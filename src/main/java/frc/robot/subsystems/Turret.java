@@ -45,10 +45,11 @@ public class Turret extends SubsystemBase {
     }
 
     public double getTurretAngle() {
-        double angle = m_encoder.get() * 360.0;
+        double angle =(m_encoder.get() * Constants.TurretConstants.smallGearToBigGearRatio)*360;
         angle -= Constants.TurretConstants.kEncoderOffsetDegrees;
         return MathUtil.inputModulus(angle, 0.0, 360.0);
     }
+
 
     public void setSetpoint(double degrees) {
         degrees = MathUtil.inputModulus(degrees, 0.0, 360.0);
