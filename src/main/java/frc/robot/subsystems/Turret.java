@@ -174,8 +174,7 @@ public class Turret extends SubsystemBase {
     public void periodic() {
         currentAngle = getTurretAngle();
 
-        if (directionFlag && Math.abs(getShortestRotation(setpoint, currentAngle)) 
-            > Constants.TurretConstants.kToleranceDegrees) {
+        if (directionFlag && Math.abs(getShortestRotation(setpoint, currentAngle)) > Constants.TurretConstants.kToleranceDegrees) {
             checkDirection(setpoint);
             directionFlag = false;
         }
