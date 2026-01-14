@@ -19,7 +19,7 @@ public final class Constants {
       public static final double kMinSpeed = 5.0;  
         
       public static final double kToleranceDegrees = 1.0;    
-      public static final double gearRatio = 18.0/120;
+      public static final double gearRatio = 6.7;
      
       public static final double kRampUpTime = 0.6;  
       public static final double kRampDownTime = 0.01;  

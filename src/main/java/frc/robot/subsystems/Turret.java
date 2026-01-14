@@ -58,9 +58,9 @@ public class Turret extends SubsystemBase {
     public double getTurretAngle() {
         double currentRaw = m_encoder.get(); 
         
-        if (currentRaw < 0.25 && m_previousEncoderValue > 0.75) {
+        if (currentRaw < 0.1 && m_previousEncoderValue > 0.9) {
             m_encoderRevolutions++;
-        } else if (currentRaw > 0.75 && m_previousEncoderValue < 0.25) {
+        } else if (currentRaw > 0.9&& m_previousEncoderValue < 0.1) {
             m_encoderRevolutions--;
         }
         
