@@ -58,14 +58,11 @@ public class CustomPositionControlLoop {
         return rampDone;
     }
 
-    public double calculate(double setpoint, double feedback) {
+    public double calculate(double error, double feedback, double setpoint) {
 
-        double error;
         boolean negativeFlag;
         double outputSetpoint;
         boolean rampDone;
-
-        error = setpoint - feedback;
 
         p = error * gain;
 
@@ -93,7 +90,12 @@ public class CustomPositionControlLoop {
             output = output * -1;
         }
 
-        if (feedback > (setpoint - positionWindow) && feedback < (setpoint + positionWindow)) {
+        double angularError = Math.abs(error);
+        if (angularError > 180.0) {
+            angularError = 360.0 - angularError;
+        }
+
+        if (angularError <= positionWindow) {
             output = 0;
             atPosition = true;
         } else {
@@ -117,5 +119,6 @@ public class CustomPositionControlLoop {
 
     public void reset() {
         rampOutput = 0.0;
+        atPosition = false;
     }
 }

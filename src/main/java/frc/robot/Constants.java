@@ -15,11 +15,11 @@ public final class Constants {
       public static final double kMaxAngleDegrees = 360;   
         
       public static final double kGain = 2.0;  
-      public static final double kMaxSpeed = 0.4;  
-      public static final double kMinSpeed = 0.05;  
+      public static final double kMaxSpeed = 40.0;  
+      public static final double kMinSpeed = 5.0;  
         
       public static final double kToleranceDegrees = 1.0;    
-      public static final double gearRatio = 18/120;
+      public static final double gearRatio = 18.0/120;
      
       public static final double kRampUpTime = 0.6;  
       public static final double kRampDownTime = 0.01;  

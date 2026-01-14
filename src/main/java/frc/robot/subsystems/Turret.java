@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,16 +13,14 @@ import frc.robot.Constants;
 import frc.robot.util.CustomPositionControlLoop;
 
 public class Turret extends SubsystemBase {
+
     private final TalonSRX m_motor;
     private final DutyCycleEncoder m_encoder;
-    private final DigitalInput m_hallEffectSensor;
     private final CustomPositionControlLoop m_customController;
 
     private double currentAngle;
     private double setpoint;
     private double encoderZero = 0.0;
-    
-    private boolean lastHallState = false;
 
     public Turret() {
         m_motor = new TalonSRX(Constants.TurretConstants.kTurretMotorID);
@@ -31,27 +28,37 @@ public class Turret extends SubsystemBase {
         m_motor.setNeutralMode(NeutralMode.Brake);
 
         m_encoder = new DutyCycleEncoder(Constants.TurretConstants.kAbsEncoderPort);
-        
-        m_hallEffectSensor = new DigitalInput(Constants.TurretConstants.kHallEffectPort);
 
         m_customController = new CustomPositionControlLoop(
-                Constants.TurretConstants.kGain,
-                Constants.TurretConstants.kToleranceDegrees,
-                Constants.TurretConstants.kRampUpTime,
-                Constants.TurretConstants.kRampDownTime,
-                100.0,
-                Constants.TurretConstants.kMaxSpeed,
-                Constants.TurretConstants.kMinSpeed,
-                Constants.TurretConstants.kLoopTime
+            Constants.TurretConstants.kGain,
+            Constants.TurretConstants.kToleranceDegrees,
+            Constants.TurretConstants.kRampUpTime,
+            Constants.TurretConstants.kRampDownTime,
+            100.0,
+            Constants.TurretConstants.kMaxSpeed,
+            Constants.TurretConstants.kMinSpeed,
+            Constants.TurretConstants.kLoopTime
         );
+
         currentAngle = getTurretAngle();
         setpoint = currentAngle;
     }
 
-    public double getTurretAngle() {
-        double rawAngle = m_encoder.get() * Constants.TurretConstants.gearRatio * 360.0;
-        double angle = rawAngle - encoderZero;
-        return MathUtil.inputModulus(angle, 0.0, 360.0);
+    // public double getTurretAngle() {
+    //     double rawEncoder = m_encoder.get();
+    //     double wrappedRaw = MathUtil.inputModulus(rawEncoder, 0.0, 1);
+    //     double wrappedRaw = wrapper();
+    //     double angle = wrappedRaw*Constants.TurretConstants.gearRatio*360;
+    //     return angle;
+    // }
+    
+    public double getTurretAngle(){
+        double angle = m_encoder.get();
+        if(angle > 360){
+            angle  -= 360;
+        }
+        angle = angle * Constants.TurretConstants.gearRatio*360;
+        return angle ;
     }
 
     public void setSetpoint(double degrees) {
@@ -91,19 +98,11 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void periodic() {
-        boolean hallState = !m_hallEffectSensor.get();
-        
-        if (hallState && !lastHallState) {
-            encoderZero = m_encoder.get() * Constants.TurretConstants.gearRatio * 360.0;
-        }
-        lastHallState = hallState;
-
         currentAngle = getTurretAngle();
 
         double smallestError = getShortestRotation(setpoint, currentAngle);
-        double goalSetpoint = currentAngle + smallestError;
 
-        double motorOutput = m_customController.calculate(goalSetpoint, currentAngle);
+        double motorOutput = m_customController.calculate(smallestError, currentAngle, setpoint);
 
         setMotorOutput(motorOutput / 100.0);
 
@@ -113,6 +112,7 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("Turret/Motor Output", motorOutput / 100.0);
         SmartDashboard.putNumber("Turret/P Value", m_customController.getP());
         SmartDashboard.putNumber("Turret/Position Error", smallestError);
-        SmartDashboard.putBoolean("Turret/Hall Effect Triggered", hallState);
+        SmartDashboard.putNumber("Turret/Raw Angle", m_encoder.get());
+        SmartDashboard.putNumber("Turret/Raw Angle With Gear Ratio", m_encoder.get()*Constants.TurretConstants.gearRatio);
     }
 }
