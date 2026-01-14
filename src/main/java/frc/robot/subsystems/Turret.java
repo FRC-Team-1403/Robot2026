@@ -52,13 +52,27 @@ public class Turret extends SubsystemBase {
     //     return angle;
     // }
     
-    public double getTurretAngle(){
-        double angle = m_encoder.get();
-        if(angle > 360){
-            angle  -= 360;
+    private double m_previousEncoderValue = 0.0;
+    private int m_encoderRevolutions = 0;
+
+    public double getTurretAngle() {
+        double currentRaw = m_encoder.get(); 
+        
+        if (currentRaw < 0.25 && m_previousEncoderValue > 0.75) {
+            m_encoderRevolutions++;
+        } else if (currentRaw > 0.75 && m_previousEncoderValue < 0.25) {
+            m_encoderRevolutions--;
         }
-        angle = angle * Constants.TurretConstants.gearRatio*360;
-        return angle ;
+        
+        m_previousEncoderValue = currentRaw;
+        
+        double totalEncoderRotations = m_encoderRevolutions + currentRaw;
+        
+        double angle = (totalEncoderRotations * 360.0) / Constants.TurretConstants.gearRatio;
+
+        angle = MathUtil.inputModulus(angle, 0.0, 360.0);
+        
+        return angle;
     }
 
     public void setSetpoint(double degrees) {
