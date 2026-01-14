@@ -7,7 +7,7 @@ public final class Constants {
 
     public static class TurretConstants {
       public static final int kTurretMotorID = 5; 
-      public static final int kHallEffectPort = 1; 
+      public static final int kHallEffectPort = 9; 
       public static final int kAbsEncoderPort = 0;  
       public static final boolean kMotorInverted = true;  
      
@@ -19,7 +19,7 @@ public final class Constants {
       public static final double kMinSpeed = 0.05;  
         
       public static final double kToleranceDegrees = 1.0;    
-      public static final double gearRatio = 18.0/120.0;
+      public static final double gearRatio = 18/120;
      
       public static final double kRampUpTime = 0.6;  
       public static final double kRampDownTime = 0.01;  
