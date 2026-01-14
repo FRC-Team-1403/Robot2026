@@ -46,9 +46,10 @@ public class CustomPositionControlLoop {
             if (rampOutput < input) {
                 rampOutput = input;
             }
+            
         }
 
-        if (input == rampOutput) {
+        if (Math.abs(input - rampOutput) < 0.001) {
             rampDone = true;
         } else {
             rampDone = false;

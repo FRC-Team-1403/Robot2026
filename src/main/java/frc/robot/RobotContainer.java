@@ -44,7 +44,6 @@ public class RobotContainer {
   private void configureBindings() {
       m_driverController.a().onTrue(new TurretCommand(m_turret, 0));   
       m_driverController.b().onTrue(new TurretCommand(m_turret, 90));   
-      m_driverController.x().onTrue(new TurretCommand(m_turret, -90));    
       m_driverController.y().onTrue(new TurretCommand(m_turret, 45)); 
 
       m_driverController.leftBumper().whileTrue(m_turret.run(() -> m_turret.adjustSetpoint(-5)));
