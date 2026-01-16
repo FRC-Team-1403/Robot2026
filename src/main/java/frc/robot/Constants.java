@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Transform3d;
+
 public final class Constants {
     public static class OperatorConstants {
       public static final int kDriverControllerPort = 0;
@@ -26,5 +28,11 @@ public final class Constants {
       public static final double kUnitsPerRampTime = 100;
       
       public static final double kTurretLimitBuffer = 2.0;
+    }
+
+    public static class Vision {
+        public static final String kCameraName = "OV5647";
+        public static Transform3d kCameraToRobotTransform = new Transform3d();
+
     }
 }

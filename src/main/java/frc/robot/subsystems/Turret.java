@@ -18,6 +18,7 @@ public class Turret extends SubsystemBase {
     private double setpoint;
     private double lastEncoderValue = 0.0;
     private int encoderRotations = 0;
+    private Vision m_vision;
 
     public Turret() {
         m_motor = new TalonSRX(Constants.TurretConstants.kTurretMotorID);
@@ -39,6 +40,7 @@ public class Turret extends SubsystemBase {
         
         currentAngle = getTurretAngle();
         setpoint = MathUtil.clamp(currentAngle, Constants.TurretConstants.kMinAngleDegrees, Constants.TurretConstants.kMaxAngleDegrees);
+        m_vision = new Vision(Constants.Vision.kCameraName);
     }
 
     
