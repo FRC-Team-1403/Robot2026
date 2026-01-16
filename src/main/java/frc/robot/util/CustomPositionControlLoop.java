@@ -1,26 +1,23 @@
 package frc.robot.util;
 
 public class CustomPositionControlLoop {
-
     private double gain;
-    private double positionWindow;
+    private double tolerance;
     private double rampUpTime;
     private double rampDownTime;
     private double unitsPerRampTime;
     private double maxSpeed;
     private double minSpeed;
     private double progRate;
-
     private double rampOutput = 0.0;
-
     private double p = 0.0;
     private double output = 0.0;
     private boolean atPosition = false;
 
-    public CustomPositionControlLoop(double gain, double positionWindow, double rampUpTime, double rampDownTime,
+    public CustomPositionControlLoop(double gain, double tolerance, double rampUpTime, double rampDownTime,
                                     double unitsPerRampTime, double maxSpeed, double minSpeed, double progRate) {
         this.gain = gain;
-        this.positionWindow = positionWindow;
+        this.tolerance = tolerance;
         this.rampUpTime = rampUpTime;
         this.rampDownTime = rampDownTime;
         this.unitsPerRampTime = unitsPerRampTime;
@@ -46,10 +43,9 @@ public class CustomPositionControlLoop {
             if (rampOutput < input) {
                 rampOutput = input;
             }
-            
         }
 
-        if (Math.abs(input - rampOutput) < 0.001) {
+        if (input == rampOutput) {
             rampDone = true;
         } else {
             rampDone = false;
@@ -58,8 +54,7 @@ public class CustomPositionControlLoop {
         return rampDone;
     }
 
-    public double calculate(double error, double feedback, double setpoint) {
-
+    public double calculate(double error, double currentAngle, double setpoint) {
         boolean negativeFlag;
         double outputSetpoint;
         boolean rampDone;
@@ -87,15 +82,10 @@ public class CustomPositionControlLoop {
         }
 
         if (negativeFlag) {
-            output = output * -1;
+            output = -output;
         }
 
-        double angularError = Math.abs(error);
-        if (angularError > 180.0) {
-            angularError = 360.0 - angularError;
-        }
-
-        if (angularError <= positionWindow) {
+        if (currentAngle > (setpoint - tolerance) && currentAngle < (setpoint + tolerance)) {
             output = 0;
             atPosition = true;
         } else {

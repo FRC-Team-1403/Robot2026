@@ -8,11 +8,11 @@ public class TurretCommand extends Command {
     private final Turret m_turret;
     private final double targetAngleDegrees;
 
-    public TurretCommand(Turret turret, double targetAngleDegrees) {
-        this.m_turret = turret;
+    public TurretCommand(Turret m_turret, double targetAngleDegrees) {
+        this.m_turret = m_turret;
         this.targetAngleDegrees = targetAngleDegrees;
         
-        addRequirements(turret);
+        addRequirements(m_turret);
     }
 
     @Override
