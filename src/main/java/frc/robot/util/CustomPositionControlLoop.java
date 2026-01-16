@@ -13,6 +13,7 @@ public class CustomPositionControlLoop {
     private double p = 0.0;
     private double output = 0.0;
     private boolean atPosition = false;
+    private boolean rampDone = false;
 
     public CustomPositionControlLoop(double gain, double tolerance, double rampUpTime, double rampDownTime,
                                     double unitsPerRampTime, double maxSpeed, double minSpeed, double progRate) {
@@ -27,7 +28,6 @@ public class CustomPositionControlLoop {
     }
 
     private boolean ramp(double input) {
-        boolean rampDone;
 
         if (input > rampOutput) {
             rampOutput = rampOutput + (unitsPerRampTime / (rampUpTime / progRate));
@@ -105,6 +105,10 @@ public class CustomPositionControlLoop {
 
     public double getOutput() {
         return output;
+    }
+
+    public boolean getRampDone() {
+        return rampDone;
     }
 
     public void reset() {
