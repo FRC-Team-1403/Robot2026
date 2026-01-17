@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,19 +14,24 @@ import frc.robot.util.CustomPositionControlLoop;
 
 public class Turret extends SubsystemBase {
     private final TalonSRX m_motor;
-    private final DutyCycleEncoder m_encoder;
+    private final CANcoder m_encoder;
     private final CustomPositionControlLoop m_customController;    
     private double currentAngle;
     private double setpoint;
-    private double lastEncoderValue = 0.0;
-    private int encoderRotations = 0;
 
     public Turret() {
         m_motor = new TalonSRX(Constants.TurretConstants.kTurretMotorID);
         m_motor.setInverted(Constants.TurretConstants.kMotorInverted);
         m_motor.setNeutralMode(NeutralMode.Brake);
         
-        m_encoder = new DutyCycleEncoder(Constants.TurretConstants.kAbsEncoderPort);
+        m_encoder = new CANcoder(0);
+        
+        CANcoderConfiguration config = new CANcoderConfiguration();
+        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        
+        m_encoder.getConfigurator().apply(config);
+        
+        resetEncoder();
         
         m_customController = new CustomPositionControlLoop(
             Constants.TurretConstants.kGain,
@@ -38,30 +45,17 @@ public class Turret extends SubsystemBase {
         );
         
         currentAngle = getTurretAngle();
-        setpoint = MathUtil.clamp(currentAngle, Constants.TurretConstants.kMinAngleDegrees, Constants.TurretConstants.kMaxAngleDegrees);
+        setpoint = currentAngle;
     }
-
-    
-    
-    public double getTurretAngle() {
-        double currentRaw = m_encoder.get();
-        
-        if (currentRaw < 0.1 && lastEncoderValue > 0.9) {
-            encoderRotations++;
-        } else if (currentRaw > 0.9 && lastEncoderValue < 0.1) {
-            encoderRotations--;
-        }
-        
-        lastEncoderValue = currentRaw;
-        double totalEncoderRotations = encoderRotations + currentRaw;
-        double angle = (totalEncoderRotations * 360.0) / Constants.TurretConstants.kGearRatio;
-        
-        return angle;
+  
+    public double getTurretAngle() {  
+        double rotations = m_encoder.getPosition().getValueAsDouble();
+        double degrees = rotations / Constants.TurretConstants.kGearRatio * 360.0;
+        return -degrees;
     }
 
     public void setSetpoint(double degrees) {
-        setpoint = MathUtil.clamp(degrees, Constants.TurretConstants.kMinAngleDegrees, Constants.TurretConstants.kMaxAngleDegrees);
-    
+        setpoint = degrees;
     }
 
     public double getSetpoint() {
@@ -81,39 +75,17 @@ public class Turret extends SubsystemBase {
         m_customController.reset();
     }
 
+    public void resetEncoder() {
+        m_encoder.setPosition(0.0);
+    }
+
     private double getError(double targetAngle, double currentAngle) {
         double error = targetAngle - currentAngle;
         return error;
     }
-    
-    private boolean isWithinLimits() {
-        return currentAngle >= Constants.TurretConstants.kMinAngleDegrees && currentAngle <= Constants.TurretConstants.kMaxAngleDegrees;
-    }
-    
-    private boolean wouldExceedLimits(double output) {
-        if (currentAngle <= Constants.TurretConstants.kMinAngleDegrees + Constants.TurretConstants.kTurretLimitBuffer && output < 0) {
-            return true;
-        }
-        if (currentAngle >= Constants.TurretConstants.kMaxAngleDegrees - Constants.TurretConstants.kTurretLimitBuffer && output > 0) {
-            return true;
-        }
-        return false;
-    }
 
     private void setMotorOutput(double output) {
-        if(!isWithinLimits()) {
-            if (currentAngle < Constants.TurretConstants.kMinAngleDegrees && output > 0) {
-                m_motor.set(ControlMode.PercentOutput, output);
-            } else if (currentAngle > Constants.TurretConstants.kMaxAngleDegrees && output < 0) {
-                m_motor.set(ControlMode.PercentOutput, output);
-            } else {
-                m_motor.set(ControlMode.PercentOutput, 0.0);
-            }
-        } else if (wouldExceedLimits(output)) {
-            m_motor.set(ControlMode.PercentOutput, 0.0);
-        } else {
-            m_motor.set(ControlMode.PercentOutput, output);
-        }
+        m_motor.set(ControlMode.PercentOutput, output);
     }
 
     @Override
@@ -128,11 +100,9 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("Turret/Current Angle", currentAngle);
         SmartDashboard.putNumber("Turret/Setpoint", setpoint);
         SmartDashboard.putBoolean("Turret/At Setpoint", atSetpoint());
-        SmartDashboard.putNumber("Turret/Motor Output", motorOutput/100.0);
+        SmartDashboard.putNumber("Turret/Motor Output", motorOutput);
         SmartDashboard.putNumber("Turret/P Value", m_customController.getP());
         SmartDashboard.putNumber("Turret/Position Error", smallestError);
-        SmartDashboard.putNumber("Turret/Raw Angle", m_encoder.get());
-        SmartDashboard.putNumber("Turret/Raw Angle With Gear Ratio", m_encoder.get()*Constants.TurretConstants.kGearRatio);
-        SmartDashboard.putBoolean("Turret/Within Limits", isWithinLimits());
+        SmartDashboard.putNumber("Turret/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
     }
 }
