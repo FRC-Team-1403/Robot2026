@@ -1,22 +1,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Turret;
+import frc.robot.vision.Vision;
 
 public class TurretCommand extends Command {
     
     private final Turret m_turret;
-    private final double targetAngleDegrees;
+    private final Vision m_vision;
 
-    public TurretCommand(Turret m_turret, double targetAngleDegrees) {
+    public TurretCommand(Turret m_turret, Vision m_vision) {
         this.m_turret = m_turret;
-        this.targetAngleDegrees = targetAngleDegrees;
+        this.m_vision = m_vision;
         
         addRequirements(m_turret);
     }
 
     @Override
     public void initialize() {
+        double targetAngleDegrees = (Math.atan2(m_vision.getPose2d().getY() - Constants.Vision.kGoalY, m_vision.getPose2d().getX() - Constants.Vision.kGoalX) * (180.0/Math.PI)) - (m_vision.getPose2d().getRotation().getDegrees()+180);
+        while (targetAngleDegrees < 0) {
+            targetAngleDegrees += 360;
+        }
         m_turret.setSetpoint(targetAngleDegrees);
     }
 

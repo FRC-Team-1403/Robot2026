@@ -1,5 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Transform3d;
+
+
 public final class Constants {
     public static class OperatorConstants {
       public static final int kDriverControllerPort = 0;
@@ -26,5 +31,13 @@ public final class Constants {
       public static final double kUnitsPerRampTime = 100;
       
       public static final double kTurretLimitBuffer = 2.0;
+    }
+
+    public static class Vision {
+    public static final String kCameraName = "";
+    public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+    public static Transform3d kRobotToCamera;
+    public static double kGoalY = 0;
+    public static double kGoalX = 0;
     }
 }

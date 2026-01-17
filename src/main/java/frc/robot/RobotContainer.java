@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TurretCommand;
 import frc.robot.subsystems.Turret;
+import frc.robot.vision.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,6 +21,7 @@ import frc.robot.subsystems.Turret;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Turret m_turret;
+  private final Vision m_vision;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -29,6 +31,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     m_turret = new Turret();
+    m_vision = new Vision();
     configureBindings();
   }
 
@@ -42,10 +45,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-      m_driverController.a().onTrue(new TurretCommand(m_turret, 0));   
-      m_driverController.b().onTrue(new TurretCommand(m_turret, 90));   
-      m_driverController.y().onTrue(new TurretCommand(m_turret, 270)); 
-      m_driverController.y().onTrue(new TurretCommand(m_turret, 360)); 
+      m_driverController.a().onTrue(new TurretCommand(m_turret, m_vision));
 
 
       m_driverController.leftBumper().whileTrue(m_turret.run(() -> m_turret.adjustSetpoint(-5)));
@@ -59,6 +59,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new TurretCommand(m_turret, 0);
+    return new TurretCommand(m_turret, m_vision);
   }
 }
