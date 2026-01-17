@@ -7,7 +7,9 @@ public final class Constants {
 
     public static class TurretConstants {
       public static final int kTurretMotorID = 5; 
-      public static final int kAbsEncoderPort = 0;  
+      public static final int kRelEncoderPort1 = 0;  
+      public static final int kRelEncoderPort2 = 0;  
+
       public static final boolean kMotorInverted = true;  
      
       public static final double kMinAngleDegrees = 0;  
@@ -26,5 +28,7 @@ public final class Constants {
       public static final double kUnitsPerRampTime = 100;
       
       public static final double kTurretLimitBuffer = 2.0;
+
+      public static final double kEncoderPulsesPerRotation = 0;
     }
 }
