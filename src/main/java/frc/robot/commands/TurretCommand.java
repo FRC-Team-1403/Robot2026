@@ -19,16 +19,16 @@ public class TurretCommand extends Command {
 
     @Override
     public void initialize() {
-        double targetAngleDegrees = (Math.atan2(m_vision.getPose2d().getY() - Constants.Vision.kGoalY, m_vision.getPose2d().getX() - Constants.Vision.kGoalX) * (180.0/Math.PI)) - (m_vision.getPose2d().getRotation().getDegrees()+180);
-        while (targetAngleDegrees < 0) {
-            targetAngleDegrees += 360;
-        }
-        m_turret.setSetpoint(targetAngleDegrees);
+        
     }
 
     @Override
     public void execute() {
-       
+       if(m_vision.hasPose()){
+            double targetAngleDegrees = (Math.atan2(m_vision.getPose2d().getY() - Constants.Vision.kGoalY, m_vision.getPose2d().getX() - Constants.Vision.kGoalX) * (180.0/Math.PI)) - (m_vision.getPose2d().getRotation().getDegrees()+180);
+            targetAngleDegrees = ((targetAngleDegrees % 360) + 360) % 360;
+            m_turret.setSetpoint(targetAngleDegrees);
+        }
     }
 
     @Override

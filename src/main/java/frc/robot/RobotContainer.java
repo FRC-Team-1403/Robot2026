@@ -45,7 +45,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-      m_driverController.a().onTrue(new TurretCommand(m_turret, m_vision));
+      m_driverController.a().whileTrue(new TurretCommand(m_turret, m_vision));
 
 
       m_driverController.leftBumper().whileTrue(m_turret.run(() -> m_turret.adjustSetpoint(-5)));
