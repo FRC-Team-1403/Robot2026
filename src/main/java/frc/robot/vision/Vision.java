@@ -91,7 +91,7 @@ public class Vision extends SubsystemBase {
         Logger.recordOutput("Pose2d", getPose2d());
         Logger.recordOutput("Pose2d X", getPose2d().getX());
         Logger.recordOutput("Pose2d Y", getPose2d().getY());
-        Logger.recordOutput("Pose2d Rotation", (getPose2d().getRotation().getDegrees()+180));
+        Logger.recordOutput("Pose2d Rotation", (getPose2d().getRotation().getDegrees()+360)%360);
 
         // Process all unread camera results
         for (var result : m_camera.getAllUnreadResults()) {
