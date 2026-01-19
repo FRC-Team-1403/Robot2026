@@ -20,23 +20,27 @@ public class TurretCommand extends Command {
 
     @Override
     public void initialize() {
-
     }
 
     @Override
     public void execute() {
-        if (m_vision.hasPose()) {
-            double deltaX = Constants.Vision.kGoalX - m_vision.getPose2d().getX();
-            double deltaY = Constants.Vision.kGoalY - m_vision.getPose2d().getY();
-            double fieldAngleToGoal = Math.atan2(deltaY, deltaX) * (180.0 / Math.PI);
+        double deltaX = Constants.Vision.kGoalX - m_vision.getPose2d().getX();
+        double deltaY = Constants.Vision.kGoalY - m_vision.getPose2d().getY();
+        double fieldAngleToGoal = Math.atan2(deltaY, deltaX) * (180.0 / Math.PI);
 
-            double robotHeading = (m_vision.getPose2d().getRotation().getDegrees() + 360) % 360;
-            double turretAngle = ((fieldAngleToGoal - robotHeading) + 1080) % 360;
+        double robotHeading = (m_vision.getPose2d().getRotation().getDegrees() + 360) % 360;
+        double turretAngle = ((fieldAngleToGoal - robotHeading) + 1080) % 360;
 
-            SmartDashboard.putNumber("Calculated Angle", turretAngle);
+        SmartDashboard.putNumber("Testing/Calculated Angle", turretAngle);
+        SmartDashboard.putNumber("Testing/Delta X", deltaX);
+        SmartDashboard.putNumber("Testing/Delta Y", deltaY);
+        SmartDashboard.putNumber("Testing/Field Angle to Goal", fieldAngleToGoal);
+        SmartDashboard.putNumber("Testing/Robot Heading (CCW)", robotHeading);
+        SmartDashboard.putNumber("Testing/Robot X", m_vision.getPose2d().getX());
+        SmartDashboard.putNumber("Testing/Robot Y", m_vision.getPose2d().getY());
+        SmartDashboard.putNumber("Testing/Robot Heading CCW", m_vision.getPose2d().getRotation().getDegrees());
 
-            m_turret.setSetpoint(turretAngle);
-        }
+        m_turret.setSetpoint(turretAngle);
     }
 
     @Override
@@ -46,7 +50,6 @@ public class TurretCommand extends Command {
 
     @Override
     public boolean isFinished() {
-
-        return m_turret.atSetpoint();
+        return false;
     }
 }
