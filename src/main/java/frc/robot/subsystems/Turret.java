@@ -52,7 +52,7 @@ public class Turret extends SubsystemBase {
     public double getTurretAngle() {
         double rotations = m_encoder.getPosition().getValueAsDouble();
         double degrees = rotations / Constants.TurretConstants.kGearRatio * 360.0;
-        return -degrees;
+        return degrees;
     }
 
     public void setSetpoint(double degrees) {

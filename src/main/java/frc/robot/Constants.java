@@ -14,7 +14,7 @@ public final class Constants {
     public static final int kRelEncoderPort1 = 4;
     public static final int kRelEncoderPort2 = 5;
 
-    public static final boolean kMotorInverted = true;
+    public static final boolean kMotorInverted = false;
 
     // public static final double kMinAngleDegrees = 0;
     // public static final double kMaxAngleDegrees = 360;
@@ -23,7 +23,7 @@ public final class Constants {
     public static final double kMaxSpeed = 100.0;
     public static final double kMinSpeed = 7.0;
 
-    public static final double kToleranceDegrees = 1.0;
+    public static final double kToleranceDegrees = 5;
     public static final double kGearRatio = 6.7;
 
     public static final double kRampUpTime = 0.01;
@@ -34,15 +34,15 @@ public final class Constants {
     public static final double kTurretLimitBuffer = 2.0;
 
     public static final double kEncoderPulsesPerRotation = 0;
-    public static double kMinAngleDegrees = 0;
-    public static double kMaxAngleDegrees = 270;
+    public static double kMinAngleDegrees = Double.NEGATIVE_INFINITY;
+    public static double kMaxAngleDegrees = Double.POSITIVE_INFINITY;
   }
 
   public static class Vision {
-    public static final String kCameraName = "";
+    public static final String kCameraName = "PC_Camera";
     public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-    public static Transform3d kRobotToCamera;
-    public static double kGoalY = 0;
-    public static double kGoalX = 0;
+    public static Transform3d kRobotToCamera = new Transform3d();
+    public static double kGoalY = 4;
+    public static double kGoalX = 12;
   }
 }

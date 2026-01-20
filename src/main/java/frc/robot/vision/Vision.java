@@ -88,20 +88,31 @@ public class Vision extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-        Logger.recordOutput("Pose2d", getPose2d());
-        Logger.recordOutput("Pose2d X", getPose2d().getX());
-        Logger.recordOutput("Pose2d Y", getPose2d().getY());
-        Logger.recordOutput("Pose2d Rotation", (getPose2d().getRotation().getDegrees() + 360) % 360);
+   public void periodic() {
+    boolean updated = false;
 
-        // Process all unread camera results
-        for (var result : m_camera.getAllUnreadResults()) {
-            Optional<EstimatedRobotPose> visionEst = m_poseEstimator.update(result);
+    for (var result : m_camera.getAllUnreadResults()) {
+        Optional<EstimatedRobotPose> visionEst = m_poseEstimator.update(result);
 
-            if (visionEst.isPresent()) {
-                m_lastEstimatedPose = visionEst.get().estimatedPose;
-                m_lastTimestamp = visionEst.get().timestampSeconds;
-            }
+        if (visionEst.isPresent()) {
+            m_lastEstimatedPose = visionEst.get().estimatedPose;
+            m_lastTimestamp = visionEst.get().timestampSeconds;
+            updated = true;
         }
     }
+
+    Logger.recordOutput("Vision/CameraConnected", m_camera.isConnected());
+    Logger.recordOutput("Vision/HasPose", hasPose());
+    Logger.recordOutput("Vision/Timestamp", m_lastTimestamp);
+
+    if (updated) {
+        Pose2d pose2d = m_lastEstimatedPose.toPose2d();
+
+        Logger.recordOutput("Vision/Pose2d", pose2d);
+        Logger.recordOutput("Vision/X", pose2d.getX());
+        Logger.recordOutput("Vision/Y", pose2d.getY());
+        Logger.recordOutput("Vision/RotationDeg",
+            (pose2d.getRotation().getDegrees() + 360) % 360);
+    }
+}
 }
