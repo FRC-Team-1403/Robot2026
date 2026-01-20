@@ -10,6 +10,7 @@ import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,7 +40,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-   m_driverController.rightTrigger().whileTrue(new ShooterCommand(m_shooter, 4000));
+   m_driverController.rightTrigger().whileTrue(new ShooterCommand(m_shooter, 1000));
+   m_driverController.a().whileTrue(m_shooter.getSysIDQ(SysIdRoutine.Direction.kForward));
+   m_driverController.b().whileTrue(m_shooter.getSysIDQ(SysIdRoutine.Direction.kReverse));
+   m_driverController.x().whileTrue(m_shooter.getSysIDD(SysIdRoutine.Direction.kForward));
+   m_driverController.y().whileTrue(m_shooter.getSysIDD(SysIdRoutine.Direction.kReverse)); 
   }
 
   /**
