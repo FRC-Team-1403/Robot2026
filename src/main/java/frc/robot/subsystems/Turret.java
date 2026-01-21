@@ -100,6 +100,12 @@ public class Turret extends SubsystemBase {
 
         setMotorOutput(motorOutput / 100.0);
 
+        if (currentAngle >= Constants.TurretConstants.kMaxAngleDegrees && motorOutput > 0) {
+            motorOutput = 0; // At max limit, don't move more positive
+        } else if (currentAngle <= Constants.TurretConstants.kMinAngleDegrees && motorOutput < 0) {
+            motorOutput = 0; // At min limit, don't move more negative
+        }
+
         SmartDashboard.putNumber("Turret/Current Angle", currentAngle);
         SmartDashboard.putNumber("Turret/Setpoint", setpoint);
         SmartDashboard.putBoolean("Turret/At Setpoint", atSetpoint());

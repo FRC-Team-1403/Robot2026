@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Turret;
@@ -22,38 +22,29 @@ public class TurretCommand extends Command {
     }
 
     @Override
-    public void initialize() {
-    }
-
-    @Override
     public void execute() {
         if (m_vision.hasPose()) {
-            double deltaX = Constants.Vision.kGoalX - m_vision.getPose2d().getX();
-            double deltaY = Constants.Vision.kGoalY - m_vision.getPose2d().getY();
-            double fieldAngleToGoal = Math.atan2(deltaY, deltaX) * (180.0 / Math.PI);
+            Pose2d robotPose = m_vision.getPose2d();
 
-            double robotHeading = m_vision.getPose2d().getRotation().getDegrees();
-            double turretAngle = ((fieldAngleToGoal - robotHeading + 1080)%360)-180;
+            // Calculate angle to goal
+            double deltaX = Constants.Vision.kGoalX - robotPose.getX();
+            double deltaY = Constants.Vision.kGoalY - robotPose.getY();
+            double fieldAngleToGoal = Math.toDegrees(Math.atan2(deltaY, deltaX));
 
-            SmartDashboard.putNumber("Testing/Calculated Angle", turretAngle);
-            SmartDashboard.putNumber("Testing/Delta X", deltaX);
-            SmartDashboard.putNumber("Testing/Delta Y", deltaY);
-            SmartDashboard.putNumber("Testing/Field Angle to Goal", fieldAngleToGoal);
-            SmartDashboard.putNumber("Testing/Robot Heading (CCW)", robotHeading);
-            SmartDashboard.putNumber("Testing/Robot X", m_vision.getPose2d().getX());
-            SmartDashboard.putNumber("Testing/Robot Y", m_vision.getPose2d().getY());
-            SmartDashboard.putNumber("Testing/Robot Heading CCW", m_vision.getPose2d().getRotation().getDegrees());
-            Logger.recordOutput("Pose2d", m_vision.getPose2d());
-            Logger.recordOutput("Goal", new Pose2d(Constants.Vision.kGoalX, Constants.Vision.kGoalY, new Rotation2d()));
-            Logger.recordOutput("Angle", turretAngle);
+            double robotHeading = robotPose.getRotation().getDegrees();
+            double turretAngle = MathUtil.inputModulus(fieldAngleToGoal - robotHeading, -180, 180);
+
+            // Log for debugging
+            Logger.recordOutput("TurretCommand/RobotPose", robotPose);
+            Logger.recordOutput("TurretCommand/GoalPose",
+                    new Pose2d(Constants.Vision.kGoalX, Constants.Vision.kGoalY, new Rotation2d()));
+            Logger.recordOutput("TurretCommand/DeltaX", deltaX);
+            Logger.recordOutput("TurretCommand/DeltaY", deltaY);
+            Logger.recordOutput("TurretCommand/FieldAngleToGoal", fieldAngleToGoal);
+            Logger.recordOutput("TurretCommand/TurretAngle", turretAngle);
 
             m_turret.setSetpoint(turretAngle);
         }
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-
     }
 
     @Override
