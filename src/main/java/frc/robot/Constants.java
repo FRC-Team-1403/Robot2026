@@ -23,7 +23,7 @@ public final class Constants {
     public static final double kMaxSpeed = 100.0;
     public static final double kMinSpeed = 7.0;
 
-    public static final double kToleranceDegrees = 5;
+    public static final double kToleranceDegrees = 1;
     public static final double kGearRatio = 6.7;
 
     public static final double kRampUpTime = 0.01;
