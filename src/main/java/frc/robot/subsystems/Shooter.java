@@ -1,63 +1,72 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.units.measure.AngularVelocity;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 
 public class Shooter extends SubsystemBase {
-  private final TalonFX m_motor;
-  private final VelocityVoltage m_velocityRequest;
-  private final DutyCycleOut m_dutyCycleRequest;
+  private final SparkMax m_motor1;
+  private final SparkMax m_motor2;
+  private final RelativeEncoder m_encoder;
+  private SimpleMotorFeedforward m_feedForward;
+  private ProfiledPIDController m_profiled;
   private double m_targetRPM = 0;
   private double m_targetDutyCycle = 0;
   private boolean m_useVelocityControl = true;
 
-  private final StatusSignal<AngularVelocity> m_velocity;
-
   public Shooter() {
-    m_motor = new TalonFX(1);
-    m_velocityRequest = new VelocityVoltage(0);
-    m_dutyCycleRequest = new DutyCycleOut(0);
-
-    TalonFXConfiguration config = new TalonFXConfiguration();
-    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    m_motor1 = new SparkMax(3, MotorType.kBrushless);
+    m_motor2 = new SparkMax(2, MotorType.kBrushless);
     
-    var slot0 = config.Slot0;
-    slot0.kS = 0.15;
-    slot0.kV = 0.15;
-    slot0.kA = 0.0;
-    slot0.kP = 0.1;
-    slot0.kI = 0.0;
-    slot0.kD = 0.02;
-
-    config.CurrentLimits.StatorCurrentLimit = 100;
-    config.CurrentLimits.StatorCurrentLimitEnable = true;
-    config.CurrentLimits.SupplyCurrentLimit = 80;
-    config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    m_motor.getConfigurator().apply(config);
-
-    m_velocity = m_motor.getVelocity();
+    SparkMaxConfig config1 = new SparkMaxConfig();
+    config1.idleMode(IdleMode.kCoast);
+    config1.smartCurrentLimit(40);
+    
+    SparkMaxConfig config2 = new SparkMaxConfig();
+    config2.idleMode(IdleMode.kCoast);
+    config2.smartCurrentLimit(40);
+    config2.follow(1);
+    
+    m_motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    m_motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    
+    m_encoder = m_motor1.getEncoder();
+    
+    m_feedForward = new SimpleMotorFeedforward(
+      Constants.Shooter.kS,
+      Constants.Shooter.kV
+    );
+    
+    m_profiled = new ProfiledPIDController(
+      Constants.Shooter.kP,
+      Constants.Shooter.kI,
+      Constants.Shooter.kD,
+      new TrapezoidProfile.Constraints(
+        Constants.Shooter.maxVelocityRPM,
+        Constants.Shooter.maxAccelerationRPMPerSec
+      )
+    );
+    
+    m_profiled.setTolerance(Constants.Shooter.rpmTolerance);
   }
   
   public void setTargetRPM(double rpm) {
     m_targetRPM = rpm;
-    double rotationsPerSecond = rpm / 60.0;
-    m_velocityRequest.Velocity = rotationsPerSecond;
     m_useVelocityControl = true;
   }
   
   public void setTargetPower(double dutyCycle) {
     m_targetDutyCycle = dutyCycle;
-    m_dutyCycleRequest.Output = dutyCycle;
     m_useVelocityControl = false;
   }
   
@@ -66,7 +75,7 @@ public class Shooter extends SubsystemBase {
   }
   
   public double getRPM() {
-    return m_velocity.getValueAsDouble() * 60.0;
+    return m_encoder.getVelocity();
   }
   
   public double getTargetRPM() {
@@ -78,7 +87,7 @@ public class Shooter extends SubsystemBase {
   }
   
   public boolean isAtSpeed() {
-    return Math.abs(getRPMError()) < Constants.Shooter.rpmTolerance;
+    return m_profiled.atGoal();
   }
   
   public double getTargetDutyCycle() {
@@ -87,22 +96,25 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_velocity.refresh();
     if (m_useVelocityControl) {
-      m_motor.setControl(m_velocityRequest);
+      double pidOutput = m_profiled.calculate(getRPM(), m_targetRPM);
+      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity);
+      double voltage = pidOutput + ffOutput;
+      m_motor1.setVoltage(voltage);
     } else {
-      m_motor.setControl(m_dutyCycleRequest);
+      m_motor1.set(m_targetDutyCycle);
     }
+    
     SmartDashboard.putNumber("Shooter/Target RPM", m_targetRPM);
     SmartDashboard.putNumber("Shooter/Actual RPM", getRPM());
     SmartDashboard.putNumber("Shooter/RPM Error", getRPMError());
     SmartDashboard.putBoolean("Shooter/At Speed", isAtSpeed());
     SmartDashboard.putNumber("Shooter/Target Duty Cycle", m_targetDutyCycle);
-    SmartDashboard.putNumber("Shooter/Motor Voltage", m_motor.getMotorVoltage().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter/Motor Current", m_motor.getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter/Duty Cycle", m_motor.getDutyCycle().getValueAsDouble()*1000);
-    SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
-    
+    SmartDashboard.putNumber("Shooter/Motor Voltage", m_motor1.getBusVoltage() * m_motor1.getAppliedOutput());
+    SmartDashboard.putNumber("Shooter/Motor Current", m_motor1.getOutputCurrent());
+    SmartDashboard.putNumber("Shooter/Duty Cycle", m_motor1.getAppliedOutput());
+    SmartDashboard.putNumber("Shooter/Motor Temp", m_motor1.getMotorTemperature());
     SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
+    SmartDashboard.putNumber("Shooter/Setpoint RPM", m_profiled.getSetpoint().velocity);
   }
 }
