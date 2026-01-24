@@ -33,9 +33,9 @@ public class Shooter extends SubsystemBase {
     
     var slot0 = config.Slot0;
     slot0.kS = 0.15;
-    slot0.kV = 0.125;
+    slot0.kV = 0.15;
     slot0.kA = 0.0;
-    slot0.kP = 0.25;
+    slot0.kP = 0.1;
     slot0.kI = 0.0;
     slot0.kD = 0.02;
 
@@ -101,6 +101,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Motor Voltage", m_motor.getMotorVoltage().getValueAsDouble());
     SmartDashboard.putNumber("Shooter/Motor Current", m_motor.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Shooter/Duty Cycle", m_motor.getDutyCycle().getValueAsDouble()*1000);
+    SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
+    
     SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
   }
 }
