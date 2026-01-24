@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase {
     SparkMaxConfig config2 = new SparkMaxConfig();
     config2.idleMode(IdleMode.kCoast);
     config2.smartCurrentLimit(40);
-    config2.follow(1);
+    config2.follow(3);
     
     m_motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     m_motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
