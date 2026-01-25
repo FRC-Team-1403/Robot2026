@@ -42,9 +42,11 @@ public final class Constants {
     public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     public static double kGoalY = 4;
     public static double kGoalX = 12;
-    public static Transform3d kFrontRobotToCamera = new Transform3d();
-    public static String kBackCameraName = "PC_Camera";
-    public static String kFrontCameraName = "Camera_Module_v1";
-    public static Transform3d kBackRobotToCamera = new Transform3d();
+    public static String kCamera1 = "ThriftyCamera1";
+    public static String kCamera2 = "Limelight2";
+    public static String kCamera3; 
+    public static Transform3d kCamera1Transform = new Transform3d();
+    public static Transform3d kCamera2Transform = new Transform3d();
+    public static Transform3d kCamera3Transform = new Transform3d();
   }
 }
