@@ -31,11 +31,13 @@ public class Shooter extends SubsystemBase {
     SparkMaxConfig config1 = new SparkMaxConfig();
     config1.idleMode(IdleMode.kCoast);
     config1.smartCurrentLimit(40);
+    config1.inverted(true); 
     
     SparkMaxConfig config2 = new SparkMaxConfig();
     config2.idleMode(IdleMode.kCoast);
     config2.smartCurrentLimit(40);
-    config2.follow(3);
+    config2.inverted(true); 
+    config2.follow(2);
     
     m_motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     m_motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
@@ -62,6 +64,7 @@ public class Shooter extends SubsystemBase {
   
   public void setTargetRPM(double rpm) {
     m_targetRPM = rpm;
+    m_profiled.reset(getRPM());
     m_useVelocityControl = true;
   }
   
@@ -98,7 +101,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     if (m_useVelocityControl) {
       double pidOutput = m_profiled.calculate(getRPM(), m_targetRPM);
-      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity/60.0);
+      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity/60);
       double voltage = pidOutput + ffOutput;
       m_motor1.setVoltage(voltage);
     } else {
