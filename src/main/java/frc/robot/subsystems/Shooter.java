@@ -98,7 +98,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     if (m_useVelocityControl) {
       double pidOutput = m_profiled.calculate(getRPM(), m_targetRPM);
-      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity);
+      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity/60.0);
       double voltage = pidOutput + ffOutput;
       m_motor1.setVoltage(voltage);
     } else {
