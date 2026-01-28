@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
 public final class Constants {
@@ -44,9 +45,9 @@ public final class Constants {
     public static double kGoalX = 12;
     public static String kCamera1 = "ThriftyCamera1";
     public static String kCamera2 = "Limelight2";
-    public static String kCamera3; 
+    public static String kCamera3 = "Limelight3"; 
     public static Transform3d kCamera1Transform = new Transform3d();
-    public static Transform3d kCamera2Transform = new Transform3d();
-    public static Transform3d kCamera3Transform = new Transform3d();
+    public static Transform3d kCamera2Transform = new Transform3d(0,0,0, new Rotation3d(0,0,Math.toRadians(90)));
+    public static Transform3d kCamera3Transform = new Transform3d(0,0,0, new Rotation3d(0, 0, Math.toRadians(180)));
   }
 }
