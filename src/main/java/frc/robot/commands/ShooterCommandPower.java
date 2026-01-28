@@ -15,13 +15,13 @@ public class ShooterCommandPower extends Command {
   
   @Override
   public void initialize() {
-    m_shooter.setTargetPower(m_targetPower);
+    
   }
   
   @Override
   public void execute() {
-
-}
+    m_shooter.setTargetPower(m_targetPower);
+  }
   
   @Override
   public void end(boolean interrupted) {

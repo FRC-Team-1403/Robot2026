@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
   private ProfiledPIDController m_profiled;
   private double m_targetRPM = 0;
   private double m_targetDutyCycle = 0;
-  private boolean m_useVelocityControl = true;
+  private boolean m_useVelocityControl = false;
 
   public Shooter() {
     m_motor1 = new SparkMax(3, MotorType.kBrushless);
@@ -31,16 +31,14 @@ public class Shooter extends SubsystemBase {
     SparkMaxConfig config1 = new SparkMaxConfig();
     config1.idleMode(IdleMode.kCoast);
     config1.smartCurrentLimit(40);
-    config1.inverted(true); 
     
     SparkMaxConfig config2 = new SparkMaxConfig();
     config2.idleMode(IdleMode.kCoast);
     config2.smartCurrentLimit(40);
-    config2.inverted(true); 
-    config2.follow(2);
+    config2.follow(3, true);
     
-    m_motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    m_motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    m_motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     
     m_encoder = m_motor1.getEncoder();
     
@@ -64,8 +62,7 @@ public class Shooter extends SubsystemBase {
   
   public void setTargetRPM(double rpm) {
     m_targetRPM = rpm;
-    m_profiled.reset(getRPM());
-    m_useVelocityControl = true;
+    m_useVelocityControl = rpm > 0;
   }
   
   public void setTargetPower(double dutyCycle) {
@@ -74,7 +71,10 @@ public class Shooter extends SubsystemBase {
   }
   
   public void stop() {
-    setTargetRPM(0);
+    m_targetRPM = 0;
+    m_targetDutyCycle = 0;
+    m_useVelocityControl = false;
+    m_motor1.set(0);
   }
   
   public double getRPM() {
@@ -99,11 +99,10 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (m_useVelocityControl) {
+    if (m_useVelocityControl && m_targetRPM > 0) {
       double pidOutput = m_profiled.calculate(getRPM(), m_targetRPM);
-      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity/60);
-      double voltage = pidOutput + ffOutput;
-      m_motor1.setVoltage(voltage);
+      double ffOutput = m_feedForward.calculate(m_targetRPM / 60.0);
+      m_motor1.setVoltage(pidOutput + ffOutput);
     } else {
       m_motor1.set(m_targetDutyCycle);
     }

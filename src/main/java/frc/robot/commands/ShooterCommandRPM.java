@@ -15,17 +15,18 @@ public class ShooterCommandRPM extends Command {
   
   @Override
   public void initialize() {
-    m_shooter.setTargetRPM(m_targetRPM);
   }
   
   @Override
   public void execute() {
-
-}
+    m_shooter.setTargetRPM(m_targetRPM);
+  }
   
   @Override
   public void end(boolean interrupted) {
-    m_shooter.stop();
+    if (interrupted) {
+      m_shooter.stop();
+    }
   }
   
   @Override
