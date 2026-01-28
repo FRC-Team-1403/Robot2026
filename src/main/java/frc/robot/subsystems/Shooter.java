@@ -37,7 +37,7 @@ public class Shooter extends SubsystemBase {
     config2.idleMode(IdleMode.kCoast);
     config2.smartCurrentLimit(40);
     config2.inverted(true); 
-    config2.follow(2);
+    config2.follow(m_motor1);
     
     m_motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     m_motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
@@ -74,7 +74,10 @@ public class Shooter extends SubsystemBase {
   }
   
   public void stop() {
-    setTargetRPM(0);
+    m_targetRPM = 0;
+    m_targetDutyCycle = 0;
+    m_useVelocityControl = false;
+    m_motor1.set(0);
   }
   
   public double getRPM() {
@@ -101,9 +104,12 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     if (m_useVelocityControl) {
       double pidOutput = m_profiled.calculate(getRPM(), m_targetRPM);
-      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity/60);
+      double ffOutput = m_feedForward.calculate(m_profiled.getSetpoint().velocity);
       double voltage = pidOutput + ffOutput;
       m_motor1.setVoltage(voltage);
+      SmartDashboard.putNumber("Shooter/PID Output", pidOutput);
+      SmartDashboard.putNumber("Shooter/FF Output", ffOutput);
+      SmartDashboard.putNumber("Shooter/Total Voltage", voltage);
     } else {
       m_motor1.set(m_targetDutyCycle);
     }
