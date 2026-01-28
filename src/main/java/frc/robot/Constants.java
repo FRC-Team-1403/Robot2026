@@ -20,7 +20,7 @@ public final class Constants {
     // public static final double kMinAngleDegrees = 0;
     // public static final double kMaxAngleDegrees = 360;
 
-    public static final double kGain = 1.25;
+    public static final double kGain = 0.75; //1.25
     public static final double kMaxSpeed = 100.0;
     public static final double kMinSpeed = 7.0;
 
@@ -43,11 +43,13 @@ public final class Constants {
     public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     public static double kGoalY = 4;
     public static double kGoalX = 12;
-    public static String kCamera1 = "ThriftyCamera1";
+    public static String kCamera1 = "ThriftyCam1.0";
     public static String kCamera2 = "Limelight2";
     public static String kCamera3 = "Limelight3"; 
+    public static String kCamera4 = "ThriftyCamera2.0";
     public static Transform3d kCamera1Transform = new Transform3d();
     public static Transform3d kCamera2Transform = new Transform3d(0,0,0, new Rotation3d(0,0,Math.toRadians(90)));
     public static Transform3d kCamera3Transform = new Transform3d(0,0,0, new Rotation3d(0, 0, Math.toRadians(180)));
+    public static Transform3d kCamera4Transform = new Transform3d(0,0,0,new Rotation3d(0,0,Math.toRadians(270)));
   }
 }

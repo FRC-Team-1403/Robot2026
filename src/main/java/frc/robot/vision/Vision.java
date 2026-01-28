@@ -21,10 +21,12 @@ public class Vision extends SubsystemBase {
     private final PhotonCamera m_camera1;
     private final PhotonCamera m_camera2;
     private final PhotonCamera m_camera3;
+    private final PhotonCamera m_camera4;
 
     private final PhotonPoseEstimator m_poseEstimator1;
     private final PhotonPoseEstimator m_poseEstimator2;
     private final PhotonPoseEstimator m_poseEstimator3;
+    private final PhotonPoseEstimator m_poseEstimator4;
 
     private Pose3d m_combinedPose;
     private double m_lastTimestamp;
@@ -43,6 +45,7 @@ public class Vision extends SubsystemBase {
         m_camera1 = new PhotonCamera(Constants.Vision.kCamera1);
         m_camera2 = new PhotonCamera(Constants.Vision.kCamera2);
         m_camera3 = new PhotonCamera(Constants.Vision.kCamera3);
+        m_camera4 = new PhotonCamera(Constants.Vision.kCamera4);
 
         m_poseEstimator1 = new PhotonPoseEstimator(
                 Constants.Vision.kFieldLayout,
@@ -61,6 +64,12 @@ public class Vision extends SubsystemBase {
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                 Constants.Vision.kCamera3Transform);
         m_poseEstimator3.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+         m_poseEstimator4 = new PhotonPoseEstimator(
+                Constants.Vision.kFieldLayout,
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                Constants.Vision.kCamera4Transform);
+        m_poseEstimator4.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         m_combinedPose = new Pose3d();
         m_lastTimestamp = 0.0;
@@ -92,6 +101,10 @@ public class Vision extends SubsystemBase {
 
     public boolean isCamera3Connected() {
         return m_camera3.isConnected();
+    }
+
+    public boolean isCamera4Connected() {
+        return m_camera4.isConnected();
     }
 
     private Pose3d combinePoses(List<WeightedPose> weightedPoses) {
@@ -172,6 +185,18 @@ public class Vision extends SubsystemBase {
             }
         }
 
+        for (var result : m_camera4.getAllUnreadResults()) {
+            Optional<EstimatedRobotPose> visionEst = m_poseEstimator4.update(result);
+            if (visionEst.isPresent() && result.hasTargets()) {
+                double ambiguity = result.getBestTarget().getPoseAmbiguity();
+                weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
+                latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
+                Logger.recordOutput("Vision/Camera4/Pose", visionEst.get().estimatedPose.toPose2d());
+                Logger.recordOutput("Vision/Camera4/TagCount", result.getTargets().size());
+                Logger.recordOutput("Vision/Camera4/Ambiguity", ambiguity);
+            }
+        }
+
         if (!weightedPoses.isEmpty()) {
             m_combinedPose = combinePoses(weightedPoses);
             m_lastTimestamp = latestTimestamp;
@@ -180,6 +205,7 @@ public class Vision extends SubsystemBase {
         Logger.recordOutput("Vision/Camera1Connected", m_camera1.isConnected());
         Logger.recordOutput("Vision/Camera2Connected", m_camera2.isConnected());
         Logger.recordOutput("Vision/Camera3Connected", m_camera3.isConnected());
+        Logger.recordOutput("Vision/Camera4Connected", m_camera4.isConnected());
         Logger.recordOutput("Vision/ActiveCameraCount", weightedPoses.size());
         Logger.recordOutput("Vision/HasPose", hasPose());
         Logger.recordOutput("Vision/Timestamp", m_lastTimestamp);
