@@ -35,8 +35,8 @@ public final class Constants {
     public static final double kTurretLimitBuffer = 2.0;
 
     public static final double kEncoderPulsesPerRotation = 0;
-    public static double kMinAngleDegrees = Double.NEGATIVE_INFINITY;
-    public static double kMaxAngleDegrees = Double.POSITIVE_INFINITY;
+    public static double kMinAngleDegrees = -135;
+    public static double kMaxAngleDegrees = 135;
   }
 
   public static class Vision {
