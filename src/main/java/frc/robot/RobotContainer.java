@@ -42,14 +42,14 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2500));
+   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2341));
     // RPM
 
-   m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.4));
+   m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.8));
    //power
    
   }
-
+                                                                                                           
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

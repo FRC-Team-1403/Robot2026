@@ -21,10 +21,11 @@ public final class Constants {
     public static final int rpmTolerance=20;
     public static final double kS = 0.1; 
     public static final double kV = 0.1375; 
+    public static final double kA = 0.02; 
     public static final double kP = 0.001;//0.0001
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double maxVelocityRPM = 6000; 
-    public static final double maxAccelerationRPMPerSec = 8000; 
+    public static final double maxAccelerationRPMPerSec = 12000; 
   }
 }

@@ -44,7 +44,8 @@ public class Shooter extends SubsystemBase {
     
     m_feedForward = new SimpleMotorFeedforward(
       Constants.Shooter.kS,
-      Constants.Shooter.kV
+      Constants.Shooter.kV,
+      Constants.Shooter.kA
     );
     
     m_profiled = new ProfiledPIDController(
@@ -114,7 +115,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Target Duty Cycle", m_targetDutyCycle);
     SmartDashboard.putNumber("Shooter/Motor Voltage", m_motor1.getBusVoltage() * m_motor1.getAppliedOutput());
     SmartDashboard.putNumber("Shooter/Motor Current", m_motor1.getOutputCurrent());
-    SmartDashboard.putNumber("Shooter/Duty Cycle", m_motor1.getAppliedOutput());
+    SmartDashboard.putNumber("Shooter/Duty Cycle", m_motor1.getAppliedOutput()*1000);
     SmartDashboard.putNumber("Shooter/Motor Temp", m_motor1.getMotorTemperature());
     SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
     SmartDashboard.putNumber("Shooter/Setpoint RPM", m_profiled.getSetpoint().velocity);
