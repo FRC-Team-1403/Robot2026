@@ -52,4 +52,28 @@ public final class Constants {
     public static Transform3d kCamera3Transform = new Transform3d(0,0,0, new Rotation3d(0, 0, Math.toRadians(180)));
     public static Transform3d kCamera4Transform = new Transform3d(0,0,0,new Rotation3d(0,0,Math.toRadians(270)));
   }
+
+  public static class Shooter {
+    public static final int kLeftMotorID = 0; // temp
+    public static final int kRightMotorID = 0; // temp
+    public static final int kHoodMotorID = 0; // temp
+
+    public static final double superCloseDist = 5;
+    public static final double kindaCloseDist = 10;
+    public static final double closeDist = 15;
+    public static final double kindaMediumDist = 20;
+    public static final double mediumDist = 25;
+    public static final double kindaFarDist = 30;
+    public static final double farDist = 35;
+    public static final double veryFarDist = 40;
+
+    public static final double superCloseRPM = 500;
+    public static final double kindaCloseRPM = 1000;
+    public static final double closeRPM = 1500;
+    public static final double kindaMediumRPM = 2000;
+    public static final double mediumRPM = 2500;
+    public static final double kindaFarRPM = 3000;
+    public static final double farRPM = 3500;
+    public static final double veryFarRPM = 4000; 
+  }
 }
