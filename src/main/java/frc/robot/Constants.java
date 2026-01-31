@@ -53,12 +53,51 @@ public final class Constants {
     public static Transform3d kCamera4Transform = new Transform3d(0,0,0,new Rotation3d(0,0,Math.toRadians(270)));
   }
 
+  public static class ShooterHood {
+    public static final int kHoodMotorID = 0; // temp
+
+    public static final double kMinAngleDegrees = 0; // temp
+    public static final double kMaxAngleDegrees = 50; // temp
+
+    public static final double kGain = 0.75; //1.25
+    public static final double kMaxSpeed = 100.0;
+    public static final double kMinSpeed = 7.0;
+
+    public static final double kToleranceDegrees = 1;
+    public static final double kGearRatio = 6.7;
+
+    public static final double kRampUpTime = 0.01;
+    public static final double kRampDownTime = 0.001;
+    public static final double kLoopTime = 0.02;
+    public static final double kUnitsPerRampTime = 100;
+
+    public static final double superCloseAngle = 0;
+    public static final double kindaCloseAngle = 1;
+    public static final double closeAngle = 2;
+    public static final double kindaMediumAngle = 3;
+    public static final double mediumAngle = 4;
+    public static final double kindaFarAngle = 5;
+    public static final double farAngle = 6;
+    public static final double veryFarAngle = 7; 
+  }
+
   public static class Shooter {
     public static final int kLeftMotorID = 0; // temp
     public static final int kRightMotorID = 0; // temp
-    public static final int kHoodMotorID = 0; // temp
 
-    public static final double superCloseDist = 5;
+    public static final double kGain = 0.75; //1.25
+    public static final double kMaxSpeed = 100.0;
+    public static final double kMinSpeed = 7.0;
+
+    public static final double kToleranceDegrees = 1;
+    public static final double kGearRatio = 6.7;
+
+    public static final double kRampUpTime = 0.01;
+    public static final double kRampDownTime = 0.001;
+    public static final double kLoopTime = 0.02;
+    public static final double kUnitsPerRampTime = 100;
+
+    public static final double superCloseDist = 5; // everything is temp
     public static final double kindaCloseDist = 10;
     public static final double closeDist = 15;
     public static final double kindaMediumDist = 20;

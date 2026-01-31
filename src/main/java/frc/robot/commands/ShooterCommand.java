@@ -6,6 +6,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterHood;
 import frc.robot.subsystems.Turret;
 import frc.robot.vision.Vision;
 import org.littletonrobotics.junction.Logger;
@@ -13,10 +14,12 @@ import org.littletonrobotics.junction.Logger;
 public class ShooterCommand extends Command {
 
     private final Shooter m_shooter;
+    private final ShooterHood m_shooterHood;
     private final Vision m_vision;
 
-    public ShooterCommand(Shooter m_shooter, Vision m_vision) {
+    public ShooterCommand(Shooter m_shooter, ShooterHood m_shooterHood, Vision m_vision) {
         this.m_shooter = m_shooter;
+        this.m_shooterHood = m_shooterHood;
         this.m_vision = m_vision;
 
         addRequirements(m_shooter);
@@ -35,27 +38,35 @@ public class ShooterCommand extends Command {
             
             if (dist > Constants.Shooter.veryFarDist) {
                 m_shooter.setRPM(Constants.Shooter.veryFarRPM);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.veryFarAngle);
             }
             else if (dist > Constants.Shooter.farDist) {
                 m_shooter.setRPM(Constants.Shooter.farDist);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.farAngle);
             }
             else if (dist > Constants.Shooter.kindaFarDist) {
                 m_shooter.setRPM(Constants.Shooter.kindaFarRPM);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.kindaFarAngle);
             }
             else if (dist > Constants.Shooter.mediumDist) {
                 m_shooter.setRPM(Constants.Shooter.mediumDist);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.mediumAngle);
             }
             else if (dist > Constants.Shooter.kindaMediumDist) {
                 m_shooter.setRPM(Constants.Shooter.kindaMediumRPM);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.kindaMediumAngle);
             }
             else if (dist > Constants.Shooter.closeDist) {
                 m_shooter.setRPM(Constants.Shooter.closeRPM);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.closeAngle);
             }
             else if (dist > Constants.Shooter.kindaCloseDist) {
                 m_shooter.setRPM(Constants.Shooter.kindaCloseRPM);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.kindaCloseAngle);
             }
             else {
                 m_shooter.setRPM(Constants.Shooter.superCloseDist);
+                m_shooterHood.setSetpoint(Constants.ShooterHood.superCloseAngle);
             }
         }
 
