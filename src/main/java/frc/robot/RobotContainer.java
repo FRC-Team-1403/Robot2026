@@ -5,9 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ShooterCommandPower;
-import frc.robot.commands.ShooterCommandRPM;
-import frc.robot.subsystems.Shooter;
+import frc.robot.commands.IntakeCommandPower;
+import frc.robot.commands.IntakeCommandRPM;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   
-  private final Shooter m_shooter = new Shooter();
+  private final IntakeTest m_intake = new IntakeTest();
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -42,10 +42,10 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2341));
+   m_driverController.rightTrigger().whileTrue(new IntakeCommandRPM(m_intake, 2341));
     // RPM
 
-   m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.8));
+   m_driverController.leftTrigger().whileTrue(new IntakeCommandoOwer(m_intake, 0.8));
    //power
    
   }

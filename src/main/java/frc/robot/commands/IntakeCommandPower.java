@@ -1,16 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.IntakeTest;
 
-public class ShooterCommandPower extends Command {
-  private final Shooter m_shooter;
+public class IntakeCommandPower extends Command {
+  private final IntakeTest m_intake;
   private final double m_targetPower;
   
-  public ShooterCommandPower(Shooter shooter, double targetPower) {
-    m_shooter = shooter;
+  public IntakeCommandPower(IntakeTest intake, double targetPower) {
+    m_intake = intake;
     m_targetPower = targetPower;
-    addRequirements(shooter);
+    addRequirements(intake);
   }
   
   @Override
@@ -20,12 +20,12 @@ public class ShooterCommandPower extends Command {
   
   @Override
   public void execute() {
-    m_shooter.setTargetPower(m_targetPower);
+    m_intake.setTargetPower(m_targetPower);
   }
   
   @Override
   public void end(boolean interrupted) {
-    m_shooter.stop();
+    m_intake.stop();
   }
   
   @Override

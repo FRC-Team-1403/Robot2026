@@ -35,9 +35,9 @@ public class Intake extends SubsystemBase{
             Constants.Intake.kA
         );
         m_profiled = new ProfiledPIDController(
-      Constants.Shooter.kP,
-      Constants.Shooter.kI,
-      Constants.Shooter.kD,
+      Constants.Intake.kP,
+      Constants.Intake.kI,
+      Constants.Intake.kD,
       new TrapezoidProfile.Constraints(
         Constants.Shooter.maxVelocityRPM,
         Constants.Shooter.maxAccelerationRPMPerSec

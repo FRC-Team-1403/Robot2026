@@ -37,22 +37,22 @@ public class IntakeTest extends SubsystemBase {
     m_encoder = m_motor1.getEncoder();
     
     m_feedForward = new SimpleMotorFeedforward(
-      Constants.Shooter.kS,
-      Constants.Shooter.kV,
-      Constants.Shooter.kA
+      Constants.Intake.kS,
+      Constants.Intake.kV,
+      Constants.Intake.kA
     );
     
     m_profiled = new ProfiledPIDController(
-      Constants.Shooter.kP,
-      Constants.Shooter.kI,
-      Constants.Shooter.kD,
+      Constants.Intake.kP,
+      Constants.Intake.kI,
+      Constants.Intake.kD,
       new TrapezoidProfile.Constraints(
-        Constants.Shooter.maxVelocityRPM,
-        Constants.Shooter.maxAccelerationRPMPerSec
+        Constants.Intake.maxVelocityRPM,
+        Constants.Intake.maxAccelerationRPMPerSec
       )
     );
     
-    m_profiled.setTolerance(Constants.Shooter.rpmTolerance);
+    m_profiled.setTolerance(Constants.Intake.rpmTolerance);
   }
   
   public void setTargetRPM(double rpm) {
