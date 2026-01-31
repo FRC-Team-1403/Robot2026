@@ -14,9 +14,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 
-public class Shooter extends SubsystemBase {
+public class IntakeTest extends SubsystemBase {
   private final SparkMax m_motor1;
-  private final SparkMax m_motor2;
   private final RelativeEncoder m_encoder;
   private SimpleMotorFeedforward m_feedForward;
   private ProfiledPIDController m_profiled;
@@ -24,22 +23,17 @@ public class Shooter extends SubsystemBase {
   private double m_targetDutyCycle = 0;
   private boolean m_useVelocityControl = false;
 
-  public Shooter() {
+  public IntakeTest() {
     m_motor1 = new SparkMax(3, MotorType.kBrushless);
-    m_motor2 = new SparkMax(2, MotorType.kBrushless);
     
     SparkMaxConfig config1 = new SparkMaxConfig();
     config1.idleMode(IdleMode.kCoast);
     config1.smartCurrentLimit(40);
     
-    SparkMaxConfig config2 = new SparkMaxConfig();
-    config2.idleMode(IdleMode.kCoast);
-    config2.smartCurrentLimit(40);
-    config2.follow(3, true);
+ 
     
     m_motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    m_motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    
+   
     m_encoder = m_motor1.getEncoder();
     
     m_feedForward = new SimpleMotorFeedforward(

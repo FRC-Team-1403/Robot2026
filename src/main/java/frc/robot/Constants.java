@@ -28,4 +28,11 @@ public final class Constants {
     public static final double maxVelocityRPM = 6000; 
     public static final double maxAccelerationRPMPerSec = 12000; 
   }
+
+  public static class Intake {
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+  }
 }
+
