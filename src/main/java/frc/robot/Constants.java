@@ -85,6 +85,8 @@ public final class Constants {
     public static final int kLeftMotorID = 0; // temp
     public static final int kRightMotorID = 0; // temp
 
+    public static final double rpmTolerance = 20;
+
     public static final double kGain = 0.75; //1.25
     public static final double kMaxSpeed = 100.0;
     public static final double kMinSpeed = 7.0;
