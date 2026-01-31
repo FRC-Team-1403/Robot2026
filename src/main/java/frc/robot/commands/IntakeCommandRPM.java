@@ -19,13 +19,13 @@ public class IntakeCommandRPM extends Command {
   
   @Override
   public void execute() {
-    m_shooter.setTargetRPM(m_targetRPM);
+    m_intake.setTargetRPM(m_targetRPM);
   }
   
   @Override
   public void end(boolean interrupted) {
     if (interrupted) {
-      m_shooter.stop();
+      m_intake.stop();
     }
   }
   
