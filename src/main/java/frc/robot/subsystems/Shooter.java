@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -24,6 +25,7 @@ public class Shooter extends SubsystemBase {
     private boolean m_useVelocityControl = true;
     private final StatusSignal<AngularVelocity> m_velocity;
     private final StatusSignal<AngularVelocity> m_velocity2;
+    private final Slot0Configs slot0;
 
     public Shooter() {
         m_motor = new TalonFX(1);
@@ -38,13 +40,13 @@ public class Shooter extends SubsystemBase {
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-        var slot0 = config.Slot0;
-        slot0.kS = 0.55;
-        slot0.kV = 0.12;
+        slot0 = config.Slot0;
+        slot0.kS = 0.25;
+        slot0.kV = 0.125;
         slot0.kA = 0.01;
-        slot0.kP = 0.20;
+        slot0.kP = 0.05;
         slot0.kI = 0.0;
-        slot0.kD = 0.0;
+        slot0.kD = 0.01;
 
         config.CurrentLimits.StatorCurrentLimit = 40;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -73,7 +75,6 @@ public class Shooter extends SubsystemBase {
     public void setTargetRPM(double rpm) {
         m_targetRPM = rpm;
         m_velocityRequest.Velocity = rpm / 60.0;
-        m_velocityRequest.FeedForward = 0;
         m_useVelocityControl = true;
     }
 
@@ -139,5 +140,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putNumber("Shooter/Motor 2 Temp", m_motor2.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
+        SmartDashboard.putNumber("Shooter/kP", slot0.kP);
     }
 }

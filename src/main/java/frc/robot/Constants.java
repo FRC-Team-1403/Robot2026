@@ -18,6 +18,6 @@ public final class Constants {
   }
 
   public static class Shooter{
-    public static final int rpmTolerance=20;
+    public static final int rpmTolerance=30;
   }
 }
