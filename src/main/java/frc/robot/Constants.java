@@ -30,7 +30,7 @@ public final class Constants {
   }
 
   public static class Intake {
-    public static final int rpmTolderance = 0; 
+    public static final int rpmTolerance = 0; 
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;
