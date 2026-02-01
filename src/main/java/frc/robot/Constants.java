@@ -19,5 +19,12 @@ public final class Constants {
 
   public static class Shooter{
     public static final int rpmTolerance=30;
+    public static final double kGain = 0.001; 
+    public static final double kMaxSpeed = 1;
+    public static final double kMinSpeed = 0.7;
+    public static final double kRampUpTime = 0.1;
+    public static final double kRampDownTime = 0.001;
+    public static final double kLoopTime = 0.02;
+    public static final double kUnitsPerRampTime = 1;
   }
 }
