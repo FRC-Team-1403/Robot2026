@@ -19,5 +19,8 @@ public final class Constants {
 
   public static class Shooter{
     public static final int rpmTolerance=30;
+    public static final int threshold = 5;
+    public static final double kP = 60;
+    public static final double kF = 1;
   }
 }

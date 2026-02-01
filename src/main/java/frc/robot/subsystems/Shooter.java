@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -25,7 +24,6 @@ public class Shooter extends SubsystemBase {
     private boolean m_useVelocityControl = true;
     private final StatusSignal<AngularVelocity> m_velocity;
     private final StatusSignal<AngularVelocity> m_velocity2;
-    private final Slot0Configs slot0;
 
     public Shooter() {
         m_motor = new TalonFX(1);
@@ -39,14 +37,6 @@ public class Shooter extends SubsystemBase {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-
-        slot0 = config.Slot0;
-        slot0.kS = 0.25;
-        slot0.kV = 0.125;
-        slot0.kA = 0.01;
-        slot0.kP = 0.05;
-        slot0.kI = 0.0;
-        slot0.kD = 0.01;
 
         config.CurrentLimits.StatorCurrentLimit = 40;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -118,7 +108,18 @@ public class Shooter extends SubsystemBase {
         m_velocity2.refresh();
 
         if (m_useVelocityControl) {
-            m_motor.setControl(m_velocityRequest);
+            double currentVelocity = getRPM();
+            
+            if(currentVelocity < m_targetRPM - Constants.Shooter.threshold) {
+                m_motor.setControl(m_dutyCycleRequest.withOutput(1.0));
+            } else if(currentVelocity > m_targetRPM + Constants.Shooter.threshold) {
+                m_motor.setControl(m_dutyCycleRequest.withOutput(0));
+            } else {
+                double p_component = (m_targetRPM - currentVelocity) * Constants.Shooter.kP;
+                double f_component = m_targetRPM * Constants.Shooter.kF;
+                double output = Math.max(0.0, Math.min(1.0, (p_component + f_component) / 12000.0));
+                m_motor.setControl(m_dutyCycleRequest.withOutput(output));
+            }
         } else {
             m_motor.setControl(m_dutyCycleRequest);
         }
@@ -140,6 +141,5 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putNumber("Shooter/Motor 2 Temp", m_motor2.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
-        SmartDashboard.putNumber("Shooter/kP", slot0.kP);
     }
 }
