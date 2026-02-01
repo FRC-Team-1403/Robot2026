@@ -26,6 +26,7 @@ public class Shooter extends SubsystemBase {
     private final StatusSignal<AngularVelocity> m_velocity;
     private final StatusSignal<AngularVelocity> m_velocity2;
     private final Slot0Configs slot0;
+    private final Slot0Configs readBack = new Slot0Configs();
 
     public Shooter() {
         m_motor = new TalonFX(1);
@@ -116,6 +117,14 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         m_velocity.refresh();
         m_velocity2.refresh();
+        m_motor.getConfigurator().refresh(readBack);
+
+        SmartDashboard.putNumber("Shooter/Actual kS", readBack.kS);
+        SmartDashboard.putNumber("Shooter/Actual kV", readBack.kV);
+        SmartDashboard.putNumber("Shooter/Actual kA", readBack.kA);
+        SmartDashboard.putNumber("Shooter/Actual kP", readBack.kP);
+        SmartDashboard.putNumber("Shooter/Actual kI", readBack.kI);
+        SmartDashboard.putNumber("Shooter/Actual kD", readBack.kD);
 
         if (m_useVelocityControl) {
             m_motor.setControl(m_velocityRequest);
@@ -140,6 +149,5 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putNumber("Shooter/Motor 2 Temp", m_motor2.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
-        SmartDashboard.putNumber("Shooter/kP", slot0.kP);
     }
 }
