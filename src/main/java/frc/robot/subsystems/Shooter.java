@@ -107,14 +107,19 @@ public class Shooter extends SubsystemBase {
         m_velocity.refresh();
         m_velocity2.refresh();
 
+        boolean usingBangBang = false;
+
         if (m_useVelocityControl) {
             double currentVelocity = getRPM();
             
             if(currentVelocity < m_targetRPM - Constants.Shooter.threshold) {
+                usingBangBang = true;
                 m_motor.setControl(m_dutyCycleRequest.withOutput(1.0));
             } else if(currentVelocity > m_targetRPM + Constants.Shooter.threshold) {
+                usingBangBang = true;
                 m_motor.setControl(m_dutyCycleRequest.withOutput(0));
             } else {
+                usingBangBang = true;
                 double p_component = (m_targetRPM - currentVelocity) * Constants.Shooter.kP;
                 double f_component = m_targetRPM * Constants.Shooter.kF;
                 double output = Math.max(0.0, Math.min(1.0, (p_component + f_component) / 12000.0));
@@ -141,5 +146,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putNumber("Shooter/Motor 2 Temp", m_motor2.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
+        SmartDashboard.putBoolean("Shooter/Using Bang-Bang", usingBangBang);
     }
 }
