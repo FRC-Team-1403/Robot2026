@@ -21,7 +21,7 @@ public class Shooter extends SubsystemBase {
     private final DutyCycleOut m_dutyCycleRequest;
     private double m_targetRPM = 0;
     private double m_targetDutyCycle = 0;
-    private boolean m_useVelocityControl = true;
+    private boolean m_useVelocityControl = false;
     private final StatusSignal<AngularVelocity> m_velocity;
     private final StatusSignal<AngularVelocity> m_velocity2;
 
@@ -113,16 +113,14 @@ public class Shooter extends SubsystemBase {
             double currentVelocity = getRPM();
             
             if(currentVelocity < m_targetRPM - Constants.Shooter.threshold) {
-                usingBangBang = true;
                 m_motor.setControl(m_dutyCycleRequest.withOutput(1.0));
             } else if(currentVelocity > m_targetRPM + Constants.Shooter.threshold) {
-                usingBangBang = true;
-                m_motor.setControl(m_dutyCycleRequest.withOutput(0));
+                m_motor.setControl(m_dutyCycleRequest.withOutput(0.3));
             } else {
-                usingBangBang = true;
-                double p_component = (m_targetRPM - currentVelocity) * Constants.Shooter.kP;
-                double f_component = m_targetRPM * Constants.Shooter.kF;
-                double output = Math.max(0.0, Math.min(1.0, (p_component + f_component) / 12000.0));
+                double error = m_targetRPM - currentVelocity;
+                double p_output = error * Constants.Shooter.kP;
+                double f_output = m_targetRPM * Constants.Shooter.kF;
+                double output = Math.max(0, Math.min(0.3, p_output + f_output));
                 m_motor.setControl(m_dutyCycleRequest.withOutput(output));
             }
         } else {

@@ -9,6 +9,7 @@ import frc.robot.commands.ShooterCommandPower;
 import frc.robot.commands.ShooterCommandRPM;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -42,7 +43,11 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 1900));
+    m_driverController.rightTrigger()
+    .whileTrue(new ShooterCommandRPM(m_shooter, 2500))
+    .onFalse(new InstantCommand(() -> m_shooter.setTargetPower(0), m_shooter));
+
+
     // RPM
 
    m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.6));
