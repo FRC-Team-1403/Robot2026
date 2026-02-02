@@ -1,15 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.MathUtil;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterHood;
-import frc.robot.subsystems.Turret;
 import frc.robot.vision.Vision;
-import org.littletonrobotics.junction.Logger;
 
 public class ShooterCommand extends Command {
 
@@ -41,7 +38,7 @@ public class ShooterCommand extends Command {
                 m_shooterHood.setSetpoint(Constants.ShooterHood.veryFarAngle);
             }
             else if (dist > Constants.Shooter.farDist) {
-                m_shooter.setTargetRPM(Constants.Shooter.farDist);
+                m_shooter.setTargetRPM(Constants.Shooter.farRPM);
                 m_shooterHood.setSetpoint(Constants.ShooterHood.farAngle);
             }
             else if (dist > Constants.Shooter.kindaFarDist) {
@@ -49,7 +46,7 @@ public class ShooterCommand extends Command {
                 m_shooterHood.setSetpoint(Constants.ShooterHood.kindaFarAngle);
             }
             else if (dist > Constants.Shooter.mediumDist) {
-                m_shooter.setTargetRPM(Constants.Shooter.mediumDist);
+                m_shooter.setTargetRPM(Constants.Shooter.mediumRPM);
                 m_shooterHood.setSetpoint(Constants.ShooterHood.mediumAngle);
             }
             else if (dist > Constants.Shooter.kindaMediumDist) {
@@ -65,7 +62,7 @@ public class ShooterCommand extends Command {
                 m_shooterHood.setSetpoint(Constants.ShooterHood.kindaCloseAngle);
             }
             else {
-                m_shooter.setTargetRPM(Constants.Shooter.superCloseDist);
+                m_shooter.setTargetRPM(Constants.Shooter.superCloseRPM);
                 m_shooterHood.setSetpoint(Constants.ShooterHood.superCloseAngle);
             }
         }
