@@ -25,7 +25,6 @@ public class Shooter extends SubsystemBase {
     private boolean m_useVelocityControl = true;
     private final StatusSignal<AngularVelocity> m_velocity;
     private final StatusSignal<AngularVelocity> m_velocity2;
-    private final Slot0Configs slot0;
 
     public Shooter() {
         m_motor = new TalonFX(1);
@@ -34,24 +33,26 @@ public class Shooter extends SubsystemBase {
         m_velocityRequest = new VelocityVoltage(0);
         m_velocityRequest.Slot = 0;
         m_velocityRequest.EnableFOC = true;
+
         m_dutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-        slot0 = config.Slot0;
-        slot0.kS = 0.25;
-        slot0.kV = 0.12;
-        slot0.kA = 0.02;
-        slot0.kP = 0.3;
-        slot0.kI = 0.0;
-        slot0.kD = 0.01;
-
         config.CurrentLimits.StatorCurrentLimit = 40;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimit = 40;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        Slot0Configs slot0 = new Slot0Configs();
+        slot0.kP = 0.20;
+        slot0.kI = 0.01;
+        slot0.kD = 0.005;
+        slot0.kS = 0.10;
+        slot0.kV = 0.11;
+        slot0.kA = 3.0;
+        config.Slot0 = slot0;
 
         m_motor.getConfigurator().apply(config);
 
@@ -140,6 +141,5 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putNumber("Shooter/Motor 2 Temp", m_motor2.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
-        SmartDashboard.putNumber("Shooter/kP", slot0.kP);
     }
 }
