@@ -5,23 +5,26 @@ import frc.robot.subsystems.Shooter;
 
 public class ShooterCommandPower extends Command {
   private final Shooter m_shooter;
-  private final double m_targetPower;
+  private final double m_flywheelTargetPower;
+  private final double m_rollerTargetPower;
   
-  public ShooterCommandPower(Shooter shooter, double targetPower) {
+  public ShooterCommandPower(Shooter shooter, double flywheelTargetPower, double rollerTargetPower) {
     m_shooter = shooter;
-    m_targetPower = targetPower;
+    m_flywheelTargetPower = flywheelTargetPower;
+    m_rollerTargetPower = rollerTargetPower;
     addRequirements(shooter);
   }
   
   @Override
   public void initialize() {
-    m_shooter.setTargetPower(m_targetPower);
+    m_shooter.setFlywheelTargetPower(m_flywheelTargetPower);
+    m_shooter.setRollerTargetPower(m_rollerTargetPower);
   }
   
   @Override
   public void execute() {
 
-}
+  }
   
   @Override
   public void end(boolean interrupted) {
