@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -31,7 +31,7 @@ public class Shooter extends SubsystemBase {
     private final PIDController m_rollerPIDController;
     private final SimpleMotorFeedforward m_rollerFeedforward;
     private final RelativeEncoder m_rollerEncoder;
-    private final VelocityTorqueCurrentFOC m_flywheelVelocityRequest;
+    private final VelocityVoltage m_flywheelVelocityRequest;
     private final DutyCycleOut m_flywheelDutyCycleRequest;
     private double m_flywheelTargetRPM = 0;
     private double m_flywheelTargetDutyCycle = 0;
@@ -49,7 +49,7 @@ public class Shooter extends SubsystemBase {
         m_rollerEncoder = m_rollerMotor.getEncoder();
         m_rollerPIDController = new PIDController(0.0002, 0.000001, 0.0001);
         m_rollerFeedforward = new SimpleMotorFeedforward(0.0, 0.00019, 0.0);
-        m_flywheelVelocityRequest = new VelocityTorqueCurrentFOC(0);
+        m_flywheelVelocityRequest = new VelocityVoltage(0);
         m_flywheelVelocityRequest.Slot = 0;
         m_flywheelDutyCycleRequest = new DutyCycleOut(0);
 
