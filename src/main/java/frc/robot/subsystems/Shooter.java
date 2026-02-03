@@ -3,13 +3,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
     private final TalonFX m_motor;
     private final TalonFX m_motor2;
-    private final VelocityVoltage m_velocityRequest;
+    private final VelocityTorqueCurrentFOC m_velocityRequest;
     private final DutyCycleOut m_dutyCycleRequest;
     private double m_targetRPM = 0;
     private double m_targetDutyCycle = 0;
@@ -30,10 +30,9 @@ public class Shooter extends SubsystemBase {
         m_motor = new TalonFX(1);
         m_motor2 = new TalonFX(2);
 
-        m_velocityRequest = new VelocityVoltage(0);
+        m_velocityRequest = new VelocityTorqueCurrentFOC(0);
         m_velocityRequest.Slot = 0;
-        m_velocityRequest.EnableFOC = true;
-
+ 
         m_dutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
