@@ -9,32 +9,39 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.swerve.SwerveConstants;
 
-public class Swervejoystickcommand extends Command {
+/**
+ * Teleop command - translates joystick inputs to swerve drive motion.
+ * Applies deadband and slew rate limiting for smooth control.
+ */
+public class SwerveJoystickCommand extends Command {
 
     private final SwerveDrive m_swerveDrive;
-    private final DoubleSupplier m_xSupplier;
-    private final DoubleSupplier m_ySupplier;
-    private final DoubleSupplier m_rotSupplier;
+    
+    // Input suppliers
+    private final DoubleSupplier m_xSupplier;          // Forward/backward
+    private final DoubleSupplier m_ySupplier;          // Left/right
+    private final DoubleSupplier m_rotSupplier;        // Rotation
     private final BooleanSupplier m_fieldRelativeSupplier;
 
+    // Slew rate limiters (smooth acceleration)
     private final SlewRateLimiter m_xLimiter;
     private final SlewRateLimiter m_yLimiter;
     private final SlewRateLimiter m_rotLimiter;
 
-    public Swervejoystickcommand(
+    public SwerveJoystickCommand(
         SwerveDrive swerveDrive,
         DoubleSupplier xSupplier,
         DoubleSupplier ySupplier,
         DoubleSupplier rotSupplier,
         BooleanSupplier fieldRelativeSupplier
     ) {
-
         m_swerveDrive = swerveDrive;
         m_xSupplier = xSupplier;
         m_ySupplier = ySupplier;
         m_rotSupplier = rotSupplier;
         m_fieldRelativeSupplier = fieldRelativeSupplier;
 
+        // Limit acceleration to 3.0 units/second
         m_xLimiter = new SlewRateLimiter(3.0);
         m_yLimiter = new SlewRateLimiter(3.0);
         m_rotLimiter = new SlewRateLimiter(3.0);
@@ -42,16 +49,32 @@ public class Swervejoystickcommand extends Command {
         addRequirements(swerveDrive);
     }
 
+    /**
+     * Called every 20ms - processes inputs and drives robot.
+     */
     @Override
     public void execute() {
-        double xSpeed = MathUtil.applyDeadband(m_xSupplier.getAsDouble(), 0.1);
-        double ySpeed = MathUtil.applyDeadband(m_ySupplier.getAsDouble(), 0.1);
-        double rotSpeed = MathUtil.applyDeadband(m_rotSupplier.getAsDouble(), 0.1);
+        // Read joystick values
+        double xSpeed = m_xSupplier.getAsDouble();
+        double ySpeed = m_ySupplier.getAsDouble();
+        double rotSpeed = m_rotSupplier.getAsDouble();
+        
+        // Apply deadband (ignore small movements < 10%)
+        xSpeed = MathUtil.applyDeadband(xSpeed, 0.1);
+        ySpeed = MathUtil.applyDeadband(ySpeed, 0.1);
+        rotSpeed = MathUtil.applyDeadband(rotSpeed, 0.1);
 
-        xSpeed = m_xLimiter.calculate(xSpeed) * SwerveConstants.kMaxSpeedMetersPerSecond;
-        ySpeed = m_yLimiter.calculate(ySpeed) * SwerveConstants.kMaxSpeedMetersPerSecond;
-        rotSpeed = m_rotLimiter.calculate(rotSpeed) * SwerveConstants.kMaxAngularSpeed;
+        // Apply slew rate limiting (smooth acceleration)
+        xSpeed = m_xLimiter.calculate(xSpeed);
+        ySpeed = m_yLimiter.calculate(ySpeed);
+        rotSpeed = m_rotLimiter.calculate(rotSpeed);
+        
+        // Scale to actual velocities
+        xSpeed = xSpeed * SwerveConstants.kMaxSpeedMetersPerSecond;
+        ySpeed = ySpeed * SwerveConstants.kMaxSpeedMetersPerSecond;
+        rotSpeed = rotSpeed * SwerveConstants.kMaxAngularSpeed;
 
+        // Drive the robot
         m_swerveDrive.drive(
             xSpeed,
             ySpeed,
@@ -60,8 +83,19 @@ public class Swervejoystickcommand extends Command {
         );
     }
 
+    /**
+     * Stop robot when command ends.
+     */
     @Override
     public void end(boolean interrupted) {
         m_swerveDrive.stop();
+    }
+    
+    /**
+     * This command never ends on its own - runs until interrupted.
+     */
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

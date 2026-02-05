@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Swervejoystickcommand;
+import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
@@ -18,7 +18,7 @@ public class RobotContainer {
     
     private void configureDefaultCommands() {
         m_swerveDrive.setDefaultCommand(
-            new Swervejoystickcommand(
+            new SwerveJoystickCommand(
                 m_swerveDrive,
                 () -> -m_driverController.getLeftY(),
                 () -> -m_driverController.getLeftX(),

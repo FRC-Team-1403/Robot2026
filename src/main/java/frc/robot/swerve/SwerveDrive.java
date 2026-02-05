@@ -14,24 +14,28 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Swerve drive subsystem - manages all 4 modules, gyro, and pose estimation.
+ */
 public class SwerveDrive extends SubsystemBase {
 
+    // Hardware
     private final SwerveModule m_frontLeft;
     private final SwerveModule m_frontRight;
     private final SwerveModule m_backLeft;
     private final SwerveModule m_backRight;
-
     private final AHRS m_gyro;
+    
+    // Tracking
     private final SwerveDrivePoseEstimator m_poseEstimator;
     private final Field2d m_field;
 
     public SwerveDrive() {
-
+        // Initialize all four swerve modules
         m_frontLeft = new SwerveModule(
             "Front Left",
             SwerveConstants.ModuleConstants.kFrontLeftDriveID,
@@ -68,7 +72,10 @@ public class SwerveDrive extends SubsystemBase {
             SwerveConstants.ModuleConstants.kBackRightDriveInverted
         );
 
-        m_gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);   
+        // Initialize gyro on MXP SPI port
+        m_gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
+        
+        // Initialize pose estimator at origin
         m_poseEstimator = new SwerveDrivePoseEstimator(
             SwerveConstants.kDriveKinematics,
             getRotation2d(),
@@ -76,29 +83,34 @@ public class SwerveDrive extends SubsystemBase {
             new Pose2d()
         );
 
+        // Field visualization for dashboard
         m_field = new Field2d();
         SmartDashboard.putData("Field", m_field);
 
+        // Configure PathPlanner for autonomous
         configurePathPlanner();
 
+        // Zero gyro after 1 second delay (allows gyro to initialize)
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
                 zeroHeading();
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
         }).start();
     }
 
+    /**
+     * Configure PathPlanner for autonomous path following.
+     */
     private void configurePathPlanner() {
         try {
             RobotConfig config = RobotConfig.fromGUISettings();
 
             AutoBuilder.configure(
-                this::getPose,
-                this::resetPose,
-                this::getChassisSpeeds,
-                (speeds, feedforwards) -> driveRobotRelative(speeds),
+                this::getPose,                    // Pose supplier
+                this::resetPose,                  // Pose resetter
+                this::getChassisSpeeds,           // Speeds supplier
+                (speeds, feedforwards) -> driveRobotRelative(speeds),  // Drive method
                 new PPHolonomicDriveController(
                     SwerveConstants.kTranslationPID,
                     SwerveConstants.kRotationPID
@@ -113,10 +125,14 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
+    /**
+     * Drive with X/Y speeds and rotation. Can be field-relative or robot-relative.
+     */
     public void drive(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative) {
         ChassisSpeeds speeds;
 
         if (fieldRelative) {
+            // Convert field-relative speeds to robot-relative
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, rotSpeed, getRotation2d()
             );
@@ -127,12 +143,18 @@ public class SwerveDrive extends SubsystemBase {
         driveRobotRelative(speeds);
     }
 
+    /**
+     * Drive using robot-relative chassis speeds.
+     */
     public void driveRobotRelative(ChassisSpeeds speeds) {
+        // Discretize to compensate for loop time (reduces drift)
         speeds = ChassisSpeeds.discretize(speeds, 0.02);
 
+        // Convert to individual module states
         SwerveModuleState[] moduleStates =
             SwerveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
 
+        // Scale down if any wheel exceeds max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(
             moduleStates,
             SwerveConstants.kMaxSpeedMetersPerSecond
@@ -141,6 +163,9 @@ public class SwerveDrive extends SubsystemBase {
         setModuleStates(moduleStates);
     }
 
+    /**
+     * Set desired states for all modules. Order: FL, FR, BL, BR
+     */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         m_frontLeft.setDesiredState(desiredStates[0]);
         m_frontRight.setDesiredState(desiredStates[1]);
@@ -148,6 +173,9 @@ public class SwerveDrive extends SubsystemBase {
         m_backRight.setDesiredState(desiredStates[3]);
     }
 
+    /**
+     * Stop all modules.
+     */
     public void stop() {
         m_frontLeft.stop();
         m_frontRight.stop();
@@ -155,6 +183,9 @@ public class SwerveDrive extends SubsystemBase {
         m_backRight.stop();
     }
 
+    /**
+     * Set wheels to X formation (defensive stance - hard to push).
+     */
     public void setX() {
         m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
         m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
@@ -162,6 +193,9 @@ public class SwerveDrive extends SubsystemBase {
         m_backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
     }
 
+    /**
+     * Get current states of all modules.
+     */
     public SwerveModuleState[] getModuleStates() {
         return new SwerveModuleState[] {
             m_frontLeft.getState(),
@@ -171,6 +205,9 @@ public class SwerveDrive extends SubsystemBase {
         };
     }
 
+    /**
+     * Get current positions of all modules.
+     */
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
@@ -180,30 +217,51 @@ public class SwerveDrive extends SubsystemBase {
         };
     }
 
+    /**
+     * Get estimated robot pose on field.
+     */
     public Pose2d getPose() {
         return m_poseEstimator.getEstimatedPosition();
     }
 
+    /**
+     * Reset pose to specific position.
+     */
     public void resetPose(Pose2d pose) {
         m_poseEstimator.resetPosition(getRotation2d(), getModulePositions(), pose);
     }
 
+    /**
+     * Get gyro rotation (negated to match WPILib coordinate system).
+     */
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(-m_gyro.getYaw());
     }
 
+    /**
+     * Get heading in radians, wrapped to [-π, π].
+     */
     public double getHeading() {
         return MathUtil.angleModulus(getRotation2d().getRadians());
     }
 
+    /**
+     * Zero the gyro - sets current direction as forward (0°).
+     */
     public void zeroHeading() {
         m_gyro.reset();
     }
 
+    /**
+     * Get current robot-relative chassis speeds.
+     */
     public ChassisSpeeds getChassisSpeeds() {
         return SwerveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
     }
 
+    /**
+     * Reset all module encoders to their absolute encoder readings.
+     */
     public void resetEncoders() {
         m_frontLeft.resetToAbsolute();
         m_frontRight.resetToAbsolute();
@@ -211,11 +269,18 @@ public class SwerveDrive extends SubsystemBase {
         m_backRight.resetToAbsolute();
     }
 
+    /**
+     * Called every 20ms - updates pose estimate and publishes telemetry.
+     */
     @Override
     public void periodic() {
+        // Update pose estimate with latest sensor data
         m_poseEstimator.update(getRotation2d(), getModulePositions());
+        
+        // Update field visualization
         m_field.setRobotPose(getPose());
 
+        // Publish telemetry to dashboard
         SmartDashboard.putNumber("Gyro Heading", Math.toDegrees(getHeading()));
         SmartDashboard.putNumber("Robot X", getPose().getX());
         SmartDashboard.putNumber("Robot Y", getPose().getY());
