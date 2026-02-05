@@ -24,7 +24,7 @@ public class IntakeTest extends SubsystemBase {
   private boolean m_useVelocityControl = false;
 
   public IntakeTest() {
-    m_motor1 = new SparkMax(3, MotorType.kBrushless);
+    m_motor1 = new SparkMax(10, MotorType.kBrushless);
     
     SparkMaxConfig config1 = new SparkMaxConfig();
     config1.idleMode(IdleMode.kCoast);
