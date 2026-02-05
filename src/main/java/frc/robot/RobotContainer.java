@@ -70,10 +70,11 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
+
    m_driverController.rightTrigger().whileTrue(new IntakeCommandRPM(m_intake, 0));
     // RPM
 
-   m_driverController.leftTrigger().whileTrue(new IntakeCommandPower(m_intake, 0));
+   m_driverController.leftTrigger().whileTrue(new IntakeCommandPower(m_intake, 0.3));
    //power
    
    // Note that X is defined as forward according to WPILib convention,
