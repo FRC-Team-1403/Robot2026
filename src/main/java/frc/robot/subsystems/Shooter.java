@@ -17,8 +17,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,7 +29,7 @@ public class Shooter extends SubsystemBase {
     private final TalonFX m_flywheelLeader;
     private final TalonFX m_flywheelFollower;
     private final SparkMax m_rollerMotor;
-    private final PIDController m_rollerPIDController;
+    private final ProfiledPIDController m_rollerPIDController;
     private final SimpleMotorFeedforward m_rollerFeedforward;
     private final RelativeEncoder m_rollerEncoder;
     private final VelocityVoltage m_flywheelVelocityRequest;
@@ -45,12 +46,17 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         m_flywheelLeader = new TalonFX(1);
         m_flywheelFollower = new TalonFX(2);
-        m_rollerMotor = new SparkMax(3, MotorType.kBrushless);
+        m_rollerMotor = new SparkMax(42, MotorType.kBrushless);
         m_rollerEncoder = m_rollerMotor.getEncoder();
-        m_rollerPIDController = new PIDController(0.0002, 0.000001, 0.0001);
-        m_rollerFeedforward = new SimpleMotorFeedforward(0.0, 0.00019, 0.0);
+        m_rollerPIDController = new ProfiledPIDController(
+                0.00008,
+                0,
+                0.0001,
+                new TrapezoidProfile.Constraints(5000, 10000));
+        m_rollerFeedforward = new SimpleMotorFeedforward(0.0, 0.0021, 0.0);
         m_flywheelVelocityRequest = new VelocityVoltage(0);
         m_flywheelVelocityRequest.Slot = 0;
+        m_flywheelVelocityRequest.EnableFOC = true;
         m_flywheelDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration flywheelLeaderConfig = new TalonFXConfiguration();
@@ -62,11 +68,11 @@ public class Shooter extends SubsystemBase {
         flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         Slot0Configs flywheelPIDConfig = new Slot0Configs();
-        flywheelPIDConfig.kP = 0.20;
+        flywheelPIDConfig.kP = 0.25;
         flywheelPIDConfig.kI = 0.01;
         flywheelPIDConfig.kD = 0.005;
         flywheelPIDConfig.kS = 0.10;
-        flywheelPIDConfig.kV = 0.11;
+        flywheelPIDConfig.kV = 0.115;
         flywheelPIDConfig.kA = 3.0;
         flywheelLeaderConfig.Slot0 = flywheelPIDConfig;
 
@@ -85,8 +91,13 @@ public class Shooter extends SubsystemBase {
 
         SparkMaxConfig rollerConfig = new SparkMaxConfig();
         rollerConfig.idleMode(IdleMode.kCoast);
-        rollerConfig.smartCurrentLimit(30);
-        m_rollerMotor.configure(rollerConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+        rollerConfig.smartCurrentLimit(40);
+        rollerConfig.inverted(true);
+        m_rollerMotor.configure(
+                rollerConfig,
+                SparkBase.ResetMode.kResetSafeParameters,
+                SparkBase.PersistMode.kPersistParameters
+        );
 
         m_flywheelLeaderVelocity = m_flywheelLeader.getVelocity();
         m_flywheelFollowerVelocity = m_flywheelFollower.getVelocity();
@@ -128,7 +139,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getRollerRPM() {
-        return m_rollerEncoder.getVelocity();
+        return m_rollerEncoder.getVelocity() / Constants.Shooter.rollerGearRatio;
     }
 
     public double getFlywheelTargetRPM() {
@@ -152,7 +163,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isRollerAtSpeed() {
-        return Math.abs(getRollerRPMError()) < Constants.Shooter.rpmTolerance;
+        return m_rollerPIDController.atGoal();
     }
 
     public double getFlywheelTargetDutyCycle() {
@@ -175,7 +186,8 @@ public class Shooter extends SubsystemBase {
         }
 
         if (m_rollerUseVelocityControl) {
-            double feedforwardOutput = m_rollerFeedforward.calculate(m_rollerTargetRPM);
+            double motorTargetRPM = m_rollerTargetRPM * Constants.Shooter.rollerGearRatio;
+            double feedforwardOutput = m_rollerFeedforward.calculate(motorTargetRPM);
             double pidOutput = m_rollerPIDController.calculate(getRollerRPM(), m_rollerTargetRPM);
             m_rollerMotor.setVoltage(feedforwardOutput + pidOutput);
         } else {
