@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.22858606557377,
+        "y": 1.4896004098360651
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.109042693807643,
+        "y": 1.997689896083843
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.993852459016393,
+        "y": 1.9331454918032784
+      },
+      "prevControl": {
+        "x": 6.3915899988967935,
+        "y": 1.7784793821527525
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Proc2P"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.752,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 2.0,
+    "rotation": 128.1572265873691
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 140.19442890773485
+  },
+  "useDefaultConstraints": true
+}
