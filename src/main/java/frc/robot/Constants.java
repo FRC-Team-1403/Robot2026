@@ -13,8 +13,15 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    
+    public static final double kLoopTime = 0.02;
+    //controls if the debug tab is used on shuffleboard
+    public static final boolean DEBUG_MODE = false;
+    public static final boolean ENABLE_SYSID = false;
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    
   }
 
   public static class Shooter{
