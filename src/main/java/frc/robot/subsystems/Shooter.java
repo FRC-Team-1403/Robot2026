@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC; // Changed from VelocityVoltage
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -23,6 +23,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
@@ -32,14 +33,18 @@ public class Shooter extends SubsystemBase {
     private final ProfiledPIDController m_rollerPIDController;
     private final SimpleMotorFeedforward m_rollerFeedforward;
     private final RelativeEncoder m_rollerEncoder;
-    private final VelocityVoltage m_flywheelVelocityRequest;
+
+    private final VelocityTorqueCurrentFOC m_flywheelVelocityRequest; // Changed type
     private final DutyCycleOut m_flywheelDutyCycleRequest;
+
     private double m_flywheelTargetRPM = 0;
     private double m_flywheelTargetDutyCycle = 0;
     private double m_rollerTargetRPM = 0;
     private double m_rollerTargetDutyCycle = 0;
+
     private boolean m_flywheelUseVelocityControl = true;
     private boolean m_rollerUseVelocityControl = true;
+
     private final StatusSignal<AngularVelocity> m_flywheelLeaderVelocity;
     private final StatusSignal<AngularVelocity> m_flywheelFollowerVelocity;
 
@@ -48,17 +53,20 @@ public class Shooter extends SubsystemBase {
         m_flywheelFollower = new TalonFX(2);
         m_rollerMotor = new SparkMax(42, MotorType.kBrushless);
         m_rollerEncoder = m_rollerMotor.getEncoder();
+
         m_rollerPIDController = new ProfiledPIDController(
-                0.00008,
-                0,
-                0.0001,
-                new TrapezoidProfile.Constraints(5000, 10000));
+            0.00008, 0, 0.0001,
+            new TrapezoidProfile.Constraints(5000, 10000));
         m_rollerFeedforward = new SimpleMotorFeedforward(0.0, 0.0021, 0.0);
-        m_flywheelVelocityRequest = new VelocityVoltage(0);
+
+        // Initialize with VelocityTorqueCurrentFOC instead of VelocityVoltage
+        m_flywheelVelocityRequest = new VelocityTorqueCurrentFOC(0);
         m_flywheelVelocityRequest.Slot = 0;
-        m_flywheelVelocityRequest.EnableFOC = true;
+        // Note: EnableFOC is implicit with VelocityTorqueCurrentFOC, no need to set it
+
         m_flywheelDutyCycleRequest = new DutyCycleOut(0);
 
+        // Configure flywheel leader
         TalonFXConfiguration flywheelLeaderConfig = new TalonFXConfiguration();
         flywheelLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         flywheelLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -67,8 +75,9 @@ public class Shooter extends SubsystemBase {
         flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
         flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+        // PID configuration - may need tuning for torque current control
         Slot0Configs flywheelPIDConfig = new Slot0Configs();
-        flywheelPIDConfig.kP = 0.25;
+        flywheelPIDConfig.kP = 0.25;  // You may need to retune these values
         flywheelPIDConfig.kI = 0.01;
         flywheelPIDConfig.kD = 0.005;
         flywheelPIDConfig.kS = 0.10;
@@ -78,6 +87,7 @@ public class Shooter extends SubsystemBase {
 
         m_flywheelLeader.getConfigurator().apply(flywheelLeaderConfig);
 
+        // Configure flywheel follower
         TalonFXConfiguration flywheelFollowerConfig = new TalonFXConfiguration();
         flywheelFollowerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         flywheelFollowerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -89,14 +99,15 @@ public class Shooter extends SubsystemBase {
         m_flywheelFollower.getConfigurator().apply(flywheelFollowerConfig);
         m_flywheelFollower.setControl(new Follower(1, MotorAlignmentValue.Opposed));
 
+        // Configure roller motor
         SparkMaxConfig rollerConfig = new SparkMaxConfig();
         rollerConfig.idleMode(IdleMode.kCoast);
         rollerConfig.smartCurrentLimit(40);
         rollerConfig.inverted(true);
         m_rollerMotor.configure(
-                rollerConfig,
-                SparkBase.ResetMode.kResetSafeParameters,
-                SparkBase.PersistMode.kPersistParameters
+            rollerConfig,
+            SparkBase.ResetMode.kResetSafeParameters,
+            SparkBase.PersistMode.kPersistParameters
         );
 
         m_flywheelLeaderVelocity = m_flywheelLeader.getVelocity();
@@ -105,7 +116,7 @@ public class Shooter extends SubsystemBase {
 
     public void setFlywheelTargetRPM(double rpm) {
         m_flywheelTargetRPM = rpm;
-        m_flywheelVelocityRequest.Velocity = rpm / 60.0;
+        m_flywheelVelocityRequest.Velocity = rpm / 60.0; // Convert RPM to RPS
         m_flywheelUseVelocityControl = true;
     }
 
@@ -194,6 +205,7 @@ public class Shooter extends SubsystemBase {
             m_rollerMotor.set(m_rollerTargetDutyCycle);
         }
 
+        // SmartDashboard telemetry
         SmartDashboard.putNumber("Flywheel/Target RPM", m_flywheelTargetRPM);
         SmartDashboard.putNumber("Flywheel/Leader RPM", getFlywheelLeaderRPM());
         SmartDashboard.putNumber("Flywheel/Follower RPM", getFlywheelFollowerRPM());
@@ -211,6 +223,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Flywheel/Leader Temp", m_flywheelLeader.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putNumber("Flywheel/Follower Temp", m_flywheelFollower.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putBoolean("Flywheel/Using Velocity Control", m_flywheelUseVelocityControl);
+
         SmartDashboard.putNumber("Roller/RPM", getRollerRPM());
         SmartDashboard.putNumber("Roller/Target RPM", m_rollerTargetRPM);
         SmartDashboard.putNumber("Roller/RPM Error", getRollerRPMError());
