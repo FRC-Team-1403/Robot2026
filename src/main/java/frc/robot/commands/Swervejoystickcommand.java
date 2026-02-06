@@ -13,7 +13,7 @@ import frc.robot.swerve.SwerveConstants;
  * Teleop command - translates joystick inputs to swerve drive motion.
  * Applies deadband and slew rate limiting for smooth control.
  */
-public class SwerveJoystickCommand extends Command {
+public class Swervejoystickcommand extends Command {
 
     private final SwerveDrive m_swerveDrive;
     
@@ -28,7 +28,7 @@ public class SwerveJoystickCommand extends Command {
     private final SlewRateLimiter m_yLimiter;
     private final SlewRateLimiter m_rotLimiter;
 
-    public SwerveJoystickCommand(
+    public Swervejoystickcommand(
         SwerveDrive swerveDrive,
         DoubleSupplier xSupplier,
         DoubleSupplier ySupplier,
@@ -70,8 +70,8 @@ public class SwerveJoystickCommand extends Command {
         rotSpeed = m_rotLimiter.calculate(rotSpeed);
         
         // Scale to actual velocities
-        xSpeed = xSpeed * SwerveConstants.kMaxSpeedMetersPerSecond;
-        ySpeed = ySpeed * SwerveConstants.kMaxSpeedMetersPerSecond;
+        xSpeed = xSpeed * SwerveConstants.kMaxSpeed;
+        ySpeed = ySpeed * SwerveConstants.kMaxSpeed;
         rotSpeed = rotSpeed * SwerveConstants.kMaxAngularSpeed;
 
         // Drive the robot

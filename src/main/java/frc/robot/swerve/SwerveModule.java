@@ -1,6 +1,5 @@
 package frc.robot.swerve;
 
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -385,6 +384,7 @@ public class SwerveModule {
         // Optimize the desired state
         // This may reverse the drive direction and adjust angle to minimize rotation
         // For example: instead of turning 270°, turn 90° and reverse drive
+        @SuppressWarnings("all")
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, currentState.angle);
         
         // Extract optimized angle and speed

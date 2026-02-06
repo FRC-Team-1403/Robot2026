@@ -1,6 +1,10 @@
 package frc.robot.swerve;
 
+
 import com.studica.frc.AHRS;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -17,6 +21,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+//import team1403.lib.device.wpi.NavxAhrs;
+//import com.kauailabs.navx.AHRS;
 
 /**
  * Swerve drive subsystem - manages all 4 modules, gyro, and pose estimation.
@@ -24,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class SwerveDrive extends SubsystemBase {
 
     // Hardware
+    
     private final SwerveModule m_frontLeft;
     private final SwerveModule m_frontRight;
     private final SwerveModule m_backLeft;
@@ -157,7 +164,7 @@ public class SwerveDrive extends SubsystemBase {
         // Scale down if any wheel exceeds max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(
             moduleStates,
-            SwerveConstants.kMaxSpeedMetersPerSecond
+            SwerveConstants.kMaxSpeed
         );
 
         setModuleStates(moduleStates);
@@ -284,6 +291,7 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("Gyro Heading", Math.toDegrees(getHeading()));
         SmartDashboard.putNumber("Robot X", getPose().getX());
         SmartDashboard.putNumber("Robot Y", getPose().getY());
+        Logger.recordOutput("Robot Pose", getPose());
         SmartDashboard.putNumber("Robot Rotation", getPose().getRotation().getDegrees());
     }
 }
