@@ -68,30 +68,30 @@ public final class SwerveConstants {
     public static final class ModuleConstants {
         
         // Front Left
-        public static final int kFrontLeftDriveID = 1;
+        public static final int kFrontLeftDriveID = 13;
         public static final int kFrontLeftSteerID = 2;
-        public static final int kFrontLeftEncoderID = 9;
+        public static final int kFrontLeftEncoderID =1 9; //fix
         public static final double kFrontLeftOffset = 0.0;  // Calibrate: align wheel forward, set offset = -rawValue
         public static final boolean kFrontLeftDriveInverted = false;
         
         // Front Right
-        public static final int kFrontRightDriveID = 3;
-        public static final int kFrontRightSteerID = 4;
-        public static final int kFrontRightEncoderID = 10;
+        public static final int kFrontRightDriveID = 9;
+        public static final int kFrontRightSteerID = 8;
+        public static final int kFrontRightEncoderID = 10; //fix
         public static final double kFrontRightOffset = 0.0;
         public static final boolean kFrontRightDriveInverted = true;
         
         // Back Left
-        public static final int kBackLeftDriveID = 5;
-        public static final int kBackLeftSteerID = 6;
-        public static final int kBackLeftEncoderID = 11;
+        public static final int kBackLeftDriveID = 11;
+        public static final int kBackLeftSteerID = 10;
+        public static final int kBackLeftEncoderID = 11; //fix
         public static final double kBackLeftOffset = 0.0;
         public static final boolean kBackLeftDriveInverted = false;
         
         // Back Right
         public static final int kBackRightDriveID = 7;
-        public static final int kBackRightSteerID = 8;
-        public static final int kBackRightEncoderID = 12;
+        public static final int kBackRightSteerID = 6;
+        public static final int kBackRightEncoderID = 12; //fix
         public static final double kBackRightOffset = 0.0;
         public static final boolean kBackRightDriveInverted = true;
     }
