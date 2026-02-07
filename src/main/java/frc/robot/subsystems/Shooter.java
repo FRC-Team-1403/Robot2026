@@ -53,7 +53,7 @@ public class Shooter extends SubsystemBase {
                 0,
                 0.0001,
                 new TrapezoidProfile.Constraints(5000, 10000));
-        m_rollerFeedforward = new SimpleMotorFeedforward(0.0, 0.0021, 0.0);
+        m_rollerFeedforward = new SimpleMotorFeedforward(0.0, 0.00205, 0.0);
         m_flywheelVelocityRequest = new VelocityVoltage(0);
         m_flywheelVelocityRequest.Slot = 0;
         m_flywheelVelocityRequest.EnableFOC = true;
@@ -68,11 +68,11 @@ public class Shooter extends SubsystemBase {
         flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         Slot0Configs flywheelPIDConfig = new Slot0Configs();
-        flywheelPIDConfig.kP = 0.5;
+        flywheelPIDConfig.kP = 0.4;
         flywheelPIDConfig.kI = 0.01;
         flywheelPIDConfig.kD = 0.0005;
         flywheelPIDConfig.kS = 0.10;
-        flywheelPIDConfig.kV = 0.118;
+        flywheelPIDConfig.kV = 0.118;//0.118
         flywheelPIDConfig.kA = 3.0;
         flywheelLeaderConfig.Slot0 = flywheelPIDConfig;
 
