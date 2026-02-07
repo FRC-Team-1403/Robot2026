@@ -9,13 +9,10 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import monologue.Logged;
-import team1403.lib.util.CougarLogged;
-import team1403.lib.util.TimeDelayedBoolean;
-import team1403.robot.Constants;
+import frc.lib.util.TimeDelayedBoolean;
 
 //adapted from team 254
-public class SwerveHeadingCorrector implements CougarLogged {
+public class SwerveHeadingCorrector {
     //initial rotation is unknown
     private Optional<Double> yaw_setpoint = Optional.empty();
     private PIDController m_controller = new PIDController(5, 0, 0);
