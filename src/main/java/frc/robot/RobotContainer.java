@@ -42,7 +42,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2375,2200));
+   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2100,1925));
    //2100 flywheel 1925 roller 11-12 ft accurate
   //RPM
 
