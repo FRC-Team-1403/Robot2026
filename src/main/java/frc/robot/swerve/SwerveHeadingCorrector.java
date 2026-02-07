@@ -1,4 +1,4 @@
-package team1403.robot.swerve;
+package frc.robot.swerve;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.lib.util.TimeDelayedBoolean;
+import frc.robot.lib.util.TimeDelayedBoolean;
 
 //adapted from team 254
 public class SwerveHeadingCorrector {
@@ -17,7 +17,7 @@ public class SwerveHeadingCorrector {
     private Optional<Double> yaw_setpoint = Optional.empty();
     private PIDController m_controller = new PIDController(5, 0, 0);
     private TimeDelayedBoolean m_yawZeroDetector = new TimeDelayedBoolean();
-    private LinearFilter m_gyroVelFilter = LinearFilter.singlePoleIIR(Constants.kLoopTime * 5, Constants.kLoopTime);
+    private LinearFilter m_gyroVelFilter = LinearFilter.singlePoleIIR(0.02 * 5, 0.02);//TODO fix
     private ChassisSpeeds m_retSpeeds = new ChassisSpeeds();
 
 
@@ -25,9 +25,7 @@ public class SwerveHeadingCorrector {
     {
         m_controller.enableContinuousInput(-Math.PI, Math.PI);
 
-        if (Constants.DEBUG_MODE) {
-            Constants.kDebugTab.add("SwerveHC PID", m_controller);
-        }
+
     }
 
     private final static double OMEGA_THRESH = 0.03;
@@ -50,10 +48,6 @@ public class SwerveHeadingCorrector {
         if(auto_reset && yaw_setpoint.isPresent()) {
             resetHeadingSetpoint();
         }
-
-        log("SwerveHC/Yaw Setpoint", yaw_setpoint.orElse(current_rotation));
-        log("SwerveHC/Yaw Setpoint Present", yaw_setpoint.isPresent());
-        log("SwerveHC/Ang Vel Filtered", filtered_ang_vel);
 
         if(is_near_zero && yaw_setpoint.isEmpty())
         {

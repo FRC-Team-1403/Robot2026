@@ -115,9 +115,8 @@ public class SwerveDrive extends SubsystemBase {
     * Gets the current chassis speeds of the robot
     * @return Current robot-relative chassis speeds
     */
-    private ChassisSpeeds getCurrentChassisSpeeds() {
-        // This converts your current module states back to chassis speeds
-        return m_kinematics.toChassisSpeeds(getModuleStates());
+    public ChassisSpeeds getChassisSpeeds() {
+        return SwerveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
     }
 
     /**
@@ -129,8 +128,8 @@ public class SwerveDrive extends SubsystemBase {
         // return Math.toRadians(m_gyro.getRate());
         
         // Or for NavX:
-        // return Math.toRadians(m_gyro.getRate());
-        throw new UnsupportedOperationException("Implement getGyroAngularVelocity() for your gyro");
+        return Math.toRadians(m_gyro.getRate());
+        //throw new UnsupportedOperationException("Implement getGyroAngularVelocity() for your gyro");
     }
     // ===== END HELPER METHODS =====
         /**
@@ -178,7 +177,7 @@ public class SwerveDrive extends SubsystemBase {
         // ===== HEADING CORRECTION ADDED HERE =====
         // Apply heading correction to maintain heading when driver isn't rotating
         // Get current robot state for heading correction
-        ChassisSpeeds currentSpeeds = getCurrentChassisSpeeds(); // You'll need to implement this
+        ChassisSpeeds currentSpeeds = getChassisSpeeds(); // You'll need to implement this
         Rotation2d gyroAngle = getRotation2d();
         double gyroAngularVel = getGyroAngularVelocity(); // You'll need to implement this (radians/sec)
         
@@ -306,9 +305,6 @@ public class SwerveDrive extends SubsystemBase {
     /**
      * Get current robot-relative chassis speeds.
      */
-    public ChassisSpeeds getChassisSpeeds() {
-        return SwerveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
-    }
 
     /**
      * Reset all module encoders to their absolute encoder readings.
