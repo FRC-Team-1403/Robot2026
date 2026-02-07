@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.swerve.SwerveHeadingCorrector;
 //import team1403.lib.device.wpi.NavxAhrs;
 //import com.kauailabs.navx.AHRS;
 
@@ -40,6 +42,8 @@ public class SwerveDrive extends SubsystemBase {
     // Tracking
     private final SwerveDrivePoseEstimator m_poseEstimator;
     private final Field2d m_field;
+
+    private SwerveHeadingCorrector m_headingCorrector = new SwerveHeadingCorrector();
 
     public SwerveDrive() {
         // Initialize all four swerve modules
@@ -106,9 +110,33 @@ public class SwerveDrive extends SubsystemBase {
         }).start();
     }
 
+    // ===== ADD THESE HELPER METHODS =====
     /**
-     * Configure PathPlanner for autonomous path following.
-     */
+    * Gets the current chassis speeds of the robot
+    * @return Current robot-relative chassis speeds
+    */
+    private ChassisSpeeds getCurrentChassisSpeeds() {
+        // This converts your current module states back to chassis speeds
+        return m_kinematics.toChassisSpeeds(getModuleStates());
+    }
+
+    /**
+    * Gets the current angular velocity from the gyro
+    * @return Angular velocity in radians per second
+    */
+    private double getGyroAngularVelocity() {
+        // Replace with your actual gyro object - example for Pigeon2:
+        // return Math.toRadians(m_gyro.getRate());
+        
+        // Or for NavX:
+        // return Math.toRadians(m_gyro.getRate());
+        throw new UnsupportedOperationException("Implement getGyroAngularVelocity() for your gyro");
+    }
+    // ===== END HELPER METHODS =====
+        /**
+         * Configure PathPlanner for autonomous path following.
+         */
+    //TODO
     private void configurePathPlanner() {
         try {
             RobotConfig config = RobotConfig.fromGUISettings();
@@ -146,6 +174,22 @@ public class SwerveDrive extends SubsystemBase {
         } else {
             speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
         }
+
+        // ===== HEADING CORRECTION ADDED HERE =====
+        // Apply heading correction to maintain heading when driver isn't rotating
+        // Get current robot state for heading correction
+        ChassisSpeeds currentSpeeds = getCurrentChassisSpeeds(); // You'll need to implement this
+        Rotation2d gyroAngle = getRotation2d();
+        double gyroAngularVel = getGyroAngularVelocity(); // You'll need to implement this (radians/sec)
+        
+        // Update speeds with heading correction
+        speeds = m_headingCorrector.update(
+            speeds,
+            currentSpeeds,
+            gyroAngle,
+            gyroAngularVel
+        );
+        // ===== END HEADING CORRECTION =====
 
         driveRobotRelative(speeds);
     }
