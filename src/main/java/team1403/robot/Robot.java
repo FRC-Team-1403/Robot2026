@@ -2,20 +2,30 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package team1403.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import com.ctre.phoenix6.SignalLogger;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import team1403.lib.elastic.Elastic;
+import team1403.lib.elastic.Elastic.Notification.NotificationLevel;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
  * this project, you must also update the Main.java file in the project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
-
   private final RobotContainer m_robotContainer;
 
   /**
@@ -23,9 +33,37 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   public Robot() {
+    super(Constants.kLoopTime);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    String description = 
+      "Debug Mode: " + Constants.DEBUG_MODE +
+      "\nVision Debug Mode: " + Constants.Vision.kExtraVisionDebugInfo +
+      "\nSysID Enabled: " + Constants.ENABLE_SYSID +
+      "\nLoop Time: " + (int)(Constants.kLoopTime*1000) + " ms" +
+      "\nGit Commit: " + BuildConstants.GIT_SHA +
+      "\nGit Commit Date: " + BuildConstants.GIT_DATE +
+      "\nGit Branch: " + BuildConstants.GIT_BRANCH +
+      "\nGit Revision: " + BuildConstants.GIT_REVISION +
+      "\nGit Dirty: " + BuildConstants.DIRTY +
+      "\nBuild Date: " + BuildConstants.BUILD_DATE +
+      "\n";
+    Logger.recordMetadata(BuildConstants.MAVEN_NAME, description);
+    if (isReal()) {
+      Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+    }
+    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+    Logger.start();
+    /* Enable logging for motors, so we don't need logging in SysID routines */
+    SignalLogger.start();
     m_robotContainer = new RobotContainer();
+
+    //notify driver that robot code has started
+    Elastic.sendNotification(
+      new Elastic.Notification(
+        NotificationLevel.INFO, 
+        "Robot Startup Complete!", 
+        description, 4000, 350, 500));
   }
 
   /**
@@ -42,6 +80,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    //update blackbox
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -58,7 +97,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(m_autonomousCommand);
+      m_autonomousCommand.schedule();
     }
   }
 
