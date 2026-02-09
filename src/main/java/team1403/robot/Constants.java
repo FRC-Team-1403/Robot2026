@@ -123,8 +123,12 @@ public class Constants {
     //top-to-bottom disp = 17.82426 inches
     public static final Rotation3d kCameraRotation = new Rotation3d(Math.PI, Units.degreesToRadians(-25), Math.PI);
     public static final Rotation3d kLimelightRotation = new Rotation3d(0, Units.degreesToRadians(-25), Math.PI);
-    public static final Translation3d kCameraOffset = new Translation3d(Units.inchesToMeters(-8.568),0,Units.inchesToMeters(17.82426-48));
-    public static final Transform3d kCameraTransfrom = new Transform3d(kCameraOffset, kCameraRotation);
+    public static final Translation3d kCameraOffset = new Translation3d();
+    public static final Transform3d kCameraTransfromThriftyCam1 = new Transform3d(kCameraOffset, new Rotation3d(0,0,0));
+    public static final Transform3d kCameraTransfromLimelight3 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(90)));
+    public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(kCameraOffset, kCameraRotation);
+    public static final Transform3d kCameraTransfromLimelight2 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(270)));
+    
     public static final Transform3d kLimelightTransform = new Transform3d(kCameraOffset, kLimelightRotation);
   }
 

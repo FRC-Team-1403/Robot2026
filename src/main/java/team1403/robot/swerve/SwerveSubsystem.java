@@ -202,8 +202,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     VisionSimUtil.initVisionSim();
 
-    m_cameras.add(new AprilTagCamera("Unknown_Camera", () -> Swerve.kCameraTransfrom, this::getPose));
-    m_cameras.add(new LimelightWrapper("limelight", () -> Swerve.kLimelightTransform, () -> new Rotation3d(getRotation())));
+    m_cameras.add(new AprilTagCamera("ThriftyCam1.0", () -> Swerve.kCameraTransfromThriftyCam1, this::getPose));
+    m_cameras.add(new AprilTagCamera("ThriftyCamera2.0", () -> Swerve.kCameraTransfromThriftyCamera2, this::getPose));
+    m_cameras.add(new AprilTagCamera("Limelight2", () -> Swerve.kCameraTransfromLimelight2, this::getPose));
+    m_cameras.add(new AprilTagCamera("Limelight3", () -> Swerve.kCameraTransfromLimelight3, this::getPose));
 
     m_odometeryNotifier = new Notifier(m_odometer::update);
     m_odometeryNotifier.setName("SwerveOdoNotifer");

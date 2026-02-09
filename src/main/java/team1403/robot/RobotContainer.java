@@ -33,9 +33,12 @@ import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.vision.AprilTagCamera;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -51,7 +54,9 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser;
   private Command m_teleopCommand;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the trigger bindings
     m_swerve = new SwerveSubsystem();
@@ -61,22 +66,38 @@ public class RobotContainer {
     m_powerDistribution = new PowerDistribution(Constants.CanBus.powerDistributionID, ModuleType.kRev);
     // DogLog.setPdh(m_powerDistribution);
 
-    // NamedCommands.registerCommand("stop", new InstantCommand(() -> m_swerve.stop()));
-    // NamedCommands.registerCommand("First Piece", new AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> false, () -> false, false, () -> false, false));
-    // NamedCommands.registerCommand("Shoot Side", new AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> true, () -> false, true, () -> false, false));
-    // NamedCommands.registerCommand("Shoot", new AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> true, () -> false, false, () -> false, false));
-    // NamedCommands.registerCommand("Reset Shooter", new AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> false, () -> false, false, () -> false, false));
-    // NamedCommands.registerCommand("First Piece Side",  new AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> false, () -> false, true, () -> true, false));
-    // NamedCommands.registerCommand("Second Source Shoot", new AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> true, () -> false, false, () -> false, true));
-    // NamedCommands.registerCommand("IntakeClose", new IntakeCommand(m_endeff, m_arm, m_wrist,  Constants.Arm.kDriveSetpoint, Constants.Wrist.kDriveSetpoint, Constants.IntakeAndShooter.kCloseRPM));    
-    // NamedCommands.registerCommand("ShootLoaded", new ShootCommand(m_endeff, m_arm, m_wrist));
-    // NamedCommands.registerCommand("Trigger Shot", new TriggerShotCommand(m_endeff, m_wrist));
+    // NamedCommands.registerCommand("stop", new InstantCommand(() ->
+    // m_swerve.stop()));
+    // NamedCommands.registerCommand("First Piece", new
+    // AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> false, () ->
+    // false, false, () -> false, false));
+    // NamedCommands.registerCommand("Shoot Side", new
+    // AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> true, () ->
+    // false, true, () -> false, false));
+    // NamedCommands.registerCommand("Shoot", new AutoIntakeShooterLoop(m_endeff,
+    // m_arm, m_wrist, m_led, () -> true, () -> false, false, () -> false, false));
+    // NamedCommands.registerCommand("Reset Shooter", new
+    // AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> false, () ->
+    // false, false, () -> false, false));
+    // NamedCommands.registerCommand("First Piece Side", new
+    // AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> false, () ->
+    // false, true, () -> true, false));
+    // NamedCommands.registerCommand("Second Source Shoot", new
+    // AutoIntakeShooterLoop(m_endeff, m_arm, m_wrist, m_led, () -> true, () ->
+    // false, false, () -> false, true));
+    // NamedCommands.registerCommand("IntakeClose", new IntakeCommand(m_endeff,
+    // m_arm, m_wrist, Constants.Arm.kDriveSetpoint, Constants.Wrist.kDriveSetpoint,
+    // Constants.IntakeAndShooter.kCloseRPM));
+    // NamedCommands.registerCommand("ShootLoaded", new ShootCommand(m_endeff,
+    // m_arm, m_wrist));
+    // NamedCommands.registerCommand("Trigger Shot", new
+    // TriggerShotCommand(m_endeff, m_wrist));
 
     // NamedCommands.registerCommand("Trigger Shot", new TriggerShotCommand());
 
     autoChooser = AutoBuilder.buildAutoChooser();
-    
-    //avoid cluttering up auto chooser at competitions
+
+    // avoid cluttering up auto chooser at competitions
     if (Constants.ENABLE_SYSID) {
       autoChooser.addOption("Swerve SysID QF", m_swerve.getSysIDQ(Direction.kForward));
       autoChooser.addOption("Swerve SysID QR", m_swerve.getSysIDQ(Direction.kReverse));
@@ -88,11 +109,13 @@ public class RobotContainer {
       autoChooser.addOption("Swerve SysID Steer DR", m_swerve.getSysIDSteerD(Direction.kReverse));
     }
 
-    // autoChooser.addOption("Choreo Auto", AutoUtil.loadChoreoAuto("test", m_swerve));
-    // autoChooser.addOption("FivePieceCenter", AutoHelper.getFivePieceAuto(m_swerve));
+    // autoChooser.addOption("Choreo Auto", AutoUtil.loadChoreoAuto("test",
+    // m_swerve));
+    // autoChooser.addOption("FivePieceCenter",
+    // AutoHelper.getFivePieceAuto(m_swerve));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    if(Constants.DEBUG_MODE) {
+    if (Constants.DEBUG_MODE) {
       SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
       SmartDashboard.putData("Swerve Drive", m_swerve);
       SmartDashboard.putData("Power Distribution", m_powerDistribution);
@@ -100,13 +123,19 @@ public class RobotContainer {
 
     configureBindings();
   }
+
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
@@ -116,26 +145,46 @@ public class RobotContainer {
     // Right stick X axis -> rotation
     // Setting default command of swerve subPsystem
     // red
-    
-    m_swerve.setDefaultCommand(new DefaultSwerveCommand(
-        m_swerve,
-        () -> -m_driverController.getLeftX(),
-        () -> -m_driverController.getLeftY(),
-        () -> -m_driverController.getRightX(),
-        () -> m_driverController.getHID().getYButtonPressed(),
-        () -> m_driverController.getHID().getBButtonPressed(),
-        () -> m_driverController.getHID().getXButton(),
-        () -> m_driverController.getRightTriggerAxis(),
-        () -> m_driverController.getLeftTriggerAxis()));
 
-    //m_driverController.povRight().onTrue(Blackbox.reefSelect(ReefSelect.RIGHT));
-    //m_driverController.povLeft().onTrue(Blackbox.reefSelect(ReefSelect.LEFT));
-    //m_driverController.a().onTrue(new ControllerVibrationCommand(m_driverController.getHID(), 0.28, 1));
-    //SmartDashboard.putNumber("vibration", 0);
+    if (!Constants.ENABLE_SYSID) {
+      m_swerve.setDefaultCommand(new DefaultSwerveCommand(
+          m_swerve,
+          () -> -activationFunction(m_driverController.getLeftX()),
+          () -> -activationFunction(m_driverController.getLeftY()),
+          () -> -m_driverController.getRightX(),
+          () -> m_driverController.getHID().getYButtonPressed(),
+          () -> m_driverController.getHID().getBButtonPressed(),
+          () -> m_driverController.getHID().getXButton(),
+          () -> m_driverController.getRightTriggerAxis(),
+          () -> m_driverController.getLeftTriggerAxis()));
+    }
 
-    m_driverController.b().onTrue(m_swerve.runOnce(() -> m_swerve.zeroHeading()));
+    // m_driverController.povRight().onTrue(Blackbox.reefSelect(ReefSelect.RIGHT));
+    // m_driverController.povLeft().onTrue(Blackbox.reefSelect(ReefSelect.LEFT));
+    // m_driverController.a().onTrue(new
+    // ControllerVibrationCommand(m_driverController.getHID(), 0.28, 1));
+    // SmartDashboard.putNumber("vibration", 0);
+
+    if (Constants.ENABLE_SYSID) {
+      m_operatorController.a().onTrue(m_swerve.getSysIDQ(Direction.kForward)); // Drive
+      m_operatorController.b().onTrue(m_swerve.getSysIDQ(Direction.kReverse)); // Drive
+      m_operatorController.x().onTrue(m_swerve.getSysIDD(Direction.kForward)); // Drive (FAST)
+      m_operatorController.y().onTrue(m_swerve.getSysIDD(Direction.kReverse)); // Drive (FAST)
+      m_driverController.a().onTrue(m_swerve.getSysIDSteerQ(Direction.kForward)); // Steer
+      m_driverController.b().onTrue(m_swerve.getSysIDSteerQ(Direction.kReverse)); // Steer
+      m_driverController.x().onTrue(m_swerve.getSysIDSteerD(Direction.kForward)); // Steer (FAST)
+      m_driverController.y().onTrue(m_swerve.getSysIDSteerD(Direction.kReverse)); // Steer (FAST)
+    }
+
+    // m_driverController.b().onTrue(m_swerve.runOnce(() ->
+    // m_swerve.zeroHeading()));
   }
-   
+
+  private double activationFunction(double input) {
+    double output = ((15.0/8.0)*Math.pow(input, 7) - (21.0/4.0)*Math.pow(input, 5) + (35.0/8.0)*Math.pow(input, 3));
+    return output;
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

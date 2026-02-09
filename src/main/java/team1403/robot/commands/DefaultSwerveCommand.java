@@ -35,6 +35,8 @@ public class DefaultSwerveCommand extends Command {
   private boolean m_isFieldRelative;
   
   private SlewRateLimiter m_rotationRateLimiter;
+  private SlewRateLimiter m_xRateLimiter;
+  private SlewRateLimiter m_yRateLimiter;
   private double prev_horizontal = 0;
   private double prev_vertical = 0;
   private static final double kMaxVelocityChange = 13 * Constants.kLoopTime;
@@ -78,7 +80,9 @@ public class DefaultSwerveCommand extends Command {
     this.m_zeroGyroSupplier = zeroGyroSupplier;
     m_snipingMode = snipingMode;
     m_isFieldRelative = true;
-    m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
+    m_rotationRateLimiter = new SlewRateLimiter(1, -1, 0);
+    m_xRateLimiter = new SlewRateLimiter(3);
+    m_yRateLimiter = new SlewRateLimiter(3);
 
     addRequirements(m_drivetrainSubsystem);
   }
@@ -116,6 +120,8 @@ public class DefaultSwerveCommand extends Command {
     ChassisSpeeds chassisSpeeds;
     double horizontal = m_horizontalTranslationSupplier.getAsDouble();
     double vertical = m_verticalTranslationSupplier.getAsDouble();
+    horizontal = m_xRateLimiter.calculate(horizontal);
+    vertical = m_yRateLimiter.calculate(vertical);
     double vel_hypot = Math.hypot(horizontal, vertical);
 
     if(CougarUtil.getAlliance() == Alliance.Red && m_isFieldRelative) {
