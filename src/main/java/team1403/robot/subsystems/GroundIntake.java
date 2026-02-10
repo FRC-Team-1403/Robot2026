@@ -109,6 +109,6 @@ public class GroundIntake extends SubsystemBase {
         SmartDashboard.putNumber("Intake/Voltage", m_intakeMotor.getAppliedOutput() * m_intakeMotor.getBusVoltage());
         SmartDashboard.putNumber("Intake/Current", m_intakeMotor.getOutputCurrent());
         SmartDashboard.putNumber("Intake/Temp", m_intakeMotor.getMotorTemperature());
-        SmartDashboard.putBoolean("Intake/Using Velocity Control", m_intakeUseVelocityControl);
+        //SmartDashboard.putBoolean("Intake/Using Velocity Control", m_intakeUseVelocityControl);
     }
 }

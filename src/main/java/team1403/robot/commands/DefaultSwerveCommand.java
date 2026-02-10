@@ -39,7 +39,7 @@ public class DefaultSwerveCommand extends Command {
   private final BooleanSupplier m_autoRotate;
   private final Debouncer m_robotRelativeDebouncer 
     = new Debouncer(0.3, DebounceType.kFalling);
-  private boolean m_isFieldRelative = true;
+  private boolean m_isFieldRelative = false;
   
   private SlewRateLimiter m_rotationRateLimiter;
   private double prev_horizontal = 0;

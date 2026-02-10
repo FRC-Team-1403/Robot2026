@@ -43,7 +43,7 @@ public class Constants {
 
     public static final double KsDrive = 0.13382;
     public static final double KvDrive = 0.11367;
-    public static final double KaDrive = 0.0074265;
+    public static final double KaDrive = 0.0054265;
 
     public static final double KpSteer = 65;
     public static final double KiSteer = 0;
@@ -59,8 +59,8 @@ public class Constants {
     public static final double intakeKI = 0.0;
     public static final double intakeKD = 0.0;
 
-    public static final double intakeKS = 0.0;
-    public static final double intakeKV = 0.0;
+    public static final double intakeKS = 0.1;
+    public static final double intakeKV = 0.1;
     public static final double intakeKA = 0.0;
 
     public static final double intakeMaxVelocity = 5000;
