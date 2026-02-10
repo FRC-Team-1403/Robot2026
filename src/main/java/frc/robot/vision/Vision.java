@@ -1,12 +1,17 @@
 package frc.robot.vision;
 
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
+import org.photonvision.simulation.VisionSystemSim;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.photonvision.EstimatedRobotPose;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -23,13 +27,14 @@ public class Vision extends SubsystemBase {
     private final PhotonCamera m_camera3;
     private final PhotonCamera m_camera4;
 
-    private final PhotonPoseEstimator m_poseEstimator1;
-    private final PhotonPoseEstimator m_poseEstimator2;
-    private final PhotonPoseEstimator m_poseEstimator3;
-    private final PhotonPoseEstimator m_poseEstimator4;
+    private final VisionSystemSim m_visionSim;
+    private final PhotonCameraSim m_cameraSim1;
+    private final PhotonCameraSim m_cameraSim2;
+    
+    private final PhotonCameraSim m_cameraSim3;
+    private final PhotonCameraSim m_cameraSim4;
 
-    private Pose3d m_combinedPose;
-    private double m_lastTimestamp;
+    private Pose3d m_robotPose;
 
     private static class WeightedPose {
         public final Pose3d pose;
@@ -41,75 +46,76 @@ public class Vision extends SubsystemBase {
         }
     }
 
+    public static class CameraFrustum {
+        public final Pose3d pose;
+        public final double horizontalFOV;
+        public final double verticalFOV;
+        public final double range;
+
+        public CameraFrustum(Pose3d pose, double horizontalFOV, double verticalFOV, double range) {
+            this.pose = pose;
+            this.horizontalFOV = horizontalFOV;
+            this.verticalFOV = verticalFOV;
+            this.range = range;
+        }
+    }
+
     public Vision() {
         m_camera1 = new PhotonCamera(Constants.Vision.kCamera1);
         m_camera2 = new PhotonCamera(Constants.Vision.kCamera2);
         m_camera3 = new PhotonCamera(Constants.Vision.kCamera3);
         m_camera4 = new PhotonCamera(Constants.Vision.kCamera4);
 
-        m_poseEstimator1 = new PhotonPoseEstimator(
-                Constants.Vision.kFieldLayout,
-                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                Constants.Vision.kCamera1Transform);
-        m_poseEstimator1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        m_visionSim = new VisionSystemSim("main");
+        m_visionSim.addAprilTags(Constants.Vision.kFieldLayout);
 
-        m_poseEstimator2 = new PhotonPoseEstimator(
-                Constants.Vision.kFieldLayout,
-                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                Constants.Vision.kCamera2Transform);
-        m_poseEstimator2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        SimCameraProperties camProps1 = new SimCameraProperties();
+        camProps1.setCalibration(640, 480, Rotation2d.fromDegrees(70));
+        camProps1.setFPS(30);
+        m_cameraSim1 = new PhotonCameraSim(m_camera1, camProps1);
+        m_visionSim.addCamera(m_cameraSim1, Constants.Vision.kCamera1Transform);
 
-        m_poseEstimator3 = new PhotonPoseEstimator(
-                Constants.Vision.kFieldLayout,
-                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                Constants.Vision.kCamera3Transform);
-        m_poseEstimator3.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        SimCameraProperties camProps2 = new SimCameraProperties();
+        camProps2.setCalibration(640, 480, Rotation2d.fromDegrees(70));
+        camProps2.setFPS(30);
+        m_cameraSim2 = new PhotonCameraSim(m_camera2, camProps2);
+        m_visionSim.addCamera(m_cameraSim2, Constants.Vision.kCamera2Transform);
 
-         m_poseEstimator4 = new PhotonPoseEstimator(
-                Constants.Vision.kFieldLayout,
-                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                Constants.Vision.kCamera4Transform);
-        m_poseEstimator4.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        SimCameraProperties camProps3 = new SimCameraProperties();
+        camProps3.setCalibration(640, 480, Rotation2d.fromDegrees(70));
+        camProps3.setFPS(30);
+        m_cameraSim3 = new PhotonCameraSim(m_camera3, camProps3);
+        m_visionSim.addCamera(m_cameraSim3, Constants.Vision.kCamera3Transform);
 
-        m_combinedPose = new Pose3d();
-        m_lastTimestamp = 0.0;
+        SimCameraProperties camProps4 = new SimCameraProperties();
+        camProps4.setCalibration(640, 480, Rotation2d.fromDegrees(70));
+        camProps4.setFPS(30);
+        m_cameraSim4 = new PhotonCameraSim(m_camera4, camProps4);
+        m_visionSim.addCamera(m_cameraSim4, Constants.Vision.kCamera4Transform);
+
+        m_robotPose = new Pose3d();
     }
 
     public Pose3d getPose() {
-        return m_combinedPose;
+        return m_robotPose;
     }
 
     public Pose2d getPose2d() {
-        return m_combinedPose.toPose2d();
+        return m_robotPose.toPose2d();
     }
 
-    public boolean hasPose() {
-        return !m_combinedPose.equals(new Pose3d());
+    public void setSimPose(Pose2d pose) {
+        m_robotPose = new Pose3d(pose);
+        m_visionSim.update(m_robotPose);
     }
 
-    public double getTimestamp() {
-        return m_lastTimestamp;
-    }
-
-    public boolean isCamera1Connected() {
-        return m_camera1.isConnected();
-    }
-
-    public boolean isCamera2Connected() {
-        return m_camera2.isConnected();
-    }
-
-    public boolean isCamera3Connected() {
-        return m_camera3.isConnected();
-    }
-
-    public boolean isCamera4Connected() {
-        return m_camera4.isConnected();
+    public void updatePose(Pose2d pose) {
+        m_robotPose = new Pose3d(pose);
     }
 
     private Pose3d combinePoses(List<WeightedPose> weightedPoses) {
         if (weightedPoses.isEmpty()) {
-            return m_combinedPose;
+            return m_robotPose;
         }
 
         double totalWeight = weightedPoses.stream()
@@ -144,76 +150,131 @@ public class Vision extends SubsystemBase {
                 new Rotation3d(0, 0, avgAngleRad));
     }
 
+    private void logCameraData(PhotonPipelineResult result, String cameraName, Transform3d cameraTransform) {
+        if (result.hasTargets()) {
+            List<PhotonTrackedTarget> targets = result.getTargets();
+            PhotonTrackedTarget bestTarget = result.getBestTarget();
+            double ambiguity = bestTarget.getPoseAmbiguity();
+
+            Logger.recordOutput("Vision/" + cameraName + "/TagCount", targets.size());
+            Logger.recordOutput("Vision/" + cameraName + "/Ambiguity", ambiguity);
+
+            int[] visibleTagIDs = new int[targets.size()];
+            Pose3d[] tagPoses = new Pose3d[targets.size()];
+
+            for (int i = 0; i < targets.size(); i++) {
+                PhotonTrackedTarget target = targets.get(i);
+                int fiducialId = target.getFiducialId();
+                visibleTagIDs[i] = fiducialId;
+
+                Optional<Pose3d> tagPose = Constants.Vision.kFieldLayout.getTagPose(fiducialId);
+                if (tagPose.isPresent()) {
+                    tagPoses[i] = tagPose.get();
+                } else {
+                    tagPoses[i] = new Pose3d();
+                }
+            }
+
+            Logger.recordOutput("Vision/" + cameraName + "/VisibleTagIDs", visibleTagIDs);
+            Logger.recordOutput("Vision/" + cameraName + "/TagPoses", tagPoses);
+
+            Pose3d cameraPose = m_robotPose.transformBy(cameraTransform);
+            Logger.recordOutput("Vision/" + cameraName + "/CameraPose", cameraPose);
+
+            if (result.getMultiTagResult().isPresent()) {
+                Transform3d fieldToCamera = result.getMultiTagResult().get().estimatedPose.best;
+                Pose3d estimatedRobotPose = new Pose3d().transformBy(fieldToCamera).transformBy(cameraTransform.inverse());
+                Logger.recordOutput("Vision/" + cameraName + "/EstimatedRobotPose", estimatedRobotPose);
+            }
+        } else {
+            Logger.recordOutput("Vision/" + cameraName + "/TagCount", 0);
+            Logger.recordOutput("Vision/" + cameraName + "/VisibleTagIDs", new int[0]);
+            Logger.recordOutput("Vision/" + cameraName + "/TagPoses", new Pose3d[0]);
+        }
+    }
+
     @Override
     public void periodic() {
         List<WeightedPose> weightedPoses = new ArrayList<>();
-        double latestTimestamp = m_lastTimestamp;
 
-        for (var result : m_camera1.getAllUnreadResults()) {
-            Optional<EstimatedRobotPose> visionEst = m_poseEstimator1.update(result);
-            if (visionEst.isPresent() && result.hasTargets()) {
-                double ambiguity = result.getBestTarget().getPoseAmbiguity();
-                weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
-                latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
-                Logger.recordOutput("Vision/Camera1/Pose", visionEst.get().estimatedPose.toPose2d());
-                Logger.recordOutput("Vision/Camera1/TagCount", result.getTargets().size());
-                Logger.recordOutput("Vision/Camera1/Ambiguity", ambiguity);
-            }
+        var results1 = m_camera1.getAllUnreadResults();
+        if (!results1.isEmpty()) {
+            PhotonPipelineResult result1 = results1.get(results1.size() - 1);
+            logCameraData(result1, "Camera1", Constants.Vision.kCamera1Transform);
         }
 
-        for (var result : m_camera2.getAllUnreadResults()) {
-            Optional<EstimatedRobotPose> visionEst = m_poseEstimator2.update(result);
-            if (visionEst.isPresent() && result.hasTargets()) {
-                double ambiguity = result.getBestTarget().getPoseAmbiguity();
-                weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
-                latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
-                Logger.recordOutput("Vision/Camera2/Pose", visionEst.get().estimatedPose.toPose2d());
-                Logger.recordOutput("Vision/Camera2/TagCount", result.getTargets().size());
-                Logger.recordOutput("Vision/Camera2/Ambiguity", ambiguity);
-            }
+        var results2 = m_camera2.getAllUnreadResults();
+        if (!results2.isEmpty()) {
+            PhotonPipelineResult result2 = results2.get(results2.size() - 1);
+            logCameraData(result2, "Camera2", Constants.Vision.kCamera2Transform);
         }
 
-        for (var result : m_camera3.getAllUnreadResults()) {
-            Optional<EstimatedRobotPose> visionEst = m_poseEstimator3.update(result);
-            if (visionEst.isPresent() && result.hasTargets()) {
-                double ambiguity = result.getBestTarget().getPoseAmbiguity();
-                weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
-                latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
-                Logger.recordOutput("Vision/Camera3/Pose", visionEst.get().estimatedPose.toPose2d());
-                Logger.recordOutput("Vision/Camera3/TagCount", result.getTargets().size());
-                Logger.recordOutput("Vision/Camera3/Ambiguity", ambiguity);
-            }
+        var results3 = m_camera3.getAllUnreadResults();
+        if (!results3.isEmpty()) {
+            PhotonPipelineResult result3 = results3.get(results3.size() - 1);
+            logCameraData(result3, "Camera3", Constants.Vision.kCamera3Transform);
         }
 
-        for (var result : m_camera4.getAllUnreadResults()) {
-            Optional<EstimatedRobotPose> visionEst = m_poseEstimator4.update(result);
-            if (visionEst.isPresent() && result.hasTargets()) {
-                double ambiguity = result.getBestTarget().getPoseAmbiguity();
-                weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
-                latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
-                Logger.recordOutput("Vision/Camera4/Pose", visionEst.get().estimatedPose.toPose2d());
-                Logger.recordOutput("Vision/Camera4/TagCount", result.getTargets().size());
-                Logger.recordOutput("Vision/Camera4/Ambiguity", ambiguity);
-            }
+        var results4 = m_camera4.getAllUnreadResults();
+        if (!results4.isEmpty()) {
+            PhotonPipelineResult result4 = results4.get(results4.size() - 1);
+            logCameraData(result4, "Camera4", Constants.Vision.kCamera4Transform);
         }
 
-        if (!weightedPoses.isEmpty()) {
-            m_combinedPose = combinePoses(weightedPoses);
-            m_lastTimestamp = latestTimestamp;
-        }
+        Pose3d cameraPose1 = m_robotPose.transformBy(Constants.Vision.kCamera1Transform);
+        Pose3d cameraPose2 = m_robotPose.transformBy(Constants.Vision.kCamera2Transform);
+        Pose3d cameraPose3 = m_robotPose.transformBy(Constants.Vision.kCamera3Transform);
+        Pose3d cameraPose4 = m_robotPose.transformBy(Constants.Vision.kCamera4Transform);
 
-        Logger.recordOutput("Vision/Camera1Connected", m_camera1.isConnected());
-        Logger.recordOutput("Vision/Camera2Connected", m_camera2.isConnected());
-        Logger.recordOutput("Vision/Camera3Connected", m_camera3.isConnected());
-        Logger.recordOutput("Vision/Camera4Connected", m_camera4.isConnected());
-        Logger.recordOutput("Vision/ActiveCameraCount", weightedPoses.size());
-        Logger.recordOutput("Vision/HasPose", hasPose());
-        Logger.recordOutput("Vision/Timestamp", m_lastTimestamp);
-        Pose2d pose2d = m_combinedPose.toPose2d();
-        Logger.recordOutput("Vision/CombinedPose", pose2d);
+        CameraFrustum frustum1 = new CameraFrustum(cameraPose1, Math.toRadians(70), Math.toRadians(50), 5.0);
+        CameraFrustum frustum2 = new CameraFrustum(cameraPose2, Math.toRadians(70), Math.toRadians(50), 5.0);
+        CameraFrustum frustum3 = new CameraFrustum(cameraPose3, Math.toRadians(70), Math.toRadians(50), 5.0);
+        CameraFrustum frustum4 = new CameraFrustum(cameraPose4, Math.toRadians(70), Math.toRadians(50), 5.0);
+
+        Logger.recordOutput("Vision/Camera1Frustum", new Pose3d[] {
+            frustum1.pose,
+            new Pose3d(
+                frustum1.pose.getX() + frustum1.range * Math.cos(frustum1.pose.getRotation().getZ()),
+                frustum1.pose.getY() + frustum1.range * Math.sin(frustum1.pose.getRotation().getZ()),
+                frustum1.pose.getZ(),
+                frustum1.pose.getRotation()
+            )
+        });
+
+        Logger.recordOutput("Vision/Camera2Frustum", new Pose3d[] {
+            frustum2.pose,
+            new Pose3d(
+                frustum2.pose.getX() + frustum2.range * Math.cos(frustum2.pose.getRotation().getZ()),
+                frustum2.pose.getY() + frustum2.range * Math.sin(frustum2.pose.getRotation().getZ()),
+                frustum2.pose.getZ(),
+                frustum2.pose.getRotation()
+            )
+        });
+
+        Logger.recordOutput("Vision/Camera3Frustum", new Pose3d[] {
+            frustum3.pose,
+            new Pose3d(
+                frustum3.pose.getX() + frustum3.range * Math.cos(frustum3.pose.getRotation().getZ()),
+                frustum3.pose.getY() + frustum3.range * Math.sin(frustum3.pose.getRotation().getZ()),
+                frustum3.pose.getZ(),
+                frustum3.pose.getRotation()
+            )
+        });
+
+        Logger.recordOutput("Vision/Camera4Frustum", new Pose3d[] {
+            frustum4.pose,
+            new Pose3d(
+                frustum4.pose.getX() + frustum4.range * Math.cos(frustum4.pose.getRotation().getZ()),
+                frustum4.pose.getY() + frustum4.range * Math.sin(frustum4.pose.getRotation().getZ()),
+                frustum4.pose.getZ(),
+                frustum4.pose.getRotation()
+            )
+        });
+
+        Pose2d pose2d = m_robotPose.toPose2d();
+        Logger.recordOutput("Vision/RobotPose", pose2d);
         Logger.recordOutput("Vision/X", pose2d.getX());
         Logger.recordOutput("Vision/Y", pose2d.getY());
-        Logger.recordOutput("Vision/RotationDeg",
-                (pose2d.getRotation().getDegrees() + 360) % 360);
+        Logger.recordOutput("Vision/RotationDeg", (pose2d.getRotation().getDegrees() + 360) % 360);
     }
 }
