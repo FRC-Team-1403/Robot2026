@@ -2,8 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -14,17 +14,14 @@ import frc.robot.Constants;
 import frc.robot.util.CustomPositionControlLoop;
 
 public class ShooterHood extends SubsystemBase {
-    private final TalonSRX m_hoodMotor;
+    private final TalonFX m_hoodMotor;
     private final CANcoder m_encoder;
     private final CustomPositionControlLoop m_customController;
     private double currentAngle;
     private double setpoint;
 
     public ShooterHood() {
-        m_hoodMotor = new TalonSRX(Constants.ShooterHood.kHoodMotorID);
-
-        m_hoodMotor.setNeutralMode(NeutralMode.Brake);
-
+        m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID);
         m_encoder = new CANcoder(0);
 
         CANcoderConfiguration config = new CANcoderConfiguration();
@@ -72,7 +69,7 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public void stopMotor() {
-        m_hoodMotor.set(ControlMode.PercentOutput, 0.0);
+        m_hoodMotor.set(0.0);
         m_customController.reset();
     }
 
@@ -86,7 +83,7 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private void setMotorOutput(double output) {
-        m_hoodMotor.set(ControlMode.PercentOutput, output);
+        m_hoodMotor.set(output);
     }
 
     @Override

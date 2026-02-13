@@ -1,11 +1,16 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import edu.wpi.first.units.measure.Angle;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,50 +19,56 @@ import frc.robot.Constants;
 import frc.robot.util.CustomPositionControlLoop;
 
 public class Turret extends SubsystemBase {
-    private final TalonSRX m_motor;
+    private final TalonFX m_motor;
     private final CANcoder m_encoder;
     private final CustomPositionControlLoop m_customController;
+    private final DutyCycleOut m_turretDutyCycleRequest;
     private double currentAngle;
     private double setpoint;
 
     public Turret() {
-        m_motor = new TalonSRX(Constants.TurretConstants.kTurretMotorID);
-        m_motor.setInverted(Constants.TurretConstants.kMotorInverted);
-        m_motor.setNeutralMode(NeutralMode.Brake);
+        m_motor = new TalonFX(Constants.Turret.kTurretMotorID);
 
-        m_encoder = new CANcoder(0);
+        m_turretDutyCycleRequest = new DutyCycleOut(0);
 
-        CANcoderConfiguration config = new CANcoderConfiguration();
-        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        TalonFXConfiguration turretMotorConfig = new TalonFXConfiguration();
+        turretMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        turretMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        m_encoder.getConfigurator().apply(config);
+        m_motor.getConfigurator().apply(turretMotorConfig);
+
+        m_encoder = new CANcoder(Constants.Turret.kEncoderID);
+
+        CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+        encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+
+        m_encoder.getConfigurator().apply(encoderConfig);
 
         resetEncoder();
 
         m_customController = new CustomPositionControlLoop(
-                Constants.TurretConstants.kGain,
-                Constants.TurretConstants.kToleranceDegrees,
-                Constants.TurretConstants.kRampUpTime,
-                Constants.TurretConstants.kRampDownTime,
-                Constants.TurretConstants.kUnitsPerRampTime,
-                Constants.TurretConstants.kMaxSpeed,
-                Constants.TurretConstants.kMinSpeed,
-                Constants.TurretConstants.kLoopTime);
+                Constants.Turret.kGain,
+                Constants.Turret.kToleranceDegrees,
+                Constants.Turret.kRampUpTime,
+                Constants.Turret.kRampDownTime,
+                Constants.Turret.kUnitsPerRampTime,
+                Constants.Turret.kMaxSpeed,
+                Constants.Turret.kMinSpeed,
+                Constants.Turret.kLoopTime);
 
         currentAngle = getTurretAngle();
         setpoint = currentAngle;
     }
 
-    // Make sure this returns +ve angles for CCW rotation
     public double getTurretAngle() {
         double rotations = m_encoder.getPosition().getValueAsDouble();
-        double degrees = rotations / Constants.TurretConstants.kGearRatio * 360.0;
+        double degrees = rotations / Constants.Turret.kGearRatio * 360.0;
         return degrees;
     }
 
     public void setSetpoint(double degrees) {
-        double correctedDegrees = MathUtil.clamp(degrees, Constants.TurretConstants.kMinAngleDegrees,
-                Constants.TurretConstants.kMaxAngleDegrees);
+        double correctedDegrees = MathUtil.clamp(degrees, Constants.Turret.kMinAngleDegrees,
+                Constants.Turret.kMaxAngleDegrees);
         setpoint = correctedDegrees;
     }
 
@@ -74,7 +85,8 @@ public class Turret extends SubsystemBase {
     }
 
     public void stopMotor() {
-        m_motor.set(ControlMode.PercentOutput, 0.0);
+        m_turretDutyCycleRequest.Output = 0.0;
+        m_motor.setControl(m_turretDutyCycleRequest);
         m_customController.reset();
     }
 
@@ -88,7 +100,8 @@ public class Turret extends SubsystemBase {
     }
 
     private void setMotorOutput(double output) {
-        m_motor.set(ControlMode.PercentOutput, output);
+        m_turretDutyCycleRequest.Output = output;
+        m_motor.setControl(m_turretDutyCycleRequest);
     }
 
     @Override
@@ -100,10 +113,10 @@ public class Turret extends SubsystemBase {
 
         setMotorOutput(motorOutput / 100.0);
 
-        if (currentAngle >= Constants.TurretConstants.kMaxAngleDegrees && motorOutput > 0) {
-            motorOutput = 0; // At max limit, don't move more positive
-        } else if (currentAngle <= Constants.TurretConstants.kMinAngleDegrees && motorOutput < 0) {
-            motorOutput = 0; // At min limit, don't move more negative
+        if (currentAngle >= Constants.Turret.kMaxAngleDegrees && motorOutput > 0) {
+            motorOutput = 0;
+        } else if (currentAngle <= Constants.Turret.kMinAngleDegrees && motorOutput < 0) {
+            motorOutput = 0;
         }
 
         SmartDashboard.putNumber("Turret/Current Angle", currentAngle);

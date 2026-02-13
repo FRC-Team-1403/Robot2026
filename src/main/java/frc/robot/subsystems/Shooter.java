@@ -1,143 +1,141 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-    private final TalonFX m_motor;
-    private final TalonFX m_motor2;
-    private final VelocityVoltage m_velocityRequest;
-    private final DutyCycleOut m_dutyCycleRequest;
-    private double m_targetRPM = 0;
-    private double m_targetDutyCycle = 0;
-    private boolean m_useVelocityControl = true;
-    private final StatusSignal<AngularVelocity> m_velocity;
-    private final StatusSignal<AngularVelocity> m_velocity2;
+    private final TalonFX m_flywheelLeader;
+    private final TalonFX m_flywheelFollower;
+    private final VelocityVoltage m_flywheelVelocityRequest;
+    private final DutyCycleOut m_flywheelDutyCycleRequest;
+    private double m_flywheelTargetRPM = 0;
+    private double m_flywheelTargetDutyCycle = 0;
+    private boolean m_flywheelUseVelocityControl = true;
+    private final StatusSignal<AngularVelocity> m_flywheelLeaderVelocity;
+    private final StatusSignal<AngularVelocity> m_flywheelFollowerVelocity;
 
     public Shooter() {
-        m_motor = new TalonFX(1);
-        m_motor2 = new TalonFX(2);
+        m_flywheelLeader = new TalonFX(Constants.Shooter.flywheelLeaderID);
+        m_flywheelFollower = new TalonFX(Constants.Shooter.flywheelFollowerID);
 
-        m_velocityRequest = new VelocityVoltage(0);
-        m_velocityRequest.Slot = 0;
-        m_velocityRequest.EnableFOC = true;
-        m_dutyCycleRequest = new DutyCycleOut(0);
+        m_flywheelVelocityRequest = new VelocityVoltage(0);
+        m_flywheelVelocityRequest.Slot = 0;
+        m_flywheelVelocityRequest.EnableFOC = true;
+        m_flywheelDutyCycleRequest = new DutyCycleOut(0);
 
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        TalonFXConfiguration flywheelLeaderConfig = new TalonFXConfiguration();
+        flywheelLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        flywheelLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        flywheelLeaderConfig.CurrentLimits.StatorCurrentLimit = 40;
+        flywheelLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
+        flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        var slot0 = config.Slot0;
-        slot0.kS = 0.55;
-        slot0.kV = 0.12;
-        slot0.kA = 0.01;
-        slot0.kP = 0.20;
-        slot0.kI = 0.0;
-        slot0.kD = 0.0;
+        Slot0Configs flywheelPIDConfig = new Slot0Configs();
+        flywheelPIDConfig.kP = Constants.Shooter.kP;
+        flywheelPIDConfig.kI = Constants.Shooter.kI;
+        flywheelPIDConfig.kD = Constants.Shooter.kD;
+        flywheelPIDConfig.kS = Constants.Shooter.kS;
+        flywheelPIDConfig.kV = Constants.Shooter.kV;
+        flywheelPIDConfig.kA = Constants.Shooter.kA;
+        flywheelLeaderConfig.Slot0 = flywheelPIDConfig;
 
-        config.CurrentLimits.StatorCurrentLimit = 40;
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 40;
-        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        m_flywheelLeader.getConfigurator().apply(flywheelLeaderConfig);
 
-        m_motor.getConfigurator().apply(config);
+        TalonFXConfiguration flywheelFollowerConfig = new TalonFXConfiguration();
+        flywheelFollowerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        flywheelFollowerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        flywheelFollowerConfig.CurrentLimits.StatorCurrentLimit = 40;
+        flywheelFollowerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimit = 40;
+        flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        TalonFXConfiguration config2 = new TalonFXConfiguration();
-        config2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config2.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        m_flywheelFollower.getConfigurator().apply(flywheelFollowerConfig);
+        m_flywheelFollower.setControl(new Follower(Constants.Shooter.flywheelLeaderID, MotorAlignmentValue.Opposed));
 
-        config2.CurrentLimits.StatorCurrentLimit = 40;
-        config2.CurrentLimits.StatorCurrentLimitEnable = true;
-        config2.CurrentLimits.SupplyCurrentLimit = 40;
-        config2.CurrentLimits.SupplyCurrentLimitEnable = true;
-
-        m_motor2.getConfigurator().apply(config2);
-
-        m_motor2.setControl(new Follower(1, MotorAlignmentValue.Opposed));
-
-        m_velocity = m_motor.getVelocity();
-        m_velocity2 = m_motor2.getVelocity();
+        m_flywheelLeaderVelocity = m_flywheelLeader.getVelocity();
+        m_flywheelFollowerVelocity = m_flywheelFollower.getVelocity();
     }
 
-    public void setTargetRPM(double rpm) {
-        m_targetRPM = rpm;
-        m_velocityRequest.Velocity = rpm / 60.0;
-        m_velocityRequest.FeedForward = 0;
-        m_useVelocityControl = true;
+    public void setFlywheelTargetRPM(double rpm) {
+        m_flywheelTargetRPM = rpm;
+        m_flywheelVelocityRequest.Velocity = (rpm * Constants.Shooter.flywheelGearRatio) / 60.0;
+        m_flywheelUseVelocityControl = true;
     }
 
-    public void setTargetPower(double dutyCycle) {
-        m_targetDutyCycle = dutyCycle;
-        m_dutyCycleRequest.Output = dutyCycle;
-        m_useVelocityControl = false;
+    public void setFlywheelTargetPower(double dutyCycle) {
+        m_flywheelTargetDutyCycle = dutyCycle;
+        m_flywheelDutyCycleRequest.Output = dutyCycle;
+        m_flywheelUseVelocityControl = false;
     }
 
     public void stop() {
-        setTargetRPM(0);
+        setFlywheelTargetRPM(0);
     }
 
-    public double getRPM() {
-        return m_velocity.getValue().in(edu.wpi.first.units.Units.RotationsPerSecond) * 60.0;
+    public double getFlywheelLeaderRPM() {
+        return (m_flywheelLeaderVelocity.getValueAsDouble() * 60.0) / Constants.Shooter.flywheelGearRatio;
     }
 
-    public double getRPM2() {
-        return m_velocity2.getValue().in(edu.wpi.first.units.Units.RotationsPerSecond) * 60.0;
+    public double getFlywheelFollowerRPM() {
+        return (m_flywheelFollowerVelocity.getValueAsDouble() * 60.0) / Constants.Shooter.flywheelGearRatio;
     }
 
-    public double getTargetRPM() {
-        return m_targetRPM;
+    public double getFlywheelTargetRPM() {
+        return m_flywheelTargetRPM;
     }
 
-    public double getRPMError() {
-        return m_targetRPM - getRPM();
+    public double getFlywheelRPMError() {
+        return m_flywheelTargetRPM - getFlywheelLeaderRPM();
     }
 
-    public boolean isAtSpeed() {
-        return Math.abs(getRPMError()) < Constants.Shooter.rpmTolerance;
+    public boolean isFlywheelAtSpeed() {
+        return Math.abs(getFlywheelRPMError()) < Constants.Shooter.rpmTolerance;
     }
 
-    public double getTargetDutyCycle() {
-        return m_targetDutyCycle;
+    public double getFlywheelTargetDutyCycle() {
+        return m_flywheelTargetDutyCycle;
     }
 
     @Override
     public void periodic() {
-        m_velocity.refresh();
-        m_velocity2.refresh();
+        m_flywheelLeaderVelocity.refresh();
+        m_flywheelFollowerVelocity.refresh();
 
-        if (m_useVelocityControl) {
-            m_motor.setControl(m_velocityRequest);
+        if (m_flywheelUseVelocityControl) {
+            m_flywheelLeader.setControl(m_flywheelVelocityRequest);
         } else {
-            m_motor.setControl(m_dutyCycleRequest);
+            m_flywheelLeader.setControl(m_flywheelDutyCycleRequest);
         }
 
-        SmartDashboard.putNumber("Shooter/Target RPM", m_targetRPM);
-        SmartDashboard.putNumber("Shooter/Actual RPM", getRPM());
-        SmartDashboard.putNumber("Shooter/Motor 2 RPM", getRPM2());
-        SmartDashboard.putNumber("Shooter/RPM Error", getRPMError());
-        SmartDashboard.putBoolean("Shooter/At Speed", isAtSpeed());
-        SmartDashboard.putNumber("Shooter/Target Duty Cycle", m_targetDutyCycle);
-        SmartDashboard.putNumber("Shooter/Motor Voltage", m_motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Stator Current", m_motor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Motor 2 Stator Current", m_motor2.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Supply Current", m_motor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Torque Current", m_motor.getTorqueCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Closed Loop Error", m_motor.getClosedLoopError().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Closed Loop Output", m_motor.getClosedLoopOutput().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Duty Cycle", m_motor.getDutyCycle().getValueAsDouble() * 1000);
-        SmartDashboard.putNumber("Shooter/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter/Motor 2 Temp", m_motor2.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putBoolean("Shooter/Using Velocity Control", m_useVelocityControl);
+        SmartDashboard.putNumber("Flywheel/Target RPM", m_flywheelTargetRPM);
+        SmartDashboard.putNumber("Flywheel/Leader RPM", getFlywheelLeaderRPM());
+        SmartDashboard.putNumber("Flywheel/Follower RPM", getFlywheelFollowerRPM());
+        SmartDashboard.putNumber("Flywheel/RPM Error", getFlywheelRPMError());
+        SmartDashboard.putBoolean("Flywheel/At Speed", isFlywheelAtSpeed());
+        SmartDashboard.putNumber("Flywheel/Target Duty Cycle", m_flywheelTargetDutyCycle);
+        SmartDashboard.putNumber("Flywheel/Leader Voltage", m_flywheelLeader.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Leader Stator Current", m_flywheelLeader.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Follower Stator Current", m_flywheelFollower.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Torque Current", m_flywheelLeader.getTorqueCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Closed Loop Error", m_flywheelLeader.getClosedLoopError().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Closed Loop Output", m_flywheelLeader.getClosedLoopOutput().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Duty Cycle", m_flywheelLeader.getDutyCycle().getValueAsDouble() * 1000);
+        SmartDashboard.putNumber("Flywheel/Leader Temp", m_flywheelLeader.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Flywheel/Follower Temp", m_flywheelFollower.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putBoolean("Flywheel/Using Velocity Control", m_flywheelUseVelocityControl);
     }
 }
