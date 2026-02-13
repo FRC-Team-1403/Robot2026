@@ -33,13 +33,13 @@ public class GroundIntake extends SubsystemBase {
     private final DutyCycleOut m_dutyCycleRequest;
 
     public GroundIntake() {
-        m_intakeMotor = new TalonFX(1);
+        m_intakeMotor = new TalonFX(0);
 
         
         m_velocityRequest = new VelocityTorqueCurrentFOC(0);
         m_velocityRequest.Slot = 0;
  
-        m_dutyCycleRequest = new DutyCycleOut(0);
+        m_dutyCycleRequest = new DutyCycleOut();
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -90,12 +90,14 @@ public class GroundIntake extends SubsystemBase {
 
     public void setIntakeTargetRPM(double rpm) {
         m_intakeTargetRPM = rpm;
+        m_velocityRequest.Velocity = rpm / 60.0;
         m_intakeUseVelocityControl = true;
     }
 
     public void setIntakeTargetPower(double dutyCycle) {
         m_intakeTargetDutyCycle = dutyCycle;
-        m_intakeUseVelocityControl = false;
+        m_dutyCycleRequest.Output = dutyCycle;
+        m_intakeUseVelocityControl  = false;
     }
 
     public void stop() {
