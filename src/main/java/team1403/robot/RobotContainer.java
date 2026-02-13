@@ -166,14 +166,14 @@ public class RobotContainer {
     // SmartDashboard.putNumber("vibration", 0);
 
     if (Constants.ENABLE_SYSID) {
-      m_operatorController.a().onTrue(m_swerve.getSysIDQ(Direction.kForward)); // Drive
-      m_operatorController.b().onTrue(m_swerve.getSysIDQ(Direction.kReverse)); // Drive
-      m_operatorController.x().onTrue(m_swerve.getSysIDD(Direction.kForward)); // Drive (FAST)
-      m_operatorController.y().onTrue(m_swerve.getSysIDD(Direction.kReverse)); // Drive (FAST)
-      m_driverController.a().onTrue(m_swerve.getSysIDSteerQ(Direction.kForward)); // Steer
-      m_driverController.b().onTrue(m_swerve.getSysIDSteerQ(Direction.kReverse)); // Steer
-      m_driverController.x().onTrue(m_swerve.getSysIDSteerD(Direction.kForward)); // Steer (FAST)
-      m_driverController.y().onTrue(m_swerve.getSysIDSteerD(Direction.kReverse)); // Steer (FAST)
+      m_operatorController.a().whileTrue(m_swerve.getSysIDQ(Direction.kForward)); // Drive
+      m_operatorController.b().whileTrue(m_swerve.getSysIDQ(Direction.kReverse)); // Drive
+      m_operatorController.x().whileTrue(m_swerve.getSysIDD(Direction.kForward)); // Drive (FAST)
+      m_operatorController.y().whileTrue(m_swerve.getSysIDD(Direction.kReverse)); // Drive (FAST)
+      m_driverController.a().whileTrue(m_swerve.getSysIDSteerQ(Direction.kForward)); // Steer
+      m_driverController.b().whileTrue(m_swerve.getSysIDSteerQ(Direction.kReverse)); // Steer
+      m_driverController.x().whileTrue(m_swerve.getSysIDSteerD(Direction.kForward)); // Steer (FAST)
+      m_driverController.y().whileTrue(m_swerve.getSysIDSteerD(Direction.kReverse)); // Steer (FAST)
     }
 
     // m_driverController.b().onTrue(m_swerve.runOnce(() ->
