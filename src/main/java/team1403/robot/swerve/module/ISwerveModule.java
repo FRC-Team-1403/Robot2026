@@ -31,4 +31,8 @@ public interface ISwerveModule {
     public default void set(DriveControlType type, double driveValue, SteerControlType s_type, double steerValue) {
         set(type, driveValue, s_type, steerValue, null, -1);
     }
+
+    public double getSteerPositionRad();
+    public double getSteerVelocityRadPerSec();
+    public double getSteerAppliedVoltage();
 }

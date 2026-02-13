@@ -103,5 +103,16 @@ public class SimSwerveModule extends SubsystemBase implements ISwerveModule {
         m_driveSim.update(PID_PERIOD);
         m_steerSim.update(PID_PERIOD);
     }
+
+    public double getSteerPositionRad() {
+        return 0.0;
+    }
+
+    public double getSteerVelocityRadPerSec() {
+        return 0.0;
+    }
+    public double getSteerAppliedVoltage() {
+        return 0.0;
+    }
     
 }

@@ -14,8 +14,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 
 /**
  * This class holds attributes for the robot configuration.
@@ -50,7 +49,8 @@ public class Constants {
     public static final int kModuleUpdateRateMs = 10;
     public static final double kModuleUpdateRateHz = 1.0 / Units.millisecondsToSeconds(kModuleUpdateRateMs);
 
-    public static final double kWheelWidth = Units.inchesToMeters(23);
+    public static final double kWheelWidth = Units.
+    inchesToMeters(23);
     public static final double kWheelLength = Units.inchesToMeters(24);
     public static final double kDriveBase = Math.hypot(Swerve.kWheelWidth / 2.0, Swerve.kWheelLength / 2.0);
 
