@@ -41,8 +41,8 @@ public class IntakeKrakenSubsystem extends SubsystemBase {
 
     }
 
-    public void setVelocity(double velocity) {
-        m_intakeMotor.set(velocity);
+    public void setPercentPower(double percent) {
+        m_intakeMotor.set(percent / 100);
     }
 
     public double getVelocityToRPM() {

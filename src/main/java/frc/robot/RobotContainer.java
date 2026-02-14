@@ -52,7 +52,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.a().whileTrue(new IntakeKrakenCommand(m_IntakeKrakenSubsystem, 10)); //change
+    m_driverController.a().whileTrue(new IntakeKrakenCommand(m_IntakeKrakenSubsystem, 0.5)); //change
   }
 
   /**

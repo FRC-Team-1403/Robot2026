@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeKrakenCommand extends Command {
     private final IntakeKrakenSubsystem m_subsystem;
-    private double m_rpm;
+    private double m_percentPower;
 
   /**
    * Creates a new ExampleCommand.
@@ -14,9 +14,9 @@ public class IntakeKrakenCommand extends Command {
    * @param subsystem The subsystem used by this command.
    */
 
-    public IntakeKrakenCommand(IntakeKrakenSubsystem subsystem, double rpm) {
+    public IntakeKrakenCommand(IntakeKrakenSubsystem subsystem, double percent) {
     m_subsystem = subsystem;
-    m_rpm = rpm;
+    m_percentPower = percent;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,7 +31,7 @@ public class IntakeKrakenCommand extends Command {
   @Override
   public void execute() {
 
-    m_subsystem.setVelocity(m_rpm); //change
+    m_subsystem.setPercentPower(m_percentPower); //change
 
   }
 
@@ -39,7 +39,7 @@ public class IntakeKrakenCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_subsystem.setVelocity(0);
+    m_subsystem.setPercentPower(0);
 
   }
 
