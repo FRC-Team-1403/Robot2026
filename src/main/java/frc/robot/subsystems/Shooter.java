@@ -49,11 +49,11 @@ public class Shooter extends SubsystemBase {
         m_rollerMotor = new SparkMax(42, MotorType.kBrushless);
         m_rollerEncoder = m_rollerMotor.getEncoder();
         m_rollerPIDController = new ProfiledPIDController(
-                0.00008,
+                0.00015,
                 0,
                 0.0001,
                 new TrapezoidProfile.Constraints(5000, 10000));
-        m_rollerFeedforward = new SimpleMotorFeedforward(0.0, 0.00205, 0.0);
+        m_rollerFeedforward = new SimpleMotorFeedforward(0.0005, 0.00202, 0.0005);
         m_flywheelVelocityRequest = new VelocityVoltage(0);
         m_flywheelVelocityRequest.Slot = 0;
         m_flywheelVelocityRequest.EnableFOC = true;
@@ -63,16 +63,16 @@ public class Shooter extends SubsystemBase {
         flywheelLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         flywheelLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         flywheelLeaderConfig.CurrentLimits.StatorCurrentLimit = 40;
-        flywheelLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        flywheelLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = false;
         flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
-        flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 
         Slot0Configs flywheelPIDConfig = new Slot0Configs();
         flywheelPIDConfig.kP = 0.4;
         flywheelPIDConfig.kI = 0.01;
         flywheelPIDConfig.kD = 0.0005;
         flywheelPIDConfig.kS = 0.10;
-        flywheelPIDConfig.kV = 0.118;//0.118
+        flywheelPIDConfig.kV = 0.12;//0.118
         flywheelPIDConfig.kA = 3.0;
         flywheelLeaderConfig.Slot0 = flywheelPIDConfig;
 

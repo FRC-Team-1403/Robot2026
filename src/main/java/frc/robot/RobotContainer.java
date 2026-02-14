@@ -42,7 +42,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 1935,2080));
+   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2500,2500));
   //RPM
 
    m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.6,0.6));
