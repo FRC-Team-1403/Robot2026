@@ -5,9 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ShooterCommandPower;
-import frc.robot.commands.ShooterCommandRPM;
-import frc.robot.subsystems.Shooter;
+import frc.robot.commands.SpindexerCommand;
+import frc.robot.subsystems.SpindexerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   
-  private final Shooter m_shooter = new Shooter();
+  private final SpindexerSubsystem m_spindexer = new SpindexerSubsystem();
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -41,11 +40,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
-   m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2000,2000));
-  //RPM
-
-   m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.2,0.2));
+    m_spindexer.setDefaultCommand(new SpindexerCommand(-1, -1, m_spindexer));
    //power
    
   }

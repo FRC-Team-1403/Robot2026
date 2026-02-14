@@ -31,6 +31,8 @@ public class Robot extends LoggedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    
     if (Robot.isReal()) {
       Logger.addDataReceiver(new WPILOGWriter("/media/sda/logs"));
     }
