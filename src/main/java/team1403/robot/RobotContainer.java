@@ -66,7 +66,7 @@ public class RobotContainer {
     Command opVibrationCmd = new ControllerVibrationCommand(m_operatorController.getHID(), 0.28, 1);
 
     m_driverController.leftTrigger().whileTrue(new GroundIntakeCommandPower(m_groundIntake, -0.5));
-    m_driverController.rightTrigger().whileTrue(new GroundIntakeCommandRPM(m_groundIntake, 1000));
+    m_driverController.rightTrigger().whileTrue(new GroundIntakeCommandRPM(m_groundIntake, 30));
 
     if(Constants.ENABLE_SYSID){
     m_driverController.a().whileTrue(m_swerve.sysIdQuasistatic(Direction.kForward));

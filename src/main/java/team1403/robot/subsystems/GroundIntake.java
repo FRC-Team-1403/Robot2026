@@ -39,7 +39,7 @@ public class GroundIntake extends SubsystemBase {
         m_velocityRequest = new VelocityTorqueCurrentFOC(0);
         m_velocityRequest.Slot = 0;
  
-        m_dutyCycleRequest = new DutyCycleOut();
+        m_dutyCycleRequest = new DutyCycleOut(m_intakeTargetDutyCycle);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
