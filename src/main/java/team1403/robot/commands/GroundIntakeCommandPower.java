@@ -15,11 +15,12 @@ public class GroundIntakeCommandPower extends Command {
 
     @Override
     public void initialize() {
-        m_groundIntake.setIntakeTargetPower(m_intakeTargetPower);
+        m_groundIntake.setFlywheelTargetPower(m_intakeTargetPower);
     }
 
     @Override
     public void execute() {
+        m_groundIntake.setFlywheelTargetPower(m_intakeTargetPower);
     }
 
     @Override
