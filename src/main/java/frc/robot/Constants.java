@@ -16,4 +16,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class Shooter{
+ 
+    public static final int rpmTolerance = 25;      // ±15 RPM tolerance as requested
+    public static final int threshold = 10;          // Tighter control zone to reduce overshoot
+    public static final double kP = 0.0004;         // Slightly higher P for tighter control
+    public static final double kF = 0.0002;         // Keep feedforward the same
+  }
 }
