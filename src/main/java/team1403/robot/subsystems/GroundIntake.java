@@ -1,148 +1,128 @@
 package team1403.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import team1403.robot.Constants;
 
 public class GroundIntake extends SubsystemBase {
-    private final TalonFX m_intakeMotor;
-    private final ProfiledPIDController m_intakePIDController;
-    private final SimpleMotorFeedforward m_intakeFeedforward;
-
-    private double m_intakeTargetRPM = 0;
-    private double m_intakeTargetDutyCycle = 0;
-
-    private boolean m_intakeUseVelocityControl = true;
-
-    private final VelocityTorqueCurrentFOC m_velocityRequest;
-    private final StatusSignal<AngularVelocity> m_velocity;
-    private final DutyCycleOut m_dutyCycleRequest;
+    private final TalonFX m_flywheelLeader;
+    private final VelocityVoltage m_flywheelVelocityRequest;
+    private final DutyCycleOut m_flywheelDutyCycleRequest;
+    private double m_flywheelTargetRPM = 0;
+    private double m_flywheelTargetDutyCycle = 0;
+    private boolean m_flywheelUseVelocityControl = true;
+    private final StatusSignal<AngularVelocity> m_flywheelLeaderVelocity;
 
     public GroundIntake() {
-        m_intakeMotor = new TalonFX(0);
+        m_flywheelLeader = new TalonFX(0);
+        m_flywheelVelocityRequest = new VelocityVoltage(0);
+        m_flywheelVelocityRequest.Slot = 0;
+        m_flywheelVelocityRequest.EnableFOC = true;
+        m_flywheelDutyCycleRequest = new DutyCycleOut(0);
 
-        
-        m_velocityRequest = new VelocityTorqueCurrentFOC(0);
-        m_velocityRequest.Slot = 0;
- 
-        m_dutyCycleRequest = new DutyCycleOut();
+        TalonFXConfiguration flywheelLeaderConfig = new TalonFXConfiguration();
+        flywheelLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        flywheelLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        flywheelLeaderConfig.CurrentLimits.StatorCurrentLimit = 40;
+        flywheelLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = false;
+        flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
+        flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        Slot0Configs flywheelPIDConfig = new Slot0Configs();
+        flywheelPIDConfig.kP = 0.1;
+        flywheelPIDConfig.kI = 0.01;
+        flywheelPIDConfig.kD = 0.0005;
+        flywheelPIDConfig.kS = 0.10;
+        flywheelPIDConfig.kV = 0.13;
+        flywheelPIDConfig.kA = 3.0;
+        flywheelLeaderConfig.Slot0 = flywheelPIDConfig;
 
-        config.CurrentLimits.StatorCurrentLimit = 40;
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 40;
-        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        m_flywheelLeader.getConfigurator().apply(flywheelLeaderConfig);
 
-        Slot0Configs slot0 = new Slot0Configs();
-        slot0.kP = 0.20;
-        slot0.kI = 0.01;
-        slot0.kD = 0.005;
-        slot0.kS = 0.10;
-        slot0.kV = 0.11;
-        slot0.kA = 3.0;
-        config.Slot0 = slot0;
-
-        m_intakeMotor.getConfigurator().apply(config);
-
-        TalonFXConfiguration config2 = new TalonFXConfiguration();
-        config2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config2.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-
-        config2.CurrentLimits.StatorCurrentLimit = 40;
-        config2.CurrentLimits.StatorCurrentLimitEnable = true;
-        config2.CurrentLimits.SupplyCurrentLimit = 40;
-        config2.CurrentLimits.SupplyCurrentLimitEnable = true;
-
-        m_velocity = m_intakeMotor.getVelocity();
-
-        m_intakePIDController = new ProfiledPIDController(
-            Constants.GroundIntake.intakeKP,
-            Constants.GroundIntake.intakeKI,
-            Constants.GroundIntake.intakeKD,
-            new TrapezoidProfile.Constraints(
-                Constants.GroundIntake.intakeMaxVelocity,
-                Constants.GroundIntake.intakeMaxAcceleration
-            )
-        );
-        m_intakeFeedforward = new SimpleMotorFeedforward(
-            Constants.GroundIntake.intakeKS,
-            Constants.GroundIntake.intakeKV,
-            Constants.GroundIntake.intakeKA
-        );
+        m_flywheelLeaderVelocity = m_flywheelLeader.getVelocity();
     }
 
-    public void setIntakeTargetRPM(double rpm) {
-        m_intakeTargetRPM = rpm;
-        m_velocityRequest.Velocity = rpm / 60.0;
-        m_intakeUseVelocityControl = true;
+    public void setFlywheelTargetRPM(double rpm) {
+        m_flywheelTargetRPM = rpm;
+        m_flywheelVelocityRequest.Velocity = rpm * Constants.GroundIntake.intakeGearRatio / 60.0;
+        m_flywheelUseVelocityControl = true;
     }
 
-    public void setIntakeTargetPower(double dutyCycle) {
-        m_intakeTargetDutyCycle = dutyCycle;
-        m_dutyCycleRequest.Output = dutyCycle;
-        m_intakeUseVelocityControl  = false;
+    public void setFlywheelTargetPower(double dutyCycle) {
+        m_flywheelTargetDutyCycle = dutyCycle;
+        m_flywheelDutyCycleRequest.Output = dutyCycle;
+        m_flywheelUseVelocityControl = false;
     }
 
     public void stop() {
-        setIntakeTargetRPM(0);
+        setFlywheelTargetRPM(0);
     }
 
-    public double getIntakeRPM() {
-        return m_velocity.getValue().in(edu.wpi.first.units.Units.RotationsPerSecond) * 60.0;
+    public double getFlywheelLeaderRPM() {
+        return m_flywheelLeaderVelocity.getValueAsDouble() * 60.0 / Constants.GroundIntake.intakeGearRatio;
     }
 
-    public double getIntakeTargetRPM() {
-        return m_intakeTargetRPM;
+    public double getFlywheelTargetRPM() {
+        return m_flywheelTargetRPM;
     }
 
-    public double getIntakeRPMError() {
-        return m_intakeTargetRPM - getIntakeRPM();
+    public double getFlywheelRPMError() {
+        return m_flywheelTargetRPM - getFlywheelLeaderRPM();
     }
 
-    public boolean isIntakeAtSpeed() {
-        return m_intakePIDController.atGoal();
+    public boolean isFlywheelAtSpeed() {
+        return Math.abs(getFlywheelRPMError()) < Constants.GroundIntake.rpmTolerance;
     }
 
-    public double getIntakeTargetDutyCycle() {
-        return m_intakeTargetDutyCycle;
+    public double getFlywheelTargetDutyCycle() {
+        return m_flywheelTargetDutyCycle;
     }
 
     @Override
     public void periodic() {
-        if (m_intakeUseVelocityControl) {
-            double motorTargetRPM = m_intakeTargetRPM * Constants.GroundIntake.intakeGearRatio;
-            double feedforwardOutput = m_intakeFeedforward.calculate(motorTargetRPM);
-            double pidOutput = m_intakePIDController.calculate(getIntakeRPM(), m_intakeTargetRPM);
-            m_intakeMotor.setVoltage(feedforwardOutput + pidOutput);
+        m_flywheelLeaderVelocity.refresh();
+
+        if (m_flywheelUseVelocityControl) {
+            m_flywheelLeader.setControl(m_flywheelVelocityRequest);
         } else {
-            m_intakeMotor.set(m_intakeTargetDutyCycle);
+            m_flywheelLeader.setControl(m_flywheelDutyCycleRequest);
         }
 
-        SmartDashboard.putNumber("Intake/RPM", getIntakeRPM());
-        SmartDashboard.putNumber("Intake/Target RPM", m_intakeTargetRPM);
-        SmartDashboard.putNumber("Intake/RPM Error", getIntakeRPMError());
-        SmartDashboard.putBoolean("Intake/At Speed", isIntakeAtSpeed());
-        SmartDashboard.putNumber("Intake/Target Duty Cycle", m_intakeTargetDutyCycle);
-        //SmartDashboard.putNumber("Intake/Voltage", m_intakeMotor.getAppliedOutput() * m_intakeMotor.getBusVoltage());
-        //SmartDashboard.putNumber("Intake/Current", m_intakeMotor.getOutputCurrent());
-        //SmartDashboard.putNumber("Intake/Temp", m_intakeMotor.getMotorTemperature());
-        //SmartDashboard.putBoolean("Intake/Using Velocity Control", m_intakeUseVelocityControl);
+        Logger.recordOutput("Flywheel/Target RPM", m_flywheelTargetRPM);
+        Logger.recordOutput("Flywheel/Leader RPM", getFlywheelLeaderRPM());
+        Logger.recordOutput("Flywheel/RPM Error", getFlywheelRPMError());
+        Logger.recordOutput("Flywheel/At Speed", isFlywheelAtSpeed());
+        Logger.recordOutput("Flywheel/Target Duty Cycle", m_flywheelTargetDutyCycle);
+        Logger.recordOutput("Flywheel/Leader Voltage", m_flywheelLeader.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Leader Stator Current", m_flywheelLeader.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Torque Current", m_flywheelLeader.getTorqueCurrent().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Closed Loop Error", m_flywheelLeader.getClosedLoopError().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Closed Loop Output", m_flywheelLeader.getClosedLoopOutput().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Duty Cycle", m_flywheelLeader.getDutyCycle().getValueAsDouble() * 1000);
+        Logger.recordOutput("Flywheel/Leader Temp", m_flywheelLeader.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Using Velocity Control", m_flywheelUseVelocityControl);
     }
 }

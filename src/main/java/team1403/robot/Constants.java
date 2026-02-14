@@ -63,6 +63,8 @@ public class Constants {
     public static final double intakeKV = 0.1;
     public static final double intakeKA = 0.0;
 
+    public static final int rpmTolerance = 20;
+
     public static final double intakeMaxVelocity = 5000;
     public static final double intakeMaxAcceleration = 10000;
 
