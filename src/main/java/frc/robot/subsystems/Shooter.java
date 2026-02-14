@@ -18,6 +18,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -35,6 +36,8 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder m_rollerEncoder;
     private final VelocityVoltage m_flywheelVelocityRequest;
     private final DutyCycleOut m_flywheelDutyCycleRequest;
+    private final SlewRateLimiter m_flywheelSlewLimiter;
+    private final SlewRateLimiter m_rollerSlewLimiter;
     private double m_flywheelTargetRPM = 0;
     private double m_flywheelTargetDutyCycle = 0;
     private double m_rollerTargetRPM = 0;
@@ -50,15 +53,17 @@ public class Shooter extends SubsystemBase {
         m_rollerMotor = new SparkMax(42, MotorType.kBrushless);
         m_rollerEncoder = m_rollerMotor.getEncoder();
         m_rollerPIDController = new ProfiledPIDController(
-                0.00015,
+                0.00004,
                 0,
                 0.0001,
                 new TrapezoidProfile.Constraints(5000, 10000));
-        m_rollerFeedforward = new SimpleMotorFeedforward(0.0005, 0.00202, 0.0005);
+        m_rollerFeedforward = new SimpleMotorFeedforward(0.0005, 0.00205, 0.0003);
         m_flywheelVelocityRequest = new VelocityVoltage(0);
         m_flywheelVelocityRequest.Slot = 0;
         m_flywheelVelocityRequest.EnableFOC = true;
         m_flywheelDutyCycleRequest = new DutyCycleOut(0);
+        m_flywheelSlewLimiter = new SlewRateLimiter(4000.0 / 60.0 * Constants.Shooter.flywheelGearRatio);
+        m_rollerSlewLimiter = new SlewRateLimiter(4000.0 / Constants.Shooter.rollerGearRatio);
 
         TalonFXConfiguration flywheelLeaderConfig = new TalonFXConfiguration();
         flywheelLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -69,11 +74,11 @@ public class Shooter extends SubsystemBase {
         flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 
         Slot0Configs flywheelPIDConfig = new Slot0Configs();
-        flywheelPIDConfig.kP = 0.1;
+        flywheelPIDConfig.kP = 0.08;
         flywheelPIDConfig.kI = 0.01;
         flywheelPIDConfig.kD = 0.0005;
         flywheelPIDConfig.kS = 0.10;
-        flywheelPIDConfig.kV = 0.13;
+        flywheelPIDConfig.kV = 0.123;
         flywheelPIDConfig.kA = 3.0;
         flywheelLeaderConfig.Slot0 = flywheelPIDConfig;
 
@@ -106,7 +111,7 @@ public class Shooter extends SubsystemBase {
 
     public void setFlywheelTargetRPM(double rpm) {
         m_flywheelTargetRPM = rpm;
-        m_flywheelVelocityRequest.Velocity = rpm * Constants.Shooter.flywheelGearRatio / 60.0;
+        m_flywheelVelocityRequest.Velocity = m_flywheelSlewLimiter.calculate(rpm * Constants.Shooter.flywheelGearRatio / 60.0);
         m_flywheelUseVelocityControl = true;
     }
 
@@ -187,7 +192,7 @@ public class Shooter extends SubsystemBase {
         }
 
         if (m_rollerUseVelocityControl) {
-            double motorTargetRPM = m_rollerTargetRPM * Constants.Shooter.rollerGearRatio;
+            double motorTargetRPM = m_rollerSlewLimiter.calculate(m_rollerTargetRPM * Constants.Shooter.rollerGearRatio);
             double feedforwardOutput = m_rollerFeedforward.calculate(motorTargetRPM);
             double pidOutput = m_rollerPIDController.calculate(getRollerRPM(), m_rollerTargetRPM);
             m_rollerMotor.setVoltage(feedforwardOutput + pidOutput);
