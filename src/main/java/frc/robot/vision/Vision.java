@@ -51,13 +51,13 @@ public class Vision extends SubsystemBase {
         m_visionSim.addCamera(m_cameraSim1, Constants.Vision.kCamera1Transform);
 
         SimCameraProperties camProps2 = new SimCameraProperties();
-        camProps2.setCalibration(640, 480, Rotation2d.fromDegrees(70));
+        camProps2.setCalibration(640, 480, Rotation2d.fromDegrees(80));
         camProps2.setFPS(30);
         m_cameraSim2 = new PhotonCameraSim(m_camera2, camProps2);
         m_visionSim.addCamera(m_cameraSim2, Constants.Vision.kCamera2Transform);
 
         SimCameraProperties camProps3 = new SimCameraProperties();
-        camProps3.setCalibration(640, 480, Rotation2d.fromDegrees(70));
+        camProps3.setCalibration(640, 480, Rotation2d.fromDegrees(80));
         camProps3.setFPS(30);
         m_cameraSim3 = new PhotonCameraSim(m_camera3, camProps3);
         m_visionSim.addCamera(m_cameraSim3, Constants.Vision.kCamera3Transform);
@@ -228,15 +228,15 @@ public class Vision extends SubsystemBase {
         Pose3d cameraPose3 = m_robotPose.transformBy(Constants.Vision.kCamera3Transform);
         Pose3d cameraPose4 = m_robotPose.transformBy(Constants.Vision.kCamera4Transform);
 
-        Logger.recordOutput("Vision/Camera1Direction", createCameraDirectionLine(cameraPose1, 2.5));
-        Logger.recordOutput("Vision/Camera2Direction", createCameraDirectionLine(cameraPose2, 2.5));
-        Logger.recordOutput("Vision/Camera3Direction", createCameraDirectionLine(cameraPose3, 2.5));
-        Logger.recordOutput("Vision/Camera4Direction", createCameraDirectionLine(cameraPose4, 2.5));
+        Logger.recordOutput("Vision/Camera1Direction", createCameraDirectionLine(cameraPose1,1));
+        Logger.recordOutput("Vision/Camera2Direction", createCameraDirectionLine(cameraPose2, 1));
+        Logger.recordOutput("Vision/Camera3Direction", createCameraDirectionLine(cameraPose3, 1));
+        Logger.recordOutput("Vision/Camera4Direction", createCameraDirectionLine(cameraPose4, 1));
 
-        Logger.recordOutput("Vision/Camera1FOV", createCameraFOVCone(cameraPose1, Math.toRadians(80), 2.5));  
-        Logger.recordOutput("Vision/Camera2FOV", createCameraFOVCone(cameraPose2, Math.toRadians(80), 2.5));
-        Logger.recordOutput("Vision/Camera3FOV", createCameraFOVCone(cameraPose3, Math.toRadians(80), 2.5));
-        Logger.recordOutput("Vision/Camera4FOV", createCameraFOVCone(cameraPose4, Math.toRadians(80), 2.5));  
+        Logger.recordOutput("Vision/Camera1FOV", createCameraFOVCone(cameraPose1, Math.toRadians(80),1));  
+        Logger.recordOutput("Vision/Camera2FOV", createCameraFOVCone(cameraPose2, Math.toRadians(80), 1));
+        Logger.recordOutput("Vision/Camera3FOV", createCameraFOVCone(cameraPose3, Math.toRadians(80), 1));
+        Logger.recordOutput("Vision/Camera4FOV", createCameraFOVCone(cameraPose4, Math.toRadians(80), 1));  
 
         Logger.recordOutput("Vision/CameraPoses", new Pose3d[] {
             cameraPose1, cameraPose2, cameraPose3, cameraPose4

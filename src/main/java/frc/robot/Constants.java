@@ -46,9 +46,12 @@ public final class Constants {
     public static String kCamera3 = "OtherThrifty"; 
     public static String kCamera4 = "ThriftyCamera2.0";
     
-    public static Transform3d kCamera1Transform = new Transform3d(0.373,-0.294,0.367, new Rotation3d(Math.toRadians(10),0,Math.toRadians(0)));      
-    public static Transform3d kCamera2Transform = new Transform3d(-0.377926,-0.31736,0.484686, new Rotation3d(Math.toRadians(10),0,Math.toRadians(90)));     
-    public static Transform3d kCamera3Transform = new Transform3d(-0.267,0,0.431, new Rotation3d(Math.toRadians(10),0,Math.toRadians(180)));   
-    public static Transform3d kCamera4Transform = new Transform3d(0.33,-0.3,0.431, new Rotation3d(Math.toRadians(10),0,Math.toRadians(270)));   
+    public static Transform3d kCamera1Transform = new Transform3d(0.0, -0.3, 0.431, new Rotation3d(Math.toRadians(10), 0, Math.toRadians(-90)));
+    public static Transform3d kCamera2Transform = new Transform3d(-0.35, 0.0, 0.431, new Rotation3d(Math.toRadians(10), 0, Math.toRadians(180)));
+    public static Transform3d kCamera3Transform = new Transform3d(0.0, 0.3, 0.431, new Rotation3d(Math.toRadians(10), 0, Math.toRadians(90)));
+    public static Transform3d kCamera4Transform = new Transform3d(0.35, 0.0, 0.431, new Rotation3d(Math.toRadians(10), 0, Math.toRadians(0)));
+
+
+
   }
 }
