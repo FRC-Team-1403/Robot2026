@@ -50,7 +50,7 @@ public class Robot extends LoggedRobot {
       "\n";
     Logger.recordMetadata(BuildConstants.MAVEN_NAME, description);
     if (isReal()) {
-      Logger.addDataReceiver(new WPILOGWriter("/media/sda1/steerTest")); // Log to a USB stick ("/U/logs")
+      Logger.addDataReceiver(new WPILOGWriter("/media/sda1/driveTest")); // Log to a USB stick ("/U/logs")
     }
     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     Logger.start();
