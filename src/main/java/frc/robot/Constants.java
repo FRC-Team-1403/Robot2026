@@ -19,6 +19,7 @@ public final class Constants {
 
   public static class Shooter{
     public static final int rpmTolerance=30;
+    public static final double flywheelGearRatio = 1.5/1.0;
     public static final double rollerGearRatio = 34.0/24.0;
 
   }

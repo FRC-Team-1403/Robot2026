@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -21,7 +23,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -44,8 +45,8 @@ public class Shooter extends SubsystemBase {
     private final StatusSignal<AngularVelocity> m_flywheelFollowerVelocity;
 
     public Shooter() {
-        m_flywheelLeader = new TalonFX(1);
-        m_flywheelFollower = new TalonFX(2);
+        m_flywheelLeader = new TalonFX(0);
+        m_flywheelFollower = new TalonFX(1);
         m_rollerMotor = new SparkMax(42, MotorType.kBrushless);
         m_rollerEncoder = m_rollerMotor.getEncoder();
         m_rollerPIDController = new ProfiledPIDController(
@@ -68,11 +69,11 @@ public class Shooter extends SubsystemBase {
         flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 
         Slot0Configs flywheelPIDConfig = new Slot0Configs();
-        flywheelPIDConfig.kP = 0.4;
+        flywheelPIDConfig.kP = 0.1;
         flywheelPIDConfig.kI = 0.01;
         flywheelPIDConfig.kD = 0.0005;
         flywheelPIDConfig.kS = 0.10;
-        flywheelPIDConfig.kV = 0.12;//0.118
+        flywheelPIDConfig.kV = 0.13;
         flywheelPIDConfig.kA = 3.0;
         flywheelLeaderConfig.Slot0 = flywheelPIDConfig;
 
@@ -87,7 +88,7 @@ public class Shooter extends SubsystemBase {
         flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         m_flywheelFollower.getConfigurator().apply(flywheelFollowerConfig);
-        m_flywheelFollower.setControl(new Follower(1, MotorAlignmentValue.Opposed));
+        m_flywheelFollower.setControl(new Follower(0, MotorAlignmentValue.Opposed));
 
         SparkMaxConfig rollerConfig = new SparkMaxConfig();
         rollerConfig.idleMode(IdleMode.kCoast);
@@ -105,7 +106,7 @@ public class Shooter extends SubsystemBase {
 
     public void setFlywheelTargetRPM(double rpm) {
         m_flywheelTargetRPM = rpm;
-        m_flywheelVelocityRequest.Velocity = rpm / 60.0;
+        m_flywheelVelocityRequest.Velocity = rpm * Constants.Shooter.flywheelGearRatio / 60.0;
         m_flywheelUseVelocityControl = true;
     }
 
@@ -131,11 +132,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getFlywheelLeaderRPM() {
-        return m_flywheelLeaderVelocity.getValueAsDouble() * 60.0;
+        return m_flywheelLeaderVelocity.getValueAsDouble() * 60.0 / Constants.Shooter.flywheelGearRatio;
     }
 
     public double getFlywheelFollowerRPM() {
-        return m_flywheelFollowerVelocity.getValueAsDouble() * 60.0;
+        return m_flywheelFollowerVelocity.getValueAsDouble() * 60.0 / Constants.Shooter.flywheelGearRatio;
     }
 
     public double getRollerRPM() {
@@ -194,31 +195,31 @@ public class Shooter extends SubsystemBase {
             m_rollerMotor.set(m_rollerTargetDutyCycle);
         }
 
-        SmartDashboard.putNumber("Flywheel/Target RPM", m_flywheelTargetRPM);
-        SmartDashboard.putNumber("Flywheel/Leader RPM", getFlywheelLeaderRPM());
-        SmartDashboard.putNumber("Flywheel/Follower RPM", getFlywheelFollowerRPM());
-        SmartDashboard.putNumber("Flywheel/RPM Error", getFlywheelRPMError());
-        SmartDashboard.putBoolean("Flywheel/At Speed", isFlywheelAtSpeed());
-        SmartDashboard.putNumber("Flywheel/Target Duty Cycle", m_flywheelTargetDutyCycle);
-        SmartDashboard.putNumber("Flywheel/Leader Voltage", m_flywheelLeader.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Leader Stator Current", m_flywheelLeader.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Follower Stator Current", m_flywheelFollower.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Torque Current", m_flywheelLeader.getTorqueCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Closed Loop Error", m_flywheelLeader.getClosedLoopError().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Closed Loop Output", m_flywheelLeader.getClosedLoopOutput().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Duty Cycle", m_flywheelLeader.getDutyCycle().getValueAsDouble() * 1000);
-        SmartDashboard.putNumber("Flywheel/Leader Temp", m_flywheelLeader.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Follower Temp", m_flywheelFollower.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putBoolean("Flywheel/Using Velocity Control", m_flywheelUseVelocityControl);
-        SmartDashboard.putNumber("Roller/RPM", getRollerRPM());
-        SmartDashboard.putNumber("Roller/Target RPM", m_rollerTargetRPM);
-        SmartDashboard.putNumber("Roller/RPM Error", getRollerRPMError());
-        SmartDashboard.putBoolean("Roller/At Speed", isRollerAtSpeed());
-        SmartDashboard.putNumber("Roller/Target Duty Cycle", m_rollerTargetDutyCycle);
-        SmartDashboard.putNumber("Roller/Voltage", m_rollerMotor.getAppliedOutput() * m_rollerMotor.getBusVoltage());
-        SmartDashboard.putNumber("Roller/Current", m_rollerMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Roller/Temp", m_rollerMotor.getMotorTemperature());
-        SmartDashboard.putBoolean("Roller/Using Velocity Control", m_rollerUseVelocityControl);
+        Logger.recordOutput("Flywheel/Target RPM", m_flywheelTargetRPM);
+        Logger.recordOutput("Flywheel/Leader RPM", getFlywheelLeaderRPM());
+        Logger.recordOutput("Flywheel/Follower RPM", getFlywheelFollowerRPM());
+        Logger.recordOutput("Flywheel/RPM Error", getFlywheelRPMError());
+        Logger.recordOutput("Flywheel/At Speed", isFlywheelAtSpeed());
+        Logger.recordOutput("Flywheel/Target Duty Cycle", m_flywheelTargetDutyCycle);
+        Logger.recordOutput("Flywheel/Leader Voltage", m_flywheelLeader.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Leader Stator Current", m_flywheelLeader.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Follower Stator Current", m_flywheelFollower.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Torque Current", m_flywheelLeader.getTorqueCurrent().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Closed Loop Error", m_flywheelLeader.getClosedLoopError().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Closed Loop Output", m_flywheelLeader.getClosedLoopOutput().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Duty Cycle", m_flywheelLeader.getDutyCycle().getValueAsDouble() * 1000);
+        Logger.recordOutput("Flywheel/Leader Temp", m_flywheelLeader.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Follower Temp", m_flywheelFollower.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Flywheel/Using Velocity Control", m_flywheelUseVelocityControl);
+        Logger.recordOutput("Roller/RPM", getRollerRPM());
+        Logger.recordOutput("Roller/Target RPM", m_rollerTargetRPM);
+        Logger.recordOutput("Roller/RPM Error", getRollerRPMError());
+        Logger.recordOutput("Roller/At Speed", isRollerAtSpeed());
+        Logger.recordOutput("Roller/Target Duty Cycle", m_rollerTargetDutyCycle);
+        Logger.recordOutput("Roller/Voltage", m_rollerMotor.getAppliedOutput() * m_rollerMotor.getBusVoltage());
+        Logger.recordOutput("Roller/Current", m_rollerMotor.getOutputCurrent());
+        Logger.recordOutput("Roller/Temp", m_rollerMotor.getMotorTemperature());
+        Logger.recordOutput("Roller/Using Velocity Control", m_rollerUseVelocityControl);
     }
 }
