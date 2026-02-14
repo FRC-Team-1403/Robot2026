@@ -35,7 +35,7 @@ public class Constants {
   public static final double kLoopTime = 0.02;
   //controls if the debug tab is used on shuffleboard
   public static final boolean DEBUG_MODE = false;
-  public static final boolean ENABLE_SYSID = false;
+  public static final boolean ENABLE_SYSID = true;
   //controls if the debug tab is used on shuffleboard
 
   /**
@@ -80,6 +80,7 @@ public class Constants {
     
     public static final double kFirstDriveStage = (15.0 / 45.0);
     public static final double kDriveReduction = (14.0 / 50.0) * (28.0 / 16.0) * kFirstDriveStage; // ~ 1/6.21
+    public static final double kDriveGearRatio = 6.75;
     public static final double kDrivePositionConversionFactor = kWheelDiameterMeters * Math.PI * kDriveReduction; //(14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0) * kWheelDiameterMeters * Math.PI; //0.05215454470665408
 
     public static final double kSteerReduction = (15.0 / 32.0) * (10.0 / 60.0);
@@ -108,9 +109,9 @@ public class Constants {
     public static final double kPDrive = 0.1; //0.1
     public static final double kIDrive = 0.0;
     public static final double kDDrive = 0.0;
-    public static final double kSDrive = 0.29614; //tune using sysid (volts)
-    public static final double kVDrive = -11.292; //volts instead of % duty cycle (tune with sysid)
-    public static final double kADrive = 2.584; //tune with sysid (volts)
+    public static final double kSDrive = 0.11331; //tune using sysid (volts)
+    public static final double kVDrive = 2.5702; //volts instead of % duty cycle (tune with sysid)
+    public static final double kADrive = 0.35086; //tune with sysid (volts)
 
     //swerve module azimuth
     public static final double kPTurning = 0.7; //0.7

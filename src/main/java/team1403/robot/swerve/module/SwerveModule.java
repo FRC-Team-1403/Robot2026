@@ -321,7 +321,7 @@ public class SwerveModule extends SubsystemBase implements ISwerveModule {
 
   @Override
   public double getSteerPositionRad() {
-    return m_steerRelativeEncoder.getPosition();
+    return m_steerRelativeEncoder.getPosition()*2*Math.PI;
   }
 
   @Override
@@ -332,6 +332,25 @@ public class SwerveModule extends SubsystemBase implements ISwerveModule {
   @Override
   public double getSteerAppliedVoltage() {
     return m_steerMotor.getAppliedOutput() * m_steerMotor.getBusVoltage();
+  }
+
+  @Override
+  public double getDrivePositionMeters() {
+    double motorRotations = m_driveRelativeEncoder.getPosition();
+    double wheelRotations = motorRotations / Constants.Swerve.kDriveReduction;
+    return wheelRotations * 2.0 * Math.PI * Constants.Swerve.kWheelRadiusMeters;
+  }
+
+  @Override
+  public double getDriveVelocityMetersPerSec() {
+    double motorRPM = m_driveRelativeEncoder.getVelocity();
+    double wheelRPS = (motorRPM / 60.0) / Constants.Swerve.kDriveGearRatio;
+    return wheelRPS * 2.0 * Math.PI * Constants.Swerve.kWheelRadiusMeters;
+  }
+
+  @Override
+  public double getDriveAppliedVoltage() {
+    return m_driveMotor.getAppliedOutput() * m_driveMotor.getBusVoltage();
   }
 
   @Override

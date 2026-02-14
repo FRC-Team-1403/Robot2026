@@ -26,19 +26,19 @@ public class SimSwerveModule extends SubsystemBase implements ISwerveModule {
     private final DCMotorSim m_steerSim;
     private final PIDController m_steerController = new PIDController(6, 0, 0);
     private final PIDController m_driveController = new PIDController(0.04, 0, 0);
-    private final SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0, 12/Constants.Swerve.kMaxSpeed, 0.1);
+    private final SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0, 12 / Constants.Swerve.kMaxSpeed,
+            0.1);
 
     private static final double PID_PERIOD = 0.004;
     private final Notifier m_pidNotifier;
     private final ReentrantLock m_lock;
 
-
     public SimSwerveModule(String name) {
         m_name = name;
         m_position = new SwerveModulePosition();
         m_state = new SwerveModuleState();
-        m_driveSim = CougarUtil.createDCMotorSim(DCMotor.getNEO(1), 1/Constants.Swerve.kDriveReduction, 0.025);
-        m_steerSim = CougarUtil.createDCMotorSim(DCMotor.getNEO(1), 1/Constants.Swerve.kSteerReduction, 0.004);
+        m_driveSim = CougarUtil.createDCMotorSim(DCMotor.getNEO(1), 1 / Constants.Swerve.kDriveReduction, 0.025);
+        m_steerSim = CougarUtil.createDCMotorSim(DCMotor.getNEO(1), 1 / Constants.Swerve.kSteerReduction, 0.004);
 
         m_steerController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -55,7 +55,7 @@ public class SimSwerveModule extends SubsystemBase implements ISwerveModule {
     }
 
     private double getDriveVelocity() {
-        return m_driveSim.getAngularVelocityRadPerSec() * Constants.Swerve.kWheelRadiusMeters; //omega * r = v
+        return m_driveSim.getAngularVelocityRadPerSec() * Constants.Swerve.kWheelRadiusMeters; // omega * r = v
     }
 
     private double getDrivePosition() {
@@ -79,7 +79,8 @@ public class SimSwerveModule extends SubsystemBase implements ISwerveModule {
     }
 
     @Override
-    public void set(DriveControlType type, double driveValue, SteerControlType s_type, double steerValue, DriveFeedforwards ff, int index) {
+    public void set(DriveControlType type, double driveValue, SteerControlType s_type, double steerValue,
+            DriveFeedforwards ff, int index) {
         m_lock.lock();
         if (s_type == SteerControlType.Angle) {
             m_steerController.setSetpoint(MathUtil.angleModulus(steerValue));
@@ -92,9 +93,9 @@ public class SimSwerveModule extends SubsystemBase implements ISwerveModule {
 
     public void simLoop() {
         m_lock.lock();
-        double driveVel = getDriveVelocity(); 
-        double driveVolt = m_driveController.calculate(driveVel) + 
-            m_driveFF.calculateWithVelocities(driveVel, m_driveController.getSetpoint());
+        double driveVel = getDriveVelocity();
+        double driveVolt = m_driveController.calculate(driveVel) +
+                m_driveFF.calculateWithVelocities(driveVel, m_driveController.getSetpoint());
 
         m_driveSim.setInputVoltage(driveVolt);
         m_steerSim.setInputVoltage(m_steerController.calculate(m_steerSim.getAngularPositionRad()));
@@ -111,8 +112,19 @@ public class SimSwerveModule extends SubsystemBase implements ISwerveModule {
     public double getSteerVelocityRadPerSec() {
         return 0.0;
     }
+
     public double getSteerAppliedVoltage() {
         return 0.0;
     }
-    
+
+    public double getDrivePositionMeters(){
+        return 0.0;
+    };
+    public double getDriveVelocityMetersPerSec(){
+        return 0.0;
+    };
+    public double getDriveAppliedVoltage(){
+        return 0.0;
+    };
+
 }

@@ -63,8 +63,6 @@ import team1403.robot.vision.AprilTagCamera;
 import team1403.robot.vision.ITagCamera;
 import team1403.robot.vision.VisionSimUtil;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.*;
 
 /**
@@ -224,9 +222,9 @@ public class SwerveSubsystem extends SubsystemBase {
             (log) -> {
               for (int i = 0; i < m_modules.length; i++) {
                 log.motor("linear" + i)
-                    .voltage(Volts.of(m_modules[i].getSteerAppliedVoltage()))
-                    .linearPosition(Meters.of(m_modules[i].getSteerPositionRad()))
-                    .linearVelocity(MetersPerSecond.of(m_modules[i].getSteerVelocityRadPerSec()));
+                    .voltage(Volts.of(m_modules[i].getDriveAppliedVoltage()))
+                    .linearPosition(Meters.of(m_modules[i].getDrivePositionMeters()))
+                    .linearVelocity(MetersPerSecond.of(m_modules[i].getDriveVelocityMetersPerSec()));
               }
             }, this));
     m_sysIDAngle = new SysIdRoutine(new SysIdRoutine.Config(null, null, null,

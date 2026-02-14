@@ -35,4 +35,7 @@ public interface ISwerveModule {
     public double getSteerPositionRad();
     public double getSteerVelocityRadPerSec();
     public double getSteerAppliedVoltage();
+    public double getDrivePositionMeters();
+    public double getDriveVelocityMetersPerSec();
+    public double getDriveAppliedVoltage();
 }
