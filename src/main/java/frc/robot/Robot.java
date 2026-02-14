@@ -4,16 +4,21 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import com.ctre.phoenix6.SignalLogger;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
  * this project, you must also update the Main.java file in the project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
@@ -25,6 +30,15 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    super(0.02); // change in constants later if needed
+    if (isReal()) {
+      Logger.addDataReceiver(new WPILOGWriter("/media/sda1/testlogs")); // USB path
+    }
+    Logger.addDataReceiver(new NT4Publisher()); // NetworkTables
+    Logger.start();
+
+    //okay so basically idk if we need this because etaash h it in for Enable logging for motors, so we don't need logging in SysID routines but you want to do sysid right? so anyways i added it just in case
+    SignalLogger.start();
     m_robotContainer = new RobotContainer();
   }
 
