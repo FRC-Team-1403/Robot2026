@@ -109,15 +109,37 @@ public class Constants {
     public static final double kPDrive = 0.1; //0.1
     public static final double kIDrive = 0.0;
     public static final double kDDrive = 0.0;
+
+    //sysid tuning -- tune by hand
     public static final double kSDrive = 0.11331; //tune using sysid (volts)
     public static final double kVDrive = 2.5702; //volts instead of % duty cycle (tune with sysid)
     public static final double kADrive = 0.35086; //tune with sysid (volts)
+
+    
+    /**
+    public static final double kSModule1Drive = 0.33449;
+    public static final double kVModule1Drive = 3422.3;
+    public static final double kAModule1Drive = 412.78;
+
+    public static final double kSModule2Drive = 0.29689;
+    public static final double kVModule2Drive = 3412.8;
+    public static final double kAModule2Drive = 824.63;
+
+    public static final double kSModule3Drive = 0.26161;
+    public static final double kVModule3Drive = 3468.5;
+    public static final double kAModule3Drive = 805.55;
+
+    public static final double kSModule4Drive = 0.2186;
+    public static final double kVModule4Drive = 3437.7;
+    public static final double kAModule4Drive = 712.38;
+    */
 
     //swerve module azimuth
     public static final double kPTurning = 0.7; //0.7
     public static final double kITurning = 0.0;
     public static final double kDTurning = 0.11;
     public static final double kSTurning = 0.0;
+    
 
     //front-to-back-disp = ~8.568 inches 
     //left-to-right-disp = 0 inches
