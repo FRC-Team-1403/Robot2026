@@ -72,7 +72,7 @@ public class Constants {
 
     public static final double intakeCurrentLimit = 40;
 
-    public static final int intakeMotorID = 10;
+    public static final int intakeMotorID = 0;
   }
 
   /**

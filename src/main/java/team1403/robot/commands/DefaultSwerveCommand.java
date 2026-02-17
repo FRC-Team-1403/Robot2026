@@ -88,7 +88,7 @@ public class DefaultSwerveCommand extends Command {
     this.m_snipingMode = snipingMode;
     this.m_robotRelativeMode = robotRelativeSupplier;
     this.m_autoRotate = autoRotate;
-    m_isFieldRelative = true;
+    m_isFieldRelative = false;
     m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
 
     m_rotationPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -108,7 +108,8 @@ public class DefaultSwerveCommand extends Command {
     SmartDashboard.putBoolean("isFieldRelative", m_isFieldRelative);
     //if (Constants.DEBUG_MODE) SmartDashboard.putBoolean("Aimbot", m_aimbotSupplier.getAsBoolean());
 
-    m_speedLimiter = 0.3 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + squareNum(m_speedSupplier.getAsDouble()) * 0.7;
+
+    //m_speedLimiter = 0.3 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + squareNum(m_speedSupplier.getAsDouble()) * 0.7;
   
     if (DriverStation.isAutonomousEnabled()) {
       m_drivetrainSubsystem.drive(new ChassisSpeeds());
