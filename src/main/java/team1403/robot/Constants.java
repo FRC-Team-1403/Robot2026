@@ -54,14 +54,14 @@ public class Constants {
     public static final double KaSteer = 0;
   }
 
-  public static class GroundIntake {
-    public static final double intakeKP = 0.0;
-    public static final double intakeKI = 0.0;
-    public static final double intakeKD = 0.0;
+  public static class Intake {
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
 
-    public static final double intakeKS = 0.1;
-    public static final double intakeKV = 0.1;
-    public static final double intakeKA = 0.0;
+    public static final double kS = 0.1;
+    public static final double kV = 0.1;
+    public static final double kA = 0.0;
 
     public static final int rpmTolerance = 20;
 

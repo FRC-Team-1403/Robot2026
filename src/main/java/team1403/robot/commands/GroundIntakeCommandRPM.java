@@ -15,12 +15,12 @@ public class GroundIntakeCommandRPM extends Command {
 
     @Override
     public void initialize() {
-        m_groundIntake.setFlywheelTargetRPM(m_intakeTargetRPM);
+        m_groundIntake.setIntakeRPM(m_intakeTargetRPM);
     }
 
     @Override
     public void execute() {
-        m_groundIntake.setFlywheelTargetPower(m_intakeTargetRPM);
+        m_groundIntake.setIntakeRPM(m_intakeTargetRPM);
     }
 
     @Override
