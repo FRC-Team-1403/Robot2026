@@ -40,7 +40,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    m_spindexer.setDefaultCommand(new SpindexerCommand(-1, -1, m_spindexer));
+    m_spindexer.setDefaultCommand(new SpindexerCommand(0.7, 1, m_spindexer));
    //power
    
   }
