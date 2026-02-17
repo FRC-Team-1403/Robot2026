@@ -158,4 +158,27 @@ public static class ShooterHood {
     public static final double dist7 = 0;
     public static final double dist8 = 0;
   }
+
+  public static class Intake {
+    public static final int m_intakeID = 0;
+
+    public static final double kP = 0.0; 
+    public static final double kI = 0.0; 
+    public static final double kD = 0.0; 
+
+    public static final double kS = 0.1; 
+    public static final double kV = 0.1;
+    public static final double kA = 0.0; 
+
+    public static final int rpmTolerance = 20;
+
+    public static final double intakeMaxVelocity = 5000;
+    public static final double intakeMaxAcceleration = 10000;
+
+    public static final double intakeGearRatio = 1.0;
+
+    public static final double intakeCurrentLimit = 40;
+
+    public static final int intakeMotorID = 10;
+  }
 }
