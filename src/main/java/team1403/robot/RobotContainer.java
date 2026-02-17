@@ -9,6 +9,7 @@ import java.util.Set;
 import org.ejml.dense.row.MatrixFeatures_CDRM;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -176,13 +177,13 @@ public class RobotContainer {
       m_driverController.y().whileTrue(m_swerve.getSysIDSteerD(Direction.kReverse)); // Steer (FAST)
     }
 
-
     // m_driverController.b().onTrue(m_swerve.runOnce(() ->
     // m_swerve.zeroHeading()));
   }
 
   private double activationFunction(double input) {
-    double output = ((15.0/8.0)*Math.pow(input, 7) - (21.0/4.0)*Math.pow(input, 5) + (35.0/8.0)*Math.pow(input, 3));
+    double output = ((15.0 / 8.0) * Math.pow(input, 7) - (21.0 / 4.0) * Math.pow(input, 5)
+        + (35.0 / 8.0) * Math.pow(input, 3));
     return output;
   }
 
@@ -193,6 +194,16 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoChooser.getSelected();
+    try {
+      // Load the path you want to follow using its name in the GUI
+      PathPlannerPath path = PathPlannerPath.fromPathFile("Forward");
+
+      // Create a path following command using AutoBuilder. This will also trigger
+      // event markers.
+      return AutoBuilder.followPath(path);
+    } catch (Exception e) {
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+      return Commands.none();
+    }
   }
 }
