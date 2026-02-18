@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import team1403.robot.commands.ControllerVibrationCommand;
@@ -38,6 +39,12 @@ public class RobotContainer {
     m_operatorController = new CommandXboxController(Constants.Operator.pilotPort);
 
     Blackbox.init();
+
+    //*****if code still doesn't work try running this tmrw
+    
+    //m_autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+    //m_autoChooser.addDefaultOption("None", Commands.none());
+
     m_swerve = TunerConstants.createDrivetrain();
     m_groundIntake = new GroundIntake();
     m_powerDistribution = new PowerDistribution(Constants.CanBus.powerDistributionID, ModuleType.kRev);
@@ -65,15 +72,16 @@ public class RobotContainer {
     Command vibrationCmd = new ControllerVibrationCommand(m_driverController.getHID(), 0.28, 1);
     Command opVibrationCmd = new ControllerVibrationCommand(m_operatorController.getHID(), 0.28, 1);
 
-    m_driverController.leftTrigger().whileTrue(new GroundIntakeCommandPower(m_groundIntake, -0.5));
-    m_driverController.rightTrigger().whileTrue(new GroundIntakeCommandRPM(m_groundIntake, 30));
+    //**** change from triger to bumper to not mess with swervee
+    m_driverController.leftBumper().whileTrue(new GroundIntakeCommandPower(m_groundIntake, -0.5));
+    m_driverController.rightBumper().whileTrue(new GroundIntakeCommandRPM(m_groundIntake, 30));
 
-    if(Constants.ENABLE_SYSID){
-    m_driverController.a().whileTrue(m_swerve.sysIdQuasistatic(Direction.kForward));
-    m_driverController.b().whileTrue(m_swerve.sysIdQuasistatic(Direction.kReverse));
-    m_driverController.rightBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kForward));
-    m_driverController.leftBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kReverse));
-    }
+    // if(Constants.ENABLE_SYSID){
+    // m_driverController.a().whileTrue(m_swerve.sysIdQuasistatic(Direction.kForward));
+    // m_driverController.b().whileTrue(m_swerve.sysIdQuasistatic(Direction.kReverse));
+    // m_driverController.rightBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kForward));
+    // m_driverController.leftBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kReverse));
+    // }
     
   }
   public Command getAutonomousCommand() {

@@ -103,11 +103,16 @@ public class DefaultSwerveCommand extends Command {
 
   @Override
   public void execute() {
-    m_isFieldRelative = m_robotRelativeDebouncer.calculate(!m_robotRelativeMode.getAsBoolean());
+    
+    //****button was beign werid so removed so it is always robot relative. Pray it work!!!!!*****
+
+    //m_isFieldRelative = m_robotRelativeDebouncer.calculate(!m_robotRelativeMode.getAsBoolean());
 
     SmartDashboard.putBoolean("isFieldRelative", m_isFieldRelative);
     //if (Constants.DEBUG_MODE) SmartDashboard.putBoolean("Aimbot", m_aimbotSupplier.getAsBoolean());
 
+
+    //****got rid of snipping mode becase the intake was same butto and robot kept slowing down which was not needed for current testing 
 
     //m_speedLimiter = 0.3 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + squareNum(m_speedSupplier.getAsDouble()) * 0.7;
   
@@ -151,16 +156,18 @@ public class DefaultSwerveCommand extends Command {
       angular /= 2;
     }
 
-    if(!Blackbox.isCoralLoaded() && m_autoRotate.getAsBoolean()) {
-      Pose2d target = Blackbox.getNearestHeuristic(m_drivetrainSubsystem.getPose(), Blackbox.getReefPoses());
-      if (target != null) {
-        m_targetState.position = target.getRotation().getRadians();
-        m_targetState.velocity = 0;
-        angular = m_rotationPID.calculate(m_drivetrainSubsystem.getRotation().getRadians(), m_targetState);
-      }
-    } else {
-      m_rotationPID.reset(m_drivetrainSubsystem.getRotation().getRadians());
-    }
+    //*****Got rid of auto rotate to make sure not mesing with swerve 
+
+    // if(!Blackbox.isCoralLoaded() && m_autoRotate.getAsBoolean()) {
+    //   Pose2d target = Blackbox.getNearestHeuristic(m_drivetrainSubsystem.getPose(), Blackbox.getReefPoses());
+    //   if (target != null) {
+    //     m_targetState.position = target.getRotation().getRadians();
+    //     m_targetState.velocity = 0;
+    //     angular = m_rotationPID.calculate(m_drivetrainSubsystem.getRotation().getRadians(), m_targetState);
+    //   }
+    // } else {
+    //   m_rotationPID.reset(m_drivetrainSubsystem.getRotation().getRadians());
+    // }
 
     //limit change in translation of the overall robot, based on orbit's slideshow
     {
