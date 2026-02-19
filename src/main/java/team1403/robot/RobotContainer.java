@@ -196,7 +196,7 @@ public class RobotContainer {
     // An example command will be run in autonomous
     try {
       // Load the path you want to follow using its name in the GUI
-      PathPlannerPath path = PathPlannerPath.fromPathFile("Forward");
+      PathPlannerPath path = PathPlannerPath.fromPathFile("Trench Forward");
 
       // Create a path following command using AutoBuilder. This will also trigger
       // event markers.
