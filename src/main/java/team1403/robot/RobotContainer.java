@@ -58,6 +58,7 @@ public class RobotContainer {
 
   private void configureBindings() {
    
+    if(!Constants.ENABLE_SYSID){
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
         m_swerve,
         () -> -m_driverController.getLeftX(),
@@ -74,14 +75,16 @@ public class RobotContainer {
 
     //**** change from triger to bumper to not mess with swervee
     m_driverController.leftBumper().whileTrue(new GroundIntakeCommandPower(m_groundIntake, -0.5));
-    m_driverController.rightBumper().whileTrue(new GroundIntakeCommandRPM(m_groundIntake, 30));
+    //m_driverController.rightBumper().whileTrue(new GroundIntakeCommandRPM(m_groundIntake, 30));
+    }
 
-    // if(Constants.ENABLE_SYSID){
-    // m_driverController.a().whileTrue(m_swerve.sysIdQuasistatic(Direction.kForward));
-    // m_driverController.b().whileTrue(m_swerve.sysIdQuasistatic(Direction.kReverse));
-    // m_driverController.rightBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kForward));
-    // m_driverController.leftBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kReverse));
-    // }
+
+    if(Constants.ENABLE_SYSID){
+      m_driverController.rightTrigger().whileTrue(m_swerve.sysIdQuasistatic(Direction.kForward));
+      m_driverController.leftTrigger().whileTrue(m_swerve.sysIdQuasistatic(Direction.kReverse));
+      m_driverController.rightBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kForward));
+      m_driverController.leftBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kReverse));
+    }
     
   }
   public Command getAutonomousCommand() {
