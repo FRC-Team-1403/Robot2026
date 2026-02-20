@@ -84,6 +84,7 @@ public static class ShooterHood {
   public static class Shooter {
     public static final int flywheelLeaderID = 0;
     public static final int flywheelFollowerID = 0;
+    public static final int flywheelFollower2ID = 0;
     public static final double flywheelGearRatio = 0;
     public static final double rpmTolerance = 20;
 
