@@ -24,9 +24,9 @@ public class Shooter extends SubsystemBase {
     private double m_flywheelTargetRPM = 0;
     private double m_flywheelTargetDutyCycle = 0;
     private boolean m_flywheelUseVelocityControl = true;
-    private final StatusSignal m_flywheelLeaderVelocity;
-    private final StatusSignal m_flywheelFollowerVelocity;
-    private final StatusSignal m_flywheelFollower2Velocity;
+    private final StatusSignal<AngularVelocity> m_flywheelLeaderVelocity;
+    private final StatusSignal<AngularVelocity> m_flywheelFollowerVelocity;
+    private final StatusSignal<AngularVelocity> m_flywheelFollower2Velocity;
 
     public Shooter() {
         m_flywheelLeader = new TalonFX(Constants.Shooter.flywheelLeaderID);
@@ -93,6 +93,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void stop() {
+        m_flywheelTargetDutyCycle = 0;
         setFlywheelTargetRPM(0);
     }
 
