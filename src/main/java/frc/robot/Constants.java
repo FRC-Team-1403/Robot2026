@@ -31,6 +31,11 @@ public static class ShooterHood {
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
+    public static final double kS = 0;
+    public static final double kG = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+
   }
 
   public static class Shooter {

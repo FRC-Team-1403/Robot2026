@@ -31,25 +31,21 @@ public class ShooterHood extends SubsystemBase {
         m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID,"Bus 1");
         m_dutyCycleRequest = new DutyCycleOut(0);
         m_neutralRequest = new NeutralOut();
-        m_hoodFeedforward = new ArmFeedforward(0, 0, 0, 0);
-
+        m_hoodFeedforward = new ArmFeedforward(Constants.ShooterHood.kS, Constants.ShooterHood.kG, Constants.ShooterHood.kV, Constants.ShooterHood.kA);
+        
         TalonFXConfiguration hoodMotorConfig = new TalonFXConfiguration();
         hoodMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         m_hoodMotor.getConfigurator().apply(hoodMotorConfig);
 
-
-
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
-        config.MagnetSensor.MagnetOffset = 0;//-0.794921875
+        config.MagnetSensor.MagnetOffset = 0;
         m_encoder.getConfigurator().apply(config);
 
         double absoluteRotations = getAbsolutePosition();
         double hoodRotations = absoluteRotations * Constants.ShooterHood.kGearRatioEncoder;
         m_hoodMotor.setPosition(hoodRotations);
-
-        //m_hoodMotor.setPosition(0);
 
         m_customController = new CustomPositionControlLoop(
                 Constants.ShooterHood.kGain,
@@ -112,8 +108,8 @@ public class ShooterHood extends SubsystemBase {
         currentAngle = getHoodAngle();
         double smallestError = getError(setpoint, currentAngle);
         double controlLoop = m_customController.calculate(smallestError, currentAngle, setpoint);
-        double ff = m_hoodFeedforward.calculate(smallestError, currentAngle, setpoint);
-        double motorOutput = ff+controlLoop;
+        double ff = m_hoodFeedforward.calculate(Units.degreesToRadians(currentAngle), 0);
+        double motorOutput = ff + controlLoop;
 
         if (currentAngle >= Constants.ShooterHood.kMaxAngleDegrees && motorOutput > 0) {
             motorOutput = 0;
