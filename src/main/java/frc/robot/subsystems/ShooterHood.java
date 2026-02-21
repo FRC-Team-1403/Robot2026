@@ -10,65 +10,62 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.CustomPositionControlLoop;
 
 public class ShooterHood extends SubsystemBase {
     private final TalonFX m_hoodMotor;
     private final CANcoder m_encoder;
-    private ArmFeedforward m_hoodFeedforward;
     private final DutyCycleOut m_dutyCycleRequest;
     private final NeutralOut m_neutralRequest;
-    private final CustomPositionControlLoop m_customController;
+    private final PIDController m_pidController;
+    private final ArmFeedforward m_feedforward;
     private double currentAngle;
     private double setpoint;
 
     public ShooterHood() {
-        m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID,"Bus 1");
-        m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID,"Bus 1");
+        m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID, "Bus 1");
+        m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID, "Bus 1");
         m_dutyCycleRequest = new DutyCycleOut(0);
         m_neutralRequest = new NeutralOut();
-        m_hoodFeedforward = new ArmFeedforward(0, 0, 0, 0);
 
         TalonFXConfiguration hoodMotorConfig = new TalonFXConfiguration();
         hoodMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         m_hoodMotor.getConfigurator().apply(hoodMotorConfig);
 
-
-
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
-        config.MagnetSensor.MagnetOffset = 0;//-0.794921875
+        config.MagnetSensor.MagnetOffset = 0;
         m_encoder.getConfigurator().apply(config);
 
         double absoluteRotations = getAbsolutePosition();
         double hoodRotations = absoluteRotations * Constants.ShooterHood.kGearRatioEncoder;
         m_hoodMotor.setPosition(hoodRotations);
 
-        //m_hoodMotor.setPosition(0);
+        m_pidController = new PIDController(
+                Constants.ShooterHood.kP,
+                Constants.ShooterHood.kI,
+                Constants.ShooterHood.kD);
+        m_pidController.setTolerance(Constants.ShooterHood.kToleranceDegrees);
 
-        m_customController = new CustomPositionControlLoop(
-                Constants.ShooterHood.kGain,
-                Constants.ShooterHood.kToleranceDegrees,
-                Constants.ShooterHood.kRampUpTime,
-                Constants.ShooterHood.kRampDownTime,
-                Constants.ShooterHood.kUnitsPerRampTime,
-                Constants.ShooterHood.kMaxSpeed,
-                Constants.ShooterHood.kMinSpeed,
-                Constants.ShooterHood.kLoopTime);
+    
+        m_feedforward = new ArmFeedforward(
+                Constants.ShooterHood.kS,
+                Constants.ShooterHood.kG,
+                Constants.ShooterHood.kV);
 
         currentAngle = getHoodAngle();
         setpoint = currentAngle;
     }
 
-    public double getAbsolutePosition(){
-        return (m_encoder.getAbsolutePosition().getValueAsDouble()-0.794921875)*-1;
+    public double getAbsolutePosition() {
+        return (m_encoder.getAbsolutePosition().getValueAsDouble() - 0.794921875) * -1;
     }
-    
+
     public double getHoodAngle() {
         double motorRotations = m_hoodMotor.getPosition().getValueAsDouble();
         double hoodRotations = motorRotations / Constants.ShooterHood.kGearRatioHoodAngleRatio;
@@ -76,8 +73,12 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public void setSetpoint(double degrees) {
-        double correctedDegrees = MathUtil.clamp(degrees, Constants.ShooterHood.kMinAngleDegrees, Constants.ShooterHood.kMaxAngleDegrees);
+        double correctedDegrees = MathUtil.clamp(
+                degrees,
+                Constants.ShooterHood.kMinAngleDegrees,
+                Constants.ShooterHood.kMaxAngleDegrees);
         setpoint = correctedDegrees;
+        m_pidController.setSetpoint(setpoint);
     }
 
     public double getSetpoint() {
@@ -85,7 +86,7 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return m_customController.isAtPosition();
+        return m_pidController.atSetpoint();
     }
 
     public void adjustSetpoint(double degrees) {
@@ -94,12 +95,7 @@ public class ShooterHood extends SubsystemBase {
 
     public void stopMotor() {
         m_hoodMotor.setControl(m_neutralRequest);
-        m_customController.reset();
-    }
-
-    private double getError(double targetAngle, double currentAngle) {
-        double error = targetAngle - currentAngle;
-        return error;
+        m_pidController.reset();
     }
 
     private void setMotorOutput(double output) {
@@ -110,10 +106,14 @@ public class ShooterHood extends SubsystemBase {
     @Override
     public void periodic() {
         currentAngle = getHoodAngle();
-        double smallestError = getError(setpoint, currentAngle);
-        double controlLoop = m_customController.calculate(smallestError, currentAngle, setpoint);
-        double ff = m_hoodFeedforward.calculate(smallestError, currentAngle, setpoint);
-        double motorOutput = ff+controlLoop;
+
+        double pidOutput = m_pidController.calculate(currentAngle, setpoint);
+
+        double ffOutput = m_feedforward.calculate(Units.degreesToRadians(currentAngle), 0) / 12.0;
+
+        double motorOutput = pidOutput + ffOutput;
+
+        motorOutput = MathUtil.clamp(motorOutput, -1.0, 1.0);
 
         if (currentAngle >= Constants.ShooterHood.kMaxAngleDegrees && motorOutput > 0) {
             motorOutput = 0;
@@ -121,15 +121,20 @@ public class ShooterHood extends SubsystemBase {
             motorOutput = 0;
         }
 
-        setMotorOutput(motorOutput / 100.0);
+        if (atSetpoint()) {
+            motorOutput = ffOutput;
+        }
+
+        setMotorOutput(motorOutput);
 
         SmartDashboard.putNumber("Hood/Current Angle", currentAngle);
         SmartDashboard.putNumber("Hood/Absolute", getAbsolutePosition());
         SmartDashboard.putNumber("Hood/Setpoint", setpoint);
         SmartDashboard.putBoolean("Hood/At Setpoint", atSetpoint());
         SmartDashboard.putNumber("Hood/Motor Output", motorOutput);
-        SmartDashboard.putNumber("Hood/P Value", m_customController.getP());
-        SmartDashboard.putNumber("Hood/Position Error", smallestError);
+        SmartDashboard.putNumber("Hood/PID Output", pidOutput);
+        SmartDashboard.putNumber("Hood/FF Output", ffOutput);
+        SmartDashboard.putNumber("Hood/Position Error", m_pidController.getError());
         SmartDashboard.putNumber("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
     }
 }

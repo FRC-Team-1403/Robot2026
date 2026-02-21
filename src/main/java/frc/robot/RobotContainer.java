@@ -42,7 +42,7 @@ public class RobotContainer {
     //m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
     //m_operatorController.b().whileTrue(new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_vision));
 
-    m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 1800));
+    m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 2500));
     m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.2));
     m_driverController.a().whileTrue(new ShooterHoodCommand(m_shooterHood,5 ));
     m_driverController.b().whileTrue(new ShooterHoodCommand(m_shooterHood,10 ));
