@@ -103,7 +103,7 @@ public class DefaultSwerveCommand extends Command {
     }
 
     if (m_fieldRelativeSupplier.getAsBoolean()) {
-      m_isFieldRelative = !m_isFieldRelative;
+      m_isFieldRelative = true;
     }
 
     if(m_zeroGyroSupplier.getAsBoolean()) {
