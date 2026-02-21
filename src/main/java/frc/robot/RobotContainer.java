@@ -44,7 +44,12 @@ public class RobotContainer {
 
     m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 1800));
     m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.2));
-    m_driverController.a().whileTrue(new ShooterHoodCommand(m_shooterHood,10 ));
+    m_driverController.a().whileTrue(new ShooterHoodCommand(m_shooterHood,5 ));
+    m_driverController.b().whileTrue(new ShooterHoodCommand(m_shooterHood,10 ));
+
+    m_driverController.y().whileTrue(new ShooterHoodCommand(m_shooterHood,15 ));
+    m_driverController.x().whileTrue(new ShooterHoodCommand(m_shooterHood,20 ));
+
 
 
 

@@ -29,9 +29,9 @@ public class Shooter extends SubsystemBase {
     private final StatusSignal<AngularVelocity> m_flywheelFollower2Velocity;
 
     public Shooter() {
-        m_flywheelLeader = new TalonFX(Constants.Shooter.flywheelLeaderID);
-        m_flywheelFollower = new TalonFX(Constants.Shooter.flywheelFollowerID);
-        m_flywheelFollower2 = new TalonFX(Constants.Shooter.flywheelFollower2ID);
+        m_flywheelLeader = new TalonFX(Constants.Shooter.flywheelLeaderID,"Bus 1");
+        m_flywheelFollower = new TalonFX(Constants.Shooter.flywheelFollowerID,"Bus 1");
+        m_flywheelFollower2 = new TalonFX(Constants.Shooter.flywheelFollower2ID,"Bus 1");
         m_flywheelVelocityRequest = new VelocityVoltage(0);
         m_flywheelVelocityRequest.Slot = 0;
         m_flywheelVelocityRequest.EnableFOC = true;
