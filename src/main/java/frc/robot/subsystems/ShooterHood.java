@@ -93,13 +93,13 @@ public class ShooterHood extends SubsystemBase {
         double smallestError = getError(setpoint, currentAngle);
         double motorOutput = m_customController.calculate(smallestError, currentAngle, setpoint);
 
-        setMotorOutput(motorOutput / 100.0);
-
         if (currentAngle >= Constants.ShooterHood.kMaxAngleDegrees && motorOutput > 0) {
             motorOutput = 0; // At max limit, don't move more positive
         } else if (currentAngle <= Constants.ShooterHood.kMinAngleDegrees && motorOutput < 0) {
             motorOutput = 0; // At min limit, don't move more negative
         }
+        
+        setMotorOutput(motorOutput / 100.0);
 
         SmartDashboard.putNumber("Hood/Current Angle", currentAngle);
         SmartDashboard.putNumber("Hood/Setpoint", setpoint);
@@ -109,4 +109,6 @@ public class ShooterHood extends SubsystemBase {
         SmartDashboard.putNumber("Hood/Position Error", smallestError);
         SmartDashboard.putNumber("Hood/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
     }
+
+    
 }

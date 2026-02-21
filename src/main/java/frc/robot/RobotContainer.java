@@ -3,30 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.TurretCommand;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.IntakeWrist;
+import frc.robot.commands.ShooterCommandPower;
+import frc.robot.commands.ShooterCommandRPM;
+import frc.robot.commands.ShooterHoodCommand;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterHood;
-import frc.robot.subsystems.Spindexer;
-import frc.robot.subsystems.Turret;
-import frc.robot.vision.Vision;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-  private final Turret m_turret;
-  private final Intake m_intake;
-  private final IntakeWrist m_intakeWrist;
   private final Shooter m_shooter;
   private final ShooterHood m_shooterHood;
-  private final Indexer m_indexer;
-  private final Spindexer m_spindexer;
-  private final Vision m_vision;
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(Constants.Driver.kDriverControllerPort);
@@ -34,14 +23,8 @@ public class RobotContainer {
       new CommandXboxController(Constants.Operator.kOperatorControllerPort);
 
   public RobotContainer() {
-    m_turret = new Turret();
-    m_intake = new Intake();
-    m_intakeWrist = new IntakeWrist();
     m_shooter = new Shooter();
     m_shooterHood = new ShooterHood();
-    m_indexer = new Indexer();
-    m_spindexer = new Spindexer();
-    m_vision = new Vision();
     configureBindings();
   }
 
@@ -55,9 +38,18 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_turret.setDefaultCommand(new TurretCommand(m_turret, m_vision));
-    m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
-    m_operatorController.b().whileTrue(new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_vision));
+    //m_turret.setDefaultCommand(new TurretCommand(m_turret, m_vision));
+    //m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
+    //m_operatorController.b().whileTrue(new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_vision));
+
+    m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 1800));
+  //RPM
+
+    m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.2));
+    m_driverController.a().whileTrue(new ShooterHoodCommand(m_shooterHood,10 ));
+
+
+
   }
 
   /**

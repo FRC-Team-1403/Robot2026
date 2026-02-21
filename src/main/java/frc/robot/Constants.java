@@ -54,7 +54,7 @@ public final class Constants {
   }
 
 public static class ShooterHood {
-    public static final int kHoodMotorID = 0;
+    public static final int kHoodMotorID = 10;
 
     public static final double kMinAngleDegrees = 0;
     public static final double kMaxAngleDegrees = 50;
@@ -82,9 +82,9 @@ public static class ShooterHood {
   }
 
   public static class Shooter {
-    public static final int flywheelLeaderID = 0;
-    public static final int flywheelFollowerID = 0;
-    public static final int flywheelFollower2ID = 0;
+    public static final int flywheelLeaderID = 1;
+    public static final int flywheelFollowerID = 20;
+    public static final int flywheelFollower2ID = 30;
     public static final double flywheelGearRatio = 0;
     public static final double rpmTolerance = 20;
 
