@@ -38,8 +38,6 @@ public class Intake extends SubsystemBase{
         intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeConfig.CurrentLimits.StatorCurrentLimit = 40;
         intakeConfig.CurrentLimits.StatorCurrentLimitEnable = false;
-        intakeConfig.CurrentLimits.SupplyCurrentLimit = 40;
-        intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 
         Slot0Configs intakePIDConfig = new Slot0Configs();
         intakePIDConfig.kP = Constants.Intake.kP;//0.1
