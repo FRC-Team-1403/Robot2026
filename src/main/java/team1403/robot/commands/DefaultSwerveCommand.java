@@ -39,7 +39,7 @@ public class DefaultSwerveCommand extends Command {
   private final BooleanSupplier m_autoRotate;
   private final Debouncer m_robotRelativeDebouncer 
     = new Debouncer(0.3, DebounceType.kFalling);
-  private boolean m_isFieldRelative = false;
+  private boolean m_isFieldRelative = true;
   
   private SlewRateLimiter m_rotationRateLimiter;
   private double prev_horizontal = 0;
@@ -88,7 +88,7 @@ public class DefaultSwerveCommand extends Command {
     this.m_snipingMode = snipingMode;
     this.m_robotRelativeMode = robotRelativeSupplier;
     this.m_autoRotate = autoRotate;
-    m_isFieldRelative = false;
+    m_isFieldRelative = true;
     m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
 
     m_rotationPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -106,7 +106,7 @@ public class DefaultSwerveCommand extends Command {
     
     //****button was beign werid so removed so it is always robot relative. Pray it work!!!!!*****
 
-    //m_isFieldRelative = m_robotRelativeDebouncer.calculate(!m_robotRelativeMode.getAsBoolean());
+    m_isFieldRelative = m_robotRelativeDebouncer.calculate(!m_robotRelativeMode.getAsBoolean());
 
     SmartDashboard.putBoolean("isFieldRelative", m_isFieldRelative);
     //if (Constants.DEBUG_MODE) SmartDashboard.putBoolean("Aimbot", m_aimbotSupplier.getAsBoolean());
