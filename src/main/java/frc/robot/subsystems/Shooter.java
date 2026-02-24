@@ -124,6 +124,33 @@ public class Shooter extends SubsystemBase {
         return m_flywheelTargetDutyCycle;
     }
 
+    public double getWheelSpeedForDistance(double distanceMeters) {
+        return interpolate(Constants.Ranges.DISTANCE_TO_WHEEL_SPEED, distanceMeters);
+    }
+
+    public double getPitchRadiansForDistance(double distanceMeters) {
+        return Math.toRadians(interpolate(Constants.Ranges.DISTANCE_TO_PITCH_DEG, distanceMeters));
+    }
+
+    public double getRPMForShotSpeed(double shotSpeedMs) {
+        double baseSpeed = getWheelSpeedForDistance(1.0);
+        if (baseSpeed == 0) return m_flywheelTargetRPM;
+        return m_flywheelTargetRPM * (shotSpeedMs / baseSpeed);
+    }
+
+    private double interpolate(double[][] table, double x) {
+        if (table[0][0] == table[table.length - 1][0]) return table[0][1];
+        if (x <= table[0][0]) return table[0][1];
+        if (x >= table[table.length - 1][0]) return table[table.length - 1][1];
+        for (int i = 0; i < table.length - 1; i++) {
+            if (x >= table[i][0] && x <= table[i + 1][0]) {
+                double t = (x - table[i][0]) / (table[i + 1][0] - table[i][0]);
+                return table[i][1] + t * (table[i + 1][1] - table[i][1]);
+            }
+        }
+        return table[table.length - 1][1];
+    }
+
     @Override
     public void periodic() {
         m_flywheelLeaderVelocity.refresh();

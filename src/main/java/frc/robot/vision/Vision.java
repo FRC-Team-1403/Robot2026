@@ -30,6 +30,13 @@ public class Vision extends SubsystemBase {
 
     private Pose3d m_combinedPose;
     private double m_lastTimestamp;
+    private double m_poseFOM;
+    private double m_timeSinceLastUpdate;
+
+    private static final double kFOMDriftRate = 0.05;
+    private static final double kFOMMin = 0.05;
+    private static final double kFOMMax = 10.0;
+    private static final double kFOMAmbiguityScale = 2.0;
 
     private static class WeightedPose {
         public final Pose3d pose;
@@ -65,7 +72,7 @@ public class Vision extends SubsystemBase {
                 Constants.Vision.kCamera3Transform);
         m_poseEstimator3.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-         m_poseEstimator4 = new PhotonPoseEstimator(
+        m_poseEstimator4 = new PhotonPoseEstimator(
                 Constants.Vision.kFieldLayout,
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                 Constants.Vision.kCamera4Transform);
@@ -73,6 +80,8 @@ public class Vision extends SubsystemBase {
 
         m_combinedPose = new Pose3d();
         m_lastTimestamp = 0.0;
+        m_poseFOM = kFOMMax;
+        m_timeSinceLastUpdate = 0.0;
     }
 
     public Pose3d getPose() {
@@ -89,6 +98,10 @@ public class Vision extends SubsystemBase {
 
     public double getTimestamp() {
         return m_lastTimestamp;
+    }
+
+    public double getPoseFOM() {
+        return m_poseFOM;
     }
 
     public boolean isCamera1Connected() {
@@ -148,6 +161,7 @@ public class Vision extends SubsystemBase {
     public void periodic() {
         List<WeightedPose> weightedPoses = new ArrayList<>();
         double latestTimestamp = m_lastTimestamp;
+        double bestAmbiguity = Double.MAX_VALUE;
 
         for (var result : m_camera1.getAllUnreadResults()) {
             Optional<EstimatedRobotPose> visionEst = m_poseEstimator1.update(result);
@@ -155,6 +169,7 @@ public class Vision extends SubsystemBase {
                 double ambiguity = result.getBestTarget().getPoseAmbiguity();
                 weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
                 latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
+                bestAmbiguity = Math.min(bestAmbiguity, ambiguity);
                 Logger.recordOutput("Vision/Camera1/Pose", visionEst.get().estimatedPose.toPose2d());
                 Logger.recordOutput("Vision/Camera1/TagCount", result.getTargets().size());
                 Logger.recordOutput("Vision/Camera1/Ambiguity", ambiguity);
@@ -167,6 +182,7 @@ public class Vision extends SubsystemBase {
                 double ambiguity = result.getBestTarget().getPoseAmbiguity();
                 weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
                 latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
+                bestAmbiguity = Math.min(bestAmbiguity, ambiguity);
                 Logger.recordOutput("Vision/Camera2/Pose", visionEst.get().estimatedPose.toPose2d());
                 Logger.recordOutput("Vision/Camera2/TagCount", result.getTargets().size());
                 Logger.recordOutput("Vision/Camera2/Ambiguity", ambiguity);
@@ -179,6 +195,7 @@ public class Vision extends SubsystemBase {
                 double ambiguity = result.getBestTarget().getPoseAmbiguity();
                 weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
                 latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
+                bestAmbiguity = Math.min(bestAmbiguity, ambiguity);
                 Logger.recordOutput("Vision/Camera3/Pose", visionEst.get().estimatedPose.toPose2d());
                 Logger.recordOutput("Vision/Camera3/TagCount", result.getTargets().size());
                 Logger.recordOutput("Vision/Camera3/Ambiguity", ambiguity);
@@ -191,6 +208,7 @@ public class Vision extends SubsystemBase {
                 double ambiguity = result.getBestTarget().getPoseAmbiguity();
                 weightedPoses.add(new WeightedPose(visionEst.get().estimatedPose, ambiguity));
                 latestTimestamp = Math.max(latestTimestamp, visionEst.get().timestampSeconds);
+                bestAmbiguity = Math.min(bestAmbiguity, ambiguity);
                 Logger.recordOutput("Vision/Camera4/Pose", visionEst.get().estimatedPose.toPose2d());
                 Logger.recordOutput("Vision/Camera4/TagCount", result.getTargets().size());
                 Logger.recordOutput("Vision/Camera4/Ambiguity", ambiguity);
@@ -200,6 +218,11 @@ public class Vision extends SubsystemBase {
         if (!weightedPoses.isEmpty()) {
             m_combinedPose = combinePoses(weightedPoses);
             m_lastTimestamp = latestTimestamp;
+            m_poseFOM = Math.max(kFOMMin, bestAmbiguity * kFOMAmbiguityScale);
+            m_timeSinceLastUpdate = 0.0;
+        } else {
+            m_timeSinceLastUpdate += 0.02;
+            m_poseFOM = Math.min(kFOMMax, m_poseFOM + kFOMDriftRate * m_timeSinceLastUpdate);
         }
 
         Logger.recordOutput("Vision/Camera1Connected", m_camera1.isConnected());
@@ -209,6 +232,7 @@ public class Vision extends SubsystemBase {
         Logger.recordOutput("Vision/ActiveCameraCount", weightedPoses.size());
         Logger.recordOutput("Vision/HasPose", hasPose());
         Logger.recordOutput("Vision/Timestamp", m_lastTimestamp);
+        Logger.recordOutput("Vision/PoseFOM", m_poseFOM);
         Pose2d pose2d = m_combinedPose.toPose2d();
         Logger.recordOutput("Vision/CombinedPose", pose2d);
         Logger.recordOutput("Vision/X", pose2d.getX());

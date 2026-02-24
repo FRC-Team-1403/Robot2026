@@ -11,12 +11,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ShootOnTheFly;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterHood;
+import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.Turret;
+import frc.robot.vision.Vision;
 // import frc.robot.commands.auto.AutoHelper;
 // import frc.robot.swerve.SwerveSubsystem;
 // import frc.robot.swerve.TunerConstants;
 
 public class RobotContainer {
   //private final SwerveSubsystem m_swerve;
+
+  private final Shooter m_shooter;
+  private final ShooterHood m_hood;
+  private final Turret m_turret;
+  private final Indexer m_indexer;
+  private final Spindexer m_spindexer;
+  private final Vision m_vision;
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(Constants.Driver.kDriverControllerPort);
@@ -27,6 +41,13 @@ public class RobotContainer {
 
   public RobotContainer() {
     //m_swerve = TunerConstants.createDrivetrain();
+
+    m_shooter = new Shooter();
+    m_hood = new ShooterHood();
+    m_turret = new Turret();
+    m_indexer = new Indexer();
+    m_spindexer = new Spindexer();
+    m_vision = new Vision();
 
     if (AutoBuilder.isConfigured())
       m_autoChooser = new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
@@ -50,6 +71,20 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_operatorController.rightTrigger().or(m_operatorController.leftTrigger()).whileTrue(
+        new ShootOnTheFly(
+            m_shooter,
+            m_hood,
+            m_turret,
+            m_indexer,
+            m_spindexer,
+            m_vision,
+            () -> null, // TODO: replace with m_swerve::getFieldRelativeSpeeds
+            () -> null, // TODO: replace with m_swerve::getPose
+            m_operatorController.rightTrigger(),
+            m_operatorController.leftTrigger()
+        )
+    );
   }
 
   /**
