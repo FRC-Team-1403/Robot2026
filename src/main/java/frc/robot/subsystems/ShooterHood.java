@@ -40,7 +40,7 @@ public class ShooterHood extends SubsystemBase {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
-        config.MagnetSensor.MagnetOffset = 0;
+        config.MagnetSensor.MagnetOffset = -0.89111328125;
         m_encoder.getConfigurator().apply(config);
 
         double absoluteRotations = getAbsolutePosition();
@@ -62,7 +62,8 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public double getAbsolutePosition(){
-        return (m_encoder.getAbsolutePosition().getValueAsDouble()-0.794921875)*-1;
+        //return (m_encoder.getAbsolutePosition().getValueAsDouble()-0.89111328125)*-1;
+        return (m_encoder.getAbsolutePosition().getValueAsDouble());
     }
     
     public double getHoodAngle() {

@@ -17,11 +17,11 @@ public static class ShooterHood {
     public static final double kMinAngleDegrees = 0;
     public static final double kMaxAngleDegrees = 30;
 
-    public static final double kGain = 6.0;//0.75
-    public static final double kMaxSpeed = 28.0;//100.0
-    public static final double kMinSpeed = 0;//7.0
+    public static final double kGain = 3.5;
+    public static final double kMaxSpeed = 10.0;
+    public static final double kMinSpeed = 0;
 
-    public static final double kToleranceDegrees = 0.18;//1
+    public static final double kToleranceDegrees = 0.05;
     public static final double kGearRatioEncoder = (56.0/16.0);
     public static final double kGearRatioHoodAngleRatio = (56.0/16.0)*(175.0/10.0);
 
@@ -31,8 +31,8 @@ public static class ShooterHood {
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
-    public static final double kS = 0;
-    public static final double kG = 0;
+    public static final double kS = 0.0;
+    public static final double kG = 0.8;
     public static final double kV = 0;
     public static final double kA = 0;
 
