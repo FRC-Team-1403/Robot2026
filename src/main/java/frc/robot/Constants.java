@@ -54,22 +54,30 @@ public final class Constants {
   }
 
 public static class ShooterHood {
-    public static final int kHoodMotorID = 0;
+    public static final int kHoodMotorID = 10;
+    public static final int kEncoderID = 5;
 
     public static final double kMinAngleDegrees = 0;
-    public static final double kMaxAngleDegrees = 50;
+    public static final double kMaxAngleDegrees = 30;
 
-    public static final double kGain = 0.75;
-    public static final double kMaxSpeed = 100.0;
-    public static final double kMinSpeed = 7.0;
+    public static final double kGain = 3.5;
+    public static final double kMaxSpeed = 10.0;
+    public static final double kMinSpeed = 0;
 
-    public static final double kToleranceDegrees = 1;
-    public static final double kGearRatio = 6.7;
+    public static final double kToleranceDegrees = 0.05;
+    public static final double kGearRatioEncoder = (56.0/16.0);
+    public static final double kGearRatioHoodAngleRatio = (56.0/16.0)*(175.0/10.0);
+
 
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
+
+    public static final double kS = 0.0;
+    public static final double kG = 0.8;
+    public static final double kV = 0;
+    public static final double kA = 0;
 
     public static final double angle1 = 0;
     public static final double angle2 = 0;
@@ -82,18 +90,18 @@ public static class ShooterHood {
   }
 
   public static class Shooter {
-    public static final int flywheelLeaderID = 0;
-    public static final int flywheelFollowerID = 0;
-    public static final int flywheelFollower2ID = 0;
-    public static final double flywheelGearRatio = 0;
+    public static final int flywheelLeaderID = 1;
+    public static final int flywheelFollowerID = 20;
+    public static final int flywheelFollower2ID = 30;
+    public static final double flywheelGearRatio = 1;
     public static final double rpmTolerance = 20;
 
-    public static final double kP = 0;
+    public static final double kP = 0.075;
     public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kS = 0;
-    public static final double kV = 0;
-    public static final double kA = 0;
+    public static final double kD = 0.001;
+    public static final double kS = 0.1;
+    public static final double kV = 0.13;
+    public static final double kA = 0.2;
 
     public static final double rpm1 = 0;
     public static final double rpm2 = 0;
