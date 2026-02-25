@@ -24,7 +24,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     private final StatusSignal<AngularVelocity> m_spindexerVelocity;
 
     public SpindexerSubsystem() {
-        m_spindexer = new TalonFX(0, "Bus 2");
+        m_spindexer = new TalonFX(0, "Bus 1");
         m_spindexerVelocityRequest = new VelocityVoltage(0);
         m_spindexerVelocityRequest.Slot = 0;
         m_spindexerVelocityRequest.EnableFOC = true;

@@ -24,7 +24,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    m_driverController.rightTrigger().whileTrue(new ShooterRPMCommand(m_indexer, m_spindexer, 5900, 3600));
+    m_driverController.rightTrigger().whileTrue(new ShooterRPMCommand(m_indexer, m_spindexer, 5900, 3000));
     m_driverController.leftTrigger().whileTrue(new ShooterPowerCommand(m_indexer, m_spindexer, 0.7, 1));
   }
 

@@ -24,7 +24,7 @@ public class IndexerSubsystem extends SubsystemBase {
     private final StatusSignal<AngularVelocity> m_indexerVelocity;
 
     public IndexerSubsystem() {
-        m_indexer = new TalonFX(1, "Bus 2");
+        m_indexer = new TalonFX(1, "Bus 1");
         m_indexerVelocityRequest = new VelocityVoltage(0);
         m_indexerVelocityRequest.Slot = 0;
         m_indexerVelocityRequest.EnableFOC = true;
