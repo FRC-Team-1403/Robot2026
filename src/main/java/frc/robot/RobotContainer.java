@@ -3,19 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import frc.robot.commands.ShooterCommandPower;
-import frc.robot.commands.ShooterCommandRPM;
-import frc.robot.commands.ShooterHoodCommand;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterHood;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.TurretCommand;
+import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
-  private final Shooter m_shooter;
-  private final ShooterHood m_shooterHood;
+  private final Turret m_turret;
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(Constants.Driver.kDriverControllerPort);
@@ -23,8 +19,7 @@ public class RobotContainer {
       new CommandXboxController(Constants.Operator.kOperatorControllerPort);
 
   public RobotContainer() {
-    m_shooter = new Shooter();
-    m_shooterHood = new ShooterHood();
+    m_turret = new Turret();
     configureBindings();
   }
 
@@ -42,13 +37,10 @@ public class RobotContainer {
     //m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
     //m_operatorController.b().whileTrue(new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_vision));
 
-    m_driverController.rightTrigger().whileTrue(new ShooterCommandRPM(m_shooter, 1800));
-    m_driverController.leftTrigger().whileTrue(new ShooterCommandPower(m_shooter, 0.2));
-    m_driverController.a().whileTrue(new ShooterHoodCommand(m_shooterHood,5 ));
-    m_driverController.b().whileTrue(new ShooterHoodCommand(m_shooterHood,10 ));
-
-    m_driverController.y().whileTrue(new ShooterHoodCommand(m_shooterHood,15 ));
-    m_driverController.x().whileTrue(new ShooterHoodCommand(m_shooterHood,20 ));
+    m_driverController.a().whileTrue(new TurretCommand(m_turret, 5));
+    m_driverController.b().whileTrue(new TurretCommand(m_turret, 10));
+    m_driverController.x().whileTrue(new TurretCommand(m_turret, 15));
+    m_driverController.y().whileTrue(new TurretCommand(m_turret, 20));
 
 
 
