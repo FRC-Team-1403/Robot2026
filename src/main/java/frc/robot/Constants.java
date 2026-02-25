@@ -14,8 +14,8 @@ public final class Constants {
     public static final int kEncoderID = 6;
     public static final double kMagnetOffset = 0.0;
 
-    public static final double kMinAngleDegrees = -90.0;
-    public static final double kMaxAngleDegrees = 90.0;
+    public static final double kMinAngleDegrees = -180.0;
+    public static final double kMaxAngleDegrees = 180.0;
 
     public static final double kGain = 3.5;
     public static final double kMaxSpeed = 10.0;
