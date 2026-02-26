@@ -29,7 +29,7 @@ public class Turret extends SubsystemBase {
     private double setpoint;
 
     public Turret() {
-        m_motor = new TalonFX(Constants.Turret.kTurretMotorID);
+        m_motor = new TalonFX(Constants.Turret.kTurretMotorID,"Bus 1");
         m_turretDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration turretMotorConfig = new TalonFXConfiguration();
@@ -37,7 +37,7 @@ public class Turret extends SubsystemBase {
         turretMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         m_motor.getConfigurator().apply(turretMotorConfig);
 
-        m_encoder = new CANcoder(Constants.Turret.kEncoderID);
+        m_encoder = new CANcoder(Constants.Turret.kEncoderID,"Bus 1");
         CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
         encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
@@ -45,7 +45,7 @@ public class Turret extends SubsystemBase {
         m_encoder.getConfigurator().apply(encoderConfig);
 
         double absoluteRotations = getAbsolutePosition();
-        double motorRotations = absoluteRotations * Constants.Turret.kGearRatio;
+        double motorRotations = absoluteRotations * Constants.Turret.kGearRatioEncoder;
         m_motor.setPosition(motorRotations);
 
         m_feedforward = new ArmFeedforward(
@@ -75,8 +75,8 @@ public class Turret extends SubsystemBase {
 
     public double getTurretAngle() {
         double motorRotations = m_motor.getPosition().getValueAsDouble();
-        double turretRotations = motorRotations / Constants.Turret.kGearRatio;
-        return turretRotations * 360.0;
+        double turretRotations = motorRotations / Constants.Turret.kGearRatioTurretAngleRatio;
+        return Units.rotationsToDegrees(turretRotations);
     }
 
     public void setSetpoint(double degrees) {
