@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 package team1403.robot;
+import java.util.List;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import team1403.robot.Constants.Swerve;
 import team1403.robot.commands.ControllerVibrationCommand;
 import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.GroundIntakeCommandPower;
@@ -20,10 +23,14 @@ import team1403.robot.subsystems.Blackbox;
 import team1403.robot.subsystems.GroundIntake;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
+import team1403.robot.vision.AprilTagCamera;
+import team1403.robot.vision.ITagCamera;
+import team1403.robot.vision.VisionSimUtil;
 
 public class RobotContainer {
   private final SwerveSubsystem m_swerve;
   private final GroundIntake m_groundIntake;
+  private List<ITagCamera> m_cameras;
   
 
   private final CommandXboxController m_driverController;
@@ -48,6 +55,16 @@ public class RobotContainer {
     m_swerve = TunerConstants.createDrivetrain();
     m_groundIntake = new GroundIntake();
     m_powerDistribution = new PowerDistribution(Constants.CanBus.powerDistributionID, ModuleType.kRev);
+
+    m_cameras = List.of(
+      new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, m_swerve::getPose),
+      new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, m_swerve::getPose),
+      new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, m_swerve::getPose),
+      new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, m_swerve::getPose)
+    );
+
+    VisionSimUtil.initVisionSim();
+    m_swerve.setCameras(m_cameras);
 
     if(TunerConstants.SWERVE_DEBUG_MODE) {
       SmartDashboard.putData("Swerve Drive", m_swerve);

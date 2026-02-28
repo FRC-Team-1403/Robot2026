@@ -2,6 +2,8 @@ package team1403.robot.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -43,6 +45,8 @@ import team1403.lib.util.CougarUtil;
 import team1403.robot.Constants;
 import team1403.robot.swerve.TunerConstants.TunerSwerveDrivetrain;
 import team1403.robot.swerve.util.SwerveHeadingCorrector;
+import team1403.robot.vision.ITagCamera;
+import team1403.robot.vision.VisionSimUtil;
 
 public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem, Sendable {
     private static final double kSimLoopPeriod = 0.005;
@@ -60,6 +64,8 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+    private List<ITagCamera> m_cameras = new ArrayList<>();
 
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -109,6 +115,10 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
     private Telemetry m_telemetry;
+
+    public void setCameras(List<ITagCamera> cameras) {
+        m_cameras = cameras;
+    }    
 
     private void onConstruct() {
       super.resetPose(CougarUtil.getInitialRobotPose());
@@ -207,7 +217,19 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
                         : kBlueAlliancePerspectiveRotation
                 );
                 m_hasAppliedOperatorPerspective = true;
-            });
+        });
+        }
+        
+        VisionSimUtil.update(getPose());
+
+        for (ITagCamera camera : m_cameras) {
+            if (camera.checkVisionResult()) {
+                addVisionMeasurement(
+                    camera.getPose().toPose2d(),
+                    camera.getTimestamp(),
+                    camera.getEstStdv()
+                );
+            }
         }
 
         m_state = getState();

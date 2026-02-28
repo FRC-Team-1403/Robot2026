@@ -75,6 +75,19 @@ public class Constants {
     public static final int intakeMotorID = 0;
   }
 
+  public static class Vision {
+    //FIX ALL OFFSETS TMR
+    public static final Translation3d kCameraOffset = new Translation3d();
+
+    public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+    public static final boolean kExtraVisionDebugInfo = true;
+
+    public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(kCameraOffset, new Rotation3d(0,0,0));;
+    public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(90)));
+    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(180)));
+    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(270)));
+
+  }
   /**
    * Configures the CAN bus. These are grouped together
    * rather than by subsystem to more easily detect conflict
@@ -121,29 +134,6 @@ public class Constants {
      * The joystick port for the driver's controller.
      */
     public static final int pilotPort = 1;
-  }
-
-  public static class Vision {
-    public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-    public static final boolean kExtraVisionDebugInfo = true;
-
-    //front-to-back-disp = ~8.568 inches 
-    //left-to-right-disp = 0 inches
-    //top-to-bottom disp = 17.82426 inches
-    //public static final Rotation3d kCameraRotation = new Rotation3d(Math.PI, Units.degreesToRadians(-25), Math.PI);
-    public static final Rotation3d kLimelightRotation = new Rotation3d(Units.degreesToRadians(0), 0, Units.degreesToRadians(0));
-    public static final Translation3d kCameraOffset = new Translation3d(Units.inchesToMeters(3.213) - 0.08,Units.inchesToMeters(-0.495) + 0.02,Units.inchesToMeters(17.396));
-    //public static final Transform3d kCameraTransfrom = new Transform3d(kCameraOffset, kCameraRotation);
-    public static final Transform3d kLimelightTransform = new Transform3d(kCameraOffset, kLimelightRotation);
-
-    public static final Transform3d kLimelight2Transform = new Transform3d(
-        new Translation3d(
-          Units.inchesToMeters(3.123) - 0.08,
-          Units.inchesToMeters(-0.495) + 0.02,
-          Units.inchesToMeters(17.936) - 0.05
-        ), new Rotation3d(Math.PI, 0, Math.PI)); //TODO: TUNE!
-
-    public static final double closeAlignDistance = 1.25;
   }
 
   public static class CoralIntake {
