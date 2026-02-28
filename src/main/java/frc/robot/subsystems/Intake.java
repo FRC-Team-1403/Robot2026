@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase{
         m_intakelDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
-        intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        intakeConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeConfig.CurrentLimits.StatorCurrentLimit = 40;
         intakeConfig.CurrentLimits.StatorCurrentLimitEnable = false;
@@ -55,7 +55,7 @@ public class Intake extends SubsystemBase{
         intakeConfig.Slot0 = intakePIDConfig;
 
         TalonFXConfiguration intakeFollowerConfg = new TalonFXConfiguration();
-        intakeFollowerConfg.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        intakeFollowerConfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         intakeFollowerConfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeFollowerConfg.CurrentLimits.StatorCurrentLimit = 40;
         intakeFollowerConfg.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -129,6 +129,9 @@ public class Intake extends SubsystemBase{
         SmartDashboard.putNumber("Intake/Duty Cycle", m_intake.getDutyCycle().getValueAsDouble() * 1000);
         SmartDashboard.putNumber("Intake/Leader Temp", m_intake.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putBoolean("Intake/Using Velocity Control", m_intakeUseVelocityControl);
+        SmartDashboard.putNumber("Intake/Follower Stator Current", m_intakeFollower.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Intake/Follower Duty Cycle", m_intakeFollower.getDutyCycle().getValueAsDouble() * 1000);
+
     }
 
 }
