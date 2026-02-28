@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,19 +55,28 @@ public class RobotContainer {
     //m_autoChooser = new LoggedDashboardChooser<>("Auto Choices");
     //m_autoChooser.addDefaultOption("None", Commands.none());
 
+    if (AutoBuilder.isConfigured())
+      m_autoChooser = new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
+    else {
+      m_autoChooser = new LoggedDashboardChooser<Command>("Auto Chooser");
+      DriverStation.reportError("Auto builder wasn't configured!", true);
+    }
+
+    SmartDashboard.putData("Auto Chooser", m_autoChooser.getSendableChooser());
+
     m_swerve = TunerConstants.createDrivetrain();
     m_groundIntake = new GroundIntake();
     m_powerDistribution = new PowerDistribution(Constants.CanBus.powerDistributionID, ModuleType.kRev);
 
-    m_cameras = List.of(
-      new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, m_swerve::getPose),
-      new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, m_swerve::getPose),
-      new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, m_swerve::getPose),
-      new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, m_swerve::getPose)
-    );
+    // m_cameras = List.of(
+    //   new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, m_swerve::getPose),
+    //   new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, m_swerve::getPose),
+    //   new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, m_swerve::getPose),
+    //   new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, m_swerve::getPose)
+    // );
 
-    VisionSimUtil.initVisionSim();
-    m_swerve.setCameras(m_cameras);
+    // VisionSimUtil.initVisionSim();
+    // m_swerve.setCameras(m_cameras);
 
     if(TunerConstants.SWERVE_DEBUG_MODE) {
       SmartDashboard.putData("Swerve Drive", m_swerve);

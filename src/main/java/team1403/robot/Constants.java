@@ -87,6 +87,7 @@ public class Constants {
     public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(180)));
     public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(270)));
 
+    public static final double closeAlignDistance = 1.25;
   }
   /**
    * Configures the CAN bus. These are grouped together
@@ -256,4 +257,6 @@ public class Constants {
     public static final double speed = 0.7;
     public static final int kLedCount = -1; //Placeholder
   }
+
+
 }

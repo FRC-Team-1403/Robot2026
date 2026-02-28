@@ -21,6 +21,7 @@ import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -43,8 +44,11 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import team1403.lib.util.CougarUtil;
 import team1403.robot.Constants;
+import team1403.robot.Constants.Swerve;
+import team1403.robot.Robot;
 import team1403.robot.swerve.TunerConstants.TunerSwerveDrivetrain;
 import team1403.robot.swerve.util.SwerveHeadingCorrector;
+import team1403.robot.vision.AprilTagCamera;
 import team1403.robot.vision.ITagCamera;
 import team1403.robot.vision.VisionSimUtil;
 
@@ -143,6 +147,14 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
             FollowPathCommand.warmupCommand(),
             PathfindingCommand.warmupCommand()
         ).schedule();
+
+        VisionSimUtil.initVisionSim();
+
+        m_cameras.add(new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
+        m_cameras.add(new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
+        m_cameras.add(new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
+        m_cameras.add(new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
+
 
         SmartDashboard.putData("Gyro", super.getPigeon2());
 
