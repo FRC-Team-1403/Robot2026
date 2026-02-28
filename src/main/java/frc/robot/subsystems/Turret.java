@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -119,12 +121,12 @@ public class Turret extends SubsystemBase {
             motorOutput = 0;
         }
 
-        SmartDashboard.putNumber("Turret/Current Angle", currentAngle);
-        SmartDashboard.putNumber("Turret/Setpoint", setpoint);
-        SmartDashboard.putBoolean("Turret/At Setpoint", atSetpoint());
-        SmartDashboard.putNumber("Turret/Motor Output", motorOutput);
-        SmartDashboard.putNumber("Turret/P Value", m_customController.getP());
-        SmartDashboard.putNumber("Turret/Position Error", smallestError);
-        SmartDashboard.putNumber("Turret/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
+        Logger.recordOutput("Turret/Turret Current Angle", currentAngle);
+        Logger.recordOutput("Turret/Setpoint", setpoint);
+        Logger.recordOutput("Turret/At Setpoint", atSetpoint());
+        Logger.recordOutput("Turret/Motor Output", motorOutput);
+        Logger.recordOutput("Turret/P Value", m_customController.getP());
+        Logger.recordOutput("Turret/Position Error", smallestError);
+        Logger.recordOutput("Turret/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
     }
 }

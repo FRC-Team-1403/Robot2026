@@ -4,6 +4,9 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -119,13 +122,13 @@ public class ShooterHood extends SubsystemBase {
 
         setMotorOutput(motorOutput / 100.0);
 
-        SmartDashboard.putNumber("Hood/Current Angle", currentAngle);
-        SmartDashboard.putNumber("Hood/Absolute", getAbsolutePosition());
-        SmartDashboard.putNumber("Hood/Setpoint", setpoint);
-        SmartDashboard.putBoolean("Hood/At Setpoint", atSetpoint());
-        SmartDashboard.putNumber("Hood/Motor Output", motorOutput);
-        SmartDashboard.putNumber("Hood/P Value", m_customController.getP());
-        SmartDashboard.putNumber("Hood/Position Error", smallestError);
-        SmartDashboard.putNumber("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
+        Logger.recordOutput("Hood/Shooter Hood Current Angle", currentAngle);
+        Logger.recordOutput("Hood/Absolute", getAbsolutePosition());
+        Logger.recordOutput("Hood/Setpoint", setpoint);
+        Logger.recordOutput("Hood/At Setpoint", atSetpoint());
+        Logger.recordOutput("Hood/Motor Output", motorOutput);
+        Logger.recordOutput("Hood/P Value", m_customController.getP());
+        Logger.recordOutput("Hood/Position Error", smallestError);
+        Logger.recordOutput("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
     }
 }

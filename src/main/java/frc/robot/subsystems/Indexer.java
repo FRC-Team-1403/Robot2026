@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -76,22 +78,19 @@ public class Indexer extends SubsystemBase {
     @Override
     public void periodic() {
         m_indexerVelocity.refresh();
-
-    
-            m_indexerMotor.setControl(m_indexerVelocityRequest);
+        m_indexerMotor.setControl(m_indexerVelocityRequest);
        
-
-        SmartDashboard.putNumber("Indexer/Target RPM", m_indexerTargetRPM);
-        SmartDashboard.putNumber("Indexer/Leader RPM", getIndexerRPM());
-        SmartDashboard.putNumber("Indexer/RPM Error", getIndexerRPMError());
-        SmartDashboard.putBoolean("Indexer/At Speed", isIndexerAtSpeed());
-        SmartDashboard.putNumber("Indexer/Leader Voltage", m_indexerMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Indexer/Leader Stator Current", m_indexerMotor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Indexer/Supply Current", m_indexerMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Indexer/Torque Current", m_indexerMotor.getTorqueCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Indexer/Closed Loop Error", m_indexerMotor.getClosedLoopError().getValueAsDouble());
-        SmartDashboard.putNumber("Indexer/Closed Loop Output", m_indexerMotor.getClosedLoopOutput().getValueAsDouble());
-        SmartDashboard.putNumber("Indexer/Duty Cycle", m_indexerMotor.getDutyCycle().getValueAsDouble() * 1000);
-        SmartDashboard.putNumber("Indexer/Leader Temp", m_indexerMotor.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Indexer/Target RPM", m_indexerTargetRPM);
+        Logger.recordOutput("Indexer/Leader RPM", getIndexerRPM());
+        Logger.recordOutput("Indexer/RPM Error", getIndexerRPMError());
+        Logger.recordOutput("Indexer/At Speed", isIndexerAtSpeed());
+        Logger.recordOutput("Indexer/Leader Voltage", m_indexerMotor.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Indexer/Leader Stator Current", m_indexerMotor.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Indexer/Supply Current", m_indexerMotor.getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Indexer/Torque Current", m_indexerMotor.getTorqueCurrent().getValueAsDouble());
+        Logger.recordOutput("Indexer/Closed Loop Error", m_indexerMotor.getClosedLoopError().getValueAsDouble());
+        Logger.recordOutput("Indexer/Closed Loop Output", m_indexerMotor.getClosedLoopOutput().getValueAsDouble());
+        Logger.recordOutput("Indexer/Duty Cycle", m_indexerMotor.getDutyCycle().getValueAsDouble() * 1000);
+        Logger.recordOutput("Indexer/Leader Temp", m_indexerMotor.getDeviceTemp().getValueAsDouble());
     }
 }

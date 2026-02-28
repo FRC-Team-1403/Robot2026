@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.measure.AngularVelocity;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -101,20 +103,20 @@ public class Intake extends SubsystemBase{
             m_intake.setControl(m_intakelDutyCycleRequest);
         }
 
-        SmartDashboard.putNumber("Intake/Target RPM", m_intakeTargetRPM);
-        SmartDashboard.putNumber("Intake/Leader RPM", getIntakeRPM());
-        SmartDashboard.putNumber("Intake/RPM Error", getIntakeRPMError());
-        SmartDashboard.putBoolean("Intake/At Speed", isIntakeAtSpeed());
-        SmartDashboard.putNumber("Intake/Target Duty Cycle", m_intakeTargetDutyCycle);
-        SmartDashboard.putNumber("Intake/Leader Voltage", m_intake.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Intake/Leader Stator Current", m_intake.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Intake/Supply Current", m_intake.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Intake/Torque Current", m_intake.getTorqueCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Intake/Closed Loop Error", m_intake.getClosedLoopError().getValueAsDouble());
-        SmartDashboard.putNumber("Intake/Closed Loop Output", m_intake.getClosedLoopOutput().getValueAsDouble());
-        SmartDashboard.putNumber("Intake/Duty Cycle", m_intake.getDutyCycle().getValueAsDouble() * 1000);
-        SmartDashboard.putNumber("Intake/Leader Temp", m_intake.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putBoolean("Intake/Using Velocity Control", m_intakeUseVelocityControl);
+        Logger.recordOutput("Intake/Target RPM", m_intakeTargetRPM);
+        Logger.recordOutput("Intake/Leader RPM", getIntakeRPM());
+        Logger.recordOutput("Intake/RPM Error", getIntakeRPMError());
+        Logger.recordOutput("Intake/At Speed", isIntakeAtSpeed());
+        Logger.recordOutput("Intake/Target Duty Cycle", m_intakeTargetDutyCycle);
+        Logger.recordOutput("Intake/Leader Voltage", m_intake.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Intake/Leader Stator Current", m_intake.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Intake/Supply Current", m_intake.getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Intake/Torque Current", m_intake.getTorqueCurrent().getValueAsDouble());
+        Logger.recordOutput("Intake/Closed Loop Error", m_intake.getClosedLoopError().getValueAsDouble());
+        Logger.recordOutput("Intake/Closed Loop Output", m_intake.getClosedLoopOutput().getValueAsDouble());
+        Logger.recordOutput("Intake/Duty Cycle", m_intake.getDutyCycle().getValueAsDouble() * 1000);
+        Logger.recordOutput("Intake/Leader Temp", m_intake.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Intake/Using Velocity Control", m_intakeUseVelocityControl);
     }
 
 }

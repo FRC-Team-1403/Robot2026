@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -76,17 +78,17 @@ public class Spindexer extends SubsystemBase {
         m_spindexerVelocity.refresh();
         m_spindexerMotor.setControl(m_spindexerVelocityRequest);
        
-        SmartDashboard.putNumber("Spindexer/Target RPM", m_spindexerTargetRPM);
-        SmartDashboard.putNumber("Spindexer/Current RPM", getSpindexerRPM());
-        SmartDashboard.putNumber("Spindexer/RPM Error", getSpindexerRPMError());
-        SmartDashboard.putBoolean("Spindexer/At Speed", isSpindexerAtSpeed());
-        SmartDashboard.putNumber("Spindexer/Voltage", m_spindexerMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Spindexer/Stator Current", m_spindexerMotor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Spindexer/Supply Current", m_spindexerMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Spindexer/Torque Current", m_spindexerMotor.getTorqueCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Spindexer/Closed Loop Error", m_spindexerMotor.getClosedLoopError().getValueAsDouble());
-        SmartDashboard.putNumber("Spindexer/Closed Loop Output", m_spindexerMotor.getClosedLoopOutput().getValueAsDouble());
-        SmartDashboard.putNumber("Spindexer/Duty Cycle", m_spindexerMotor.getDutyCycle().getValueAsDouble() * 1000);
-        SmartDashboard.putNumber("Spindexer/Temperature", m_spindexerMotor.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Spindexer/Target RPM", m_spindexerTargetRPM);
+        Logger.recordOutput("Spindexer/Current RPM", getSpindexerRPM());
+        Logger.recordOutput("Spindexer/RPM Error", getSpindexerRPMError());
+        Logger.recordOutput("Spindexer/At Speed", isSpindexerAtSpeed());
+        Logger.recordOutput("Spindexer/Voltage", m_spindexerMotor.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Spindexer/Stator Current", m_spindexerMotor.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Spindexer/Supply Current", m_spindexerMotor.getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Spindexer/Torque Current", m_spindexerMotor.getTorqueCurrent().getValueAsDouble());
+        Logger.recordOutput("Spindexer/Closed Loop Error", m_spindexerMotor.getClosedLoopError().getValueAsDouble());
+        Logger.recordOutput("Spindexer/Closed Loop Output", m_spindexerMotor.getClosedLoopOutput().getValueAsDouble());
+        Logger.recordOutput("Spindexer/Duty Cycle", m_spindexerMotor.getDutyCycle().getValueAsDouble() * 1000);
+        Logger.recordOutput("Spindexer/Temperature", m_spindexerMotor.getDeviceTemp().getValueAsDouble());
     }
 }

@@ -14,9 +14,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import frc.robot.commands.auto.AutoHelper;
 // import frc.robot.swerve.SwerveSubsystem;
 // import frc.robot.swerve.TunerConstants;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeWrist;
 
 public class RobotContainer {
   //private final SwerveSubsystem m_swerve;
+  private final Intake m_intake;
+  private final IntakeWrist m_intakeWrist;
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(Constants.Driver.kDriverControllerPort);
@@ -27,6 +32,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     //m_swerve = TunerConstants.createDrivetrain();
+    m_intake = new Intake();
+    m_intakeWrist = new IntakeWrist();
 
     if (AutoBuilder.isConfigured())
       m_autoChooser = new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
@@ -50,6 +57,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
+    
   }
 
   /**

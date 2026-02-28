@@ -6,6 +6,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -116,12 +119,12 @@ public class IntakeWrist extends SubsystemBase {
             motorOutput = 0;
         }
 
-        SmartDashboard.putNumber("IntakeWrist/Current Angle", currentAngle);
-        SmartDashboard.putNumber("IntakeWrist/Setpoint", setpoint);
-        SmartDashboard.putBoolean("IntakeWrist/At Setpoint", atSetpoint());
-        SmartDashboard.putNumber("IntakeWrist/Motor Output", motorOutput);
-        SmartDashboard.putNumber("IntakeWrist/P Value", m_customController.getP());
-        SmartDashboard.putNumber("IntakeWrist/Position Error", smallestError);
-        SmartDashboard.putNumber("IntakeWrist/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
+        Logger.recordOutput("IntakeWrist/Intake Wrist Current Angle", currentAngle);
+        Logger.recordOutput("IntakeWrist/Setpoint", setpoint);
+        Logger.recordOutput("IntakeWrist/At Setpoint", atSetpoint());
+        Logger.recordOutput("IntakeWrist/Motor Output", motorOutput);
+        Logger.recordOutput("IntakeWrist/P Value", m_customController.getP());
+        Logger.recordOutput("IntakeWrist/Position Error", smallestError);
+        Logger.recordOutput("IntakeWrist/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
     }
 }

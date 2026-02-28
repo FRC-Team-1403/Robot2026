@@ -178,6 +178,7 @@ public static class ShooterHood {
     public static final double kS = 0.1; 
     public static final double kV = 0.1;
     public static final double kA = 0.0; 
+    public static final double wristRPMStartAngle = 0;
 
     public static final double RPM = 0.0; 
 
