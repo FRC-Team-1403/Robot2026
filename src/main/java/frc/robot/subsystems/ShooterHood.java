@@ -27,8 +27,8 @@ public class ShooterHood extends SubsystemBase {
     private double setpoint;
 
     public ShooterHood() {
-        m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID,"Bus 1");
-        m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID,"Bus 1");
+        m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID);
+        m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID);
         m_dutyCycleRequest = new DutyCycleOut(0);
         m_neutralRequest = new NeutralOut();
         m_hoodFeedforward = new ArmFeedforward(Constants.ShooterHood.kS, Constants.ShooterHood.kG, Constants.ShooterHood.kV, Constants.ShooterHood.kA);
@@ -40,7 +40,7 @@ public class ShooterHood extends SubsystemBase {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
-        config.MagnetSensor.MagnetOffset = -0.89111328125;
+        config.MagnetSensor.MagnetOffset = -0.89;
         m_encoder.getConfigurator().apply(config);
 
         double absoluteRotations = getAbsolutePosition();
