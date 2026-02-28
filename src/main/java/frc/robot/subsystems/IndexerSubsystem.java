@@ -24,14 +24,14 @@ public class IndexerSubsystem extends SubsystemBase {
     private final StatusSignal<AngularVelocity> m_indexerVelocity;
 
     public IndexerSubsystem() {
-        m_indexer = new TalonFX(1, "Bus 1");
+        m_indexer = new TalonFX(2);
         m_indexerVelocityRequest = new VelocityVoltage(0);
         m_indexerVelocityRequest.Slot = 0;
-        m_indexerVelocityRequest.EnableFOC = true;
+        m_indexerVelocityRequest.EnableFOC = false;
         m_indexerDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration indexerConfig = new TalonFXConfiguration();
-        indexerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        indexerConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         indexerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         indexerConfig.CurrentLimits.StatorCurrentLimit = 40;
         indexerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -43,7 +43,7 @@ public class IndexerSubsystem extends SubsystemBase {
         indexerPIDConfig.kI = 0.01;
         indexerPIDConfig.kD = 0.0005;
         indexerPIDConfig.kS = 0.10;
-        indexerPIDConfig.kV = 0.115;
+        indexerPIDConfig.kV = 0.12;
         indexerPIDConfig.kA = 3.0;
         indexerConfig.Slot0 = indexerPIDConfig;
 

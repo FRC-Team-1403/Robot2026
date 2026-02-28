@@ -24,14 +24,14 @@ public class SpindexerSubsystem extends SubsystemBase {
     private final StatusSignal<AngularVelocity> m_spindexerVelocity;
 
     public SpindexerSubsystem() {
-        m_spindexer = new TalonFX(0, "Bus 1");
+        m_spindexer = new TalonFX(1);
         m_spindexerVelocityRequest = new VelocityVoltage(0);
         m_spindexerVelocityRequest.Slot = 0;
-        m_spindexerVelocityRequest.EnableFOC = true;
+        m_spindexerVelocityRequest.EnableFOC = false;
         m_spindexerDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration spindexerConfig = new TalonFXConfiguration();
-        spindexerConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        spindexerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         spindexerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         spindexerConfig.CurrentLimits.StatorCurrentLimit = 40;
         spindexerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -39,11 +39,11 @@ public class SpindexerSubsystem extends SubsystemBase {
         spindexerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         Slot0Configs spindexerPIDConfig = new Slot0Configs();
-        spindexerPIDConfig.kP = 0.02;
+        spindexerPIDConfig.kP = 0.04;
         spindexerPIDConfig.kI = 0.0;
-        spindexerPIDConfig.kD = 0.0;
+        spindexerPIDConfig.kD = 0.01;
         spindexerPIDConfig.kS = 0.1;
-        spindexerPIDConfig.kV = 0.125;
+        spindexerPIDConfig.kV = 0.115;
         spindexerPIDConfig.kA = 0.0;
         spindexerConfig.Slot0 = spindexerPIDConfig;
 

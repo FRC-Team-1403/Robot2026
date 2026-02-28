@@ -7,15 +7,15 @@ import frc.robot.subsystems.IntakeWrist;
 
 public class IntakeCommand extends Command {
     private final Intake m_intake;
-    private final IntakeWrist m_intakeWrist;
-    private int rpm;
+    //private final IntakeWrist m_intakeWrist;
+    private final double power;
 
-    public IntakeCommand(Intake m_intake, IntakeWrist m_intakeWrist, int rpm) {
+    public IntakeCommand(Intake m_intake, double power) {
         this.m_intake = m_intake;
-        this.m_intakeWrist = m_intakeWrist;
-        this.rpm = rpm;
+        //this.m_intakeWrist = m_intakeWrist;
+        this.power = power;
 
-        addRequirements(m_intake, m_intakeWrist);
+        addRequirements(m_intake);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class IntakeCommand extends Command {
         // if (m_intakeWrist.atSetpoint()) {
         //     m_intake.setIntakeRPM(Constants.Intake.RPM);
         // }
-        m_intake.setIntakeRPM(rpm);
+        m_intake.setIntakePower(power);
     }
 
     @Override

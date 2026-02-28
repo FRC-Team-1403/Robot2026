@@ -18,20 +18,20 @@ public class RobotContainer {
   private final IndexerSubsystem m_indexer;
   private final SpindexerSubsystem m_spindexer;
   private final Intake m_intake;
-  private final IntakeWrist m_intakeWrist;
+  //private final IntakeWrist m_intakeWrist;
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   public RobotContainer() {
     m_intake = new Intake();
     m_indexer = new IndexerSubsystem();
     m_spindexer = new SpindexerSubsystem();
-    m_intakeWrist =  new IntakeWrist();
+    //m_intakeWrist =  new IntakeWrist();
     configureBindings();
   }
 
   private void configureBindings() {
-    m_driverController.rightTrigger().whileTrue(new ShooterRPMCommand(m_indexer, m_spindexer, 5900, 3000));
-    m_driverController.leftTrigger().whileTrue(new IntakeCommand(m_intake, m_intakeWrist, 1000));
+    m_driverController.rightTrigger().whileTrue(new ShooterRPMCommand(m_indexer, m_spindexer,5800,3600));
+    m_driverController.leftTrigger().whileTrue(new IntakeCommand(m_intake, -1));
   }
 
   public Command getAutonomousCommand() {

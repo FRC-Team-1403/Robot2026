@@ -30,7 +30,6 @@ public class Intake extends SubsystemBase{
 
         m_intakeVelocityRequest = new VelocityVoltage(0);
         m_intakeVelocityRequest.Slot = 0;
-        m_intakeVelocityRequest.EnableFOC = true;
         m_intakelDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
