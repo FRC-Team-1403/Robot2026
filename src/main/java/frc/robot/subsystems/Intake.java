@@ -9,8 +9,10 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants;
@@ -18,6 +20,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase{
     
     private final TalonFX m_intake;
+    private final TalonFX m_intakeFollower;
     private final VelocityVoltage m_intakeVelocityRequest;
     private final DutyCycleOut m_intakelDutyCycleRequest;
     private double m_intakeTargetRPM = 0;
@@ -27,9 +30,11 @@ public class Intake extends SubsystemBase{
 
      public Intake() {
         m_intake = new TalonFX(Constants.Intake.m_intakeID);
+        m_intakeFollower = new TalonFX(Constants.Intake.m_intakeFollowerID);
 
         m_intakeVelocityRequest = new VelocityVoltage(0);
         m_intakeVelocityRequest.Slot = 0;
+        m_intakeVelocityRequest.EnableFOC = false;
         m_intakelDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
@@ -41,13 +46,23 @@ public class Intake extends SubsystemBase{
         intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 
         Slot0Configs intakePIDConfig = new Slot0Configs();
-        intakePIDConfig.kP = Constants.Intake.kP;//0.1
-        intakePIDConfig.kI = Constants.Intake.kI;//0.01;
-        intakePIDConfig.kD = Constants.Intake.kD;//0.0005;
-        intakePIDConfig.kS = Constants.Intake.kS;//0.10;
-        intakePIDConfig.kV = Constants.Intake.kV;//0.13;
-        intakePIDConfig.kA = Constants.Intake.kA;//3.0;
+        intakePIDConfig.kP = Constants.Intake.kP;
+        intakePIDConfig.kI = Constants.Intake.kI;
+        intakePIDConfig.kD = Constants.Intake.kD;
+        intakePIDConfig.kS = Constants.Intake.kS;
+        intakePIDConfig.kV = Constants.Intake.kV;
+        intakePIDConfig.kA = Constants.Intake.kA;
         intakeConfig.Slot0 = intakePIDConfig;
+
+        TalonFXConfiguration intakeFollowerConfg = new TalonFXConfiguration();
+        intakeFollowerConfg.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        intakeFollowerConfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        intakeFollowerConfg.CurrentLimits.StatorCurrentLimit = 40;
+        intakeFollowerConfg.CurrentLimits.StatorCurrentLimitEnable = true;
+        intakeFollowerConfg.CurrentLimits.SupplyCurrentLimit = 40;
+        intakeFollowerConfg.CurrentLimits.SupplyCurrentLimitEnable = true;
+        m_intakeFollower.getConfigurator().apply(intakeFollowerConfg);
+        m_intakeFollower.setControl(new Follower(Constants.Intake.m_intakeID, MotorAlignmentValue.Opposed));
 
         m_intake.getConfigurator().apply(intakeConfig);
 
