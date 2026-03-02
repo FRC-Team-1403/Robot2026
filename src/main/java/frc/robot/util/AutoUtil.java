@@ -16,8 +16,8 @@
 //       PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(name);
 //       Command cmd = AutoBuilder.followPath(path);
 //       return Commands.sequence(Commands.runOnce(() -> {
-//           Pose2d startPose = CougarUtil.shouldMirrorPath() ? 
-//             path.flipPath().getStartingDifferentialPose() : 
+//           Pose2d startPose = CougarUtil.shouldMirrorPath() ?
+//             path.flipPath().getStartingDifferentialPose() :
 //             path.getStartingDifferentialPose();
 //           swerve.resetOdometry(startPose);
 //       }, swerve), cmd);
@@ -30,8 +30,9 @@
 //   public static Pose2d getStartingPose(PathPlannerPath path) {
 //     PathPlannerPath mirrored = CougarUtil.shouldMirrorPath() ? path.flipPath() : path;
 //     Pose2d startPose = mirrored.getStartingDifferentialPose();
-//     if(AutoBuilder.isHolonomic()) 
-//       startPose = CougarUtil.createPose2d(startPose, mirrored.getIdealStartingState().rotation());
+//     if(AutoBuilder.isHolonomic())
+//       startPose = CougarUtil.createPose2d(startPose,
+// mirrored.getIdealStartingState().rotation());
 //     return startPose;
 //   }
 

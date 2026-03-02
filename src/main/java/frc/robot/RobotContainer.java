@@ -3,9 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,26 +15,30 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeWrist;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
-  //private final SwerveSubsystem m_swerve;
+  // private final SwerveSubsystem m_swerve;
   private final Intake m_intake;
   private final IntakeWrist m_intakeWrist;
 
+  @SuppressWarnings("all")
   private final CommandXboxController m_driverController =
       new CommandXboxController(Constants.Driver.kDriverControllerPort);
+
   private final CommandXboxController m_operatorController =
       new CommandXboxController(Constants.Operator.kOperatorControllerPort);
 
   private LoggedDashboardChooser<Command> m_autoChooser;
 
   public RobotContainer() {
-    //m_swerve = TunerConstants.createDrivetrain();
+    // m_swerve = TunerConstants.createDrivetrain();
     m_intake = new Intake();
     m_intakeWrist = new IntakeWrist();
 
     if (AutoBuilder.isConfigured())
-      m_autoChooser = new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
+      m_autoChooser =
+          new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
     else {
       m_autoChooser = new LoggedDashboardChooser<Command>("Auto Chooser");
       DriverStation.reportError("Auto builder wasn't configured!", true);
@@ -58,7 +60,6 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
-    
   }
 
   /**
