@@ -17,26 +17,25 @@ public final class Constants {
   public static class Turret {
     public static final int kTurretMotorID = 0;
     public static final int kEncoderID = 0;
-    public static final int kRelEncoderPort1 = 4;
-    public static final int kRelEncoderPort2 = 5;
+    public static final double kMagnetOffset = 0.19775390625;
 
-    public static final double kGain = 0.75;
-    public static final double kMaxSpeed = 100.0;
-    public static final double kMinSpeed = 7.0;
+    public static final double kMinAngleDegrees = -180.0;
+    public static final double kMaxAngleDegrees = 180.0;
 
-    public static final double kToleranceDegrees = 1;
-    public static final double kGearRatio = 6.7;
+    public static final double kGain = 0.6;
+    public static final double kMaxSpeed = 35.0;
+    public static final double kMinSpeed = 2.0;
+
+    public static final double kGearRatioEncoder = (85.0 / 10.0);//12.0 50
+    public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
+
+    public static final double kToleranceDegrees = 0.25;
+    public static final double kGearRatio = (56.0 / 16.0);
 
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
-
-    public static final double kTurretLimitBuffer = 2.0;
-
-    public static final double kEncoderPulsesPerRotation = 0;
-    public static double kMinAngleDegrees = -135;
-    public static double kMaxAngleDegrees = 135;
   }
 
   public static class Vision {
@@ -61,16 +60,17 @@ public final class Constants {
     public static final int kHoodMotorID = 10;
     public static final int kEncoderID = 5;
 
-    public static final double kMinAngleDegrees = 0;
+    public static final double kMinAngleDegrees = 0.1;
     public static final double kMaxAngleDegrees = 30;
 
-    public static final double kGain = 3.5;
-    public static final double kMaxSpeed = 10.0;
-    public static final double kMinSpeed = 0;
+    public static final double kGain =4;
+    public static final double kMaxSpeed = 12.0;
+    public static final double kMinSpeed = 2.0;
 
-    public static final double kToleranceDegrees = 0.05;
-    public static final double kGearRatioEncoder = (56.0 / 16.0);
-    public static final double kGearRatioHoodAngleRatio = (56.0 / 16.0) * (175.0 / 10.0);
+    public static final double kToleranceDegrees = 0.3;
+    public static final double kGearRatioEncoder = (56.0/16.0);
+    public static final double kGearRatioHoodAngleRatio = (56.0/16.0)*(175.0/10.0);
+
 
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;
@@ -78,7 +78,7 @@ public final class Constants {
     public static final double kUnitsPerRampTime = 100;
 
     public static final double kS = 0.0;
-    public static final double kG = 0.8;
+    public static final double kG = 2.5;
     public static final double kV = 0;
     public static final double kA = 0;
 
