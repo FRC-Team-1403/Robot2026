@@ -44,12 +44,12 @@ public class DefaultSwerveCommand extends Command {
   private SlewRateLimiter m_rotationRateLimiter;
   private double prev_horizontal = 0;
   private double prev_vertical = 0;
-  private static final double kMaxVelocityChange = 13 * Constants.kLoopTime;
+  private static final double kMaxVelocityChange = 13 * Constants.kLoopTime; //changes max acceleeration change 
 
   private double m_speedLimiter = 0.4;
 
   private final ProfiledPIDController m_rotationPID = new ProfiledPIDController(5, 0, 0, 
-    new TrapezoidProfile.Constraints(TunerConstants.kMaxAngularRate, 14));
+    new TrapezoidProfile.Constraints(TunerConstants.kMaxAngularRate, 14)); //changed man angular acceleration 
   private final TrapezoidProfile.State m_targetState = new TrapezoidProfile.State();
 
   /**

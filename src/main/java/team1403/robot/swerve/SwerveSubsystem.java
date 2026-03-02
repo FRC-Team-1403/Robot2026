@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,7 +52,7 @@ import team1403.robot.swerve.util.SwerveHeadingCorrector;
 import team1403.robot.vision.AprilTagCamera;
 import team1403.robot.vision.ITagCamera;
 import team1403.robot.vision.VisionSimUtil;
-
+import team1403.robot.vision.VisionConfigurator;
 public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem, Sendable {
     private static final double kSimLoopPeriod = 0.005;
     private Notifier m_simNotifier = null;
@@ -150,11 +151,16 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
 
         VisionSimUtil.initVisionSim();
 
-        m_cameras.add(new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
-        m_cameras.add(new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
-        m_cameras.add(new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
-        m_cameras.add(new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
+        VisionConfigurator config = new VisionConfigurator()
+            .withRobotPose(this::getPose, () -> Timer.getFPGATimestamp()) /* find a way to convert m_state.Timestamp to fpga time */
+            .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
 
+        if(Robot.isReal()){
+            m_cameras.add(new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
+            m_cameras.add(new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
+            m_cameras.add(new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
+            m_cameras.add(new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
+        }
 
         SmartDashboard.putData("Gyro", super.getPigeon2());
 
@@ -284,6 +290,40 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+    
+    /**
+     * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
+     * while still accounting for measurement noise.
+     *
+     * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
+     * @param timestampSeconds The timestamp of the vision measurement in seconds.
+     */
+    @Override
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+    }
+
+    /**
+     * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
+     * while still accounting for measurement noise.
+     * <p>
+     * Note that the vision measurement standard deviations passed into this method
+     * will continue to apply to future measurements until a subsequent call to
+     * {@link #setVisionMeasurementStdDevs(Matrix)} or this method.
+     *
+     * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
+     * @param timestampSeconds The timestamp of the vision measurement in seconds.
+     * @param visionMeasurementStdDevs Standard deviations of the vision pose measurement
+     *     in the form [x, y, theta]ᵀ, with units in meters and radians.
+     */
+    @Override
+    public void addVisionMeasurement(
+        Pose2d visionRobotPoseMeters,
+        double timestampSeconds,
+        Matrix<N3, N1> visionMeasurementStdDevs
+    ) {
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
     public Pose2d getPose() {

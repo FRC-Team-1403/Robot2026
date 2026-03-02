@@ -1,6 +1,8 @@
 package team1403.robot.commands.auto;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -31,4 +33,16 @@ public class AutoHelper {
             return AutoBuilder.pathfindToPose(target, TunerConstants.kPathConstraints);
         });
     }
+
+    public static Command getDepoAuto(SwerveSubsystem m_swerve){
+        try {
+            return Commands.sequence(
+                AutoUtil.loadPathPlannerPath("Deop", m_swerve)
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none();
+        }
+    }
+
 }
