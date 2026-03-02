@@ -82,14 +82,6 @@ public final class Constants {
     public static final double kV = 0;
     public static final double kA = 0;
 
-    public static final double angle1 = 0;
-    public static final double angle2 = 0;
-    public static final double angle3 = 0;
-    public static final double angle4 = 0;
-    public static final double angle5 = 0;
-    public static final double angle6 = 0;
-    public static final double angle7 = 0;
-    public static final double angle8 = 0;
   }
 
   public static class Shooter {
@@ -105,15 +97,6 @@ public final class Constants {
     public static final double kS = 0.1;
     public static final double kV = 0.13;
     public static final double kA = 0.2;
-
-    public static final double rpm1 = 0;
-    public static final double rpm2 = 0;
-    public static final double rpm3 = 0;
-    public static final double rpm4 = 0;
-    public static final double rpm5 = 0;
-    public static final double rpm6 = 0;
-    public static final double rpm7 = 0;
-    public static final double rpm8 = 0;
   }
 
   public static class Indexer {
@@ -128,14 +111,6 @@ public final class Constants {
     public static final double kV = 0;
     public static final double kA = 0;
 
-    public static final double rpm1 = 0;
-    public static final double rpm2 = 0;
-    public static final double rpm3 = 0;
-    public static final double rpm4 = 0;
-    public static final double rpm5 = 0;
-    public static final double rpm6 = 0;
-    public static final double rpm7 = 0;
-    public static final double rpm8 = 0;
   }
 
   public static class Spindexer {
@@ -150,25 +125,6 @@ public final class Constants {
     public static final double kV = 0;
     public static final double kA = 0;
 
-    public static final double rpm1 = 0;
-    public static final double rpm2 = 0;
-    public static final double rpm3 = 0;
-    public static final double rpm4 = 0;
-    public static final double rpm5 = 0;
-    public static final double rpm6 = 0;
-    public static final double rpm7 = 0;
-    public static final double rpm8 = 0;
-  }
-
-  public static class Ranges {
-    public static final double dist1 = 0;
-    public static final double dist2 = 0;
-    public static final double dist3 = 0;
-    public static final double dist4 = 0;
-    public static final double dist5 = 0;
-    public static final double dist6 = 0;
-    public static final double dist7 = 0;
-    public static final double dist8 = 0;
   }
 
   public static class Intake {
@@ -215,5 +171,164 @@ public final class Constants {
     public static final double kMaxSpeed = 100.0;
     public static final double kMinSpeed = 5.0;
     public static final double kLoopTime = 0.02;
+  }
+
+  public static final class ShooterTuning {
+
+    public static final class myAllianceZone {
+
+      public static final double range1Distance = 1.0;
+      public static final double range2Distance = 1.5;
+      public static final double range3Distance = 2.0;
+      public static final double range4Distance = 2.5;
+      public static final double range5Distance = 3.0;
+      public static final double range6Distance = 3.5;
+      public static final double range7Distance = 4.0;
+      public static final double range8Distance = 4.5;
+
+      public static final double range1ShooterRpm = 1800;
+      public static final double range1IndexerRpm = 1500;
+      public static final double range1SpindexerRpm = 1000;
+      public static final double range1HoodAngle = 10;
+
+      public static final double range2ShooterRpm = 1900;
+      public static final double range2IndexerRpm = 1500;
+      public static final double range2SpindexerRpm = 1000;
+      public static final double range2HoodAngle = 12;
+
+      public static final double range3ShooterRpm = 2000;
+      public static final double range3IndexerRpm = 1600;
+      public static final double range3SpindexerRpm = 1100;
+      public static final double range3HoodAngle = 14;
+
+      public static final double range4ShooterRpm = 2100;
+      public static final double range4IndexerRpm = 1600;
+      public static final double range4SpindexerRpm = 1100;
+      public static final double range4HoodAngle = 16;
+
+      public static final double range5ShooterRpm = 2200;
+      public static final double range5IndexerRpm = 1700;
+      public static final double range5SpindexerRpm = 1200;
+      public static final double range5HoodAngle = 18;
+
+      public static final double range6ShooterRpm = 2300;
+      public static final double range6IndexerRpm = 1700;
+      public static final double range6SpindexerRpm = 1200;
+      public static final double range6HoodAngle = 20;
+
+      public static final double range7ShooterRpm = 2400;
+      public static final double range7IndexerRpm = 1800;
+      public static final double range7SpindexerRpm = 1300;
+      public static final double range7HoodAngle = 22;
+
+      public static final double range8ShooterRpm = 2500;
+      public static final double range8IndexerRpm = 1800;
+      public static final double range8SpindexerRpm = 1300;
+      public static final double range8HoodAngle = 24;
+    }
+
+    public static final class neutralZone {
+
+      public static final double range1Distance = 1.2;
+      public static final double range2Distance = 1.7;
+      public static final double range3Distance = 2.2;
+      public static final double range4Distance = 2.7;
+      public static final double range5Distance = 3.2;
+      public static final double range6Distance = 3.7;
+      public static final double range7Distance = 4.2;
+      public static final double range8Distance = 4.7;
+
+      public static final double range1ShooterRpm = 1900;
+      public static final double range1IndexerRpm = 1600;
+      public static final double range1SpindexerRpm = 1100;
+      public static final double range1HoodAngle = 12;
+
+      public static final double range2ShooterRpm = 2000;
+      public static final double range2IndexerRpm = 1600;
+      public static final double range2SpindexerRpm = 1100;
+      public static final double range2HoodAngle = 14;
+
+      public static final double range3ShooterRpm = 2100;
+      public static final double range3IndexerRpm = 1700;
+      public static final double range3SpindexerRpm = 1200;
+      public static final double range3HoodAngle = 16;
+
+      public static final double range4ShooterRpm = 2200;
+      public static final double range4IndexerRpm = 1700;
+      public static final double range4SpindexerRpm = 1200;
+      public static final double range4HoodAngle = 18;
+
+      public static final double range5ShooterRpm = 2300;
+      public static final double range5IndexerRpm = 1800;
+      public static final double range5SpindexerRpm = 1300;
+      public static final double range5HoodAngle = 20;
+
+      public static final double range6ShooterRpm = 2400;
+      public static final double range6IndexerRpm = 1800;
+      public static final double range6SpindexerRpm = 1300;
+      public static final double range6HoodAngle = 22;
+
+      public static final double range7ShooterRpm = 2500;
+      public static final double range7IndexerRpm = 1900;
+      public static final double range7SpindexerRpm = 1400;
+      public static final double range7HoodAngle = 24;
+
+      public static final double range8ShooterRpm = 2600;
+      public static final double range8IndexerRpm = 1900;
+      public static final double range8SpindexerRpm = 1400;
+      public static final double range8HoodAngle = 26;
+    }
+
+    public static final class opposingAllianceZone {
+
+      public static final double range1Distance = 1.5;
+      public static final double range2Distance = 2.0;
+      public static final double range3Distance = 2.5;
+      public static final double range4Distance = 3.0;
+      public static final double range5Distance = 3.5;
+      public static final double range6Distance = 4.0;
+      public static final double range7Distance = 4.5;
+      public static final double range8Distance = 5.0;
+
+      public static final double range1ShooterRpm = 2000;
+      public static final double range1IndexerRpm = 1700;
+      public static final double range1SpindexerRpm = 1200;
+      public static final double range1HoodAngle = 14;
+
+      public static final double range2ShooterRpm = 2100;
+      public static final double range2IndexerRpm = 1700;
+      public static final double range2SpindexerRpm = 1200;
+      public static final double range2HoodAngle = 16;
+
+      public static final double range3ShooterRpm = 2200;
+      public static final double range3IndexerRpm = 1800;
+      public static final double range3SpindexerRpm = 1300;
+      public static final double range3HoodAngle = 18;
+
+      public static final double range4ShooterRpm = 2300;
+      public static final double range4IndexerRpm = 1800;
+      public static final double range4SpindexerRpm = 1300;
+      public static final double range4HoodAngle = 20;
+
+      public static final double range5ShooterRpm = 2400;
+      public static final double range5IndexerRpm = 1900;
+      public static final double range5SpindexerRpm = 1400;
+      public static final double range5HoodAngle = 22;
+
+      public static final double range6ShooterRpm = 2500;
+      public static final double range6IndexerRpm = 1900;
+      public static final double range6SpindexerRpm = 1400;
+      public static final double range6HoodAngle = 24;
+
+      public static final double range7ShooterRpm = 2600;
+      public static final double range7IndexerRpm = 2000;
+      public static final double range7SpindexerRpm = 1500;
+      public static final double range7HoodAngle = 26;
+
+      public static final double range8ShooterRpm = 2700;
+      public static final double range8IndexerRpm = 2000;
+      public static final double range8SpindexerRpm = 1500;
+      public static final double range8HoodAngle = 28;
+    }
   }
 }
