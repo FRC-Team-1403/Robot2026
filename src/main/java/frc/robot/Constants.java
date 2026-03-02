@@ -26,7 +26,7 @@ public final class Constants {
     public static final double kMaxSpeed = 35.0;
     public static final double kMinSpeed = 2.0;
 
-    public static final double kGearRatioEncoder = (85.0 / 10.0);//12.0 50
+    public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
     public static final double kToleranceDegrees = 0.25;
@@ -63,14 +63,13 @@ public final class Constants {
     public static final double kMinAngleDegrees = 0.1;
     public static final double kMaxAngleDegrees = 30;
 
-    public static final double kGain =4;
+    public static final double kGain = 4;
     public static final double kMaxSpeed = 12.0;
     public static final double kMinSpeed = 2.0;
 
     public static final double kToleranceDegrees = 0.3;
-    public static final double kGearRatioEncoder = (56.0/16.0);
-    public static final double kGearRatioHoodAngleRatio = (56.0/16.0)*(175.0/10.0);
-
+    public static final double kGearRatioEncoder = (56.0 / 16.0);
+    public static final double kGearRatioHoodAngleRatio = (56.0 / 16.0) * (175.0 / 10.0);
 
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;
@@ -81,7 +80,6 @@ public final class Constants {
     public static final double kG = 2.5;
     public static final double kV = 0;
     public static final double kA = 0;
-
   }
 
   public static class Shooter {
@@ -110,7 +108,6 @@ public final class Constants {
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;
-
   }
 
   public static class Spindexer {
@@ -124,7 +121,6 @@ public final class Constants {
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;
-
   }
 
   public static class Intake {

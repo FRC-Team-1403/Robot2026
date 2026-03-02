@@ -43,9 +43,7 @@ public class ShooterCommand extends Command {
       double dist = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
       switch (zone) {
-
         case MY_ALLIANCE:
-
           if (dist > Constants.ShooterTuning.myAllianceZone.range8Distance) {
             m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.myAllianceZone.range8ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.myAllianceZone.range8IndexerRpm);
@@ -91,7 +89,6 @@ public class ShooterCommand extends Command {
           break;
 
         case NEUTRAL:
-
           if (dist > Constants.ShooterTuning.neutralZone.range8Distance) {
             m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.neutralZone.range8ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.neutralZone.range8IndexerRpm);
@@ -137,46 +134,61 @@ public class ShooterCommand extends Command {
           break;
 
         case OPPOSING_ALLIANCE:
-
           if (dist > Constants.ShooterTuning.opposingAllianceZone.range8Distance) {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range8ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range8ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range8IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range8SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range8SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range8HoodAngle);
           } else if (dist > Constants.ShooterTuning.opposingAllianceZone.range7Distance) {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range7ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range7ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range7IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range7SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range7SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range7HoodAngle);
           } else if (dist > Constants.ShooterTuning.opposingAllianceZone.range6Distance) {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range6ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range6ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range6IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range6SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range6SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range6HoodAngle);
           } else if (dist > Constants.ShooterTuning.opposingAllianceZone.range5Distance) {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range5ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range5ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range5IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range5SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range5SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range5HoodAngle);
           } else if (dist > Constants.ShooterTuning.opposingAllianceZone.range4Distance) {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range4ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range4ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range4IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range4SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range4SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range4HoodAngle);
           } else if (dist > Constants.ShooterTuning.opposingAllianceZone.range3Distance) {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range3ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range3ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range3IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range3SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range3SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range3HoodAngle);
           } else if (dist > Constants.ShooterTuning.opposingAllianceZone.range2Distance) {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range2ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range2ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range2IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range2SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range2SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range2HoodAngle);
           } else {
-            m_shooter.setFlywheelTargetRPM(Constants.ShooterTuning.opposingAllianceZone.range1ShooterRpm);
+            m_shooter.setFlywheelTargetRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range1ShooterRpm);
             m_indexer.setIndexerRPM(Constants.ShooterTuning.opposingAllianceZone.range1IndexerRpm);
-            m_spindexer.setSpindexerRPM(Constants.ShooterTuning.opposingAllianceZone.range1SpindexerRpm);
+            m_spindexer.setSpindexerRPM(
+                Constants.ShooterTuning.opposingAllianceZone.range1SpindexerRpm);
             m_shooterHood.setSetpoint(Constants.ShooterTuning.opposingAllianceZone.range1HoodAngle);
           }
 
