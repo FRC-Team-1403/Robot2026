@@ -24,7 +24,7 @@ import team1403.robot.swerve.SwerveSubsystem;
 public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot.
     public static final boolean SWERVE_DEBUG_MODE = true;
-    
+
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
