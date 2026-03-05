@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Shooter.flywheel;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -34,9 +34,9 @@ public class Shooter extends SubsystemBase {
   private final StatusSignal m_flywheelFollower2Velocity;
 
   public Shooter() {
-    m_flywheelLeader = new TalonFX(Constants.Shooter.flywheelLeaderID);
-    m_flywheelFollower = new TalonFX(Constants.Shooter.flywheelFollowerID);
-    m_flywheelFollower2 = new TalonFX(Constants.Shooter.flywheelFollower2ID);
+    m_flywheelLeader = new TalonFX(Constants.Shooter.kFlywheelLeaderID);
+    m_flywheelFollower = new TalonFX(Constants.Shooter.kFlywheelFollowerID);
+    m_flywheelFollower2 = new TalonFX(Constants.Shooter.kFlywheelFollower2ID);
     m_flywheelVelocityRequest = new VelocityVoltage(0);
     m_flywheelVelocityRequest.Slot = 0;
     m_flywheelVelocityRequest.EnableFOC = true;
@@ -69,7 +69,7 @@ public class Shooter extends SubsystemBase {
     flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     m_flywheelFollower.getConfigurator().apply(flywheelFollowerConfig);
     m_flywheelFollower.setControl(
-        new Follower(Constants.Shooter.flywheelLeaderID, MotorAlignmentValue.Opposed));
+        new Follower(Constants.Shooter.kFlywheelLeaderID, MotorAlignmentValue.Opposed));
 
     TalonFXConfiguration flywheelFollower2Config = new TalonFXConfiguration();
     flywheelFollower2Config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
     flywheelFollower2Config.CurrentLimits.SupplyCurrentLimitEnable = true;
     m_flywheelFollower2.getConfigurator().apply(flywheelFollower2Config);
     m_flywheelFollower2.setControl(
-        new Follower(Constants.Shooter.flywheelLeaderID, MotorAlignmentValue.Opposed));
+        new Follower(Constants.Shooter.kFlywheelLeaderID, MotorAlignmentValue.Opposed));
 
     m_flywheelLeaderVelocity = m_flywheelLeader.getVelocity();
     m_flywheelFollowerVelocity = m_flywheelFollower.getVelocity();
@@ -89,7 +89,7 @@ public class Shooter extends SubsystemBase {
 
   public void setFlywheelTargetRPM(double rpm) {
     m_flywheelTargetRPM = rpm;
-    m_flywheelVelocityRequest.Velocity = (rpm * Constants.Shooter.flywheelGearRatio) / 60.0;
+    m_flywheelVelocityRequest.Velocity = (rpm * Constants.Shooter.kFlywheelGearRatio) / 60.0;
     m_flywheelUseVelocityControl = true;
   }
 
@@ -105,17 +105,17 @@ public class Shooter extends SubsystemBase {
 
   public double getFlywheelLeaderRPM() {
     return (m_flywheelLeaderVelocity.getValueAsDouble() * 60.0)
-        / Constants.Shooter.flywheelGearRatio;
+        / Constants.Shooter.kFlywheelGearRatio;
   }
 
   public double getFlywheelFollowerRPM() {
     return (m_flywheelFollowerVelocity.getValueAsDouble() * 60.0)
-        / Constants.Shooter.flywheelGearRatio;
+        / Constants.Shooter.kFlywheelGearRatio;
   }
 
   public double getFlywheelFollower2RPM() {
     return (m_flywheelFollower2Velocity.getValueAsDouble() * 60.0)
-        / Constants.Shooter.flywheelGearRatio;
+        / Constants.Shooter.kFlywheelGearRatio;
   }
 
   public double getFlywheelTargetRPM() {
@@ -127,7 +127,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isFlywheelAtSpeed() {
-    return Math.abs(getFlywheelRPMError()) < Constants.Shooter.rpmTolerance;
+    return Math.abs(getFlywheelRPMError()) < Constants.Shooter.kRPMTolerance;
   }
 
   public double getFlywheelTargetDutyCycle() {

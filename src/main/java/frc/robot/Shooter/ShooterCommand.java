@@ -1,15 +1,15 @@
-package frc.robot.commands;
+package frc.robot.Shooter;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterHood;
-import frc.robot.subsystems.Spindexer;
+import frc.robot.Indexer.Indexer;
+import frc.robot.Shooter.flywheel.Shooter;
+import frc.robot.Shooter.hood.ShooterHood;
+import frc.robot.Spindexer.Spindexer;
+import frc.robot.Vision.Vision;
 import frc.robot.util.FieldZoneUtil;
 import frc.robot.util.FieldZoneUtil.Zone;
-import frc.robot.vision.Vision;
 
 public class ShooterCommand extends Command {
   private final Shooter m_shooter;
@@ -18,12 +18,7 @@ public class ShooterCommand extends Command {
   private final Spindexer m_spindexer;
   private final Vision m_vision;
 
-  public ShooterCommand(
-      Shooter m_shooter,
-      Indexer m_indexer,
-      Spindexer m_spindexer,
-      ShooterHood m_shooterHood,
-      Vision m_vision) {
+  public ShooterCommand(Shooter m_shooter, Indexer m_indexer, Spindexer m_spindexer, ShooterHood m_shooterHood, Vision m_vision) {
     this.m_shooter = m_shooter;
     this.m_shooterHood = m_shooterHood;
     this.m_vision = m_vision;

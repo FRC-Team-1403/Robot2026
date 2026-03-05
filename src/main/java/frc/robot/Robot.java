@@ -17,7 +17,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
  */
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
-
   private final RobotContainer m_robotContainer;
 
   /**

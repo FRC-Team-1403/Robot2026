@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Indexer;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -19,7 +19,7 @@ public class Indexer extends SubsystemBase {
   private final StatusSignal<AngularVelocity> m_indexerVelocity;
 
   public Indexer() {
-    m_indexerMotor = new TalonFX(Constants.Indexer.m_indexerID);
+    m_indexerMotor = new TalonFX(Constants.Indexer.kIndexerID);
 
     m_indexerVelocityRequest = new VelocityVoltage(0);
     m_indexerVelocityRequest.Slot = 0;
@@ -29,9 +29,9 @@ public class Indexer extends SubsystemBase {
     indexerLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     indexerLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     indexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 40;
-    indexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = false;
+    indexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     indexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     Slot0Configs indexerPIDConfig = new Slot0Configs();
     indexerPIDConfig.kP = Constants.Indexer.kP;
@@ -48,7 +48,7 @@ public class Indexer extends SubsystemBase {
 
   public void setIndexerRPM(double rpm) {
     m_indexerTargetRPM = rpm;
-    m_indexerVelocityRequest.Velocity = (rpm * Constants.Indexer.m_indexerGearRatio) / 60.0;
+    m_indexerVelocityRequest.Velocity = (rpm * Constants.Indexer.kGearRatio) / 60.0;
   }
 
   public void stop() {
@@ -56,7 +56,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public double getIndexerRPM() {
-    return (m_indexerVelocity.getValueAsDouble() * 60.0) / Constants.Indexer.m_indexerGearRatio;
+    return (m_indexerVelocity.getValueAsDouble() * 60.0) / Constants.Indexer.kGearRatio;
   }
 
   public double getIndexerTargetRPM() {
@@ -68,7 +68,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean isIndexerAtSpeed() {
-    return Math.abs(getIndexerRPMError()) < Constants.Indexer.rpmTolerance;
+    return Math.abs(getIndexerRPMError()) < Constants.Indexer.kRPMTolerance;
   }
 
   @Override

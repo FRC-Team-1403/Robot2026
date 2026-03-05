@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Intake.rollers;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase {
   private final StatusSignal<AngularVelocity> m_intakeVelocity;
 
   public Intake() {
-    m_intake = new TalonFX(Constants.Intake.m_intakeID);
+    m_intake = new TalonFX(Constants.Intake.kIntakeID);
 
     m_intakeVelocityRequest = new VelocityVoltage(0);
     m_intakeVelocityRequest.Slot = 0;
@@ -35,9 +35,9 @@ public class Intake extends SubsystemBase {
     intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     intakeConfig.CurrentLimits.StatorCurrentLimit = 40;
-    intakeConfig.CurrentLimits.StatorCurrentLimitEnable = false;
+    intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     intakeConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+    intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     Slot0Configs intakePIDConfig = new Slot0Configs();
     intakePIDConfig.kP = Constants.Intake.kP; // 0.1
@@ -49,13 +49,12 @@ public class Intake extends SubsystemBase {
     intakeConfig.Slot0 = intakePIDConfig;
 
     m_intake.getConfigurator().apply(intakeConfig);
-
     m_intakeVelocity = m_intake.getVelocity();
   }
 
   public void setIntakeRPM(double rpm) {
     m_intakeTargetRPM = rpm;
-    m_intakeVelocityRequest.Velocity = rpm * Constants.Intake.intakeGearRatio / 60.0;
+    m_intakeVelocityRequest.Velocity = rpm * Constants.Intake.kIntakeGearRatio / 60.0;
     m_intakeUseVelocityControl = true;
   }
 
@@ -70,7 +69,7 @@ public class Intake extends SubsystemBase {
   }
 
   public double getIntakeRPM() {
-    return m_intakeVelocity.getValueAsDouble() * 60.0 / Constants.Intake.intakeGearRatio;
+    return m_intakeVelocity.getValueAsDouble() * 60.0 / Constants.Intake.kIntakeGearRatio;
   }
 
   public double getIntakeTargetRPM() {
@@ -82,7 +81,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean isIntakeAtSpeed() {
-    return Math.abs(getIntakeRPMError()) < Constants.Intake.rpmTolerance;
+    return Math.abs(getIntakeRPMError()) < Constants.Intake.kRPMTolerance;
   }
 
   public double getIntakeTargetDutyCycle() {

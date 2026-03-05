@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Intake.wrist;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;

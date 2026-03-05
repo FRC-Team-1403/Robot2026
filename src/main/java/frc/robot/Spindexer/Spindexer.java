@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Spindexer;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -19,7 +19,7 @@ public class Spindexer extends SubsystemBase {
   private final StatusSignal<AngularVelocity> m_spindexerVelocity;
 
   public Spindexer() {
-    m_spindexerMotor = new TalonFX(Constants.Spindexer.m_spindexerID);
+    m_spindexerMotor = new TalonFX(Constants.Spindexer.kSpindexerID);
 
     m_spindexerVelocityRequest = new VelocityVoltage(0);
     m_spindexerVelocityRequest.Slot = 0;
@@ -48,7 +48,7 @@ public class Spindexer extends SubsystemBase {
 
   public void setSpindexerRPM(double rpm) {
     m_spindexerTargetRPM = rpm;
-    m_spindexerVelocityRequest.Velocity = (rpm * Constants.Spindexer.m_spindexerGearRatio) / 60.0;
+    m_spindexerVelocityRequest.Velocity = (rpm * Constants.Spindexer.kSpindexerGearRatio) / 60.0;
   }
 
   public void stop() {
@@ -57,7 +57,7 @@ public class Spindexer extends SubsystemBase {
 
   public double getSpindexerRPM() {
     return (m_spindexerVelocity.getValueAsDouble() * 60.0)
-        / Constants.Spindexer.m_spindexerGearRatio;
+        / Constants.Spindexer.kSpindexerGearRatio;
   }
 
   public double getSpindexerTargetRPM() {
@@ -69,7 +69,7 @@ public class Spindexer extends SubsystemBase {
   }
 
   public boolean isSpindexerAtSpeed() {
-    return Math.abs(getSpindexerRPMError()) < Constants.Spindexer.rpmTolerance;
+    return Math.abs(getSpindexerRPMError()) < Constants.Spindexer.kRPMTolerance;
   }
 
   @Override

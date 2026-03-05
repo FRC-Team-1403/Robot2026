@@ -34,9 +34,9 @@ public class CougarUtil {
   }
 
   public static Pose2d getInitialRobotPose() {
-    if (getAlliance() == Alliance.Red)
+    if (getAlliance() == Alliance.Red) {
       return new Pose2d(new Translation2d(10, 2), Rotation2d.kZero);
-
+    }
     return new Pose2d(new Translation2d(7.6, 2), Rotation2d.k180deg);
   }
 
@@ -54,7 +54,7 @@ public class CougarUtil {
 
   public static double dot(Rotation2d a, Rotation2d b) {
     return a.getCos() * b.getCos()
-        + a.getSin() * b.getSin(); // 2d dot product: a_x * b_x + a_y * b_y
+        + a.getSin() * b.getSin();
   }
 
   public static double norm(ChassisSpeeds s) {
@@ -77,7 +77,6 @@ public class CougarUtil {
         pose.getRotation());
   }
 
-  // saves allocation comared to Pose2d.nearest
   public static Pose2d getNearest(Pose2d a, Pose2d[] list) {
     if (list.length == 0) return null;
     Pose2d min = list[0];

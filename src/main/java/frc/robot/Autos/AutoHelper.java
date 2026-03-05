@@ -1,15 +1,12 @@
-// package frc.robot.commands.auto;
+// package frc.robot.Autos;
 
-// import com.pathplanner.lib.auto.AutoBuilder;
 // import edu.wpi.first.math.geometry.Pose2d;
+// import com.pathplanner.lib.auto.AutoBuilder;
 // import edu.wpi.first.math.geometry.Rotation2d;
 // import edu.wpi.first.wpilibj.DriverStation.Alliance;
 // import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.Commands;
-// import frc.robot.util.AutoUtil;
 // import frc.robot.util.CougarUtil;
-// import frc.robot.swerve.SwerveSubsystem;
-// import frc.robot.swerve.TunerConstants;
 
 // public class AutoHelper {
 

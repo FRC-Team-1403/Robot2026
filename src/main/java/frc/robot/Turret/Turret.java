@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Turret;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;

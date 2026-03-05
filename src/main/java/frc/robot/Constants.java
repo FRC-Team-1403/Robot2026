@@ -26,7 +26,7 @@ public final class Constants {
     public static final double kMaxSpeed = 35.0;
     public static final double kMinSpeed = 2.0;
 
-    public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
+    public static final double kGearRatioEncoder = (85.0 / 10.0);
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
     public static final double kToleranceDegrees = 0.25;
@@ -83,11 +83,11 @@ public final class Constants {
   }
 
   public static class Shooter {
-    public static final int flywheelLeaderID = 1;
-    public static final int flywheelFollowerID = 20;
-    public static final int flywheelFollower2ID = 30;
-    public static final double flywheelGearRatio = 1;
-    public static final double rpmTolerance = 20;
+    public static final int kFlywheelLeaderID = 1;
+    public static final int kFlywheelFollowerID = 20;
+    public static final int kFlywheelFollower2ID = 30;
+    public static final double kFlywheelGearRatio = 1;
+    public static final double kRPMTolerance = 20;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
@@ -98,9 +98,9 @@ public final class Constants {
   }
 
   public static class Indexer {
-    public static final int m_indexerID = 0;
-    public static final double m_indexerGearRatio = 1.0;
-    public static final double rpmTolerance = 20;
+    public static final int kIndexerID = 0;
+    public static final double kGearRatio = 1.0;
+    public static final double kRPMTolerance = 20;
 
     public static final double kP = 0;
     public static final double kI = 0;
@@ -111,9 +111,9 @@ public final class Constants {
   }
 
   public static class Spindexer {
-    public static final int m_spindexerID = 0;
-    public static final double m_spindexerGearRatio = 1.0;
-    public static final double rpmTolerance = 20;
+    public static final int kSpindexerID = 0;
+    public static final double kSpindexerGearRatio = 1.0;
+    public static final double kRPMTolerance = 20;
 
     public static final double kP = 0;
     public static final double kI = 0;
@@ -124,29 +124,29 @@ public final class Constants {
   }
 
   public static class Intake {
-    public static final int m_intakeID = 0;
+    public static final int kIntakeID = 0;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-
     public static final double kS = 0.1;
     public static final double kV = 0.1;
     public static final double kA = 0.0;
-    public static final double wristRPMStartAngle = 0;
 
-    public static final double RPM = 0.0;
+    public static final double kWristRPMStartAngle = 0;
 
-    public static final int rpmTolerance = 20;
+    public static final double kRPM = 0.0;
 
-    public static final double intakeMaxVelocity = 5000;
-    public static final double intakeMaxAcceleration = 10000;
+    public static final int kRPMTolerance = 20;
 
-    public static final double intakeGearRatio = 1.0;
+    public static final double kIntakeMaxVelocity = 5000;
+    public static final double kIntakeMaxAcceleration = 10000;
 
-    public static final double intakeCurrentLimit = 40;
+    public static final double kIntakeGearRatio = 1.0;
 
-    public static final int intakeMotorID = 10;
+    public static final double kIntakeCurrentLimit = 40;
+
+    public static final int kIntakeMotorID = 10;
   }
 
   public static final class IntakeWrist {
