@@ -2,17 +2,17 @@
     "fileName": "Phoenix6-26.1.0.json",
     "name": "CTRE-Phoenix (v6)",
     "version": "26.1.0",
-    "frcYear": "2026",
+    "team1403Year": "2026",
     "uuid": "e995de00-2c64-4df5-8831-c1441420ff19",
     "mavenUrls": [
         "https://maven.ctr-electronics.com/release/"
     ],
-    "jsonUrl": "https://maven.ctr-electronics.com/release/com/ctre/phoenix6/latest/Phoenix6-frc2026-latest.json",
+    "jsonUrl": "https://maven.ctr-electronics.com/release/com/ctre/phoenix6/latest/Phoenix6-team14032026-latest.json",
     "conflictsWith": [
         {
             "uuid": "e7900d8d-826f-4dca-a1ff-182f658e98af",
             "errorMessage": "Users can not have both the replay and regular Phoenix 6 vendordeps in their robot program.",
-            "offlineFileName": "Phoenix6-replay-frc2026-latest.json"
+            "offlineFileName": "Phoenix6-replay-team14032026-latest.json"
         }
     ],
     "javaDependencies": [

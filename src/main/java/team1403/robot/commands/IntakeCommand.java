@@ -1,9 +1,9 @@
-package frc.robot.commands;
+package team1403.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.IntakeWrist;
+import team1403.robot.Constants;
+import team1403.robot.subsystems.Intake;
+import team1403.robot.subsystems.IntakeWrist;
 
 public class IntakeCommand extends Command {
   private final Intake m_intake;

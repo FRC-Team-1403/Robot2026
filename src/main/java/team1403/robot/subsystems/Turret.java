@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package team1403.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -12,8 +12,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.util.CustomPositionControlLoop;
+import team1403.robot.Constants;
+import team1403.robot.util.CustomPositionControlLoop;
 
 public class Turret extends SubsystemBase {
   private final TalonFX m_motor;

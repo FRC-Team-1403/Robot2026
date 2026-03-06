@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package team1403.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -12,8 +12,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.util.CustomPositionControlLoop;
+import team1403.robot.Constants;
+import team1403.robot.util.CustomPositionControlLoop;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterHood extends SubsystemBase {
