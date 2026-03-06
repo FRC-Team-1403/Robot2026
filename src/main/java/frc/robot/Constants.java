@@ -56,6 +56,15 @@ public final class Constants {
         new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(270)));
   }
 
+  public static final class Hopper {
+    public static final int kCANRangeID = 0; 
+
+    public static final double kMaxDistanceMeters = 0.50;
+    public static final double kMinDistanceMeters = 0.05; 
+    public static final double kFullThresholdPercentage = 90.0;
+    public static final double kEmptyThresholdPercentage = 5.0;
+  }
+
   public static class ShooterHood {
     public static final int kHoodMotorID = 10;
     public static final int kEncoderID = 5;
