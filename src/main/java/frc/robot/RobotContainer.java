@@ -9,16 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.robot.commands.auto.AutoHelper;
-// import frc.robot.swerve.SwerveSubsystem;
-// import frc.robot.swerve.TunerConstants;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeWrist;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
-  // private final SwerveSubsystem m_swerve;
   private final Intake m_intake;
   private final IntakeWrist m_intakeWrist;
 
@@ -32,20 +28,10 @@ public class RobotContainer {
   private LoggedDashboardChooser<Command> m_autoChooser;
 
   public RobotContainer() {
-    // m_swerve = TunerConstants.createDrivetrain();
     m_intake = new Intake();
     m_intakeWrist = new IntakeWrist();
 
-    if (AutoBuilder.isConfigured())
-      m_autoChooser =
-          new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
-    else {
-      m_autoChooser = new LoggedDashboardChooser<Command>("Auto Chooser");
-      DriverStation.reportError("Auto builder wasn't configured!", true);
-    }
-
-    SmartDashboard.putData("Auto Chooser", m_autoChooser.getSendableChooser());
-
+    
     configureBindings();
   }
 

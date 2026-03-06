@@ -125,7 +125,19 @@ public class IntakeWrist extends SubsystemBase {
     Logger.recordOutput("IntakeWrist/Motor Output", motorOutput);
     Logger.recordOutput("IntakeWrist/P Value", m_customController.getP());
     Logger.recordOutput("IntakeWrist/Position Error", smallestError);
-    Logger.recordOutput(
-        "IntakeWrist/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Motor Voltage", m_motor.getMotorVoltage().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Motor Stator Current", m_motor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Motor Supply Current", m_motor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Motor Torque Current", m_motor.getTorqueCurrent().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Motor Duty Cycle", m_motor.getDutyCycle().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Motor Temp", m_motor.getDeviceTemp().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Motor Velocity RPS", m_motor.getVelocity().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Encoder Velocity RPS", m_encoder.getVelocity().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Encoder Absolute Position", m_encoder.getAbsolutePosition().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Min Angle Limit", Constants.IntakeWrist.kMinAngleDegrees);
+    Logger.recordOutput("IntakeWrist/Max Angle Limit", Constants.IntakeWrist.kMaxAngleDegrees);
+    Logger.recordOutput("IntakeWrist/At Min Limit", currentAngle <= Constants.IntakeWrist.kMinAngleDegrees);
+    Logger.recordOutput("IntakeWrist/At Max Limit", currentAngle >= Constants.IntakeWrist.kMaxAngleDegrees);
   }
 }
