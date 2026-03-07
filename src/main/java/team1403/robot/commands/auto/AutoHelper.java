@@ -35,7 +35,6 @@ public class AutoHelper {
     public static Command Depot(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
-                Commands.waitSeconds(1.5), //shoot preload balls
                 //Add in the shoot command
                 AutoUtil.loadPathPlannerPath("DepotPt1", m_swerve, true), //fix names tmr
                 Commands.waitSeconds(10) //pick up balls from depot and shoot from their at the same thing
