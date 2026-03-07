@@ -21,6 +21,7 @@ import team1403.robot.commands.ControllerVibrationCommand;
 import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.GroundIntakeCommandPower;
 import team1403.robot.commands.GroundIntakeCommandRPM;
+import team1403.robot.commands.auto.AutoHelper;
 
 import team1403.robot.subsystems.Blackbox;
 import team1403.robot.subsystems.GroundIntake;
@@ -33,7 +34,7 @@ import team1403.robot.vision.VisionSimUtil;
 public class RobotContainer {
   private final SwerveSubsystem m_swerve;
   private final GroundIntake m_groundIntake;
-  private List<ITagCamera> m_cameras;
+  //private List<ITagCamera> m_cameras;
   
 
   private final CommandXboxController m_driverController;
@@ -50,7 +51,11 @@ public class RobotContainer {
 
     Blackbox.init();
 
-    //*****if code still doesn't work try running this tmrw
+    m_swerve = TunerConstants.createDrivetrain();
+    m_groundIntake = new GroundIntake();
+    m_powerDistribution = new PowerDistribution(Constants.CanBus.powerDistributionID, ModuleType.kRev);
+
+     //*****if code still doesn't work try running this tmrw
     
     //m_autoChooser = new LoggedDashboardChooser<>("Auto Choices");
     //m_autoChooser.addDefaultOption("None", Commands.none());
@@ -63,10 +68,6 @@ public class RobotContainer {
     }
 
     SmartDashboard.putData("Auto Chooser", m_autoChooser.getSendableChooser());
-
-    m_swerve = TunerConstants.createDrivetrain();
-    m_groundIntake = new GroundIntake();
-    m_powerDistribution = new PowerDistribution(Constants.CanBus.powerDistributionID, ModuleType.kRev);
 
     // m_cameras = List.of(
     //   new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, m_swerve::getPose),
@@ -114,6 +115,11 @@ public class RobotContainer {
       m_driverController.rightBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kForward));
       m_driverController.leftBumper().whileTrue(m_swerve.sysIdDynamic(Direction.kReverse));
     }
+
+
+     /* Move forward 1 m from any position on the starting line 
+      (make sure robot is facing a tag to seed the position) */
+    m_autoChooser.addOption("MoveAuto", AutoHelper.getDepoAuto(m_swerve));
     
   }
   public Command getAutonomousCommand() {
