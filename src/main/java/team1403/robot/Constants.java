@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 public final class Constants {
   // Variables to used by all subsystems.
@@ -51,9 +52,22 @@ public final class Constants {
     public static double kGoalY = 4;
     public static double kGoalX = 12;
     public static String kCamera1 = "ThriftyCam1.0";
-    public static String kCamera2 = "Limelight2";
-    public static String kCamera3 = "Limelight3";
-    public static String kCamera4 = "ThriftyCamera2.0";
+    public static String kCamera2 = "ThriftyCam2.0";
+    public static String kCamera3 = "ThriftyCam3.0";
+    public static String kCamera4 = "ThriftyCam4.0";
+
+    //ETAASH METHOD + MATCHED TO THRIFTY. FIX THESE:
+    public static final Translation3d kCameraOffset = new Translation3d();
+
+    public static final boolean kExtraVisionDebugInfo = true;
+
+    public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(kCameraOffset, new Rotation3d(0,0,0));;
+    public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(90)));
+    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(180)));
+    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(270)));
+
+
+    //NEW COMBINED VISION SUBSYSTEM
     public static Transform3d kCamera1Transform = new Transform3d();
     public static Transform3d kCamera2Transform =
         new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(90)));
@@ -62,7 +76,6 @@ public final class Constants {
     public static Transform3d kCamera4Transform =
         new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(270)));
         
-    public static final boolean kExtraVisionDebugInfo = true;
   }
 
   public static final class Hopper {
