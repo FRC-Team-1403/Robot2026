@@ -45,16 +45,10 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import team1403.robot.util.CougarUtil;
 import team1403.robot.Constants;
-import team1403.robot.Constants;
+import team1403.robot.Constants.Swerve;
 import team1403.robot.Robot;
 import team1403.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrain;
 import team1403.robot.subsystems.swerve.SwerveHeadingCorrector;
-
-import team1403.robot.vision.VisionSimUtil;
-import team1403.robot.vision.AprilTagCamera;
-import team1403.robot.vision.ITagCamera;
-import team1403.robot.vision.VisionConfigurator;
-//import team1403.robot.vision.Vision;
 
 public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem, Sendable {
     private static final double kSimLoopPeriod = 0.005;
@@ -72,8 +66,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-
-    private List<ITagCamera> m_cameras = new ArrayList<>();
 
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
