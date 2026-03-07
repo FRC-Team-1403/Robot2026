@@ -1,9 +1,9 @@
-package team1403.robot.subsystems;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import team1403.robot.Constants;
+import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {

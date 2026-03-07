@@ -6,13 +6,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
 public final class Constants {
-  // Variables to used by all subsystems.
-  public static final double kLoopTime = 0.02;
-  //controls if the debug tab is used on shuffleboard
-  public static final boolean DEBUG_MODE = false;
-  public static final boolean ENABLE_SYSID = false;
-  //controls if the debug tab is used on shuffleboard
-
   public static class Operator {
     public static final int kOperatorControllerPort = 0;
   }
@@ -61,8 +54,6 @@ public final class Constants {
         new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(180)));
     public static Transform3d kCamera4Transform =
         new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(270)));
-        
-    public static final boolean kExtraVisionDebugInfo = true;
   }
 
   public static final class Hopper {
