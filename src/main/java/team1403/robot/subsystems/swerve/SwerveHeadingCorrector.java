@@ -20,7 +20,7 @@ public class SwerveHeadingCorrector {
     //initial rotation is unknown
     private Optional<Double> yaw_setpoint = Optional.empty();
     private PIDController m_controller = new PIDController(5, 0, 0, Constants.kLoopTime);
-    //private TimeDelayedBoolean m_yawZeroDetector = new TimeDelayedBoolean();
+    private TimeDelayedBoolean m_yawZeroDetector = new TimeDelayedBoolean();
     private LinearFilter m_gyroVelFilter = LinearFilter.singlePoleIIR(Constants.kLoopTime * 5, Constants.kLoopTime);
     private ChassisSpeeds m_retSpeeds = new ChassisSpeeds();
 
