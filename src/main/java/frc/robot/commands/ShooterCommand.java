@@ -1,15 +1,15 @@
-package team1403.robot.commands;
+package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import team1403.robot.Constants;
-import team1403.robot.subsystems.Indexer;
-import team1403.robot.subsystems.Shooter;
-import team1403.robot.subsystems.ShooterHood;
-import team1403.robot.subsystems.Spindexer;
-import team1403.robot.util.FieldZoneUtil;
-import team1403.robot.util.FieldZoneUtil.Zone;
-import team1403.robot.vision.Vision;
+import frc.robot.Constants;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterHood;
+import frc.robot.subsystems.Spindexer;
+import frc.robot.util.FieldZoneUtil;
+import frc.robot.util.FieldZoneUtil.Zone;
+import frc.robot.vision.Vision;
 
 public class ShooterCommand extends Command {
   private final Shooter m_shooter;

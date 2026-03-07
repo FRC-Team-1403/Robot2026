@@ -1,4 +1,4 @@
-package team1403.robot.subsystems;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -9,7 +9,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import team1403.robot.Constants;
+import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Spindexer extends SubsystemBase {
