@@ -49,10 +49,10 @@ import team1403.robot.Constants.Swerve;
 import team1403.robot.Robot;
 import team1403.robot.swerve.TunerConstants.TunerSwerveDrivetrain;
 import team1403.robot.swerve.util.SwerveHeadingCorrector;
-import team1403.robot.vision.AprilTagCamera;
-import team1403.robot.vision.ITagCamera;
-import team1403.robot.vision.VisionSimUtil;
-import team1403.robot.vision.VisionConfigurator;
+//import team1403.robot.vision.AprilTagCamera;
+//import team1403.robot.vision.ITagCamera;
+//import team1403.robot.vision.VisionSimUtil;
+//import team1403.robot.vision.VisionConfigurator;
 public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem, Sendable {
     private static final double kSimLoopPeriod = 0.005;
     private Notifier m_simNotifier = null;
@@ -70,7 +70,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-    private List<ITagCamera> m_cameras = new ArrayList<>();
+    //private List<ITagCamera> m_cameras = new ArrayList<>();
 
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -121,9 +121,9 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
 
     private Telemetry m_telemetry;
 
-    public void setCameras(List<ITagCamera> cameras) {
-        m_cameras = cameras;
-    }    
+    // public void setCameras(List<ITagCamera> cameras) {
+    //     m_cameras = cameras;
+    // }    
 
     private void onConstruct() {
       super.resetPose(CougarUtil.getInitialRobotPose());
@@ -149,18 +149,18 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
             PathfindingCommand.warmupCommand()
         ).schedule();
 
-        VisionSimUtil.initVisionSim();
+        // VisionSimUtil.initVisionSim();
 
-        VisionConfigurator config = new VisionConfigurator()
-            .withRobotPose(this::getPose, () -> Timer.getFPGATimestamp()) /* find a way to convert m_state.Timestamp to fpga time */
-            .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
+        // VisionConfigurator config = new VisionConfigurator()
+        //     .withRobotPose(this::getPose, () -> Timer.getFPGATimestamp()) /* find a way to convert m_state.Timestamp to fpga time */
+        //     .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
 
-        if(Robot.isReal()){
-            m_cameras.add(new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
-        }
+        // if(Robot.isReal()){
+        //     m_cameras.add(new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
+        //     m_cameras.add(new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
+        //     m_cameras.add(new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
+        //     m_cameras.add(new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
+        // }
 
         SmartDashboard.putData("Gyro", super.getPigeon2());
 
@@ -238,17 +238,17 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
         });
         }
         
-        VisionSimUtil.update(getPose());
+        // VisionSimUtil.update(getPose());
 
-        for (ITagCamera camera : m_cameras) {
-            if (camera.checkVisionResult()) {
-                addVisionMeasurement(
-                    camera.getPose().toPose2d(),
-                    camera.getTimestamp(),
-                    camera.getEstStdv()
-                );
-            }
-        }
+        // for (ITagCamera camera : m_cameras) {
+        //     if (camera.checkVisionResult()) {
+        //         addVisionMeasurement(
+        //             camera.getPose().toPose2d(),
+        //             camera.getTimestamp(),
+        //             camera.getEstStdv()
+        //         );
+        //     }
+        // }
 
         m_state = getState();
 
