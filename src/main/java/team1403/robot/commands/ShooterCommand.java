@@ -10,6 +10,10 @@ import team1403.robot.subsystems.Spindexer;
 import team1403.robot.util.FieldZoneUtil;
 import team1403.robot.util.FieldZoneUtil.Zone;
 import team1403.robot.vision.Vision;
+import team1403.robot.vision.AprilTagCamera;
+import team1403.robot.vision.VisionConfigurator;
+import team1403.robot.vision.ITagCamera;
+
 
 public class ShooterCommand extends Command {
   private final Shooter m_shooter;
