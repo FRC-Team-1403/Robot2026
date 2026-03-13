@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import team1403.lib.util.CougarUtil;
+import team1403.robot.util.CougarUtil;
 import team1403.robot.Constants;
-import team1403.robot.subsystems.Blackbox;
+//import team1403.robot.subsystems.Blackbox;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
 
@@ -144,22 +144,7 @@ public class DefaultSwerveCommand extends Command {
     double ang_deadband = MathUtil.applyDeadband(m_rotationSupplier.getAsDouble(), 0.05);
     double angular = m_rotationRateLimiter.calculate(squareNum(ang_deadband) * m_speedLimiter) * TunerConstants.kMaxAngularRate;
 
-    if(Blackbox.getCloseAlign(m_drivetrainSubsystem.getPose()) && Blackbox.isCoralLoaded()){
-      horizontal /= 2;
-      vertical /= 2;
-      angular /= 2;
-    }
 
-    if(!Blackbox.isCoralLoaded() && m_autoRotate.getAsBoolean()) {
-      Pose2d target = Blackbox.getNearestSourcePose(m_drivetrainSubsystem.getPose());
-      if (target != null) {
-        m_targetState.position = target.getRotation().getRadians();
-        m_targetState.velocity = 0;
-        angular = m_rotationPID.calculate(m_drivetrainSubsystem.getRotation().getRadians(), m_targetState);
-      }
-    } else {
-      m_rotationPID.reset(m_drivetrainSubsystem.getRotation().getRadians());
-    }
 
     //limit change in translation of the overall robot, based on orbit's slideshow
     {
