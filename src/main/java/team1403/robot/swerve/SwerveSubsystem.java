@@ -277,6 +277,37 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
         builder.addDoubleProperty("Back Right Velocity", () -> states[3].speedMetersPerSecond, null);
 
         builder.addDoubleProperty("Robot Angle", () -> getRotation().getRadians(), null);
+
+
+
+        //curent logging 
+        builder.addDoubleProperty("FL/Drive Stator Current", () -> getModule(0).getDriveMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FL/Drive Supply Current", () -> getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FL/Steer Stator Current", () -> getModule(0).getSteerMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FL/Steer Supply Current", () -> getModule(0).getSteerMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FL/Drive Temp",   () -> getModule(0).getDriveMotor().getDeviceTemp().getValueAsDouble(), null);
+        builder.addDoubleProperty("FL/Steer Temp",   () -> getModule(0).getSteerMotor().getDeviceTemp().getValueAsDouble(), null);
+
+        builder.addDoubleProperty("FR/Drive Stator Current", () -> getModule(1).getDriveMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FR/Drive Supply Current", () -> getModule(1).getDriveMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FR/Steer Stator Current", () -> getModule(1).getSteerMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FR/Steer Supply Current", () -> getModule(1).getSteerMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("FR/Drive Temp",   () -> getModule(1).getDriveMotor().getDeviceTemp().getValueAsDouble(), null);
+        builder.addDoubleProperty("FR/Steer Temp",   () -> getModule(1).getSteerMotor().getDeviceTemp().getValueAsDouble(), null);
+
+        builder.addDoubleProperty("BL/Drive Stator Current", () -> getModule(2).getDriveMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BL/Drive Supply Current", () -> getModule(2).getDriveMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BL/Steer Stator Current", () -> getModule(2).getSteerMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BL/Steer Supply Current", () -> getModule(2).getSteerMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BL/Drive Temp",   () -> getModule(2).getDriveMotor().getDeviceTemp().getValueAsDouble(), null);
+        builder.addDoubleProperty("BL/Steer Temp",   () -> getModule(2).getSteerMotor().getDeviceTemp().getValueAsDouble(), null);
+
+        builder.addDoubleProperty("BR/Drive Stator Current", () -> getModule(3).getDriveMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BR/Drive Supply Current", () -> getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BR/Steer Stator Current", () -> getModule(3).getSteerMotor().getStatorCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BR/Steer Supply Current", () -> getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble(), null);
+        builder.addDoubleProperty("BR/Drive Temp",   () -> getModule(3).getDriveMotor().getDeviceTemp().getValueAsDouble(), null);
+        builder.addDoubleProperty("BR/Steer Temp",   () -> getModule(3).getSteerMotor().getDeviceTemp().getValueAsDouble(), null);
     }
 
     private void startSimThread() {
