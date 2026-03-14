@@ -9,9 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.IntakeCommand;
+import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Intake;
 import team1403.robot.subsystems.IntakeWrist;
+import team1403.robot.subsystems.Shooter;
+import team1403.robot.subsystems.ShooterHood;
+import team1403.robot.subsystems.Spindexer;
+import team1403.robot.subsystems.Turret;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -19,6 +25,11 @@ public class RobotContainer {
   // private final SwerveSubsystem m_swerve;
   private final Intake m_intake;
   private final IntakeWrist m_intakeWrist;
+  private final Indexer m_indexer;
+  private final Spindexer m_spindexer;
+  private final Shooter m_shooter;
+  private final ShooterHood m_shooterHood;
+  private final Turret m_turret;
 
   @SuppressWarnings("all")
   private final CommandXboxController m_driverController =
@@ -33,7 +44,12 @@ public class RobotContainer {
     // m_swerve = TunerConstants.createDrivetrain();
     m_intake = new Intake();
     m_intakeWrist = new IntakeWrist();
-
+    m_indexer= new Indexer();
+    m_spindexer = new Spindexer();
+    m_shooter = new Shooter();
+    m_shooterHood = new ShooterHood();
+    m_turret = new Turret();
+    
     if (AutoBuilder.isConfigured())
       m_autoChooser =
           new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
@@ -58,6 +74,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
+    m_operatorController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,1500,800,3000));
   }
 
   /**
