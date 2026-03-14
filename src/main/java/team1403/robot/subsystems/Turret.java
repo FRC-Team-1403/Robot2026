@@ -1,5 +1,7 @@
 package team1403.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -8,15 +10,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
 import team1403.robot.util.CustomPositionControlLoop;
 
 public class Turret extends SubsystemBase {
-  private final TalonFX m_motor;
+  private final TalonFX m_turretMotor;
   private final CANcoder m_encoder;
   private final CustomPositionControlLoop m_customController;
   private final DutyCycleOut m_turretDutyCycleRequest;
@@ -24,15 +26,23 @@ public class Turret extends SubsystemBase {
   private double setpoint;
 
   public Turret() {
-    m_motor = new TalonFX(Constants.Turret.kTurretMotorID, "Bus 1");
+    m_turretMotor = new TalonFX(Constants.Turret.kTurretMotorID, "Bus 2");
     m_turretDutyCycleRequest = new DutyCycleOut(0);
 
     TalonFXConfiguration turretMotorConfig = new TalonFXConfiguration();
     turretMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     turretMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    m_motor.getConfigurator().apply(turretMotorConfig);
 
-    m_encoder = new CANcoder(Constants.Turret.kEncoderID, "Bus 1");
+    turretMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+    turretMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    turretMotorConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    turretMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    turretMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    turretMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+
+    m_turretMotor.getConfigurator().apply(turretMotorConfig);
+
+    m_encoder = new CANcoder(Constants.Turret.kEncoderID, "Bus 2");
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
@@ -41,7 +51,7 @@ public class Turret extends SubsystemBase {
 
     double absoluteRotations = getAbsolutePosition();
     double motorRotations = absoluteRotations * Constants.Turret.kGearRatioEncoder;
-    m_motor.setPosition(motorRotations);
+    m_turretMotor.setPosition(motorRotations);
 
     m_customController =
         new CustomPositionControlLoop(
@@ -63,7 +73,7 @@ public class Turret extends SubsystemBase {
   }
 
   public double getTurretAngle() {
-    double motorRotations = m_motor.getPosition().getValueAsDouble();
+    double motorRotations = m_turretMotor.getPosition().getValueAsDouble();
     double turretRotations = motorRotations / Constants.Turret.kGearRatioTurretAngleRatio;
     return Units.rotationsToDegrees(turretRotations);
   }
@@ -89,7 +99,7 @@ public class Turret extends SubsystemBase {
 
   public void stopMotor() {
     m_turretDutyCycleRequest.Output = 0.0;
-    m_motor.setControl(m_turretDutyCycleRequest);
+    m_turretMotor.setControl(m_turretDutyCycleRequest);
     m_customController.reset();
   }
 
@@ -104,7 +114,7 @@ public class Turret extends SubsystemBase {
 
   private void setMotorOutput(double output) {
     m_turretDutyCycleRequest.Output = output;
-    m_motor.setControl(m_turretDutyCycleRequest);
+    m_turretMotor.setControl(m_turretDutyCycleRequest);
   }
 
   @Override
@@ -122,13 +132,18 @@ public class Turret extends SubsystemBase {
 
     setMotorOutput(motorOutput);
 
-    SmartDashboard.putNumber("Turret/Current Angle", currentAngle);
-    SmartDashboard.putNumber("Turret/Absolute", getAbsolutePosition());
-    SmartDashboard.putNumber("Turret/Setpoint", setpoint);
-    SmartDashboard.putBoolean("Turret/At Setpoint", atSetpoint());
-    SmartDashboard.putNumber("Turret/Motor Output", motorOutput);
-    SmartDashboard.putNumber("Turret/P Value", m_customController.getP());
-    SmartDashboard.putNumber("Turret/Position Error", smallestError);
-    SmartDashboard.putNumber("Turret/Relative", m_motor.getPosition().getValueAsDouble());
+    Logger.recordOutput("Turret/Current Angle", currentAngle);
+    Logger.recordOutput("Turret/Absolute", getAbsolutePosition());
+    Logger.recordOutput("Turret/Setpoint", setpoint);
+    Logger.recordOutput("Turret/At Setpoint", atSetpoint());
+    Logger.recordOutput("Turret/Motor Output", motorOutput);
+    Logger.recordOutput("Turret/P Value", m_customController.getP());
+    Logger.recordOutput("Turret/Position Error", smallestError);
+    Logger.recordOutput("Turret/Relative", m_turretMotor.getPosition().getValueAsDouble());
+    Logger.recordOutput("Turret/StatorCurrent", m_turretMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("Turret/SupplyCurrent", m_turretMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("Turret/Temperature", m_turretMotor.getDeviceTemp().getValueAsDouble());
+
+
   }
 }

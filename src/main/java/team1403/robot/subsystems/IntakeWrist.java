@@ -1,5 +1,7 @@
 package team1403.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -8,40 +10,50 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
 import team1403.robot.util.CustomPositionControlLoop;
 
-import org.littletonrobotics.junction.Logger;
-
 public class IntakeWrist extends SubsystemBase {
-  private final TalonFX m_motor;
-  private final CANcoder m_encoder;
+  private final TalonFX m_intakeWristMotor;
+  private final CANcoder m_intakeWristEncoder;
   private final CustomPositionControlLoop m_customController;
   private final DutyCycleOut m_wristDutyCycleRequest;
   private double currentAngle;
   private double setpoint;
 
   public IntakeWrist() {
-    m_motor = new TalonFX(Constants.IntakeWrist.kWristMotorID);
-
+    m_intakeWristMotor = new TalonFX(Constants.IntakeWrist.kWristMotorID,"Bus 2");
     m_wristDutyCycleRequest = new DutyCycleOut(0);
 
     TalonFXConfiguration wristMotorConfig = new TalonFXConfiguration();
     wristMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     wristMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    m_motor.getConfigurator().apply(wristMotorConfig);
+    wristMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+    wristMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    wristMotorConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    wristMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    wristMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    wristMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
 
-    m_encoder = new CANcoder(Constants.IntakeWrist.kEncoderID);
+    m_intakeWristMotor.getConfigurator().apply(wristMotorConfig);
+
+    m_intakeWristEncoder = new CANcoder(Constants.IntakeWrist.kEncoderID);
 
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
+    encoderConfig.MagnetSensor.MagnetOffset = Constants.IntakeWrist.kMagnetOffset;
 
-    m_encoder.getConfigurator().apply(encoderConfig);
+    m_intakeWristEncoder.getConfigurator().apply(encoderConfig);
 
-    resetEncoder();
+    double absoluteRotations = getAbsolutePosition();
+    double wristRotations = absoluteRotations * Constants.IntakeWrist.kGearRatioEncoder;
+    m_intakeWristMotor.setPosition(wristRotations);
 
     m_customController =
         new CustomPositionControlLoop(
@@ -58,10 +70,14 @@ public class IntakeWrist extends SubsystemBase {
     setpoint = currentAngle;
   }
 
+  public double getAbsolutePosition() {
+    return (m_intakeWristEncoder.getAbsolutePosition().getValueAsDouble());
+  }
+
   public double getWristAngle() {
-    double rotations = m_encoder.getPosition().getValueAsDouble();
-    double degrees = rotations / Constants.IntakeWrist.kGearRatio * 360.0;
-    return degrees;
+    double motorRotations = m_intakeWristMotor.getPosition().getValueAsDouble();
+    double hoodRotations = motorRotations / Constants.IntakeWrist.kGearRatioWristAngleRatio;
+    return Units.rotationsToDegrees(hoodRotations);
   }
 
   public void setSetpoint(double degrees) {
@@ -87,12 +103,12 @@ public class IntakeWrist extends SubsystemBase {
 
   public void stopMotor() {
     m_wristDutyCycleRequest.Output = 0.0;
-    m_motor.setControl(m_wristDutyCycleRequest);
+    m_intakeWristMotor.setControl(m_wristDutyCycleRequest);
     m_customController.reset();
   }
 
   public void resetEncoder() {
-    m_encoder.setPosition(0.0);
+    m_intakeWristEncoder.setPosition(0.0);
   }
 
   private double getError(double targetAngle, double currentAngle) {
@@ -102,7 +118,7 @@ public class IntakeWrist extends SubsystemBase {
 
   private void setMotorOutput(double output) {
     m_wristDutyCycleRequest.Output = output;
-    m_motor.setControl(m_wristDutyCycleRequest);
+    m_intakeWristMotor.setControl(m_wristDutyCycleRequest);
   }
 
   @Override
@@ -126,7 +142,10 @@ public class IntakeWrist extends SubsystemBase {
     Logger.recordOutput("IntakeWrist/Motor Output", motorOutput);
     Logger.recordOutput("IntakeWrist/P Value", m_customController.getP());
     Logger.recordOutput("IntakeWrist/Position Error", smallestError);
-    Logger.recordOutput(
-        "IntakeWrist/Encoder Rotations", m_encoder.getPosition().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Encoder Rotations", m_intakeWristEncoder.getPosition().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/StatorCurrent", m_intakeWristMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/SupplyCurrent", m_intakeWristMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("IntakeWrist/Device Temperature", m_intakeWristMotor.getDeviceTemp().getValueAsDouble());
+
   }
 }

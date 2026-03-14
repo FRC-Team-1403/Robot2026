@@ -1,5 +1,7 @@
 package team1403.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -7,11 +9,10 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
-
-import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
   private final TalonFX m_indexerMotor;
@@ -20,19 +21,21 @@ public class Indexer extends SubsystemBase {
   private final StatusSignal<AngularVelocity> m_indexerVelocity;
 
   public Indexer() {
-    m_indexerMotor = new TalonFX(Constants.Indexer.m_indexerID);
+    m_indexerMotor = new TalonFX(Constants.Indexer.m_indexerID,"Bus 2");
 
     m_indexerVelocityRequest = new VelocityVoltage(0);
     m_indexerVelocityRequest.Slot = 0;
-    m_indexerVelocityRequest.EnableFOC = true;
+    m_indexerVelocityRequest.EnableFOC = false;
 
     TalonFXConfiguration indexerLeaderConfig = new TalonFXConfiguration();
     indexerLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     indexerLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    indexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 40;
-    indexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = false;
-    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+    indexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 120;
+    indexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    indexerLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    indexerLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0; 
 
     Slot0Configs indexerPIDConfig = new Slot0Configs();
     indexerPIDConfig.kP = Constants.Indexer.kP;

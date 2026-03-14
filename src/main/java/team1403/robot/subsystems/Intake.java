@@ -1,5 +1,7 @@
 package team1403.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -8,15 +10,14 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
 
-import org.littletonrobotics.junction.Logger;
-
 public class Intake extends SubsystemBase {
 
-  private final TalonFX m_intake;
+  private final TalonFX m_intakeMotor;
   private final VelocityVoltage m_intakeVelocityRequest;
   private final DutyCycleOut m_intakelDutyCycleRequest;
   private double m_intakeTargetRPM = 0;
@@ -25,33 +26,35 @@ public class Intake extends SubsystemBase {
   private final StatusSignal<AngularVelocity> m_intakeVelocity;
 
   public Intake() {
-    m_intake = new TalonFX(Constants.Intake.m_intakeID);
+    m_intakeMotor = new TalonFX(Constants.Intake.m_intakeID,"Bus 2");
 
     m_intakeVelocityRequest = new VelocityVoltage(0);
     m_intakeVelocityRequest.Slot = 0;
-    m_intakeVelocityRequest.EnableFOC = true;
+    m_intakeVelocityRequest.EnableFOC = false;
     m_intakelDutyCycleRequest = new DutyCycleOut(0);
 
     TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
     intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    intakeConfig.CurrentLimits.StatorCurrentLimit = 40;
-    intakeConfig.CurrentLimits.StatorCurrentLimitEnable = false;
-    intakeConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+    intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
+    intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    intakeConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    intakeConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    intakeConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
 
     Slot0Configs intakePIDConfig = new Slot0Configs();
-    intakePIDConfig.kP = Constants.Intake.kP; // 0.1
-    intakePIDConfig.kI = Constants.Intake.kI; // 0.01;
-    intakePIDConfig.kD = Constants.Intake.kD; // 0.0005;
-    intakePIDConfig.kS = Constants.Intake.kS; // 0.10;
-    intakePIDConfig.kV = Constants.Intake.kV; // 0.13;
-    intakePIDConfig.kA = Constants.Intake.kA; // 3.0;
+    intakePIDConfig.kP = Constants.Intake.kP; 
+    intakePIDConfig.kI = Constants.Intake.kI;
+    intakePIDConfig.kD = Constants.Intake.kD; 
+    intakePIDConfig.kS = Constants.Intake.kS; 
+    intakePIDConfig.kV = Constants.Intake.kV; 
+    intakePIDConfig.kA = Constants.Intake.kA; 
     intakeConfig.Slot0 = intakePIDConfig;
 
-    m_intake.getConfigurator().apply(intakeConfig);
+    m_intakeMotor.getConfigurator().apply(intakeConfig);
 
-    m_intakeVelocity = m_intake.getVelocity();
+    m_intakeVelocity = m_intakeMotor.getVelocity();
   }
 
   public void setIntakeRPM(double rpm) {
@@ -95,9 +98,9 @@ public class Intake extends SubsystemBase {
     m_intakeVelocity.refresh();
 
     if (m_intakeUseVelocityControl) {
-      m_intake.setControl(m_intakeVelocityRequest);
+      m_intakeMotor.setControl(m_intakeVelocityRequest);
     } else {
-      m_intake.setControl(m_intakelDutyCycleRequest);
+      m_intakeMotor.setControl(m_intakelDutyCycleRequest);
     }
 
     Logger.recordOutput("Intake/Target RPM", m_intakeTargetRPM);
@@ -105,17 +108,17 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake/RPM Error", getIntakeRPMError());
     Logger.recordOutput("Intake/At Speed", isIntakeAtSpeed());
     Logger.recordOutput("Intake/Target Duty Cycle", m_intakeTargetDutyCycle);
-    Logger.recordOutput("Intake/Leader Voltage", m_intake.getMotorVoltage().getValueAsDouble());
+    Logger.recordOutput("Intake/Leader Voltage", m_intakeMotor.getMotorVoltage().getValueAsDouble());
     Logger.recordOutput(
-        "Intake/Leader Stator Current", m_intake.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Intake/Supply Current", m_intake.getSupplyCurrent().getValueAsDouble());
-    Logger.recordOutput("Intake/Torque Current", m_intake.getTorqueCurrent().getValueAsDouble());
+        "Intake/Leader Stator Current", m_intakeMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("Intake/Supply Current", m_intakeMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("Intake/Torque Current", m_intakeMotor.getTorqueCurrent().getValueAsDouble());
     Logger.recordOutput(
-        "Intake/Closed Loop Error", m_intake.getClosedLoopError().getValueAsDouble());
+        "Intake/Closed Loop Error", m_intakeMotor.getClosedLoopError().getValueAsDouble());
     Logger.recordOutput(
-        "Intake/Closed Loop Output", m_intake.getClosedLoopOutput().getValueAsDouble());
-    Logger.recordOutput("Intake/Duty Cycle", m_intake.getDutyCycle().getValueAsDouble() * 1000);
-    Logger.recordOutput("Intake/Leader Temp", m_intake.getDeviceTemp().getValueAsDouble());
+        "Intake/Closed Loop Output", m_intakeMotor.getClosedLoopOutput().getValueAsDouble());
+    Logger.recordOutput("Intake/Duty Cycle", m_intakeMotor.getDutyCycle().getValueAsDouble() * 1000);
+    Logger.recordOutput("Intake/Leader Temp", m_intakeMotor.getDeviceTemp().getValueAsDouble());
     Logger.recordOutput("Intake/Using Velocity Control", m_intakeUseVelocityControl);
   }
 }

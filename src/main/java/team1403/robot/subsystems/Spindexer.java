@@ -1,17 +1,16 @@
 package team1403.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
-
-import org.littletonrobotics.junction.Logger;
 
 public class Spindexer extends SubsystemBase {
   private final TalonFX m_spindexerMotor;
@@ -20,19 +19,19 @@ public class Spindexer extends SubsystemBase {
   private final StatusSignal<AngularVelocity> m_spindexerVelocity;
 
   public Spindexer() {
-    m_spindexerMotor = new TalonFX(Constants.Spindexer.m_spindexerID);
+    m_spindexerMotor = new TalonFX(Constants.Spindexer.m_spindexerID,"Bus 2");
 
     m_spindexerVelocityRequest = new VelocityVoltage(0);
     m_spindexerVelocityRequest.Slot = 0;
     m_spindexerVelocityRequest.EnableFOC = true;
 
     TalonFXConfiguration spindexerLeaderConfig = new TalonFXConfiguration();
-    spindexerLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    spindexerLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    spindexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 40;
-    spindexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = false;
-    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+    spindexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 120;
+    spindexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
 
     Slot0Configs spindexerPIDConfig = new Slot0Configs();
     spindexerPIDConfig.kP = Constants.Spindexer.kP;

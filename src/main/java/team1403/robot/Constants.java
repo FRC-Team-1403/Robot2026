@@ -116,6 +116,8 @@ public final class Constants {
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
+    public static final double kMagnetOffset = -0.89111328125;
+
     public static final double kS = 0.0;
     public static final double kG = 2.5;
     public static final double kV = 0;
@@ -192,6 +194,10 @@ public final class Constants {
   public static final class IntakeWrist {
     public static final int kWristMotorID = 2;
     public static final int kEncoderID = 3;
+
+    public static final double kMagnetOffset = 1;
+    public static final double kGearRatioEncoder = 1;
+    public static final double kGearRatioWristAngleRatio = 1;
 
     public static final double kGearRatio = 1.0;
     public static final double kDeployedAngle = 90.0;

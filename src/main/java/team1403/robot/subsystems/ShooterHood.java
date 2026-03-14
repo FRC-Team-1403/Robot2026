@@ -1,21 +1,23 @@
 package team1403.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
 import team1403.robot.util.CustomPositionControlLoop;
-
-import org.littletonrobotics.junction.Logger;
 
 public class ShooterHood extends SubsystemBase {
   private final TalonFX m_hoodMotor;
@@ -28,8 +30,8 @@ public class ShooterHood extends SubsystemBase {
   private double setpoint;
 
   public ShooterHood() {
-    m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID, "Bus 1");
-    m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID, "Bus 1");
+    m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID, "Bus 2");
+    m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID, "Bus 2");
     m_dutyCycleRequest = new DutyCycleOut(0);
     m_neutralRequest = new NeutralOut();
     m_hoodFeedforward =
@@ -41,12 +43,21 @@ public class ShooterHood extends SubsystemBase {
 
     TalonFXConfiguration hoodMotorConfig = new TalonFXConfiguration();
     hoodMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    hoodMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    hoodMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+    hoodMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    hoodMotorConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    hoodMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    hoodMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    hoodMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+
     m_hoodMotor.getConfigurator().apply(hoodMotorConfig);
 
     CANcoderConfiguration config = new CANcoderConfiguration();
     config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
-    config.MagnetSensor.MagnetOffset = -0.89111328125;
+    config.MagnetSensor.MagnetOffset = Constants.ShooterHood.kMagnetOffset;
+
     m_encoder.getConfigurator().apply(config);
 
     double absoluteRotations = getAbsolutePosition();
@@ -138,5 +149,8 @@ public class ShooterHood extends SubsystemBase {
     Logger.recordOutput("Hood/P Value", m_customController.getP());
     Logger.recordOutput("Hood/Position Error", smallestError);
     Logger.recordOutput("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
+    Logger.recordOutput("Hood/StatorCurrent", m_hoodMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("Hood/SupplyCurrent", m_hoodMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("Hood/Device Temperature Temperature", m_hoodMotor.getDeviceTemp().getValueAsDouble());
   }
 }
