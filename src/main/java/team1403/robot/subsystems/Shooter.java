@@ -37,8 +37,8 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     m_flywheelLeader = new TalonFX(Constants.Shooter.flywheelLeaderID,"Bus 2");
-    m_flywheelFollower = new TalonFX(Constants.Shooter.flywheelFollowerID,"Bus 2");
-    m_flywheelFollower2 = new TalonFX(Constants.Shooter.flywheelFollower2ID, "Bus 2");
+    m_flywheelFollower = new TalonFX(Constants.Shooter.flywheelFollower1TopRightID,"Bus 2");
+    m_flywheelFollower2 = new TalonFX(Constants.Shooter.flywheelFollower2BottonRightID, "Bus 2");
     m_flywheelVelocityRequest = new VelocityVoltage(0);
     m_flywheelVelocityRequest.Slot = 0;
     m_flywheelVelocityRequest.EnableFOC = true;

@@ -24,8 +24,8 @@ public final class Constants {
   }
 
   public static class Turret {
-    public static final int kTurretMotorID = 0;
-    public static final int kEncoderID = 0;
+    public static final int kTurretMotorID = 21;
+    public static final int kEncoderID = 22;
     public static final double kMagnetOffset = 0.19775390625;
 
     public static final double kMinAngleDegrees = -180.0;
@@ -97,8 +97,8 @@ public final class Constants {
   }
 
   public static class ShooterHood {
-    public static final int kHoodMotorID = 10;
-    public static final int kEncoderID = 5;
+    public static final int kHoodMotorID = 26;
+    public static final int kEncoderID = 27;
 
     public static final double kMinAngleDegrees = 0.1;
     public static final double kMaxAngleDegrees = 30;
@@ -125,9 +125,9 @@ public final class Constants {
   }
 
   public static class Shooter {
-    public static final int flywheelLeaderID = 1;
-    public static final int flywheelFollowerID = 20;
-    public static final int flywheelFollower2ID = 30;
+    public static final int flywheelLeaderID = 23;
+    public static final int flywheelFollower1TopRightID = 24;
+    public static final int flywheelFollower2BottonRightID = 25;
     public static final double flywheelGearRatio = 1;
     public static final double rpmTolerance = 20;
 
@@ -140,7 +140,7 @@ public final class Constants {
   }
 
   public static class Indexer {
-    public static final int m_indexerID = 0;
+    public static final int m_indexerID = 32;
     public static final double m_indexerGearRatio = 1.0;
     public static final double rpmTolerance = 20;
 
@@ -153,7 +153,7 @@ public final class Constants {
   }
 
   public static class Spindexer {
-    public static final int m_spindexerID = 0;
+    public static final int m_spindexerID = 31;
     public static final double m_spindexerGearRatio = 1.0;
     public static final double rpmTolerance = 20;
 
@@ -166,7 +166,8 @@ public final class Constants {
   }
 
   public static class Intake {
-    public static final int m_intakeID = 0;
+    public static final int m_intakeTurretSideLeaderID = 41;
+    public static final int m_intakeNonTurretSideFollowerID = 42;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -175,25 +176,15 @@ public final class Constants {
     public static final double kS = 0.1;
     public static final double kV = 0.1;
     public static final double kA = 0.0;
-    public static final double wristRPMStartAngle = 0;
-
-    public static final double RPM = 0.0;
 
     public static final int rpmTolerance = 20;
-
-    public static final double intakeMaxVelocity = 5000;
-    public static final double intakeMaxAcceleration = 10000;
-
     public static final double intakeGearRatio = 1.0;
-
-    public static final double intakeCurrentLimit = 40;
-
     public static final int intakeMotorID = 10;
   }
 
   public static final class IntakeWrist {
-    public static final int kWristMotorID = 2;
-    public static final int kEncoderID = 3;
+    public static final int kWristMotorID = 43;
+    public static final int kEncoderID = 44;
 
     public static final double kMagnetOffset = 1;
     public static final double kGearRatioEncoder = 1;
@@ -216,7 +207,7 @@ public final class Constants {
   }
 
   public static final class Hopper {
-    public static final int kCANRangeID = 0; 
+    public static final int kCANRangeID = 51; 
 
     public static final double kMaxDistanceMeters = 0.50;
     public static final double kMinDistanceMeters = 0.05; 
