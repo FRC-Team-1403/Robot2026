@@ -5,54 +5,38 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.Logger;
+
+import team1403.robot.Constants;
 import team1403.robot.subsystems.*;
-import team1403.robot.util.FieldZoneUtil;
-import team1403.robot.util.FieldZoneUtil.Side;
-import team1403.robot.util.FieldZoneUtil.Zone;
+import team1403.robot.util.Blackbox;
 
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
 /**
- * ShootOnMoveCommand
- * Allows the robot to aim and fire while driving.
- * Uses vector math to cancel out robot movement so the ball travels
- * toward the target relative to the field, not the moving robot.
- *
- * The turret pivot is offset from the robot center. All targeting math
- * uses the turret pivot's field position as the origin so aiming and
- * distance calculations stay accurate regardless of robot heading.
+ * This command allows the robot to score while it is physically moving across the field.
+ * Without this compensation, a ball shot from a moving robot would drift off-target because
+ * it inherits the robot's velocity. This command corrects for that by doing vector math:
+ * we figure out which direction and speed the ball needs to leave the robot so that after
+ * adding the robot's own movement, the ball still arrives at the target.
  */
 public class ShootOnMoveCommand extends Command {
-
-  // Holds the RPM and estimated time the ball spends in the air for a given distance.
+  // Combines the two shooter settings we need for any given shot distance.
   private record ShooterParams(double rpm, double timeOfFlight) {}
 
-  // Fixed field positions for the Hub and the two Feeding stations (Blue alliance coords).
-  private static final Translation2d hubPosition        = new Translation2d(8.27, 4.105);
-  private static final Translation2d feedTopPosition    = new Translation2d(4.03, 6.5);
-  private static final Translation2d feedBottomPosition = new Translation2d(4.03, 1.5);
-
-  /**
-   * How far the turret pivot is from the robot's center, in robot-relative meters
-   * (X = forward, Y = left). This offset is rotated into field-frame every loop
-   * so it stays accurate as the robot turns.
-   * TODO: Measure from the robot and update these values before competition.
-   */
-  private static final Translation2d turretOffset = new Translation2d(0.1, 0.05);
-
-  // Distance-to-shooter-settings lookup tables.
-  // TreeMap lets us quickly find the two closest entries and interpolate between them.
+  // Lookup tables mapping shot distance (meters) to flywheel RPM and time-of-flight.
+  // Two separate tables exist because hub shots and feed shots have different trajectories.
+  // TreeMap is used so we can efficiently find and interpolate between the two nearest entries.
   private static final TreeMap<Double, ShooterParams> hubTable  = new TreeMap<>();
   private static final TreeMap<Double, ShooterParams> feedTable = new TreeMap<>();
 
   static {
-    // Hub shots: distance (meters) -> RPM and time-of-flight (seconds)
+    // Hub shot table — scoring directly into the hub
+    hubTable.put(0.5, new ShooterParams(2200.0, 0.22));
+    hubTable.put(1.0, new ShooterParams(2500.0, 0.33));
     hubTable.put(1.5, new ShooterParams(2800.0, 0.42));
     hubTable.put(2.0, new ShooterParams(3100.0, 0.51));
     hubTable.put(2.5, new ShooterParams(3400.0, 0.58));
@@ -61,54 +45,62 @@ public class ShootOnMoveCommand extends Command {
     hubTable.put(4.0, new ShooterParams(4100.0, 0.78));
     hubTable.put(5.0, new ShooterParams(4550.0, 0.91));
 
-    // Feed shots: used when passing the ball across the field to an ally
+    // Feed shot table — passing the ball to an ally across the field
     feedTable.put(1.5, new ShooterParams(2200.0, 0.35));
     feedTable.put(3.0, new ShooterParams(2900.0, 0.55));
     feedTable.put(5.0, new ShooterParams(3700.0, 0.80));
     feedTable.put(8.0, new ShooterParams(4600.0, 1.18));
   }
 
-  // Tuning constants — adjust these based on robot behavior.
-  private static final double latencySeconds          = 0.15;  // Time between sensor read and ball leaving robot
-  private static final double hubHoodAngleDeg         = 25.0;  // Hood angle for Hub shots
-  private static final double feedHoodAngleDeg        = 15.0;  // Hood angle for Feed shots
-  private static final double rpmReadyTolerance       = 150.0; // Max RPM error allowed before firing
-  private static final double turretReadyToleranceDeg = 1.0;   // Max turret angle error allowed before firing
-  private static final double indexerRPM              = 1500.0;// Speed to run the indexer when feeding a ball
-  private static final double spindexerRPMRatio       = 0.25;  // Spindexer runs at this fraction of flywheel RPM
+  // How far in the future (seconds) we project the robot's position to account for
+  // the delay between sensor readings and the ball actually leaving the robot.
+  private static final double kLatencySeconds = 0.20;
 
-  private final Shooter              shooter;
-  private final ShooterHood          hood;
-  private final Turret               turret;
-  private final Indexer              indexer;
-  private final Spindexer            spindexer;
-  private final Supplier<Pose2d>     poseSupplier;
+  // Fixed hood angles per shot type. 
+  private static final double kHubHoodAngleDeg = 10.0;
+  private static final double kFeedHoodAngleDeg = 25.0;
+
+  // The flywheel must be within this much RPM 
+  private static final double kRpmReadyTolerance = 90.0;
+
+  // The indexer and spindexer always run at these fixed speeds when feeding a ball.
+  // These do not change based on distance or flywheel RPM.
+  private static final double kIndexerRPM = 1500.0;
+  private static final double kSpindexerRPM = 375.0;
+
+  private final Shooter shooter;
+  private final ShooterHood hood;
+  private final Turret turret;
+  private final Indexer indexer;
+  private final Spindexer spindexer;
+  private final Supplier<Pose2d> poseSupplier;
   private final Supplier<ChassisSpeeds> speedSupplier;
 
-  private Translation2d                  currentTarget = hubPosition;
-  private TreeMap<Double, ShooterParams> currentTable  = hubTable;
+  // Tracks which lookup table is active this loop so RPM interpolation uses the right data.
+  private TreeMap<Double, ShooterParams> currentTable = hubTable;
 
-  // Tracks whether we are currently feeding a ball. Prevents redundant stop() calls every loop.
+  // True when the indexer is currently running. Used to avoid calling motor methods
+  // every single loop — we only call them once on each state transition.
   private boolean isFeeding = false;
 
   public ShootOnMoveCommand(Shooter shooter, ShooterHood hood, Turret turret, Indexer indexer,
                             Spindexer spindexer, Supplier<Pose2d> poseSupplier,
                             Supplier<ChassisSpeeds> speedSupplier) {
-    this.shooter      = shooter;
-    this.hood         = hood;
-    this.turret       = turret;
-    this.indexer      = indexer;
-    this.spindexer    = spindexer;
+    this.shooter = shooter;
+    this.hood = hood;
+    this.turret = turret;
+    this.indexer = indexer;
+    this.spindexer = spindexer;
     this.poseSupplier = poseSupplier;
     this.speedSupplier = speedSupplier;
-    addRequirements(shooter, hood, turret, indexer, spindexer);
+    addRequirements(shooter, hood, indexer, spindexer);
   }
 
+  // Called once when the command starts. We stop the feeder motors in case they were
+  // left running from a previous command. The flywheel is intentionally left alone so
+  // we do not waste time waiting for it to re-spin if it was already at speed.
   @Override
   public void initialize() {
-    // Only stop the feeder motors on start. The flywheel is left alone intentionally —
-    // if it was already spinning from a previous command we keep that speed and avoid
-    // a full re-spin-up delay.
     indexer.stop();
     spindexer.stop();
     isFeeding = false;
@@ -116,208 +108,149 @@ public class ShootOnMoveCommand extends Command {
 
   @Override
   public void execute() {
-    // Grab current position and velocity from the swerve drive.
     Pose2d        pose   = poseSupplier.get();
     ChassisSpeeds speeds = speedSupplier.get();
 
-    // -------------------------------------------------------------------------
-    // 1. PROJECT FUTURE POSITION (Latency Compensation)
-    //    Sensors report where the robot WAS a few milliseconds ago. We project
-    //    forward in time so our aim is based on where the robot WILL be when
-    //    the ball actually leaves the shooter.
-    // -------------------------------------------------------------------------
+    // STEP 1 — LATENCY COMPENSATION
+    // Odometry tells us where the robot was a short time ago, not where it is right now.
+    // We project the robot's position forward by kLatencySeconds so our calculations
+    // are based on where the robot will actually be when the ball leaves the shooter.
     Translation2d robotVel = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
-        .rotateBy(pose.getRotation()); // Convert from robot-relative to field-relative velocity
+        .rotateBy(pose.getRotation());
 
     Pose2d futurePos = new Pose2d(
-        pose.getTranslation().plus(robotVel.times(latencySeconds)),
+        pose.getTranslation().plus(robotVel.times(kLatencySeconds)),
         pose.getRotation().plus(
-            Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * latencySeconds)
+            Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * kLatencySeconds)
         )
     );
 
-    // -------------------------------------------------------------------------
-    // 2. TURRET PIVOT POSITION (Off-Center Correction)
-    //    The turret is not at the robot center. We rotate the robot-relative
-    //    turret offset into field coordinates using the robot's heading, then
-    //    add it to the robot's future position. All shot math below uses this
-    //    pivot point — NOT the robot center — for accurate aiming.
-    // -------------------------------------------------------------------------
-    Translation2d turretPivotField = futurePos.getTranslation()
-        .plus(turretOffset.rotateBy(futurePos.getRotation()));
+    // STEP 2 — TARGET SELECTION AND DISTANCE MEASUREMENT
+    // Blackbox.getActiveTarget() picks the hub or the correct feed station based on
+    // which zone the robot is currently in, and mirrors it to the correct alliance side.
+    // turret.getDistanceToTarget() measures from the turret pivot (not the robot center)
+    // using the offset already defined in the Turret subsystem.
+    Translation2d currentTarget = Blackbox.getActiveTarget(futurePos);
 
-    // -------------------------------------------------------------------------
-    // 3. SELECT TARGET & MEASURE DISTANCE
-    //    Pick Hub or Feed target based on which zone the robot is in.
-    //    Measure distance from the turret pivot for maximum accuracy.
-    // -------------------------------------------------------------------------
-    selectTargetFromZone(pose);
+    if (Blackbox.getActiveTarget(pose) == Constants.ScoringLocation.kHubPosition) {
+      currentTable = hubTable;
+    } else {
+      currentTable = feedTable;
+    }
 
-    Translation2d toTarget = currentTarget.minus(turretPivotField);
-    double distance = toTarget.getNorm();
+    double distance = turret.getDistanceToTarget(futurePos);
+    Translation2d toTarget = currentTarget.minus(futurePos.getTranslation()
+        .plus(Constants.Turret.kTurretOffset.rotateBy(futurePos.getRotation())));
 
-    // If distance is unrealistically small, something is wrong with odometry.
-    // Clamp to 0.5m so we don't divide by zero or produce garbage outputs,
-    // and skip the rest of this loop to avoid acting on bad data.
-    if (distance < 1.0) {
-      Logger.recordOutput("SOTM/Warning", "Distance < 1.0m — skipping loop, check odometry");
-      distance = Math.max(distance, 0.5);
+    // If the distance is suspiciously small, odometry is likely producing bad data.
+    // We log a warning and skip this loop to avoid commanding garbage values.
+    if (distance < 0.1) {
+      Logger.recordOutput("SOTM/Warning", "Distance < 0.1m — skipping loop, check odometry");
       return;
     }
 
-    // Look up how fast the ball needs to travel if we were standing still.
-    ShooterParams baseline            = interpolate(distance, currentTable);
-    double        baselineHorizontalVel = distance / baseline.timeOfFlight;
+    // Look up what RPM and time-of-flight the robot would need if it were standing still.
+    ShooterParams baseline = interpolate(distance, currentTable);
+    double baselineHorizVel = distance / baseline.timeOfFlight;
 
-    // -------------------------------------------------------------------------
-    // 4. VECTOR SUBTRACTION (Shoot-On-Move Compensation)
-    //    A ball shot from a moving robot inherits the robot's velocity.
-    //    To make the ball travel straight to the target, we aim slightly
-    //    "against" the direction of travel so the two vectors cancel out.
-    //    Formula: shotVector = targetVelocityVector - robotVelocity
-    // -------------------------------------------------------------------------
+    // STEP 3 — SHOOT-ON-MOVE VECTOR COMPENSATION
+    // A ball launched from a moving robot inherits the robot's velocity. To make the
+    // ball travel straight to the target, we subtract the robot's velocity from the
+    // required ball velocity. The result is the direction and speed the ball must leave
+    // the robot so that the two velocities add up to the correct field-relative path.
     Translation2d targetDirection   = toTarget.div(distance);
-    Translation2d targetVelocityVec = targetDirection.times(baselineHorizontalVel);
+    Translation2d targetVelocityVec = targetDirection.times(baselineHorizVel);
     Translation2d shotVector        = targetVelocityVec.minus(robotVel);
 
-    // -------------------------------------------------------------------------
-    // 5. CONVERT SHOT VECTOR TO HARDWARE TARGETS
-    //    Turn the compensated shot vector into a turret angle and hood angle.
-    // -------------------------------------------------------------------------
-    Rotation2d fieldAngle     = shotVector.getAngle();
-    double     rawTurretAngle = fieldAngle.minus(futurePos.getRotation()).getDegrees();
-
-    // Wrap turret angle to -180..180 so we never try to spin past the wire stop.
-    double constrainedTurret = MathUtil.inputModulus(rawTurretAngle, -180, 180);
-
-    // Hood angle is fixed per target type. Clamped to physical limits of 0–30°.
-    double targetHoodAngle = (currentTable == hubTable) ? hubHoodAngleDeg : feedHoodAngleDeg;
+    // STEP 4 — HOOD ANGLE
+    // The hood angle is fixed per shot type and does not vary with distance.
+    // It is clamped to the physical travel limits of the hood mechanism (0–30 degrees).
+    double targetHoodAngle;
+    if (currentTable == hubTable) {
+      targetHoodAngle = kHubHoodAngleDeg;
+    } else {
+      targetHoodAngle = kFeedHoodAngleDeg;
+    }
     double constrainedHood = MathUtil.clamp(targetHoodAngle, 0, 30);
 
-    // -------------------------------------------------------------------------
-    // 6. REVERSE LOOKUP: Compensated Velocity -> Effective Distance -> RPM
-    //    The vector compensation changed the required shot speed. We find what
-    //    distance in the table produces that speed and look up the matching RPM.
-    // -------------------------------------------------------------------------
-    double requiredHorizontalVel = shotVector.getNorm();
-    double effectiveDistance     = getDistanceForVelocity(requiredHorizontalVel, currentTable);
-    double adjustedRpm           = interpolate(effectiveDistance, currentTable).rpm;
+    // STEP 5 — CONVERT COMPENSATED SHOT VECTOR BACK TO RPM
+    // The vector compensation changed the required ball speed. We reverse-look up which
+    // distance in the table produces that speed, then interpolate to get the matching RPM.
+    double requiredHorizVel  = shotVector.getNorm();
+    double effectiveDistance = getDistanceForVelocity(requiredHorizVel, currentTable);
+    double adjustedRpm = interpolate(effectiveDistance, currentTable).rpm;
 
-    // -------------------------------------------------------------------------
-    // 7. HARDWARE OUTPUT
-    //    Send final targets to each mechanism. Spindexer is set once here at a
-    //    fixed ratio to keep balls staged — it does NOT reset to zero each loop.
-    // -------------------------------------------------------------------------
+    // STEP 6 — SEND TARGETS TO HARDWARE
+    // Only the flywheel RPM and hood angle change shot to shot. The spindexer and
+    // indexer run at constant speeds and are only gated by the readiness check below.
     shooter.setFlywheelTargetRPM(adjustedRpm);
     hood.setSetpoint(constrainedHood);
-    turret.setSetpoint(constrainedTurret);
-    spindexer.setSpindexerRPM(adjustedRpm * spindexerRPMRatio);
 
-    // -------------------------------------------------------------------------
-    // 8. FIRING LOGIC
-    //    Gate the indexer behind all three readiness checks. We use a state flag
-    //    (isFeeding) so we only call setIndexerRPM / stop once on each transition
-    //    instead of hammering the motor controller every 20ms.
-    // -------------------------------------------------------------------------
-    double  turretError  = MathUtil.inputModulus(turret.getTurretAngle() - constrainedTurret, -180, 180);
-    boolean turretReady  = Math.abs(turretError) < turretReadyToleranceDeg;
-    boolean shooterReady = Math.abs(shooter.getFlywheelLeaderRPM() - adjustedRpm) < rpmReadyTolerance;
-    boolean hoodReady    = hood.atSetpoint(); // ShooterHood.atSetpoint() must use a tight tolerance
-
-    boolean readyToFire = turretReady && shooterReady && hoodReady;
+    // STEP 7 — FIRING GATE
+    // We only feed a ball once both the flywheel and hood are at their targets.
+    // The isFeeding flag means we only call motor methods on the transition in or out,
+    // not every 20ms loop, which avoids unnecessary CAN traffic.
+    boolean shooterReady = Math.abs(shooter.getFlywheelLeaderRPM() - adjustedRpm) < kRpmReadyTolerance;
+    boolean hoodReady = hood.atSetpoint();
+    boolean readyToFire = shooterReady && hoodReady;
 
     if (readyToFire && !isFeeding) {
-      indexer.setIndexerRPM(indexerRPM);
+      indexer.setIndexerRPM(kIndexerRPM);
+      spindexer.setSpindexerRPM(kSpindexerRPM);
       isFeeding = true;
     } else if (!readyToFire && isFeeding) {
       indexer.stop();
+      spindexer.stop();
       isFeeding = false;
     }
 
-    // -------------------------------------------------------------------------
-    // 9. LOGGING
-    // -------------------------------------------------------------------------
-    Logger.recordOutput("SOTM/Distance",          distance);
-    Logger.recordOutput("SOTM/TurretAngle",       constrainedTurret);
-    Logger.recordOutput("SOTM/HoodAngle",         constrainedHood);
-    Logger.recordOutput("SOTM/AdjustedRPM",       adjustedRpm);
-    Logger.recordOutput("SOTM/TurretPivotX",      turretPivotField.getX());
-    Logger.recordOutput("SOTM/TurretPivotY",      turretPivotField.getY());
-    Logger.recordOutput("SOTM/RequiredVel",       requiredHorizontalVel);
+  
+    Logger.recordOutput("SOTM/Distance", distance);
+    Logger.recordOutput("SOTM/HoodAngle", constrainedHood);
+    Logger.recordOutput("SOTM/AdjustedRPM", adjustedRpm);
+    Logger.recordOutput("SOTM/RequiredVel", requiredHorizVel);
     Logger.recordOutput("SOTM/EffectiveDistance", effectiveDistance);
-    Logger.recordOutput("SOTM/TurretReady",       turretReady);
-    Logger.recordOutput("SOTM/ShooterReady",      shooterReady);
-    Logger.recordOutput("SOTM/HoodReady",         hoodReady);
-    Logger.recordOutput("SOTM/IsFeeding",         isFeeding);
+    Logger.recordOutput("SOTM/ShooterReady", shooterReady);
+    Logger.recordOutput("SOTM/HoodReady", hoodReady);
+    Logger.recordOutput("SOTM/IsFeeding", isFeeding);
   }
+
 
   @Override
   public void end(boolean interrupted) {
-    // Stop everything cleanly when the command ends (button released or interrupted).
     shooter.stop();
     indexer.stop();
     spindexer.stop();
-    turret.stopMotor();
     isFeeding = false;
   }
 
-  // ---------------------------------------------------------------------------
-  // HELPERS
-  // ---------------------------------------------------------------------------
 
   /**
-   * Picks Hub or Feed as the target based on which field zone the robot occupies.
-   * Zone.MY_ALLIANCE = aim at the Hub. Any other zone = aim at the nearest Feed station.
-   */
-  private void selectTargetFromZone(Pose2d pose) {
-    Zone zone = FieldZoneUtil.getZone(pose);
-    Side side = FieldZoneUtil.getSide(pose);
-
-    if (zone == Zone.MY_ALLIANCE) {
-      currentTarget = mirrorForAlliance(hubPosition);
-      currentTable  = hubTable;
-    } else {
-      Translation2d rawFeedPos = (side == Side.TOP) ? feedTopPosition : feedBottomPosition;
-      currentTarget = mirrorForAlliance(rawFeedPos);
-      currentTable  = feedTable;
-    }
-  }
-
-  /**
-   * Mirrors a Blue-alliance field position to the Red side by flipping its X coordinate.
-   * This lets us define all targets once in Blue coordinates and use them for both alliances.
-   */
-  private static Translation2d mirrorForAlliance(Translation2d bluePosition) {
-    Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
-    if (alliance == Alliance.Red) {
-      return new Translation2d(FieldZoneUtil.kFieldLength - bluePosition.getX(), bluePosition.getY());
-    }
-    return bluePosition;
-  }
-
-  /**
-   * Linearly interpolates shooter parameters (RPM, time-of-flight) for a distance
-   * between two table entries. Returns the nearest edge value if distance is out of range.
+   * Linearly interpolates between the two nearest entries in a lookup table.
+   * For example, if the distance is 2.3m and the table has entries at 2.0m and 2.5m,
+   * this returns values 60% of the way between those two entries.
+   * If the distance is outside the table range, the nearest edge entry is returned as-is.
    */
   private static ShooterParams interpolate(double distance, TreeMap<Double, ShooterParams> table) {
     Map.Entry<Double, ShooterParams> lo = table.floorEntry(distance);
     Map.Entry<Double, ShooterParams> hi = table.ceilingEntry(distance);
 
-    if (lo == null) return hi.getValue(); // Closer than the closest table entry
-    if (hi == null) return lo.getValue(); // Farther than the farthest table entry
-    if (lo.getKey().equals(hi.getKey())) return lo.getValue(); // Exact match, avoid divide-by-zero
+    if (lo == null) return hi.getValue();
+    if (hi == null) return lo.getValue();
+    if (lo.getKey().equals(hi.getKey())) return lo.getValue();
 
-    double t = (distance - lo.getKey()) / (hi.getKey() - lo.getKey()); // 0.0 = lo, 1.0 = hi
+    double t = (distance - lo.getKey()) / (hi.getKey() - lo.getKey());
     return new ShooterParams(
-        lo.getValue().rpm            + t * (hi.getValue().rpm            - lo.getValue().rpm),
-        lo.getValue().timeOfFlight   + t * (hi.getValue().timeOfFlight   - lo.getValue().timeOfFlight)
+        lo.getValue().rpm          + t * (hi.getValue().rpm          - lo.getValue().rpm),
+        lo.getValue().timeOfFlight + t * (hi.getValue().timeOfFlight - lo.getValue().timeOfFlight)
     );
   }
 
   /**
-   * Reverse lookup: given a required horizontal ball speed, find the table distance
-   * that produces that speed (speed = distance / time-of-flight). Interpolates between
-   * entries. If the required speed exceeds the whole table, returns the max distance.
+   * Reverse lookup: given a required ball speed (meters/second), finds the corresponding
+   * distance in the table that produces that speed using speed = distance / timeOfFlight.
+   * Interpolates between entries just like the forward lookup above.
+   * If the required speed is faster than anything in the table, returns the max table distance.
    */
   private static double getDistanceForVelocity(double targetVel, TreeMap<Double, ShooterParams> table) {
     double prevVel  = -1;
@@ -334,6 +267,6 @@ public class ShootOnMoveCommand extends Command {
       prevVel  = vel;
       prevDist = dist;
     }
-    return table.lastKey(); // Required speed is beyond the table max — clamp to farthest entry
+    return table.lastKey();
   }
 }

@@ -12,9 +12,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
+import team1403.robot.util.Blackbox;
 import team1403.robot.util.CustomPositionControlLoop;
 
 public class Turret extends SubsystemBase {
@@ -105,6 +108,12 @@ public class Turret extends SubsystemBase {
 
   public void resetEncoder() {
     m_encoder.setPosition(0.0);
+  }
+
+  public double getDistanceToTarget(Pose2d pose) {
+    Translation2d turretPivotField = pose.getTranslation()
+        .plus(Constants.Turret.kTurretOffset.rotateBy(pose.getRotation()));
+    return Blackbox.getActiveTarget(pose).minus(turretPivotField).getNorm();
   }
 
   private double getError(double targetAngle, double currentAngle) {

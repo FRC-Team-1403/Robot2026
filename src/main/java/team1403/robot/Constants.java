@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public final class Constants {
@@ -21,6 +22,12 @@ public final class Constants {
 
   public static class Driver {
     public static final int kDriverControllerPort = 0;
+  }
+
+  public static class ScoringLocation{
+    public static final Translation2d kHubPosition = new Translation2d(8.27, 4.105);
+    public static final Translation2d kFeedTopPosition    = new Translation2d(4.03, 6.5);
+    public static final Translation2d kFeedBottomPosition = new Translation2d(4.03, 1.5);
   }
 
   public static class Turret {
@@ -45,6 +52,8 @@ public final class Constants {
     public static final double kRampDownTime = 0.001;
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
+
+    public static final Translation2d kTurretOffset = new Translation2d(0.1, 0.05); //tune
   }
 
   public static class Swerve {
@@ -129,7 +138,7 @@ public final class Constants {
     public static final int flywheelFollower1TopRightID = 24;
     public static final int flywheelFollower2BottonRightID = 25;
     public static final double flywheelGearRatio = 1;
-    public static final double rpmTolerance = 20;
+    public static final double rpmTolerance = 90.0;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
@@ -169,6 +178,8 @@ public final class Constants {
     public static final int m_intakeTurretSideLeaderID = 41;
     public static final int m_intakeNonTurretSideFollowerID = 42;
 
+    public static final double rollerRPM = 5000;
+
     public static final double kP = 0.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
@@ -195,6 +206,8 @@ public final class Constants {
     public static final double kStowedAngle = 0.0;
     public static final double kMinAngleDegrees = 0.0;
     public static final double kMaxAngleDegrees = 90.0;
+
+    public static final double  wristRPMStartAngle = 60.0;
 
     public static final double kGain = 1.0;
     public static final double kToleranceDegrees = 2.0;

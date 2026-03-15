@@ -23,8 +23,8 @@ public class IntakeCommand extends Command {
 
   @Override
   public void execute() {
-    if (m_intakeWrist.getWristAngle() > Constants.Intake.wristRPMStartAngle) {
-      m_intake.setIntakeRPM(Constants.Intake.RPM);
+    if (m_intakeWrist.getWristAngle() > Constants.IntakeWrist.wristRPMStartAngle) {
+      m_intake.setIntakeRPM(Constants.Intake.rollerRPM);
     }
   }
 
