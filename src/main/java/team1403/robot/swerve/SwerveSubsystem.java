@@ -16,12 +16,12 @@ import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -45,10 +45,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import team1403.robot.util.CougarUtil;
 import team1403.robot.Constants;
-import team1403.robot.Constants.Swerve;
 import team1403.robot.Robot;
 import team1403.robot.swerve.TunerConstants.TunerSwerveDrivetrain;
-import team1403.robot.swerve.SwerveHeadingCorrector;
 import team1403.robot.vision.AprilTagCamera;
 import team1403.robot.vision.ITagCamera;
 import team1403.robot.vision.VisionSimUtil;
@@ -74,121 +72,97 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
     private List<ITagCamera> m_cameras = new ArrayList<>();
 
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,
-            Volts.of(4),
-            null,
-            state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
-        ),
+        new SysIdRoutine.Config(null, Volts.of(4), null,
+            state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())),
         new SysIdRoutine.Mechanism(
-            output -> setControl(m_translationCharacterization.withVolts(output)),
-            null,
-            this
-        )
+            output -> setControl(m_translationCharacterization.withVolts(output)), null, this)
     );
-
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,
-            Volts.of(7),
-            null,
-            state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
-        ),
+        new SysIdRoutine.Config(null, Volts.of(7), null,
+            state -> SignalLogger.writeString("SysIdSteer_State", state.toString())),
         new SysIdRoutine.Mechanism(
-            volts -> setControl(m_steerCharacterization.withVolts(volts)),
-            null,
-            this
-        )
+            volts -> setControl(m_steerCharacterization.withVolts(volts)), null, this)
     );
-
     private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            Volts.of(Math.PI / 6).per(Second),
-            Volts.of(Math.PI),
-            null,
-            state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            output -> {
-                setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
-                SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
-            },
-            null,
-            this
-        )
+        new SysIdRoutine.Config(Volts.of(Math.PI / 6).per(Second), Volts.of(Math.PI), null,
+            state -> SignalLogger.writeString("SysIdRotation_State", state.toString())),
+        new SysIdRoutine.Mechanism(output -> {
+            setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
+            SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
+        }, null, this)
     );
-
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
     private Telemetry m_telemetry;
 
     public void setCameras(List<ITagCamera> cameras) {
         m_cameras = cameras;
-    }    
+    }
 
     private void onConstruct() {
-      super.resetPose(CougarUtil.getInitialRobotPose());
+        super.resetPose(CougarUtil.getInitialRobotPose());
 
-      AutoBuilder.configure(
-        this::getPose,
-        this::resetOdometry,
-        () -> m_state.Speeds,
-        (s, ff) -> drive(s, ff),
-        new PPHolonomicDriveController(
-            TunerConstants.kTranslationPID,
-            TunerConstants.kRotationPID,
-            Constants.kLoopTime
-        ),
-        CougarUtil.loadRobotConfig(),
-        () -> CougarUtil.shouldMirrorPath(),
-        this);
+        // PathPlanner config is loaded from the GUI settings file, which only exists
+        // after running the PathPlanner app on a real machine. In simulation (or on a
+        // fresh clone) the file is absent, so loadRobotConfig() returns null.
+        // Guard against that so the robot boots cleanly without autos.
+        RobotConfig robotConfig = CougarUtil.loadRobotConfig();
+        if (robotConfig != null) {
+            AutoBuilder.configure(
+                this::getPose,
+                this::resetOdometry,
+                () -> m_state.Speeds,
+                (s, ff) -> drive(s, ff),
+                new PPHolonomicDriveController(
+                    TunerConstants.kTranslationPID,
+                    TunerConstants.kRotationPID,
+                    Constants.kLoopTime),
+                robotConfig,
+                () -> CougarUtil.shouldMirrorPath(),
+                this);
 
-        Pathfinding.setPathfinder(new LocalADStar());
-
-        Commands.sequence(
-            FollowPathCommand.warmupCommand(),
-            PathfindingCommand.warmupCommand()
-        ).schedule();
+            Pathfinding.setPathfinder(new LocalADStar());
+            Commands.sequence(
+                FollowPathCommand.warmupCommand(),
+                PathfindingCommand.warmupCommand()
+            ).schedule();
+        } else {
+            DriverStation.reportWarning(
+                "PathPlanner RobotConfig not found — AutoBuilder disabled.", false);
+        }
 
         VisionSimUtil.initVisionSim();
 
-        VisionConfigurator config = new VisionConfigurator()
-            .withRobotPose(this::getPose, () -> Timer.getFPGATimestamp()) /* find a way to convert m_state.Timestamp to fpga time */
-            .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
-
-        if(Robot.isReal()){
-            m_cameras.add(new AprilTagCamera("ThriftyCamera1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCamera2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCamera3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCamera4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
-        }
+        // Add cameras unconditionally — AprilTagCamera creates a PhotonCameraSim
+        // internally when isSimulation() is true, so this works in both modes.
+        m_cameras.add(new AprilTagCamera("ThriftyCamera1.0",
+            () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
+        m_cameras.add(new AprilTagCamera("ThriftyCamera2.0",
+            () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
+        m_cameras.add(new AprilTagCamera("ThriftyCamera3.0",
+            () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
+        m_cameras.add(new AprilTagCamera("ThriftyCamera4.0",
+            () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
 
         SmartDashboard.putData("Gyro", super.getPigeon2());
-
         m_telemetry = new Telemetry(TunerConstants.kMaxSpeed);
         m_state = getState();
     }
 
     public SwerveSubsystem(
         SwerveDrivetrainConstants drivetrainConstants,
-        SwerveModuleConstants<?, ?, ?>... modules
-    ) {
+        SwerveModuleConstants<?, ?, ?>... modules) {
         super(drivetrainConstants, modules);
-        if (Utils.isSimulation()) {
-            startSimThread();
-        }
+        if (Utils.isSimulation()) startSimThread();
         onConstruct();
     }
 
     public SwerveSubsystem(
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
-        SwerveModuleConstants<?, ?, ?>... modules
-    ) {
+        SwerveModuleConstants<?, ?, ?>... modules) {
         super(drivetrainConstants, odometryUpdateFrequency, modules);
-        if (Utils.isSimulation()) {
-            startSimThread();
-        }
+        if (Utils.isSimulation()) startSimThread();
         onConstruct();
     }
 
@@ -197,12 +171,10 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
         double odometryUpdateFrequency,
         Matrix<N3, N1> odometryStandardDeviation,
         Matrix<N3, N1> visionStandardDeviation,
-        SwerveModuleConstants<?, ?, ?>... modules
-    ) {
-        super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
-        if (Utils.isSimulation()) {
-            startSimThread();
-        }
+        SwerveModuleConstants<?, ?, ?>... modules) {
+        super(drivetrainConstants, odometryUpdateFrequency,
+            odometryStandardDeviation, visionStandardDeviation, modules);
+        if (Utils.isSimulation()) startSimThread();
         onConstruct();
     }
 
@@ -210,13 +182,9 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
-    public void resetOdometry() {
-        resetOdometry(getPose());
-    }
+    public void resetOdometry() { resetOdometry(getPose()); }
 
-    public void resetOdometry(Pose2d pose) {
-        this.resetPose(pose);
-    }
+    public void resetOdometry(Pose2d pose) { this.resetPose(pose); }
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.quasistatic(direction);
@@ -233,12 +201,11 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
                 setOperatorPerspectiveForward(
                     allianceColor == Alliance.Red
                         ? kRedAlliancePerspectiveRotation
-                        : kBlueAlliancePerspectiveRotation
-                );
+                        : kBlueAlliancePerspectiveRotation);
                 m_hasAppliedOperatorPerspective = true;
-        });
+            });
         }
-        
+
         VisionSimUtil.update(getPose());
 
         for (ITagCamera camera : m_cameras) {
@@ -246,17 +213,13 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
                 addVisionMeasurement(
                     camera.getPose().toPose2d(),
                     camera.getTimestamp(),
-                    camera.getEstStdv()
-                );
+                    camera.getEstStdv());
             }
         }
 
         m_state = getState();
-
         m_gyroDisconnected.set(!super.getPigeon2().isConnected());
-
         SmartDashboard.putNumber("Velocity", CougarUtil.norm(m_state.Speeds));
-
         m_telemetry.telemeterize(m_state);
     }
 
@@ -264,129 +227,73 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("SwerveDrive");
         SwerveModuleState[] states = m_state.ModuleStates;
-
-        builder.addDoubleProperty("Front Left Angle", () -> states[0].angle.getRadians(), null);
-        builder.addDoubleProperty("Front Left Velocity", () -> states[0].speedMetersPerSecond, null);
-
-        builder.addDoubleProperty("Front Right Angle", () -> states[1].angle.getRadians(), null);
+        builder.addDoubleProperty("Front Left Angle",     () -> states[0].angle.getRadians(), null);
+        builder.addDoubleProperty("Front Left Velocity",  () -> states[0].speedMetersPerSecond, null);
+        builder.addDoubleProperty("Front Right Angle",    () -> states[1].angle.getRadians(), null);
         builder.addDoubleProperty("Front Right Velocity", () -> states[1].speedMetersPerSecond, null);
-
-        builder.addDoubleProperty("Back Left Angle", () -> states[2].angle.getRadians(), null);
-        builder.addDoubleProperty("Back Left Velocity", () -> states[2].speedMetersPerSecond, null);
-
-        builder.addDoubleProperty("Back Right Angle", () -> states[3].angle.getRadians(), null);
-        builder.addDoubleProperty("Back Right Velocity", () -> states[3].speedMetersPerSecond, null);
-
-        builder.addDoubleProperty("Robot Angle", () -> getRotation().getRadians(), null);
+        builder.addDoubleProperty("Back Left Angle",      () -> states[2].angle.getRadians(), null);
+        builder.addDoubleProperty("Back Left Velocity",   () -> states[2].speedMetersPerSecond, null);
+        builder.addDoubleProperty("Back Right Angle",     () -> states[3].angle.getRadians(), null);
+        builder.addDoubleProperty("Back Right Velocity",  () -> states[3].speedMetersPerSecond, null);
+        builder.addDoubleProperty("Robot Angle",          () -> getRotation().getRadians(), null);
     }
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
-
         m_simNotifier = new Notifier(() -> {
             final double currentTime = Utils.getCurrentTimeSeconds();
             double deltaTime = currentTime - m_lastSimTime;
             m_lastSimTime = currentTime;
-
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
-    
-    /**
-     * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
-     * while still accounting for measurement noise.
-     *
-     * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
-     * @param timestampSeconds The timestamp of the vision measurement in seconds.
-     */
+
     @Override
-    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+    public void addVisionMeasurement(Pose2d pose, double timestampSeconds) {
+        super.addVisionMeasurement(pose, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    /**
-     * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
-     * while still accounting for measurement noise.
-     * <p>
-     * Note that the vision measurement standard deviations passed into this method
-     * will continue to apply to future measurements until a subsequent call to
-     * {@link #setVisionMeasurementStdDevs(Matrix)} or this method.
-     *
-     * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
-     * @param timestampSeconds The timestamp of the vision measurement in seconds.
-     * @param visionMeasurementStdDevs Standard deviations of the vision pose measurement
-     *     in the form [x, y, theta]ᵀ, with units in meters and radians.
-     */
     @Override
-    public void addVisionMeasurement(
-        Pose2d visionRobotPoseMeters,
-        double timestampSeconds,
-        Matrix<N3, N1> visionMeasurementStdDevs
-    ) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    public void addVisionMeasurement(Pose2d pose, double timestampSeconds,
+        Matrix<N3, N1> stdDevs) {
+        super.addVisionMeasurement(pose, Utils.fpgaToCurrentTime(timestampSeconds), stdDevs);
     }
 
-    public Pose2d getPose() {
-        return m_state.Pose;
-    }
+    public Pose2d getPose()             { return m_state.Pose; }
+    public Rotation2d getRotation()     { return getPose().getRotation(); }
+    public ChassisSpeeds getChassisSpeeds() { return m_state.Speeds; }
 
-    public Rotation2d getRotation() {
-        return getPose().getRotation();
-    }
-
-    public Rotation2d getShallowRotation() {
-        return getRotation().minus(m_headingOffset);
-    }
-
-    public void resetShallowHeading(Rotation2d r) {
-        m_headingOffset = r;
-    }
-
+    public Rotation2d getShallowRotation()          { return getRotation().minus(m_headingOffset); }
+    public void resetShallowHeading(Rotation2d r)   { m_headingOffset = r; }
     public void resetShallowHeading() {
-        if(CougarUtil.getAlliance() == Alliance.Red)
+        if (CougarUtil.getAlliance() == Alliance.Red)
             resetShallowHeading(getRotation().plus(Rotation2d.k180deg));
         else
             resetShallowHeading(getRotation());
     }
 
-    private SwerveRequest.ApplyRobotSpeeds req = new SwerveRequest.ApplyRobotSpeeds();
-
-    private boolean m_rotDriftCorrect = true;
+    private final SwerveRequest.ApplyRobotSpeeds req = new SwerveRequest.ApplyRobotSpeeds();
 
     private ChassisSpeeds rotationalDriftCorrection(ChassisSpeeds speeds) {
-        ChassisSpeeds corrected = m_headingCorrector.update(speeds, m_state.Speeds, 
-            super.getPigeon2().getRotation2d(), super.getPigeon2().getAngularVelocityZWorld().getValue().in(DegreesPerSecond));
-        if (m_rotDriftCorrect && !DriverStation.isAutonomousEnabled())
-        {
-          return corrected;
-        }
-    
+        ChassisSpeeds corrected = m_headingCorrector.update(speeds, m_state.Speeds,
+            super.getPigeon2().getRotation2d(),
+            super.getPigeon2().getAngularVelocityZWorld().getValue().in(DegreesPerSecond));
+        if (!DriverStation.isAutonomousEnabled()) return corrected;
         return speeds;
     }
 
     private static final double[] kEmptyDoubleArr = {};
-    public void drive(ChassisSpeeds s) {
-        drive(s, null);
-    }
-
+    public void drive(ChassisSpeeds s) { drive(s, null); }
     public void drive(ChassisSpeeds s, DriveFeedforwards ff) {
         req.Speeds = rotationalDriftCorrection(s);
         req.DesaturateWheelSpeeds = true;
         req.DriveRequestType = DriveRequestType.Velocity;
         req.SteerRequestType = SteerRequestType.Position;
         req.CenterOfRotation = Translation2d.kZero;
-        if(ff != null) {
-            req.WheelForceFeedforwardsX = ff.robotRelativeForcesXNewtons();
-            req.WheelForceFeedforwardsY = ff.robotRelativeForcesYNewtons();
-        } else {
-            req.WheelForceFeedforwardsX = kEmptyDoubleArr;
-            req.WheelForceFeedforwardsY = kEmptyDoubleArr;
-        }
+        req.WheelForceFeedforwardsX = ff != null ? ff.robotRelativeForcesXNewtons() : kEmptyDoubleArr;
+        req.WheelForceFeedforwardsY = ff != null ? ff.robotRelativeForcesYNewtons() : kEmptyDoubleArr;
         super.setControl(req);
     }
-
-    public void stop() {
-        drive(new ChassisSpeeds());
-    }
+    public void stop() { drive(new ChassisSpeeds()); }
 }

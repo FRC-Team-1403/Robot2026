@@ -20,7 +20,7 @@ public final class Constants {
   }
 
   public static class Driver {
-    public static final int kDriverControllerPort = 0;
+    public static final int kDriverControllerPort = 1;
   }
 
   public static class Turret {

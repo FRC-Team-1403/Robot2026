@@ -1,7 +1,5 @@
 package team1403.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -11,146 +9,107 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 import team1403.robot.Constants;
+import team1403.robot.Robot;
 import team1403.robot.util.CustomPositionControlLoop;
 
 public class ShooterHood extends SubsystemBase {
-  private final TalonFX m_hoodMotor;
-  private final CANcoder m_encoder;
+  private final boolean m_isSim = Robot.isSimulation();
+
+  private TalonFX m_hoodMotor;
+  private CANcoder m_encoder;
   private ArmFeedforward m_hoodFeedforward;
-  private final DutyCycleOut m_dutyCycleRequest;
-  private final NeutralOut m_neutralRequest;
-  private final CustomPositionControlLoop m_customController;
-  private double currentAngle;
-  private double setpoint;
+  private DutyCycleOut m_dutyCycleRequest;
+  private NeutralOut m_neutralRequest;
+  private CustomPositionControlLoop m_customController;
+
+  private double m_currentAngle = 0;
+  private double m_setpoint     = 0;
 
   public ShooterHood() {
-    m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID, "Bus 2");
-    m_encoder = new CANcoder(Constants.ShooterHood.kEncoderID, "Bus 2");
-    m_dutyCycleRequest = new DutyCycleOut(0);
-    m_neutralRequest = new NeutralOut();
-    m_hoodFeedforward =
-        new ArmFeedforward(
-            Constants.ShooterHood.kS,
-            Constants.ShooterHood.kG,
-            Constants.ShooterHood.kV,
-            Constants.ShooterHood.kA);
+    if (!m_isSim) {
+      m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID, "Bus 2");
+      m_encoder   = new CANcoder(Constants.ShooterHood.kEncoderID, "Bus 2");
+      m_dutyCycleRequest = new DutyCycleOut(0);
+      m_neutralRequest   = new NeutralOut();
+      m_hoodFeedforward  = new ArmFeedforward(
+          Constants.ShooterHood.kS, Constants.ShooterHood.kG,
+          Constants.ShooterHood.kV, Constants.ShooterHood.kA);
 
-    TalonFXConfiguration hoodMotorConfig = new TalonFXConfiguration();
-    hoodMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    hoodMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    hoodMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
-    hoodMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    hoodMotorConfig.CurrentLimits.SupplyCurrentLimit = 70;
-    hoodMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    hoodMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
-    hoodMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+      TalonFXConfiguration cfg = new TalonFXConfiguration();
+      cfg.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      cfg.MotorOutput.Inverted    = InvertedValue.CounterClockwise_Positive;
+      cfg.CurrentLimits.StatorCurrentLimit       = 120;
+      cfg.CurrentLimits.StatorCurrentLimitEnable = true;
+      cfg.CurrentLimits.SupplyCurrentLimit       = 70;
+      cfg.CurrentLimits.SupplyCurrentLimitEnable = true;
+      m_hoodMotor.getConfigurator().apply(cfg);
 
-    m_hoodMotor.getConfigurator().apply(hoodMotorConfig);
+      CANcoderConfiguration encCfg = new CANcoderConfiguration();
+      encCfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+      encCfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
+      encCfg.MagnetSensor.MagnetOffset = Constants.ShooterHood.kMagnetOffset;
+      m_encoder.getConfigurator().apply(encCfg);
 
-    CANcoderConfiguration config = new CANcoderConfiguration();
-    config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
-    config.MagnetSensor.MagnetOffset = Constants.ShooterHood.kMagnetOffset;
+      double abs = m_encoder.getAbsolutePosition().getValueAsDouble();
+      m_hoodMotor.setPosition(abs * Constants.ShooterHood.kGearRatioEncoder);
 
-    m_encoder.getConfigurator().apply(config);
+      m_customController = new CustomPositionControlLoop(
+          Constants.ShooterHood.kGain, Constants.ShooterHood.kToleranceDegrees,
+          Constants.ShooterHood.kRampUpTime, Constants.ShooterHood.kRampDownTime,
+          Constants.ShooterHood.kUnitsPerRampTime, Constants.ShooterHood.kMaxSpeed,
+          Constants.ShooterHood.kMinSpeed, Constants.ShooterHood.kLoopTime);
 
-    double absoluteRotations = getAbsolutePosition();
-    double hoodRotations = absoluteRotations * Constants.ShooterHood.kGearRatioEncoder;
-    m_hoodMotor.setPosition(hoodRotations);
-
-    m_customController =
-        new CustomPositionControlLoop(
-            Constants.ShooterHood.kGain,
-            Constants.ShooterHood.kToleranceDegrees,
-            Constants.ShooterHood.kRampUpTime,
-            Constants.ShooterHood.kRampDownTime,
-            Constants.ShooterHood.kUnitsPerRampTime,
-            Constants.ShooterHood.kMaxSpeed,
-            Constants.ShooterHood.kMinSpeed,
-            Constants.ShooterHood.kLoopTime);
-
-    currentAngle = getHoodAngle();
-    setpoint = currentAngle;
-  }
-
-  public double getAbsolutePosition() {
-    return (m_encoder.getAbsolutePosition().getValueAsDouble());
-  }
-
-  public double getHoodAngle() {
-    double motorRotations = m_hoodMotor.getPosition().getValueAsDouble();
-    double hoodRotations = motorRotations / Constants.ShooterHood.kGearRatioHoodAngleRatio;
-    return Units.rotationsToDegrees(hoodRotations);
+      m_currentAngle = getHoodAngle();
+      m_setpoint     = m_currentAngle;
+    }
   }
 
   public void setSetpoint(double degrees) {
-    double correctedDegrees =
-        MathUtil.clamp(
-            degrees,
-            Constants.ShooterHood.kMinAngleDegrees,
-            Constants.ShooterHood.kMaxAngleDegrees);
-    setpoint = correctedDegrees;
+    m_setpoint = MathUtil.clamp(degrees,
+        Constants.ShooterHood.kMinAngleDegrees, Constants.ShooterHood.kMaxAngleDegrees);
   }
 
-  public double getSetpoint() {
-    return setpoint;
+  public double getSetpoint()    { return m_setpoint; }
+
+  /** In sim, reports setpoint directly and is always at setpoint. */
+  public double getHoodAngle()   {
+    if (m_isSim) return m_setpoint;
+    double rot = m_hoodMotor.getPosition().getValueAsDouble();
+    return Units.rotationsToDegrees(rot / Constants.ShooterHood.kGearRatioHoodAngleRatio);
   }
 
   public boolean atSetpoint() {
+    if (m_isSim) return true;
     return m_customController.isAtPosition();
   }
 
-  public void adjustSetpoint(double degrees) {
-    setSetpoint(setpoint + degrees);
-  }
-
   public void stopMotor() {
-    m_hoodMotor.setControl(m_neutralRequest);
-    m_customController.reset();
-  }
-
-  private double getError(double targetAngle, double currentAngle) {
-    double error = targetAngle - currentAngle;
-    return error;
-  }
-
-  private void setMotorOutput(double output) {
-    m_dutyCycleRequest.Output = output;
-    m_hoodMotor.setControl(m_dutyCycleRequest);
+    if (!m_isSim) { m_hoodMotor.setControl(m_neutralRequest); m_customController.reset(); }
   }
 
   @Override
   public void periodic() {
-    currentAngle = getHoodAngle();
-    double smallestError = getError(setpoint, currentAngle);
-    double controlLoop = m_customController.calculate(smallestError, currentAngle, setpoint);
-    double ff = m_hoodFeedforward.calculate(Units.degreesToRadians(currentAngle), 0);
-    double motorOutput = ff + controlLoop;
-
-    if (currentAngle >= Constants.ShooterHood.kMaxAngleDegrees && motorOutput > 0) {
-      motorOutput = 0;
-    } else if (currentAngle <= Constants.ShooterHood.kMinAngleDegrees && motorOutput < 0) {
-      motorOutput = 0;
+    if (!m_isSim) {
+      m_currentAngle = getHoodAngle();
+      double error  = m_setpoint - m_currentAngle;
+      double output = m_customController.calculate(error, m_currentAngle, m_setpoint);
+      double ff     = m_hoodFeedforward.calculate(Units.degreesToRadians(m_currentAngle), 0);
+      double motor  = (ff + output) / 100.0;
+      if (m_currentAngle >= Constants.ShooterHood.kMaxAngleDegrees && motor > 0) motor = 0;
+      if (m_currentAngle <= Constants.ShooterHood.kMinAngleDegrees && motor < 0) motor = 0;
+      m_dutyCycleRequest.Output = motor;
+      m_hoodMotor.setControl(m_dutyCycleRequest);
+    } else {
+      m_currentAngle = m_setpoint; // sim: instantly at setpoint
     }
-
-    setMotorOutput(motorOutput / 100.0);
-
-    Logger.recordOutput("Hood/Shooter Hood Current Angle", currentAngle);
-    Logger.recordOutput("Hood/Absolute", getAbsolutePosition());
-    Logger.recordOutput("Hood/Setpoint", setpoint);
-    Logger.recordOutput("Hood/At Setpoint", atSetpoint());
-    Logger.recordOutput("Hood/Motor Output", motorOutput);
-    Logger.recordOutput("Hood/P Value", m_customController.getP());
-    Logger.recordOutput("Hood/Position Error", smallestError);
-    Logger.recordOutput("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
-    Logger.recordOutput("Hood/StatorCurrent", m_hoodMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Hood/SupplyCurrent", m_hoodMotor.getSupplyCurrent().getValueAsDouble());
-    Logger.recordOutput("Hood/Device Temperature Temperature", m_hoodMotor.getDeviceTemp().getValueAsDouble());
+    Logger.recordOutput("Hood/Current Angle", m_currentAngle);
+    Logger.recordOutput("Hood/Setpoint",      m_setpoint);
+    Logger.recordOutput("Hood/At Setpoint",   atSetpoint());
   }
 }
