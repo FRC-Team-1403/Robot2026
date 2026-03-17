@@ -25,7 +25,7 @@ public class IntakeCommand extends Command {
 
   @Override
   public void execute() {
-    double targetPower = 1;
+    double targetPower = 1.0;
     double rampedPower = ramp.calculate(targetPower);
     m_intake.setIntakePower(rampedPower);
   }
@@ -37,7 +37,6 @@ public class IntakeCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    m_intake.setIntakePower(0.2);
     m_intake.stop();
   }
 }

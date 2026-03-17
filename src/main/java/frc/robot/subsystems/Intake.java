@@ -29,8 +29,8 @@ public class Intake extends SubsystemBase{
     private final StatusSignal<AngularVelocity> m_intakeVelocity;
 
      public Intake() {
-        m_intake = new TalonFX(Constants.Intake.m_intakeID);
-        m_intakeFollower = new TalonFX(Constants.Intake.m_intakeFollowerID);
+        m_intake = new TalonFX(Constants.Intake.m_intakeID,"Bus 2");
+        m_intakeFollower = new TalonFX(Constants.Intake.m_intakeFollowerID,"Bus 2");
 
         m_intakeVelocityRequest = new VelocityVoltage(0);
         m_intakeVelocityRequest.Slot = 0;
