@@ -12,7 +12,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import team1403.robot.commands.ControllerVibrationCommand;
+import team1403.robot.commands.DefaultSwerveCommand;
+import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.subsystems.Indexer;
@@ -22,6 +25,8 @@ import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.ShooterHood;
 import team1403.robot.subsystems.Spindexer;
 import team1403.robot.subsystems.Turret;
+import team1403.robot.swerve.SwerveSubsystem;
+import team1403.robot.swerve.TunerConstants;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -34,6 +39,7 @@ public class RobotContainer {
   private final Shooter m_shooter;
   private final ShooterHood m_shooterHood;
   private final Turret m_turret;
+  private final SwerveSubsystem m_swerve;
 
   //vibration command
   private final Timer m_teleopTimer;
@@ -48,7 +54,10 @@ public class RobotContainer {
   private LoggedDashboardChooser<Command> m_autoChooser;
 
   public RobotContainer() {
-    // m_swerve = TunerConstants.createDrivetrain();
+
+    m_swerve = TunerConstants.createDrivetrain();
+    
+
     m_intake = new Intake();
     m_intakeWrist = new IntakeWrist();
     m_indexer= new Indexer();
@@ -56,6 +65,7 @@ public class RobotContainer {
     m_shooter = new Shooter();
     m_shooterHood = new ShooterHood();
     m_turret = new Turret();
+
     
     //for vibration command
     m_teleopTimer = new Timer();
@@ -71,6 +81,14 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", m_autoChooser.getSendableChooser());
 
+    //avoid cluttering up auto chooser at competitions and to not accidently click
+    if (Constants.ENABLE_SYSID) {
+      m_autoChooser.addOption("Swerve SysID QF", m_swerve.sysIdQuasistatic(Direction.kForward));
+      m_autoChooser.addOption("Swerve SysID QR", m_swerve.sysIdQuasistatic(Direction.kReverse));
+      m_autoChooser.addOption("Swerve SysID DF", m_swerve.sysIdDynamic(Direction.kForward));
+      m_autoChooser.addOption("Swerve SysID DR", m_swerve.sysIdDynamic(Direction.kReverse));
+      m_autoChooser.addOption("Drive Wheel Characterization", new DriveWheelCharacterization(m_swerve));
+    }
 
 
     configureBindings();
@@ -89,6 +107,18 @@ public class RobotContainer {
     m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
     m_operatorController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,1500,800,3000));
 
+    //swerve buttons 
+    m_swerve.setDefaultCommand(new DefaultSwerveCommand(
+        m_swerve, 
+        () -> -m_driverController.getLeftX(),               //horozontal
+        () -> -m_driverController.getLeftY(),               //verticle 
+        () -> -m_driverController.getRightX(),              //rotational 
+        () -> m_driverController.getHID().getPOV() == 180,  //x-mode  
+        () -> m_driverController.getHID().getPOV() == 0,    //robot relative  
+        () -> m_driverController.getRightTriggerAxis(),     //acceleration
+        () -> m_driverController.getLeftTriggerAxis()));    //snipping mode (slow down)
+
+
 
     //vibration command - untested 
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> {
@@ -106,7 +136,7 @@ public class RobotContainer {
             new ControllerVibrationCommand(m_driverController.getHID(), 0.6, 0.5).asProxy(),
             new ControllerVibrationCommand(m_operatorController.getHID(), 0.6, 0.5).asProxy()
         ));
-}
+    } 
   }
 
   /**

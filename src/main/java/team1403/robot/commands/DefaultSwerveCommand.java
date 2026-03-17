@@ -36,7 +36,6 @@ public class DefaultSwerveCommand extends Command {
   private final DoubleSupplier m_speedSupplier;
   private final DoubleSupplier m_snipingMode;
   private final BooleanSupplier m_robotRelativeMode;
-  private final BooleanSupplier m_autoRotate;
   private final Debouncer m_robotRelativeDebouncer 
     = new Debouncer(0.3, DebounceType.kFalling);
   private boolean m_isFieldRelative = true;
@@ -44,7 +43,7 @@ public class DefaultSwerveCommand extends Command {
   private SlewRateLimiter m_rotationRateLimiter;
   private double prev_horizontal = 0;
   private double prev_vertical = 0;
-  private static final double kMaxVelocityChange = 13 * Constants.kLoopTime;
+  private static final double kMaxVelocityChange = 13 * Constants.kLoopTime; 
 
   private double m_speedLimiter = 0.2;
 
@@ -76,7 +75,6 @@ public class DefaultSwerveCommand extends Command {
       DoubleSupplier rotationSupplier,
       BooleanSupplier xModeSupplier,
       BooleanSupplier robotRelativeSupplier,
-      BooleanSupplier autoRotate,
       DoubleSupplier speedSupplier,
       DoubleSupplier snipingMode) {
     this.m_drivetrainSubsystem = drivetrain;
@@ -87,7 +85,6 @@ public class DefaultSwerveCommand extends Command {
     this.m_xModeSupplier = xModeSupplier;
     this.m_snipingMode = snipingMode;
     this.m_robotRelativeMode = robotRelativeSupplier;
-    this.m_autoRotate = autoRotate;
     m_isFieldRelative = true;
     m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
 
