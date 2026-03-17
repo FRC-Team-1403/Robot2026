@@ -106,7 +106,10 @@ public class RobotContainer {
   private void configureBindings() {
     m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
     m_operatorController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,1500,800,3000));
-
+    
+    //m_operatorController.rightTrigger().whileTrue(
+    //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
+    
     //swerve buttons 
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
         m_swerve, 

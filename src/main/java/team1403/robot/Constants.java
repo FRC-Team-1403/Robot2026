@@ -51,7 +51,7 @@ public final class Constants {
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
-    public static final Translation2d kTurretOffset = new Translation2d(-0.094409, 0.168886); //tune
+    public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
   }
 
   public static class Swerve {
@@ -176,7 +176,7 @@ public final class Constants {
     public static final int m_intakeTurretSideLeaderID = 41;
     public static final int m_intakeNonTurretSideFollowerID = 42;
 
-    public static final double rollerRPM = 5000;
+    public static final double rollerPower = 1;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -205,7 +205,7 @@ public final class Constants {
     public static final double kMinAngleDegrees = 0.0;
     public static final double kMaxAngleDegrees = 90.0;
 
-    public static final double  wristRPMStartAngle = 60.0;
+    public static final double  wristPowerStartAngle = 60.0;
 
     public static final double kGain = 1.0;
     public static final double kToleranceDegrees = 2.0;
