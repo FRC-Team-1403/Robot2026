@@ -50,6 +50,13 @@ public class ShooterCommand extends Command {
     {Constants.ShooterTuning.myAllianceZone.range6Distance, Constants.ShooterTuning.myAllianceZone.range6ShooterRpm, Constants.ShooterTuning.myAllianceZone.range6HoodAngle},
     {Constants.ShooterTuning.myAllianceZone.range7Distance, Constants.ShooterTuning.myAllianceZone.range7ShooterRpm, Constants.ShooterTuning.myAllianceZone.range7HoodAngle},
     {Constants.ShooterTuning.myAllianceZone.range8Distance, Constants.ShooterTuning.myAllianceZone.range8ShooterRpm, Constants.ShooterTuning.myAllianceZone.range8HoodAngle},
+    {Constants.ShooterTuning.myAllianceZone.range9Distance, Constants.ShooterTuning.myAllianceZone.range9ShooterRpm, Constants.ShooterTuning.myAllianceZone.range9HoodAngle},
+    {Constants.ShooterTuning.myAllianceZone.range10Distance, Constants.ShooterTuning.myAllianceZone.range10ShooterRpm, Constants.ShooterTuning.myAllianceZone.range10HoodAngle},
+    {Constants.ShooterTuning.myAllianceZone.range11Distance, Constants.ShooterTuning.myAllianceZone.range11ShooterRpm, Constants.ShooterTuning.myAllianceZone.range11HoodAngle},
+    {Constants.ShooterTuning.myAllianceZone.range12Distance, Constants.ShooterTuning.myAllianceZone.range12ShooterRpm, Constants.ShooterTuning.myAllianceZone.range12HoodAngle},
+    {Constants.ShooterTuning.myAllianceZone.range13Distance, Constants.ShooterTuning.myAllianceZone.range13ShooterRpm, Constants.ShooterTuning.myAllianceZone.range13HoodAngle},
+    {Constants.ShooterTuning.myAllianceZone.range14Distance, Constants.ShooterTuning.myAllianceZone.range14ShooterRpm, Constants.ShooterTuning.myAllianceZone.range14HoodAngle},
+    
   };
 
   private static final double[][] neutralTable = {
@@ -61,6 +68,7 @@ public class ShooterCommand extends Command {
     {Constants.ShooterTuning.neutralZone.range6Distance, Constants.ShooterTuning.neutralZone.range6ShooterRpm, Constants.ShooterTuning.neutralZone.range6HoodAngle},
     {Constants.ShooterTuning.neutralZone.range7Distance, Constants.ShooterTuning.neutralZone.range7ShooterRpm, Constants.ShooterTuning.neutralZone.range7HoodAngle},
     {Constants.ShooterTuning.neutralZone.range8Distance, Constants.ShooterTuning.neutralZone.range8ShooterRpm, Constants.ShooterTuning.neutralZone.range8HoodAngle},
+    {Constants.ShooterTuning.neutralZone.range9Distance, Constants.ShooterTuning.neutralZone.range9ShooterRpm, Constants.ShooterTuning.neutralZone.range9HoodAngle},
   };
 
   private static final double[][] opposingAllianceTable = {
@@ -131,8 +139,8 @@ public class ShooterCommand extends Command {
 
     // If the distance is suspiciously small, the pose estimator is likely giving
     // bad data. Skip this loop entirely to avoid sending garbage values to hardware.
-    if (distance < 0.1) {
-      Logger.recordOutput("Shooter/Warning", "Distance < 0.1m — skipping loop, check pose estimator");
+    if (distance < 0.3) {
+      Logger.recordOutput("Shooter/Warning", "Distance < 0.3m — skipping loop, check pose estimator");
       return;
     }
 

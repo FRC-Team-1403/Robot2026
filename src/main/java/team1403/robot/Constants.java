@@ -26,8 +26,8 @@ public final class Constants {
 
   public static class ScoringLocation{
     public static final Translation2d kHubPosition = new Translation2d(8.27, 4.105);
-    public static final Translation2d kFeedTopPosition    = new Translation2d(4.03, 6.5);
-    public static final Translation2d kFeedBottomPosition = new Translation2d(4.03, 1.5);
+    public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
+    public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
   }
 
   public static class Turret {
@@ -46,14 +46,12 @@ public final class Constants {
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
     public static final double kToleranceDegrees = 0.25;
-    public static final double kGearRatio = (56.0 / 16.0);
-
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
-    public static final Translation2d kTurretOffset = new Translation2d(0.1, 0.05); //tune
+    public static final Translation2d kTurretOffset = new Translation2d(-0.094409, 0.168886); //tune
   }
 
   public static class Swerve {
@@ -117,8 +115,8 @@ public final class Constants {
     public static final double kMinSpeed = 2.0;
 
     public static final double kToleranceDegrees = 0.3;
-    public static final double kGearRatioEncoder = (56.0 / 16.0);
-    public static final double kGearRatioHoodAngleRatio = (56.0 / 16.0) * (175.0 / 10.0);
+    public static final double kGearRatioEncoder = (54.0 / 18.0);
+    public static final double kGearRatioHoodAngleRatio = (54.0 / 18.0) * (175.0 / 10.0);
 
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;
@@ -137,7 +135,7 @@ public final class Constants {
     public static final int flywheelLeaderID = 23;
     public static final int flywheelFollower1TopRightID = 24;
     public static final int flywheelFollower2BottonRightID = 25;
-    public static final double flywheelGearRatio = 1;
+    public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 90.0;
 
     public static final double kP = 0.075;
@@ -232,119 +230,147 @@ public final class Constants {
 
     public static final class myAllianceZone {
 
-      public static final double range1Distance = 1.0;
-      public static final double range2Distance = 1.5;
-      public static final double range3Distance = 2.0;
-      public static final double range4Distance = 2.5;
-      public static final double range5Distance = 3.0;
-      public static final double range6Distance = 3.5;
-      public static final double range7Distance = 4.0;
-      public static final double range8Distance = 4.5;
+      public static final double range1Distance = 0.3;
+      public static final double range2Distance = 0.6;
+      public static final double range3Distance = 0.9;
+      public static final double range4Distance = 1.2;
+      public static final double range5Distance = 1.5;
+      public static final double range6Distance = 1.8;
+      public static final double range7Distance = 2.1;
+      public static final double range8Distance = 2.4;
+      public static final double range9Distance = 2.7;
+      public static final double range10Distance = 3.0;
+      public static final double range11Distance = 3.3;
+      public static final double range12Distance = 3.6;
+      public static final double range13Distance = 3.9;
+      public static final double range14Distance = 4.2;
 
       public static final double range1IndexerRpm = 1500;
       public static final double range1SpindexerRpm = 1000;
 
-      public static final double range1ShooterRpm = 1800;
-      public static final double range1HoodAngle = 10;
+      public static final double range1ShooterRpm = 700;
+      public static final double range1HoodAngle = 20;
 
-      public static final double range2ShooterRpm = 1900;
-      public static final double range2HoodAngle = 12;
+      public static final double range2ShooterRpm = 800;
+      public static final double range2HoodAngle = 20;
 
-      public static final double range3ShooterRpm = 2000;
-      public static final double range3HoodAngle = 14;
+      public static final double range3ShooterRpm = 900;
+      public static final double range3HoodAngle = 20;
 
-      public static final double range4ShooterRpm = 2100;
-      public static final double range4HoodAngle = 16;
+      public static final double range4ShooterRpm = 1000;
+      public static final double range4HoodAngle = 20;
 
-      public static final double range5ShooterRpm = 2200;
-      public static final double range5HoodAngle = 18;
+      public static final double range5ShooterRpm = 1100;
+      public static final double range5HoodAngle = 20;
 
-      public static final double range6ShooterRpm = 2300;
+      public static final double range6ShooterRpm = 1200;
       public static final double range6HoodAngle = 20;
 
-      public static final double range7ShooterRpm = 2400;
-      public static final double range7HoodAngle = 22;
+      public static final double range7ShooterRpm = 1300;
+      public static final double range7HoodAngle = 20;
 
-      public static final double range8ShooterRpm = 2500;
-      public static final double range8HoodAngle = 24;
+      public static final double range8ShooterRpm = 1400;
+      public static final double range8HoodAngle = 20;
+
+      public static final double range9ShooterRpm = 1400;
+      public static final double range9HoodAngle = 20;
+
+      public static final double range10ShooterRpm = 1500;
+      public static final double range10HoodAngle = 20;
+
+      public static final double range11ShooterRpm = 1600;
+      public static final double range11HoodAngle = 20;
+
+      public static final double range12ShooterRpm = 1700;
+      public static final double range12HoodAngle = 20;
+
+      public static final double range13ShooterRpm = 1800;
+      public static final double range13HoodAngle = 20;
+
+      public static final double range14ShooterRpm = 1900;
+      public static final double range14HoodAngle = 20;
+
     }
 
     public static final class neutralZone {
+      public static final double range1Distance = 1.0;
+      public static final double range2Distance = 2.0;
+      public static final double range3Distance = 3.0;
+      public static final double range4Distance = 4.0;
+      public static final double range5Distance = 5.0;
+      public static final double range6Distance = 6.0;
+      public static final double range7Distance = 7.0;
+      public static final double range8Distance = 8.0;
+      public static final double range9Distance = 9.0;
 
-      public static final double range1Distance = 1.2;
-      public static final double range2Distance = 1.7;
-      public static final double range3Distance = 2.2;
-      public static final double range4Distance = 2.7;
-      public static final double range5Distance = 3.2;
-      public static final double range6Distance = 3.7;
-      public static final double range7Distance = 4.2;
-      public static final double range8Distance = 4.7;
-
-      public static final double range1IndexerRpm = 1600;
+      public static final double range1IndexerRpm = 1000;
       public static final double range1SpindexerRpm = 1100;
 
-      public static final double range1ShooterRpm = 1900;
-      public static final double range1HoodAngle = 12;
+      public static final double range1ShooterRpm = 1200;
+      public static final double range1HoodAngle = 30;
 
-      public static final double range2ShooterRpm = 2000;
-      public static final double range2HoodAngle = 14;
+      public static final double range2ShooterRpm = 1450;
+      public static final double range2HoodAngle = 30;
 
-      public static final double range3ShooterRpm = 2100;
-      public static final double range3HoodAngle = 16;
+      public static final double range3ShooterRpm = 1700;
+      public static final double range3HoodAngle = 30;
 
-      public static final double range4ShooterRpm = 2200;
-      public static final double range4HoodAngle = 18;
+      public static final double range4ShooterRpm = 1950;
+      public static final double range4HoodAngle = 30;
 
-      public static final double range5ShooterRpm = 2300;
-      public static final double range5HoodAngle = 20;
+      public static final double range5ShooterRpm = 2200;
+      public static final double range5HoodAngle = 30;
 
-      public static final double range6ShooterRpm = 2400;
-      public static final double range6HoodAngle = 22;
+      public static final double range6ShooterRpm = 2450;
+      public static final double range6HoodAngle = 30;
 
-      public static final double range7ShooterRpm = 2500;
-      public static final double range7HoodAngle = 24;
+      public static final double range7ShooterRpm = 2700;
+      public static final double range7HoodAngle = 30;
 
-      public static final double range8ShooterRpm = 2600;
-      public static final double range8HoodAngle = 26;
+      public static final double range8ShooterRpm = 2950;
+      public static final double range8HoodAngle = 30;
+
+      public static final double range9ShooterRpm = 3200;
+      public static final double range9HoodAngle = 30;
     }
 
     public static final class opposingAllianceZone {
 
-      public static final double range1Distance = 1.5;
-      public static final double range2Distance = 2.0;
-      public static final double range3Distance = 2.5;
-      public static final double range4Distance = 3.0;
-      public static final double range5Distance = 3.5;
-      public static final double range6Distance = 4.0;
-      public static final double range7Distance = 4.5;
-      public static final double range8Distance = 5.0;
+      public static final double range1Distance = 8.0;
+      public static final double range2Distance = 9.0;
+      public static final double range3Distance = 10.0;
+      public static final double range4Distance = 11.0;
+      public static final double range5Distance = 12.0;
+      public static final double range6Distance = 13.0;
+      public static final double range7Distance = 14.0;
+      public static final double range8Distance = 15.0;
 
       public static final double range1IndexerRpm = 1700;
       public static final double range1SpindexerRpm = 1200;
 
-      public static final double range1ShooterRpm = 2000;
-      public static final double range1HoodAngle = 14;
+      public static final double range1ShooterRpm = 2950;
+      public static final double range1HoodAngle = 30;
 
-      public static final double range2ShooterRpm = 2100;
-      public static final double range2HoodAngle = 16;
+      public static final double range2ShooterRpm = 3200;
+      public static final double range2HoodAngle = 30;
 
-      public static final double range3ShooterRpm = 2200;
-      public static final double range3HoodAngle = 18;
+      public static final double range3ShooterRpm = 3450;
+      public static final double range3HoodAngle = 30;
 
-      public static final double range4ShooterRpm = 2300;
-      public static final double range4HoodAngle = 20;
+      public static final double range4ShooterRpm = 3700;
+      public static final double range4HoodAngle = 30;
 
-      public static final double range5ShooterRpm = 2400;
-      public static final double range5HoodAngle = 22;
+      public static final double range5ShooterRpm = 3950;
+      public static final double range5HoodAngle = 30;
 
-      public static final double range6ShooterRpm = 2500;
-      public static final double range6HoodAngle = 24;
+      public static final double range6ShooterRpm = 4200;
+      public static final double range6HoodAngle = 30;
 
-      public static final double range7ShooterRpm = 2600;
-      public static final double range7HoodAngle = 26;
+      public static final double range7ShooterRpm = 4450;
+      public static final double range7HoodAngle = 30;
 
-      public static final double range8ShooterRpm = 2700;
-      public static final double range8HoodAngle = 28;
+      public static final double range8ShooterRpm = 4600;
+      public static final double range8HoodAngle = 30;
     }
   }
 }
