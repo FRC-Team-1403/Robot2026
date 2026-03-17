@@ -58,9 +58,9 @@ public class Intake extends SubsystemBase{
         intakeFollowerConfg.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         intakeFollowerConfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeFollowerConfg.CurrentLimits.StatorCurrentLimit = 40;
-        intakeFollowerConfg.CurrentLimits.StatorCurrentLimitEnable = true;
+        intakeFollowerConfg.CurrentLimits.StatorCurrentLimitEnable = false;
         intakeFollowerConfg.CurrentLimits.SupplyCurrentLimit = 40;
-        intakeFollowerConfg.CurrentLimits.SupplyCurrentLimitEnable = true;
+        intakeFollowerConfg.CurrentLimits.SupplyCurrentLimitEnable = false;
         m_intakeFollower.getConfigurator().apply(intakeFollowerConfg);
         m_intakeFollower.setControl(new Follower(Constants.Intake.m_intakeID, MotorAlignmentValue.Opposed));
 
