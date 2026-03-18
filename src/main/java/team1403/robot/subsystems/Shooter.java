@@ -45,7 +45,7 @@ public class Shooter extends SubsystemBase {
     m_flywheelDutyCycleRequest = new DutyCycleOut(0);
 
     TalonFXConfiguration flywheelLeaderConfig = new TalonFXConfiguration();
-    flywheelLeaderConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    flywheelLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     flywheelLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     flywheelLeaderConfig.CurrentLimits.StatorCurrentLimit = 120;
     flywheelLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase {
     m_flywheelLeader.getConfigurator().apply(flywheelLeaderConfig);
 
     TalonFXConfiguration flywheelFollowerConfig = new TalonFXConfiguration();
-    flywheelFollowerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    flywheelFollowerConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     flywheelFollowerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     flywheelFollowerConfig.CurrentLimits.StatorCurrentLimit = 120;
     flywheelFollowerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -75,10 +75,11 @@ public class Shooter extends SubsystemBase {
     flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
 
     m_flywheelFollower.getConfigurator().apply(flywheelFollowerConfig);
+    
     m_flywheelFollower.setControl(new Follower(Constants.Shooter.flywheelLeaderID, MotorAlignmentValue.Opposed));
 
     TalonFXConfiguration flywheelFollower2Config = new TalonFXConfiguration();
-    flywheelFollower2Config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    flywheelFollower2Config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     flywheelFollower2Config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     flywheelFollower2Config.CurrentLimits.StatorCurrentLimit = 120;
     flywheelFollower2Config.CurrentLimits.StatorCurrentLimitEnable = true;
