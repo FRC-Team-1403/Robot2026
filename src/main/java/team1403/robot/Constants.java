@@ -151,11 +151,11 @@ public final class Constants {
     public static final double m_indexerGearRatio = 1.0;
     public static final double rpmTolerance = 20;
 
-    public static final double kP = 0;
+    public static final double kP = 0.05;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kS = 0;
-    public static final double kV = 0;
+    public static final double kV = 0.12;
     public static final double kA = 0;
   }
 
@@ -164,11 +164,11 @@ public final class Constants {
     public static final double m_spindexerGearRatio = 1.0;
     public static final double rpmTolerance = 20;
 
-    public static final double kP = 0;
+    public static final double kP = 0.05;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kS = 0;
-    public static final double kV = 0;
+    public static final double kV = 0.12;
     public static final double kA = 0;
   }
 
@@ -176,7 +176,7 @@ public final class Constants {
     public static final int m_intakeTurretSideLeaderID = 41;
     public static final int m_intakeNonTurretSideFollowerID = 42;
 
-    public static final double rollerPower = 1;
+    public static final double rollerPower = 0.1;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -194,26 +194,30 @@ public final class Constants {
   public static final class IntakeWrist {
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
+    public static final double kS = 0.0;
+    public static final double kG = 2.5;
+    public static final double kV = 0;
+    public static final double kA = 0;
 
-    public static final double kMagnetOffset = 1;
-    public static final double kGearRatioEncoder = 1;
-    public static final double kGearRatioWristAngleRatio = 1;
+    public static final double kMagnetOffset = 0.15;
+    public static final double kGearRatioEncoder = 1.0/1.0;
+    public static final double kGearRatioWristAngleRatio = 23.4/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
 
     public static final double kGearRatio = 1.0;
-    public static final double kDeployedAngle = 90.0;
-    public static final double kStowedAngle = 0.0;
-    public static final double kMinAngleDegrees = 0.0;
-    public static final double kMaxAngleDegrees = 90.0;
+    public static final double kDeployedAngle = 185.0;
+    public static final double kStowedAngle = 100.0;
+    public static final double kMinAngleDegrees = 2.0;
+    public static final double kMaxAngleDegrees = 175.0;
 
-    public static final double  wristPowerStartAngle = 60.0;
+    public static final double  wristPowerStartAngle = 90.0;
 
     public static final double kGain = 1.0;
-    public static final double kToleranceDegrees = 2.0;
-    public static final double kRampUpTime = 0.25;
-    public static final double kRampDownTime = 0.25;
-    public static final double kUnitsPerRampTime = 10.0;
-    public static final double kMaxSpeed = 100.0;
-    public static final double kMinSpeed = 5.0;
+    public static final double kToleranceDegrees = 3.0;
+    public static final double kRampUpTime = 0.01;;
+    public static final double kRampDownTime = 0.001;
+    public static final double kUnitsPerRampTime = 100.0;
+    public static final double kMaxSpeed = 5.0;
+    public static final double kMinSpeed = 0.0;
     public static final double kLoopTime = 0.02;
   }
 

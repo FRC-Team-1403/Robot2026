@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +33,8 @@ public class Spindexer extends SubsystemBase {
     spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     spindexerLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
     spindexerLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    spindexerLeaderConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
 
     Slot0Configs spindexerPIDConfig = new Slot0Configs();
     spindexerPIDConfig.kP = Constants.Spindexer.kP;

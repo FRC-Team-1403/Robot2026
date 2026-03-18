@@ -29,8 +29,8 @@ public class Intake extends SubsystemBase{
     private final StatusSignal<AngularVelocity> m_intakeVelocity;
 
      public Intake() {
-        m_intake = new TalonFX(Constants.Intake.m_intakeTurretSideLeaderID);
-        m_intakeFollower = new TalonFX(Constants.Intake.m_intakeNonTurretSideFollowerID);
+        m_intake = new TalonFX(Constants.Intake.m_intakeTurretSideLeaderID, "Bus 2");
+        m_intakeFollower = new TalonFX(Constants.Intake.m_intakeNonTurretSideFollowerID, "Bus 2");
 
         m_intakeVelocityRequest = new VelocityVoltage(0);
         m_intakeVelocityRequest.Slot = 0;
@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase{
         m_intakelDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
-        intakeConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        intakeConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
         intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -57,7 +57,7 @@ public class Intake extends SubsystemBase{
         intakeConfig.Slot0 = intakePIDConfig;
 
         TalonFXConfiguration intakeFollowerConfg = new TalonFXConfiguration();
-        intakeFollowerConfg.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        intakeFollowerConfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         intakeFollowerConfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeFollowerConfg.CurrentLimits.StatorCurrentLimit = 120;
         intakeFollowerConfg.CurrentLimits.StatorCurrentLimitEnable = true;

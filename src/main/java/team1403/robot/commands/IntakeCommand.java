@@ -9,7 +9,7 @@ import team1403.robot.subsystems.IntakeWrist;
 public class IntakeCommand extends Command {
   private final Intake m_intake;
   private final IntakeWrist m_intakeWrist;
-  private final SlewRateLimiter m_slewRateLimiter = new SlewRateLimiter(0.3);
+  //private final SlewRateLimiter m_slewRateLimiter = new SlewRateLimiter(0.3);
 
   public IntakeCommand(Intake m_intake, IntakeWrist m_intakeWrist) {
     this.m_intake = m_intake;
@@ -21,13 +21,12 @@ public class IntakeCommand extends Command {
   @Override
   public void initialize() {
     m_intakeWrist.setSetpoint(Constants.IntakeWrist.kDeployedAngle);
-    m_slewRateLimiter.reset(0);
   }
 
   @Override
   public void execute() {
     if (m_intakeWrist.getWristAngle() > Constants.IntakeWrist.wristPowerStartAngle) {
-      m_intake.setIntakePower(m_slewRateLimiter.calculate(Constants.Intake.rollerPower));
+      m_intake.setIntakePower(Constants.Intake.rollerPower);
     }
   }
 

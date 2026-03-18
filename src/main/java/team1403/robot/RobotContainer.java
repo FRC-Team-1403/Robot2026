@@ -31,14 +31,13 @@ import team1403.robot.swerve.TunerConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
-  // private final SwerveSubsystem m_swerve;
-  private final Intake m_intake;
-  private final IntakeWrist m_intakeWrist;
+  //private final Intake m_intake;
+  //private final IntakeWrist m_intakeWrist;
   private final Indexer m_indexer;
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
-  private final ShooterHood m_shooterHood;
-  private final Turret m_turret;
+  //private final ShooterHood m_shooterHood;
+  //private final Turret m_turret;
   private final SwerveSubsystem m_swerve;
 
   //vibration command
@@ -57,14 +56,13 @@ public class RobotContainer {
 
     m_swerve = TunerConstants.createDrivetrain();
     
-
-    m_intake = new Intake();
-    m_intakeWrist = new IntakeWrist();
+    //m_intake = new Intake();
+    //m_intakeWrist = new IntakeWrist();
     m_indexer= new Indexer();
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
-    m_shooterHood = new ShooterHood();
-    m_turret = new Turret();
+    // m_shooterHood = new ShooterHood();
+    // m_turret = new Turret();
 
     
     //for vibration command
@@ -104,8 +102,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_operatorController.a().toggleOnTrue(new IntakeCommand(m_intake, m_intakeWrist));
-    m_operatorController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,1500,800,3000));
+    //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));
+    m_driverController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,3000,5000,0));
     
     //m_operatorController.rightTrigger().whileTrue(
     //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
@@ -124,22 +122,22 @@ public class RobotContainer {
 
 
     //vibration command - untested 
-    RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> {
-      m_teleopTimer.reset();
-      m_teleopTimer.start();
-      }
-    ));
-    double[] shiftTimes = {140, 125, 105, 80, 55, 30};
-    for (double shiftTime : shiftTimes) {
-      final double time = 150 - shiftTime; // convert "time remaining" to "time elapsed"
-      new Trigger(() -> DriverStation.isTeleopEnabled()
-        && m_teleopTimer.get() <= time + 0.5
-        && m_teleopTimer.get() >= time - 0.5)
-        .onTrue(Commands.parallel(
-            new ControllerVibrationCommand(m_driverController.getHID(), 0.6, 0.5).asProxy(),
-            new ControllerVibrationCommand(m_operatorController.getHID(), 0.6, 0.5).asProxy()
-        ));
-    } 
+    // RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> {
+    //   m_teleopTimer.reset();
+    //   m_teleopTimer.start();
+    //   }
+    // ));
+    // double[] shiftTimes = {140, 125, 105, 80, 55, 30};
+    // for (double shiftTime : shiftTimes) {
+    //   final double time = 150 - shiftTime; // convert "time remaining" to "time elapsed"
+    //   new Trigger(() -> DriverStation.isTeleopEnabled()
+    //     && m_teleopTimer.get() <= time + 0.5
+    //     && m_teleopTimer.get() >= time - 0.5)
+    //     .onTrue(Commands.parallel(
+    //         new ControllerVibrationCommand(m_driverController.getHID(), 0.6, 0.5).asProxy(),
+    //         new ControllerVibrationCommand(m_operatorController.getHID(), 0.6, 0.5).asProxy()
+    //     ));
+    // } 
   }
 
   /**

@@ -211,6 +211,7 @@ public class ShooterCommand extends Command {
     m_shooter.stop();
     m_indexer.stop();
     m_spindexer.stop();
+    m_shooterHood.setSetpoint(0);
     m_isFeeding = false;
   }
 

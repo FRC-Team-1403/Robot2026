@@ -48,7 +48,7 @@ public class FixedTurretTrackingCommand extends Command {
     Logger.recordOutput("TurretCommand/FieldAngleToGoal", fieldAngleToGoal);
     Logger.recordOutput("TurretCommand/TurretAngle", turretAngle);
 
-    m_turret.setSetpoint(turretAngle);
+    m_turret.setSetpoint(turretAngle-90);
   }
 
   @Override
