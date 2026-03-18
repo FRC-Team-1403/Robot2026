@@ -142,7 +142,7 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0.001;
     public static final double kS = 0.1;
-    public static final double kV = 0.13;
+    public static final double kV = 0.12;
     public static final double kA = 0.2;
   }
 
@@ -151,12 +151,12 @@ public final class Constants {
     public static final double m_indexerGearRatio = 1.0;
     public static final double rpmTolerance = 20;
 
-    public static final double kP = 0.05;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kS = 0;
+    public static final double kP = 0.08;
+    public static final double kI = 0.01;
+    public static final double kD = 0.0005;
+    public static final double kS = 0.10;
     public static final double kV = 0.12;
-    public static final double kA = 0;
+    public static final double kA = 2.0;
   }
 
   public static class Spindexer {
@@ -164,12 +164,12 @@ public final class Constants {
     public static final double m_spindexerGearRatio = 1.0;
     public static final double rpmTolerance = 20;
 
-    public static final double kP = 0.05;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kS = 0;
-    public static final double kV = 0.12;
-    public static final double kA = 0;
+    public static final double kP = 0.04;
+    public static final double kI = 0.0;
+    public static final double kD = 0.01;
+    public static final double kS = 0.10;
+    public static final double kV = 0.115;
+    public static final double kA = 2.0;
   }
 
   public static class Intake {
