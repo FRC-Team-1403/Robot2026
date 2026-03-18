@@ -23,7 +23,21 @@ public class IntakeCommand extends Command {
     m_intakeWrist.setSetpoint(Constants.IntakeWrist.kDeployedAngle);
   }
 
-  @Override
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
   public void execute() {
     if (m_intakeWrist.getWristAngle() > Constants.IntakeWrist.wristPowerStartAngle) {
       m_intake.setIntakePower(Constants.Intake.rollerPower);
