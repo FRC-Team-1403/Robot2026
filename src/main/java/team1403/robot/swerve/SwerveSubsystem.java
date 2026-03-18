@@ -130,19 +130,19 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
       m_state = getState();
       super.resetPose(CougarUtil.getInitialRobotPose());
 
-    //   AutoBuilder.configure(
-    //     this::getPose,
-    //     this::resetOdometry,
-    //     () -> m_state.Speeds,
-    //     (s, ff) -> drive(s, ff),
-    //     new PPHolonomicDriveController(
-    //         TunerConstants.kTranslationPID,
-    //         TunerConstants.kRotationPID,
-    //         Constants.kLoopTime
-    //     ),
-    //     CougarUtil.loadRobotConfig(),
-    //     () -> CougarUtil.shouldMirrorPath(),
-    //     this);
+      AutoBuilder.configure(
+        this::getPose,
+        this::resetOdometry,
+        () -> m_state.Speeds,
+        (s, ff) -> drive(s, ff),
+        new PPHolonomicDriveController(
+            TunerConstants.kTranslationPID,
+            TunerConstants.kRotationPID,
+            Constants.kLoopTime
+        ),
+        CougarUtil.loadRobotConfig(),
+        () -> CougarUtil.shouldMirrorPath(),
+        this);
 
         Pathfinding.setPathfinder(new LocalADStar());
 

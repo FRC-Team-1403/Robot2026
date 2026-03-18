@@ -12,7 +12,7 @@ public final class Constants {
   public static final double kLoopTime = 0.02;
   //controls if the debug tab is used on shuffleboard
   public static final boolean DEBUG_MODE = false;
-  public static final boolean ENABLE_SYSID = false;
+  public static final boolean ENABLE_SYSID = true;
   //controls if the debug tab is used on shuffleboard
 
 

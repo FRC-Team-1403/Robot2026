@@ -103,7 +103,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));\
-    m_driverController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,3600,5800,2200));
+    m_driverController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,3600,5800,2320));
     
     //m_operatorController.rightTrigger().whileTrue(
     //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));

@@ -39,10 +39,10 @@ public class InSpinShootCommand extends Command {
 
     @Override
     public void execute() {
-        //if (m_shooter.isFlywheelAtSpeed()) {
+        if (m_shooter.isFlywheelAtSpeed()) {
             m_indexer.setIndexerRPM(m_indexerRPM);
             m_spindexer.setSpindexerRPM(m_spindexerRPM);
-        //}
+        }
     }
 
     @Override
