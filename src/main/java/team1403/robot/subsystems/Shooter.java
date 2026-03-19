@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     m_flywheelFollower2 = new TalonFX(Constants.Shooter.flywheelFollower2BottonRightID, "Bus 2");
     m_flywheelVelocityRequest = new VelocityVoltage(0);
     m_flywheelVelocityRequest.Slot = 0;
-    m_flywheelVelocityRequest.EnableFOC = true;
+    m_flywheelVelocityRequest.EnableFOC = false;
     m_flywheelDutyCycleRequest = new DutyCycleOut(0);
 
     TalonFXConfiguration flywheelLeaderConfig = new TalonFXConfiguration();
