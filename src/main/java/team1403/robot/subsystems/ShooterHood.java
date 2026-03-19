@@ -103,7 +103,8 @@ public class ShooterHood extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    return m_customController.isAtPosition();
+    //return m_customController.isAtPosition();\
+    return Math.abs(getSetpoint()-getHoodAngle())<2.0;
   }
 
   public void adjustSetpoint(double degrees) {

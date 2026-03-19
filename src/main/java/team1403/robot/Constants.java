@@ -135,7 +135,7 @@ public final class Constants {
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
-    public static final double kMagnetOffset = -0.398;
+    public static final double kMagnetOffset = -0.433;
     public static final double kS = 0.0;
     public static final double kG = 2.5;
     public static final double kV = 0;
@@ -391,14 +391,32 @@ public final class Constants {
   }
 
   public static final class InSpinShoot {
-    public static final double kAutoIndexerRPM = 3600; 
-    public static final double kAutoSpindexerRPM = 5800;
-    public static final double kAutoShooterRPM = 3000; // TODO: FIX
-    public static final double kAutoHoodAngle = 30; // TODO: FIX
 
-    public static final double kIndexerRPM = 3600;
-    public static final double kSpindexerRPM = 5800;
-    public static final double kShooterRPM = 3000; // TODO: FIX
-    public static final double kHoodAngle = 30; // TODO: FIX
+    //against hub 
+    public static final double kIndexerRPM_hub = 2500;
+    public static final double kSpindexerRPM_hub = 4000;
+    public static final double kShooterRPM_hub = 2500; 
+    public static final double kHoodAngle_hub = 0; 
+
+    //against tower 
+    public static final double kIndexerRPM_tower  = 0;
+    public static final double kSpindexerRPM_tower = 0;
+    public static final double kShooterRPM_tower = 0; 
+    public static final double kHoodAngle_tower = 0; 
+
+    //depo feed (left) 
+    public static final double kIndexerRPM_left = 3600;
+    public static final double kSpindexerRPM_left = 5800;
+    public static final double kShooterRPM_left = 3000; 
+    public static final double kHoodAngle_left = 30;
+
+    //human player feed (right)
+    public static final double kIndexerRPM_right = 3600;
+    public static final double kSpindexerRPM_right = 5800;
+    public static final double kShooterRPM_right = 3000;
+    public static final double kHoodAngle_right = 30;
+    
+    //auto 
+
   }
 }

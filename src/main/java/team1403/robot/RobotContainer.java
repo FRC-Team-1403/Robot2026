@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,6 +22,7 @@ import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.IntakeCommand;
+import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.auto.AutoHelper;
 import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Intake;
@@ -105,12 +107,33 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));
-    //m_operatorController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, Constants.InSpinShoot.kIndexerRPM ,Constants.InSpinShoot.kSpindexerRPM, Constants.InSpinShoot.kShooterRPM, Constants.InSpinShoot.kHoodAngle));
+    //Shooting Commands 
+      //against hub 
+    m_shooter.setDefaultCommand(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 0, 0));
+    m_operatorController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
+                                    Constants.InSpinShoot.kIndexerRPM_hub ,Constants.InSpinShoot.kSpindexerRPM_hub,
+                                    Constants.InSpinShoot.kShooterRPM_hub, Constants.InSpinShoot.kHoodAngle_hub));
+      //against tower 
+    m_operatorController.leftTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
+                                    Constants.InSpinShoot.kIndexerRPM_tower ,Constants.InSpinShoot.kSpindexerRPM_tower,
+                                    Constants.InSpinShoot.kShooterRPM_tower, Constants.InSpinShoot.kHoodAngle_tower));
+      //feed depo side (left)
+    m_operatorController.leftBumper().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
+                                    Constants.InSpinShoot.kIndexerRPM_left ,Constants.InSpinShoot.kSpindexerRPM_left,
+                                    Constants.InSpinShoot.kShooterRPM_left, Constants.InSpinShoot.kHoodAngle_left));
+      //feed human player side (right) 
+    m_operatorController.rightBumper().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
+                                    Constants.InSpinShoot.kIndexerRPM_right ,Constants.InSpinShoot.kSpindexerRPM_right,
+                                    Constants.InSpinShoot.kShooterRPM_right, Constants.InSpinShoot.kHoodAngle_right));
 
-    //m_operatorController.rightTrigger().whileTrue(
-    //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
-  
+    
+    m_operatorController.b().whileTrue(new IntakeCommand(m_intake, 1));
+    m_operatorController.x().onTrue(new IntakeCommand(m_intake, 0));
+    m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new WristCommand(m_intakeWrist, -0.3), 
+                                                                    new IntakeCommand(m_intake, 1)));
+    m_operatorController.povDown().whileTrue(new WristCommand(m_intakeWrist, 0.3));
+    
+
 
     //swerve buttons 
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
@@ -125,13 +148,12 @@ public class RobotContainer {
         () -> m_driverController.getHID().getStartButton()
         ));
 
-    //Intake buttons
-    m_intake.setDefaultCommand(new IntakeCommand(m_intake, m_intakeWrist));
-
     
-    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, m_intakeWrist));
-    NamedCommands.registerCommand("Stationary Shoot Command", 
-            new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, Constants.InSpinShoot.kAutoIndexerRPM, Constants.InSpinShoot.kAutoSpindexerRPM, Constants.InSpinShoot.kAutoShooterRPM, Constants.InSpinShoot.kAutoHoodAngle));
+    // //NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake));
+    // NamedCommands.registerCommand("Stationary Shoot Command", 
+    //         new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 
+   // Constants.InSpinShoot.kAutoIndexerRPM, Constants.InSpinShoot.kAutoSpindexerRPM, 
+    //Constants.InSpinShoot.kAutoShooterRPM, Constants.InSpinShoot.kAutoHoodAngle));
 
 
     m_autoChooser.addOption("STATIONARY SHOOT", AutoHelper.getStationaryShoot(m_swerve));

@@ -38,9 +38,9 @@ public class IntakeWrist extends SubsystemBase {
 
     wristMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
     wristMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    wristMotorConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    wristMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
     wristMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    wristMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    wristMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
     wristMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
 
     m_wristff =

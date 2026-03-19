@@ -9,11 +9,10 @@ import team1403.robot.subsystems.IntakeWrist;
 
 public class IntakeCommand extends Command {
   private final Intake m_intake;
-  private final IntakeWrist m_wrist;
-
-  public IntakeCommand(Intake m_intake, IntakeWrist wrist) {
+  private final double intakeSpeed;
+  public IntakeCommand(Intake m_intake, double intakeSpeed) {
     this.m_intake = m_intake;
-    this.m_wrist = wrist;
+    this.intakeSpeed = intakeSpeed;
 
     addRequirements(m_intake);
   }
@@ -24,12 +23,7 @@ public class IntakeCommand extends Command {
   
   @Override
   public void execute() {
-    if (Math.abs(m_wrist.getWristAngle() - Constants.IntakeWrist.kDeployedAngle) < 0.5) {
-      m_intake.setIntakePower(Constants.Intake.rollerPower);
-    }
-    else {
-      m_intake.setIntakePower(0);
-    }
+    m_intake.setIntakePower(intakeSpeed);
   }
 
   @Override

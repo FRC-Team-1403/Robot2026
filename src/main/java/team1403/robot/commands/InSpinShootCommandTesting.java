@@ -7,7 +7,7 @@ import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.ShooterHood;
 import team1403.robot.subsystems.Spindexer;
 
-public class InSpinShootCommand extends Command {
+public class InSpinShootCommandTesting extends Command {
     private final Indexer m_indexer;
     private final Spindexer m_spindexer;
     private final Shooter m_shooter;
@@ -18,7 +18,7 @@ public class InSpinShootCommand extends Command {
     private final double m_shooterRPM;
     private final double m_hoodAngle;
 
-    public InSpinShootCommand(
+    public InSpinShootCommandTesting(
             Indexer indexer,
             Spindexer spindexer,
             Shooter shooter,
@@ -37,20 +37,25 @@ public class InSpinShootCommand extends Command {
         m_shooterRPM = shooterRPM;
         m_hoodAngle = hoodAngle;
 
+        SmartDashboard.setDefaultNumber("InSpinShoot/IndexerRPM", m_indexerRPM);
+        SmartDashboard.setDefaultNumber("InSpinShoot/SpindexerRPM", m_spindexerRPM);
+        SmartDashboard.setDefaultNumber("InSpinShoot/ShooterRPM", m_shooterRPM);
+        SmartDashboard.setDefaultNumber("InSpinShoot/HoodAngle", m_hoodAngle);
+
         addRequirements(indexer, spindexer, shooter, hood);
     }
 
     @Override
     public void initialize() {
-        m_shooter.setFlywheelTargetRPM(m_shooterRPM);
-        m_shooterHood.setSetpoint(m_hoodAngle);
     }
 
     @Override
     public void execute() {
+        m_shooter.setFlywheelTargetRPM(SmartDashboard.getNumber("InSpinShoot/ShooterRPM", m_shooterRPM));
+        m_shooterHood.setSetpoint(SmartDashboard.getNumber("InSpinShoot/HoodAngle", m_hoodAngle));
         if (m_shooter.isFlywheelAtSpeed() && m_shooterHood.atSetpoint()) {
-            m_indexer.setIndexerRPM(m_indexerRPM);
-            m_spindexer.setSpindexerRPM(m_spindexerRPM);
+            m_indexer.setIndexerRPM(SmartDashboard.getNumber("InSpinShoot/IndexerRPM", m_indexerRPM));
+            m_spindexer.setSpindexerRPM(SmartDashboard.getNumber("InSpinShoot/SpindexerRPM", m_spindexerRPM));
         }
     }
 

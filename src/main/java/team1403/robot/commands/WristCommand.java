@@ -8,12 +8,11 @@ import team1403.robot.subsystems.IntakeWrist;
 
 public class WristCommand extends Command {
   private final IntakeWrist m_intakeWrist;
-  private final double m_speed;
+  private final double wristSpeed;
 
-  public WristCommand(IntakeWrist m_intakeWrist, double m_speed) {
+  public WristCommand(IntakeWrist m_intakeWrist, double wristSpeed) {
     this.m_intakeWrist = m_intakeWrist;
-    this.m_speed = m_speed;
-
+    this.wristSpeed = wristSpeed;
     addRequirements(m_intakeWrist);
   }
 
@@ -23,7 +22,7 @@ public class WristCommand extends Command {
   
     @Override
   public void execute() {
-    m_intakeWrist.setMotorOutput(0);
+    m_intakeWrist.setMotorOutput(wristSpeed);
     
   }
 
