@@ -33,7 +33,7 @@ public class Turret extends SubsystemBase {
     m_turretDutyCycleRequest = new DutyCycleOut(0);
 
     TalonFXConfiguration turretMotorConfig = new TalonFXConfiguration();
-    turretMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    turretMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     turretMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     turretMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
@@ -47,7 +47,7 @@ public class Turret extends SubsystemBase {
 
     m_encoder = new CANcoder(Constants.Turret.kEncoderID, "Bus 2");
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
-    encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
     encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
     encoderConfig.MagnetSensor.MagnetOffset = Constants.Turret.kMagnetOffset;
     m_encoder.getConfigurator().apply(encoderConfig);

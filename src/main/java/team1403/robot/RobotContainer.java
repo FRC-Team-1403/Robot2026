@@ -36,8 +36,8 @@ public class RobotContainer {
   private final Indexer m_indexer;
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
-  //private final ShooterHood m_shooterHood;
-  //private final Turret m_turret;
+  private final ShooterHood m_shooterHood;
+  private final Turret m_turret;
   private final SwerveSubsystem m_swerve;
 
   //vibration command
@@ -61,8 +61,8 @@ public class RobotContainer {
     m_indexer= new Indexer();
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
-    // m_shooterHood = new ShooterHood();
-    // m_turret = new Turret();
+    m_shooterHood = new ShooterHood();
+    m_turret = new Turret();
 
     
     //for vibration command
@@ -102,9 +102,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));\
-    m_driverController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,3600,5800,2320));
-    
+    //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));
+    m_driverController.a().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,-60));
+    m_driverController.b().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,0));
+    m_driverController.y().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,100));
+
     //m_operatorController.rightTrigger().whileTrue(
     //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
     

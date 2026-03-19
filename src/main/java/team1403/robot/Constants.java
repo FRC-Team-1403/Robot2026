@@ -33,19 +33,19 @@ public final class Constants {
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = 0.19775390625;
+    public static final double kMagnetOffset = 0.03;
 
-    public static final double kMinAngleDegrees = -180.0;
-    public static final double kMaxAngleDegrees = 180.0;
+    public static final double kMinAngleDegrees = -128;
+    public static final double kMaxAngleDegrees = 140;
 
-    public static final double kGain = 0.6;
+    public static final double kGain = 0.4;
     public static final double kMaxSpeed = 35.0;
-    public static final double kMinSpeed = 2.0;
+    public static final double kMinSpeed = 8.0;
 
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
-    public static final double kToleranceDegrees = 0.25;
+    public static final double kToleranceDegrees = 2.0;
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;
     public static final double kLoopTime = 0.02;
@@ -123,8 +123,7 @@ public final class Constants {
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
-    public static final double kMagnetOffset = -0.89111328125;
-
+    public static final double kMagnetOffset = -0.398;
     public static final double kS = 0.0;
     public static final double kG = 2.5;
     public static final double kV = 0;
@@ -249,8 +248,8 @@ public final class Constants {
       public static final double range13Distance = 3.9;
       public static final double range14Distance = 4.2;
 
-      public static final double range1IndexerRpm = 1500;
-      public static final double range1SpindexerRpm = 1000;
+      public static final double range1IndexerRpm = 3600;
+      public static final double range1SpindexerRpm = 5800;
 
       public static final double range1ShooterRpm = 700;
       public static final double range1HoodAngle = 20;
@@ -307,8 +306,8 @@ public final class Constants {
       public static final double range8Distance = 8.0;
       public static final double range9Distance = 9.0;
 
-      public static final double range1IndexerRpm = 1000;
-      public static final double range1SpindexerRpm = 1100;
+      public static final double range1IndexerRpm = 3600;
+      public static final double range1SpindexerRpm = 5800;
 
       public static final double range1ShooterRpm = 1200;
       public static final double range1HoodAngle = 30;
@@ -349,8 +348,8 @@ public final class Constants {
       public static final double range7Distance = 14.0;
       public static final double range8Distance = 15.0;
 
-      public static final double range1IndexerRpm = 1700;
-      public static final double range1SpindexerRpm = 1200;
+      public static final double range1IndexerRpm = 3600;
+      public static final double range1SpindexerRpm = 5800;
 
       public static final double range1ShooterRpm = 2950;
       public static final double range1HoodAngle = 30;
