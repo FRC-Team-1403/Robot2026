@@ -20,6 +20,8 @@ import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.IntakeCommand;
+import team1403.robot.commands.ShooterCommand;
+import team1403.robot.commands.TurretCommand;
 import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Intake;
 import team1403.robot.subsystems.IntakeWrist;
@@ -29,6 +31,8 @@ import team1403.robot.subsystems.Spindexer;
 import team1403.robot.subsystems.Turret;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
+import team1403.robot.vision.Vision;
+
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -38,9 +42,10 @@ public class RobotContainer {
   private final Indexer m_indexer;
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
-  //private final ShooterHood m_shooterHood;
-  //private final Turret m_turret;
+  private final ShooterHood m_shooterHood;
+  private final Turret m_turret;
   private final SwerveSubsystem m_swerve;
+  private final Vision m_vision; 
 
   //vibration command
   private final Timer m_teleopTimer;
@@ -63,9 +68,9 @@ public class RobotContainer {
     m_indexer= new Indexer();
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
-    // m_shooterHood = new ShooterHood();
-    // m_turret = new Turret();
-
+    m_shooterHood = new ShooterHood();
+    m_turret = new Turret();
+    m_vision = new Vision();
     
     //for vibration command
     m_teleopTimer = new Timer();
@@ -143,8 +148,10 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Intake Command", 
                                   new IntakeCommand(m_intake, m_intakeWrist ));
-    NamedCommand.registerCommand("Stationary Command", 
-                                  new ShooterCommand(m_shooter,m_shooterHood, m_indexer, m_spindexer,m_turret,  ))
+    NamedCommands.registerCommand("Turret Tracking Command", 
+                                  new TurretCommand(m_turret, m_vision));
+    NamedCommands.registerCommand("Stationary Shoot Command",
+                                  new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
 
 
   }

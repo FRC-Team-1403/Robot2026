@@ -1,15 +1,19 @@
 package team1403.robot.commands.auto;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import team1403.robot.util.AutoUtil;
 import team1403.robot.util.CougarUtil;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
+import com.pathplanner.lib.auto.NamedCommands;
 
 public class AutoHelper {
 
@@ -33,14 +37,26 @@ public class AutoHelper {
         });
     }
 
+    public static Command StationaryShoot(SwerveSubsystem m_swerve){
+        try{
+            return Commands.sequence(
+                NamedCommands.getCommand("Stationary Shoot Command"),
+                Commands.waitSeconds(5)
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
     public static Command HumanPlayer(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
-                    // Add in the shoot command
-                    AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), // fix names tmr
-                    Commands.waitSeconds(10) // pick up balls from depot and shoot from their at the same thing
-            // later add in the parellel squence to intake and shoot at the same time at the
-            // depot
+                AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
+                Commands.parallel(
+                    NamedCommands.getCommand("Stationary Shoot Command"),
+                    Commands.waitSeconds(10)
+                )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
@@ -52,15 +68,31 @@ public class AutoHelper {
     public static Command RightSweep(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
-                    AutoUtil.loadPathPlannerPath("RightSweepPt1", m_swerve, true), // fix names tmr
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("RightSweepPt1", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
                     AutoUtil.loadPathPlannerPath("RightSweepPt2", m_swerve, true),
-                    Commands.waitSeconds(5),
-                    // Add in the shoot command
-                    AutoUtil.loadPathPlannerPath("RightSweepPt3", m_swerve, true),
-                    AutoUtil.loadPathPlannerPath("RightSweepPt4", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
+                    NamedCommands.getCommand("Stationary Shoot Command"),
                     Commands.waitSeconds(5)
-                    // Add in the shoot command
-                    // Add in the intake command
+                ),
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("RightSweepPt3", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("RightSweepPt4", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
+                    Commands.waitSeconds(5),
+                    NamedCommands.getCommand("Intake Command"),
+                    NamedCommands.getCommand("Stationary Shoot Command")
+                )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
@@ -71,12 +103,19 @@ public class AutoHelper {
     public static Command centerHuman(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
-                    AutoUtil.loadPathPlannerPath("Center+HumanPt1", m_swerve, true), // fix names tmr
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("Center+HumanPt1", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
                     AutoUtil.loadPathPlannerPath("Center+HumanPt2", m_swerve, true),
-                    Commands.waitSeconds(5)
-            // Add in the shoot command
-            // later add in the parellel squence to intake and shoot at the same time at the
-            // human player station
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
+                    Commands.waitSeconds(5),
+                    NamedCommands.getCommand("Intake Command"),
+                    NamedCommands.getCommand("Stationary Shoot Command")
+                )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
