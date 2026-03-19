@@ -135,11 +135,16 @@ public final class Constants {
     public static final double kLoopTime = 0.02;
     public static final double kUnitsPerRampTime = 100;
 
+    public static final double kP = 3.2;
+    public static final double kI = 0.0;
+    public static final double kD = 0.1;
+    public static final double kS = 0.3;
+    public static final double kV = 0.0;
+    public static final double kA = 0.0;
+    public static final double kG = 0.2;
+
+
     public static final double kMagnetOffset = -0.433;
-    public static final double kS = 0.0;
-    public static final double kG = 2.5;
-    public static final double kV = 0;
-    public static final double kA = 0;
   }
 
   public static class Shooter {
