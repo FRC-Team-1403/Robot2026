@@ -9,6 +9,9 @@ public class FieldZoneUtil {
   public static final double kFieldWidth = 8.07;
   public static final double kAllianceZoneDepth = 4.03;
 
+  // Width of crossing band (only extends INTO neutral)
+  public static final double kCrossingWidth = 0.5;
+
   public enum Zone {
     MY_ALLIANCE,
     NEUTRAL,
@@ -26,17 +29,43 @@ public class FieldZoneUtil {
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
 
     if (alliance == Alliance.Blue) {
-      if (x <= kAllianceZoneDepth) {
+
+      // Crossing band: just OUTSIDE my alliance (into neutral)
+      if (x >= kAllianceZoneDepth && x <= kAllianceZoneDepth + kCrossingWidth) {
+        return Zone.CROSSING;
+      }
+
+      // Crossing band: just BEFORE opponent alliance (from neutral)
+      if (x <= (kFieldLength - kAllianceZoneDepth) &&
+          x >= (kFieldLength - kAllianceZoneDepth - kCrossingWidth)) {
+        return Zone.CROSSING;
+      }
+
+      if (x < kAllianceZoneDepth) {
         return Zone.MY_ALLIANCE;
-      } else if (x >= (kFieldLength - kAllianceZoneDepth)) {
+      } else if (x > (kFieldLength - kAllianceZoneDepth)) {
         return Zone.OPPOSING_ALLIANCE;
       } else {
         return Zone.NEUTRAL;
       }
-    } else {
-      if (x >= (kFieldLength - kAllianceZoneDepth)) {
+
+    } else { // RED alliance (mirrored)
+
+      // Crossing band: just OUTSIDE my alliance (into neutral)
+      if (x <= (kFieldLength - kAllianceZoneDepth) &&
+          x >= (kFieldLength - kAllianceZoneDepth - kCrossingWidth)) {
+        return Zone.CROSSING;
+      }
+
+      // Crossing band: just BEFORE opponent alliance (from neutral)
+      if (x >= kAllianceZoneDepth &&
+          x <= kAllianceZoneDepth + kCrossingWidth) {
+        return Zone.CROSSING;
+      }
+
+      if (x > (kFieldLength - kAllianceZoneDepth)) {
         return Zone.MY_ALLIANCE;
-      } else if (x <= kAllianceZoneDepth) {
+      } else if (x < kAllianceZoneDepth) {
         return Zone.OPPOSING_ALLIANCE;
       } else {
         return Zone.NEUTRAL;
@@ -46,11 +75,6 @@ public class FieldZoneUtil {
 
   public static Side getSide(Pose2d robotPose) {
     double midPoint = kFieldWidth / 2.0;
-
-    if (robotPose.getY() >= midPoint) {
-      return Side.TOP;
-    } else {
-      return Side.BOTTOM;
-    }
+    return robotPose.getY() >= midPoint ? Side.TOP : Side.BOTTOM;
   }
 }
