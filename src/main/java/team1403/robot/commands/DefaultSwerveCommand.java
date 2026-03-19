@@ -46,7 +46,7 @@ public class DefaultSwerveCommand extends Command {
   private double prev_vertical = 0;
   private static final double kMaxVelocityChange = 5 * Constants.kLoopTime; //12
 
-  private double m_speedLimiter = 0.8;
+  private double m_speedLimiter = 0.4;
 
   private final ProfiledPIDController m_rotationPID = new ProfiledPIDController(5, 0, 0, 
     new TrapezoidProfile.Constraints(TunerConstants.kMaxAngularRate, 5)); //13
