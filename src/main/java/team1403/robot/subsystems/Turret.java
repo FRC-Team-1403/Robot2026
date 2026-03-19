@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -25,8 +26,7 @@ import team1403.robot.util.Blackbox;
 public class Turret extends SubsystemBase {
   private final TalonFX m_turretMotor;
   private final CANcoder m_encoder;
-  private final TrapezoidProfile m_profile;
-  private final PIDController m_controller;
+  private final ProfiledPIDController m_controller;
   private final DutyCycleOut m_turretDutyCycleRequest;
   private TrapezoidProfile.State m_setpointState;
   private double currentAngle;
@@ -60,15 +60,13 @@ public class Turret extends SubsystemBase {
     double motorRotations = absoluteRotations * Constants.Turret.kGearRatioEncoder;
     m_turretMotor.setPosition(motorRotations);
 
-    m_profile = new TrapezoidProfile(
+    m_controller = new ProfiledPIDController(
+        Constants.Turret.kP,
+        Constants.Turret.kI,
+        Constants.Turret.kD,
         new TrapezoidProfile.Constraints(
             Constants.Turret.kMaxVelocityDegreesPerSec,
             Constants.Turret.kMaxAccelerationDegreesPerSec));
-
-    m_controller = new PIDController(
-        Constants.Turret.kP,
-        Constants.Turret.kI,
-        Constants.Turret.kD);
     m_controller.setTolerance(Constants.Turret.kToleranceDegrees);
 
     currentAngle = getTurretAngle();
@@ -109,7 +107,7 @@ public class Turret extends SubsystemBase {
     m_turretDutyCycleRequest.Output = 0.0;
     m_turretMotor.setControl(m_turretDutyCycleRequest);
     m_setpointState = new TrapezoidProfile.State(currentAngle, 0);
-    m_controller.reset();
+    //m_controller.reset();
   }
 
   public void resetEncoder() {
@@ -136,13 +134,9 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     currentAngle = getTurretAngle();
 
-    m_setpointState = m_profile.calculate(
-        Constants.Turret.kLoopTime,
-        m_setpointState,
-        new TrapezoidProfile.State(setpoint, 0));
+    double motorOutput = m_controller.calculate(currentAngle, getSetpoint());
 
     double smallestError = getError(setpoint, currentAngle);
-    double motorOutput = m_controller.calculate(currentAngle, m_setpointState.position) / 100.0;
 
     if (currentAngle >= Constants.Turret.kMaxAngleDegrees && motorOutput > 0) {
       motorOutput = 0;
