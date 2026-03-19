@@ -2,6 +2,8 @@ package team1403.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -25,7 +27,7 @@ public final class Constants {
   }
 
   public static class ScoringLocation{
-    public static final Translation2d kHubPosition = new Translation2d(8.27, 4.105);
+    public static final Translation2d kHubPosition = new Translation2d(4, 4);
     public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
     public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
   }
@@ -81,12 +83,16 @@ public final class Constants {
   public static class Vision {
     public static final AprilTagFieldLayout kFieldLayout =
         AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-    public static double kGoalY = 4;
-    public static double kGoalX = 12;
-    public static String kCamera1 = "ThriftyCam1.0";
-    public static String kCamera2 = "ThriftyCam2.0";
-    public static String kCamera3 = "ThriftyCam3.0";
-    public static String kCamera4 = "ThriftyCam4.0";
+    public static final double kredGoalY = 4;
+    public static final double kredGoalX = 12;
+    public static final double kblueGoalY = 4;
+    public static final double kblueGoalX = 12;
+    public static final Pose2d kredGoalPose = new Pose2d(kredGoalX, kredGoalY, new Rotation2d());
+    public static final Pose2d kblueGoalPose = new Pose2d(kblueGoalX, kblueGoalY, new Rotation2d());
+    public static final String kCamera1 = "ThriftyCam1.0";
+    public static final String kCamera2 = "ThriftyCam2.0";
+    public static final String kCamera3 = "ThriftyCam3.0";
+    public static final String kCamera4 = "ThriftyCam4.0";
     public static Transform3d kCamera1Transform = new Transform3d();
     public static Transform3d kCamera2Transform =
         new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(90)));

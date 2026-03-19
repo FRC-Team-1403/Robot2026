@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -20,17 +21,15 @@ import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.IntakeCommand;
-import team1403.robot.commands.ShooterCommand;
-import team1403.robot.commands.TurretCommand;
 import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Intake;
 import team1403.robot.subsystems.IntakeWrist;
 import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.ShooterHood;
 import team1403.robot.subsystems.Spindexer;
-import team1403.robot.subsystems.Turret;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
+import team1403.robot.util.CougarUtil;
 import team1403.robot.vision.Vision;
 
 
@@ -43,14 +42,11 @@ public class RobotContainer {
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
   private final ShooterHood m_shooterHood;
-  private final Turret m_turret;
   private final SwerveSubsystem m_swerve;
   private final Vision m_vision; 
 
-  //vibration command
   private final Timer m_teleopTimer;
 
-  @SuppressWarnings("all")
   private final CommandXboxController m_driverController =
       new CommandXboxController(Constants.Driver.kDriverControllerPort);
 
@@ -69,7 +65,6 @@ public class RobotContainer {
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
     m_shooterHood = new ShooterHood();
-    m_turret = new Turret();
     m_vision = new Vision();
     
     //for vibration command
@@ -110,55 +105,31 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));
-    m_driverController.a().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,-60));
-    m_driverController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,0));
-    m_driverController.y().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,100));
+    m_driverController.a().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,-60));
+    m_driverController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,0));
+    m_driverController.y().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,100));
 
     //m_operatorController.rightTrigger().whileTrue(
     //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
-    
+  
+
     //swerve buttons 
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
         m_swerve, 
         () -> -m_driverController.getLeftX(),               //horozontal
-        () -> -m_driverController.getLeftY(),               //verticle 
+        () -> -m_driverController.getLeftY(),               //vertical
         () -> -m_driverController.getRightX(),              //rotational 
         () -> m_driverController.getHID().getPOV() == 180,  //x-mode  
         () -> m_driverController.getHID().getPOV() == 0,    //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
-        () -> m_driverController.getLeftTriggerAxis()));    //snipping mode (slow down)
+        () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
+        () -> m_driverController.getHID().getStartButton()
+        ));
 
-
-
-    //vibration command - untested 
-    // RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> {
-    //   m_teleopTimer.reset();
-    //   m_teleopTimer.start();
-    //   }
-    // ));
-    // double[] shiftTimes = {140, 125, 105, 80, 55, 30};
-    // for (double shiftTime : shiftTimes) {
-    //   final double time = 150 - shiftTime; // convert "time remaining" to "time elapsed"
-    //   new Trigger(() -> DriverStation.isTeleopEnabled()
-    //     && m_teleopTimer.get() <= time + 0.5
-    //     && m_teleopTimer.get() >= time - 0.5)
-    //     .onTrue(Commands.parallel(
-    //         new ControllerVibrationCommand(m_driverController.getHID(), 0.6, 0.5).asProxy(),
-    //         new ControllerVibrationCommand(m_operatorController.getHID(), 0.6, 0.5).asProxy()
-    //     ));
-    // } 
-
-    NamedCommands.registerCommand("Intake Command", 
-                                  new IntakeCommand(m_intake, m_intakeWrist ));
-    NamedCommands.registerCommand("Turret Tracking Command", 
-                                  new TurretCommand(m_turret, m_vision));
-    NamedCommands.registerCommand("Stationary Shoot Command",
-                                  new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
-    // NamedCommand.registerCommand("Stationary Command", 
-    //                               new ShooterCommand(m_shooter,m_shooterHood, m_indexer, m_spindexer,m_turret,  ))
-
-
+    //Intake buttons
+    m_intake.setDefaultCommand(new IntakeCommand(m_intake));
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

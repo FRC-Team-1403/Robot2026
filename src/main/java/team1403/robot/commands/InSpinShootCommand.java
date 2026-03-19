@@ -5,14 +5,12 @@ import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.ShooterHood;
 import team1403.robot.subsystems.Spindexer;
-import team1403.robot.subsystems.Turret;
 
 public class InSpinShootCommand extends Command {
     private final Indexer m_indexer;
     private final Spindexer m_spindexer;
     private final Shooter m_shooter;
     private final ShooterHood m_shooterHood;
-    private final Turret m_turret;
 
     private final double m_indexerRPM;
     private final double m_spindexerRPM;
@@ -23,7 +21,8 @@ public class InSpinShootCommand extends Command {
     public InSpinShootCommand(
             Indexer indexer,
             Spindexer spindexer,
-            Shooter shooter,ShooterHood hood,Turret turret,
+            Shooter shooter,
+            ShooterHood hood,
             double indexerRPM,
             double spindexerRPM,
             double shooterRPM,double hoodAngle,double turretAngle) {
@@ -31,7 +30,6 @@ public class InSpinShootCommand extends Command {
         m_spindexer = spindexer;
         m_shooter = shooter;
         m_shooterHood = hood;
-        m_turret = turret;
 
         m_indexerRPM = indexerRPM;
         m_spindexerRPM = spindexerRPM;
@@ -40,7 +38,7 @@ public class InSpinShootCommand extends Command {
         m_turretAngle = turretAngle;
 
 
-        addRequirements(indexer, spindexer, shooter,hood,turret);
+        addRequirements(indexer, spindexer, shooter,hood);
     }
 
     @Override
@@ -51,12 +49,10 @@ public class InSpinShootCommand extends Command {
 
     @Override
     public void execute() {
-        m_turret.setSetpoint(m_turretAngle);
-
-        // if (m_shooter.isFlywheelAtSpeed()&&m_shooterHood.atSetpoint()) {
-        //     m_indexer.setIndexerRPM(m_indexerRPM);
-        //     m_spindexer.setSpindexerRPM(m_spindexerRPM);
-        // }
+        if (m_shooter.isFlywheelAtSpeed()&&m_shooterHood.atSetpoint()) {
+            m_indexer.setIndexerRPM(m_indexerRPM);
+            m_spindexer.setSpindexerRPM(m_spindexerRPM);
+        }
     }
 
     @Override

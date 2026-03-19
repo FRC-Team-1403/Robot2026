@@ -41,7 +41,7 @@ public class AutoHelper {
         try{
             return Commands.sequence(
                 NamedCommands.getCommand("Stationary Shoot Command"),
-                Commands.waitSeconds(5)
+                Commands.waitSeconds(10)
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
@@ -55,7 +55,7 @@ public class AutoHelper {
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
                 Commands.parallel(
                     NamedCommands.getCommand("Stationary Shoot Command"),
-                    Commands.waitSeconds(10)
+                    Commands.waitSeconds(10) // TODO: change to parallel deadline
                 )
             );
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class AutoHelper {
                 ),
                 Commands.parallel(
                     NamedCommands.getCommand("Stationary Shoot Command"),
-                    Commands.waitSeconds(5)
+                    Commands.waitSeconds(5) // TODO: parallel deadline
                 ),
                 Commands.parallel(
                     AutoUtil.loadPathPlannerPath("RightSweepPt3", m_swerve, true),

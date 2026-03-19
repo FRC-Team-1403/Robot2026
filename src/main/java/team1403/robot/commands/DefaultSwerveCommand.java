@@ -2,6 +2,9 @@ package team1403.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -10,6 +13,8 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -17,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import team1403.robot.util.Blackbox;
 import team1403.robot.util.CougarUtil;
 import team1403.robot.Constants;
 //import team1403.robot.subsystems.Blackbox;
@@ -29,14 +35,16 @@ import team1403.robot.swerve.TunerConstants;
 public class DefaultSwerveCommand extends Command {
   private final SwerveSubsystem m_drivetrainSubsystem;
 
+  private Pose2d m_targetPose;
   private final DoubleSupplier m_verticalTranslationSupplier;
   private final DoubleSupplier m_horizontalTranslationSupplier;
   private final DoubleSupplier m_rotationSupplier;
   private final BooleanSupplier m_xModeSupplier;
   private final DoubleSupplier m_speedSupplier;
   private final DoubleSupplier m_snipingMode;
+  private final BooleanSupplier m_autoAim;
   private final BooleanSupplier m_robotRelativeMode;
-  private final Debouncer m_robotRelativeDebouncer 
+  private final Debouncer m_robotRelativeDebouncer
     = new Debouncer(0.3, DebounceType.kFalling);
   private boolean m_isFieldRelative = true;
   
@@ -76,7 +84,8 @@ public class DefaultSwerveCommand extends Command {
       BooleanSupplier xModeSupplier,
       BooleanSupplier robotRelativeSupplier,
       DoubleSupplier speedSupplier,
-      DoubleSupplier snipingMode) {
+      DoubleSupplier snipingMode,
+      BooleanSupplier autoAim) {
     this.m_drivetrainSubsystem = drivetrain;
     this.m_verticalTranslationSupplier = verticalTranslationSupplier;
     this.m_horizontalTranslationSupplier = horizontalTranslationSupplier;
@@ -85,6 +94,9 @@ public class DefaultSwerveCommand extends Command {
     this.m_xModeSupplier = xModeSupplier;
     this.m_snipingMode = snipingMode;
     this.m_robotRelativeMode = robotRelativeSupplier;
+    this.m_targetPose = Pose2d.kZero;
+    this.m_autoAim = autoAim;
+
     m_isFieldRelative = true;
     m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
 
@@ -106,7 +118,13 @@ public class DefaultSwerveCommand extends Command {
     //if (Constants.DEBUG_MODE) SmartDashboard.putBoolean("Aimbot", m_aimbotSupplier.getAsBoolean());
 
     m_speedLimiter = 0.3 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + (m_speedSupplier.getAsDouble() * 0.7);
-  
+    if (CougarUtil.getAlliance() == Alliance.Red) {
+      m_targetPose = Constants.Vision.kredGoalPose;
+    }
+    else {
+      m_targetPose = Constants.Vision.kblueGoalPose;
+    }
+
     if (DriverStation.isAutonomousEnabled()) {
       m_drivetrainSubsystem.drive(new ChassisSpeeds());
       return;
@@ -161,6 +179,20 @@ public class DefaultSwerveCommand extends Command {
       prev_vertical = vertical;
     }
 
+    if (m_autoAim.getAsBoolean()) {
+      //AutoLook at the hub
+      Pose2d pose = m_drivetrainSubsystem.getPose();
+      Translation2d turretPivotField = pose.getTranslation();
+      Translation2d target = Blackbox.getActiveTarget(pose);
+      Logger.recordOutput("targetPose", new Pose2d(target, Rotation2d.kZero));
+      double deltaX = target.getX() - turretPivotField.getX();
+      double deltaY = target.getY() - turretPivotField.getY();
+      double fieldAngleToGoal = Math.atan2(deltaY, deltaX);
+      double robotHeading = pose.getRotation().getRadians();
+      double targetAngle = MathUtil.angleModulus(fieldAngleToGoal - Math.PI/2);
+      angular = m_rotationPID.calculate(robotHeading, targetAngle);
+    }
+
     {
       if (m_isFieldRelative) {
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(vertical, horizontal, angular, m_drivetrainSubsystem.getShallowRotation());
@@ -176,7 +208,6 @@ public class DefaultSwerveCommand extends Command {
     return Math.signum(num) * Math.pow(num, 2);
   }
 
-  // @Override
   // private void periodic() {
   //   Pose2d curPose = m_drivetrainSubsystem.getPose();
   //   Rotation2d curRotation = curPose.getRotation();

@@ -1,5 +1,6 @@
 package team1403.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -36,7 +37,7 @@ public class ControllerVibrationCommand extends Command {
         //Restarts the timer
         m_timer.restart();
         //Sets the controller rumble
-        m_controller.setRumble(RumbleType.kBothRumble, m_strength);
+        m_controller.setRumble(RumbleType.kBothRumble, MathUtil.clamp(m_strength, 0, 1));
     }
 
     @Override
