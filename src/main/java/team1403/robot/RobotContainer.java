@@ -20,8 +20,7 @@ import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.IntakeCommand;
-import team1403.robot.commands.ShooterCommand;
-import team1403.robot.commands.TurretCommand;
+import team1403.robot.commands.WristCommand;
 import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Intake;
 import team1403.robot.subsystems.IntakeWrist;
@@ -110,9 +109,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));
-    m_driverController.a().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,-60));
-    m_driverController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,0));
-    m_driverController.y().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,100));
+    //m_driverController.a().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,-60));
+    //m_driverController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,0));
+    //m_driverController.y().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,100));
 
     //m_operatorController.rightTrigger().whileTrue(
     //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
@@ -126,7 +125,8 @@ public class RobotContainer {
         () -> m_driverController.getHID().getPOV() == 180,  //x-mode  
         () -> m_driverController.getHID().getPOV() == 0,    //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
-        () -> m_driverController.getLeftTriggerAxis()));    //snipping mode (slow down)
+        () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
+        () -> m_driverController.getHID().getStartButton()));
 
 
 
@@ -148,16 +148,13 @@ public class RobotContainer {
     //     ));
     // } 
 
-    NamedCommands.registerCommand("Intake Command", 
-                                  new IntakeCommand(m_intake, m_intakeWrist ));
-    NamedCommands.registerCommand("Turret Tracking Command", 
-                                  new TurretCommand(m_turret, m_vision));
-    NamedCommands.registerCommand("Stationary Shoot Command",
-                                  new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
-    // NamedCommand.registerCommand("Stationary Command", 
-    //                               new ShooterCommand(m_shooter,m_shooterHood, m_indexer, m_spindexer,m_turret,  ))
 
+    //Intake buttons
+    m_intake.setDefaultCommand(new IntakeCommand(m_intake, m_intakeWrist));
+    m_intakeWrist.setDefaultCommand(new WristCommand(m_intakeWrist, () -> m_driverController.a().getAsBoolean()));
 
+    //Shooting
+    m_shooter.setDefaultCommand(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_driverController.rightTrigger().getAsBoolean()));
   }
 
   /**

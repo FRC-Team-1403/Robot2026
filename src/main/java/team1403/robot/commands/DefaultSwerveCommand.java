@@ -3,6 +3,8 @@ package team1403.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
@@ -10,6 +12,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -17,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import team1403.robot.util.Blackbox;
 import team1403.robot.util.CougarUtil;
 import team1403.robot.Constants;
 //import team1403.robot.subsystems.Blackbox;
@@ -39,6 +45,7 @@ public class DefaultSwerveCommand extends Command {
   private final Debouncer m_robotRelativeDebouncer 
     = new Debouncer(0.3, DebounceType.kFalling);
   private boolean m_isFieldRelative = true;
+  private final BooleanSupplier m_autoAim;
   
   private SlewRateLimiter m_rotationRateLimiter;
   private double prev_horizontal = 0;
@@ -76,7 +83,8 @@ public class DefaultSwerveCommand extends Command {
       BooleanSupplier xModeSupplier,
       BooleanSupplier robotRelativeSupplier,
       DoubleSupplier speedSupplier,
-      DoubleSupplier snipingMode) {
+      DoubleSupplier snipingMode,
+      BooleanSupplier autoAim) {
     this.m_drivetrainSubsystem = drivetrain;
     this.m_verticalTranslationSupplier = verticalTranslationSupplier;
     this.m_horizontalTranslationSupplier = horizontalTranslationSupplier;
@@ -85,6 +93,7 @@ public class DefaultSwerveCommand extends Command {
     this.m_xModeSupplier = xModeSupplier;
     this.m_snipingMode = snipingMode;
     this.m_robotRelativeMode = robotRelativeSupplier;
+    this.m_autoAim = autoAim;
     m_isFieldRelative = true;
     m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
 
@@ -159,6 +168,20 @@ public class DefaultSwerveCommand extends Command {
 
       prev_horizontal = horizontal;
       prev_vertical = vertical;
+    }
+
+    if (m_autoAim.getAsBoolean()) {
+      //AutoLook at the hub
+      Pose2d pose = m_drivetrainSubsystem.getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d()));
+      Translation2d turretPivotField = pose.getTranslation();
+      Translation2d target = Blackbox.getActiveTarget(pose);
+      Logger.recordOutput("targetPose", new Pose2d(target, Rotation2d.kZero));
+      double deltaX = target.getX() - turretPivotField.getX();
+      double deltaY = target.getY() - turretPivotField.getY();
+      double fieldAngleToGoal = Math.atan2(deltaY, deltaX);
+      double robotHeading = pose.getRotation().getRadians();
+      double targetAngle = MathUtil.angleModulus(fieldAngleToGoal);
+      angular = m_rotationPID.calculate(robotHeading, targetAngle);
     }
 
     {

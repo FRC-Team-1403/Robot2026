@@ -25,7 +25,7 @@ public final class Constants {
   }
 
   public static class ScoringLocation{
-    public static final Translation2d kHubPosition = new Translation2d(8.27, 4.105);
+    public static final Translation2d kHubPosition = new Translation2d(4, 4);
     public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
     public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
   }
@@ -134,6 +134,7 @@ public final class Constants {
     public static final double kG = 2.5;
     public static final double kV = 0;
     public static final double kA = 0;
+    public static final double kFixedHood = 30;
   }
 
   public static class Shooter {
@@ -149,6 +150,16 @@ public final class Constants {
     public static final double kS = 0.1;
     public static final double kV = 0.12;
     public static final double kA = 0.2;
+    public static final double[][] distanceTable = {
+      {1.0, 2000},
+      {2.0, 2500},
+      {3.0, 3000},
+      {4.0, 3500},
+      {4.5, 4000},
+      {5.0, 4500},
+      {6.0, 5000},
+      {7.0, 5500}
+    };
   }
 
   public static class Indexer {
@@ -162,6 +173,7 @@ public final class Constants {
     public static final double kS = 0.10;
     public static final double kV = 0.12;
     public static final double kA = 2.0;
+    public static final double m_indexerRPM = 0;
   }
 
   public static class Spindexer {
@@ -175,6 +187,7 @@ public final class Constants {
     public static final double kS = 0.10;
     public static final double kV = 0.115;
     public static final double kA = 2.0;
+    public static final double m_spindexerRPM = 0;
   }
 
   public static class Intake {

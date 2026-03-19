@@ -12,7 +12,8 @@ public class FieldZoneUtil {
   public enum Zone {
     MY_ALLIANCE,
     NEUTRAL,
-    OPPOSING_ALLIANCE
+    OPPOSING_ALLIANCE,
+    CROSSING
   }
 
   public enum Side {
