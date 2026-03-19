@@ -138,13 +138,13 @@ public final class Constants {
     public static final double kP = 3.2;
     public static final double kI = 0.0;
     public static final double kD = 0.1;
-    public static final double kS = 0.3;
+    public static final double kS = 0.1;
     public static final double kV = 0.0;
     public static final double kA = 0.0;
     public static final double kG = 0.2;
 
 
-    public static final double kMagnetOffset = -0.433;
+    public static final double kMagnetOffset = -0.566;
   }
 
   public static class Shooter {
@@ -398,10 +398,10 @@ public final class Constants {
   public static final class InSpinShoot {
 
     //against hub 
-    public static final double kIndexerRPM_hub = 2500;
-    public static final double kSpindexerRPM_hub = 4000;
-    public static final double kShooterRPM_hub = 2500; 
-    public static final double kHoodAngle_hub = 0; 
+    public static final double kIndexerRPM_hub = 0;//2500
+    public static final double kSpindexerRPM_hub = 0;//4000
+    public static final double kShooterRPM_hub = 0; //2500
+    public static final double kHoodAngle_hub = 15; //2500
 
     //against tower 
     public static final double kIndexerRPM_tower  = 0;

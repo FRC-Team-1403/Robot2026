@@ -59,8 +59,8 @@ public class ShooterHood extends SubsystemBase {
     m_hoodMotor.getConfigurator().apply(hoodPIDConfigs);
 
     CANcoderConfiguration config = new CANcoderConfiguration();
-    config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
+    config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
     config.MagnetSensor.MagnetOffset = Constants.ShooterHood.kMagnetOffset;
 
     m_encoder.getConfigurator().apply(config);

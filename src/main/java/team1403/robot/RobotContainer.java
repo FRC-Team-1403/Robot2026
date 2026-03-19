@@ -109,7 +109,8 @@ public class RobotContainer {
   private void configureBindings() {
     //Shooting Commands 
       //against hub 
-    m_shooter.setDefaultCommand(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 0, 0));
+    m_shooter.setDefaultCommand(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 
+                                  0, 0, 0, 0));
     m_operatorController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
                                     Constants.InSpinShoot.kIndexerRPM_hub ,Constants.InSpinShoot.kSpindexerRPM_hub,
                                     Constants.InSpinShoot.kShooterRPM_hub, Constants.InSpinShoot.kHoodAngle_hub));
