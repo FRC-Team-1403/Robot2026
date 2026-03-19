@@ -98,7 +98,8 @@ public class RobotContainer {
         () -> m_driverController.getHID().getPOV() == 0,
         () -> m_driverController.getHID().getAButton(),
         () -> m_driverController.getRightTriggerAxis(),
-        () -> m_driverController.getLeftTriggerAxis()));
+        () -> m_driverController.getLeftTriggerAxis(),
+        () -> m_driverController.getHID().getStartButton()));
 
     Command vibrationCmd = new ControllerVibrationCommand(m_driverController.getHID(), 0.28, 1);
     Command opVibrationCmd = new ControllerVibrationCommand(m_operatorController.getHID(), 0.28, 1);
