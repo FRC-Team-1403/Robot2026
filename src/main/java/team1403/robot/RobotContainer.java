@@ -109,9 +109,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));\
-    m_driverController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,3600,5800,2320));
-    
+    //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));
+    m_driverController.a().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,-60));
+    m_driverController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,0));
+    m_driverController.y().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood,m_turret, 0,0,0,0,100));
+
     //m_operatorController.rightTrigger().whileTrue(
     //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
     
@@ -152,6 +154,8 @@ public class RobotContainer {
                                   new TurretCommand(m_turret, m_vision));
     NamedCommands.registerCommand("Stationary Shoot Command",
                                   new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
+    // NamedCommand.registerCommand("Stationary Command", 
+    //                               new ShooterCommand(m_shooter,m_shooterHood, m_indexer, m_spindexer,m_turret,  ))
 
 
   }
