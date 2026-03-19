@@ -4,6 +4,8 @@
 package team1403.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,8 +33,8 @@ import team1403.robot.swerve.TunerConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
-  //private final Intake m_intake;
-  //private final IntakeWrist m_intakeWrist;
+  private final Intake m_intake;
+  private final IntakeWrist m_intakeWrist;
   private final Indexer m_indexer;
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
@@ -56,8 +58,8 @@ public class RobotContainer {
 
     m_swerve = TunerConstants.createDrivetrain();
     
-    //m_intake = new Intake();
-    //m_intakeWrist = new IntakeWrist();
+    m_intake = new Intake();
+    m_intakeWrist = new IntakeWrist();
     m_indexer= new Indexer();
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
@@ -140,6 +142,13 @@ public class RobotContainer {
     //         new ControllerVibrationCommand(m_operatorController.getHID(), 0.6, 0.5).asProxy()
     //     ));
     // } 
+
+    NamedCommands.registerCommand("Intake Command", 
+                                  new IntakeCommand(m_intake, m_intakeWrist ));
+    NamedCommand.registerCommand("Stationary Command", 
+                                  new ShooterCommand(m_shooter,m_shooterHood, m_indexer, m_spindexer,m_turret,  ))
+
+
   }
 
   /**
