@@ -45,6 +45,12 @@ public final class Constants {
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
+    public static final double kP = 1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kMaxVelocityDegreesPerSec =90;
+    public static final double kMaxAccelerationDegreesPerSec  = 180;
+
     public static final double kToleranceDegrees = 2.0;
     public static final double kRampUpTime = 0.01;
     public static final double kRampDownTime = 0.001;

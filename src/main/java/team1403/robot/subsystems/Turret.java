@@ -12,19 +12,23 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import team1403.robot.Constants;
 import team1403.robot.util.Blackbox;
-import team1403.robot.util.CustomPositionControlLoop;
 
 public class Turret extends SubsystemBase {
   private final TalonFX m_turretMotor;
   private final CANcoder m_encoder;
-  private final CustomPositionControlLoop m_customController;
+  private final TrapezoidProfile m_profile;
+  private final PIDController m_controller;
   private final DutyCycleOut m_turretDutyCycleRequest;
+  private TrapezoidProfile.State m_setpointState;
   private double currentAngle;
   private double setpoint;
 
@@ -56,19 +60,20 @@ public class Turret extends SubsystemBase {
     double motorRotations = absoluteRotations * Constants.Turret.kGearRatioEncoder;
     m_turretMotor.setPosition(motorRotations);
 
-    m_customController =
-        new CustomPositionControlLoop(
-            Constants.Turret.kGain,
-            Constants.Turret.kToleranceDegrees,
-            Constants.Turret.kRampUpTime,
-            Constants.Turret.kRampDownTime,
-            Constants.Turret.kUnitsPerRampTime,
-            Constants.Turret.kMaxSpeed,
-            Constants.Turret.kMinSpeed,
-            Constants.Turret.kLoopTime);
+    m_profile = new TrapezoidProfile(
+        new TrapezoidProfile.Constraints(
+            Constants.Turret.kMaxVelocityDegreesPerSec,
+            Constants.Turret.kMaxAccelerationDegreesPerSec));
+
+    m_controller = new PIDController(
+        Constants.Turret.kP,
+        Constants.Turret.kI,
+        Constants.Turret.kD);
+    m_controller.setTolerance(Constants.Turret.kToleranceDegrees);
 
     currentAngle = getTurretAngle();
     setpoint = currentAngle;
+    m_setpointState = new TrapezoidProfile.State(currentAngle, 0);
   }
 
   public double getAbsolutePosition() {
@@ -93,7 +98,7 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    return m_customController.isAtPosition();
+    return m_controller.atSetpoint();
   }
 
   public void adjustSetpoint(double degrees) {
@@ -103,7 +108,8 @@ public class Turret extends SubsystemBase {
   public void stopMotor() {
     m_turretDutyCycleRequest.Output = 0.0;
     m_turretMotor.setControl(m_turretDutyCycleRequest);
-    m_customController.reset();
+    m_setpointState = new TrapezoidProfile.State(currentAngle, 0);
+    m_controller.reset();
   }
 
   public void resetEncoder() {
@@ -129,9 +135,14 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     currentAngle = getTurretAngle();
+
+    m_setpointState = m_profile.calculate(
+        Constants.Turret.kLoopTime,
+        m_setpointState,
+        new TrapezoidProfile.State(setpoint, 0));
+
     double smallestError = getError(setpoint, currentAngle);
-    double controlLoop = m_customController.calculate(smallestError, currentAngle, setpoint);
-    double motorOutput = (controlLoop / 100.0);
+    double motorOutput = m_controller.calculate(currentAngle, m_setpointState.position) / 100.0;
 
     if (currentAngle >= Constants.Turret.kMaxAngleDegrees && motorOutput > 0) {
       motorOutput = 0;
@@ -146,13 +157,13 @@ public class Turret extends SubsystemBase {
     Logger.recordOutput("Turret/Setpoint", setpoint);
     Logger.recordOutput("Turret/At Setpoint", atSetpoint());
     Logger.recordOutput("Turret/Motor Output", motorOutput);
-    Logger.recordOutput("Turret/P Value", m_customController.getP());
+    Logger.recordOutput("Turret/P Value", m_controller.getP());
     Logger.recordOutput("Turret/Position Error", smallestError);
     Logger.recordOutput("Turret/Relative", m_turretMotor.getPosition().getValueAsDouble());
     Logger.recordOutput("Turret/StatorCurrent", m_turretMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Turret/SupplyCurrent", m_turretMotor.getSupplyCurrent().getValueAsDouble());
     Logger.recordOutput("Turret/Temperature", m_turretMotor.getDeviceTemp().getValueAsDouble());
 
-
+    //SmartDashboard.putData("PID", m_controller);
   }
 }
