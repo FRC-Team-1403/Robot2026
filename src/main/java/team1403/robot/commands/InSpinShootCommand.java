@@ -16,7 +16,6 @@ public class InSpinShootCommand extends Command {
     private final double m_spindexerRPM;
     private final double m_shooterRPM;
     private final double m_hoodAngle;
-    private final double m_turretAngle;
 
     public InSpinShootCommand(
             Indexer indexer,
@@ -25,7 +24,8 @@ public class InSpinShootCommand extends Command {
             ShooterHood hood,
             double indexerRPM,
             double spindexerRPM,
-            double shooterRPM,double hoodAngle,double turretAngle) {
+            double shooterRPM,
+            double hoodAngle) {
         m_indexer = indexer;
         m_spindexer = spindexer;
         m_shooter = shooter;
@@ -35,7 +35,6 @@ public class InSpinShootCommand extends Command {
         m_spindexerRPM = spindexerRPM;
         m_shooterRPM = shooterRPM;
         m_hoodAngle = hoodAngle;
-        m_turretAngle = turretAngle;
 
 
         addRequirements(indexer, spindexer, shooter,hood);

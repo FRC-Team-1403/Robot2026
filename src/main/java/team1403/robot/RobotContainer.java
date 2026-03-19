@@ -21,6 +21,7 @@ import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.IntakeCommand;
+import team1403.robot.commands.auto.AutoHelper;
 import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Intake;
 import team1403.robot.subsystems.IntakeWrist;
@@ -105,9 +106,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //m_driverController.a().onTrue(new IntakeCommand(m_intake, m_intakeWrist));
-    m_driverController.a().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,-60));
-    m_driverController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,0));
-    m_driverController.y().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0,0,0,0,100));
+    //m_operatorController.b().onTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, Constants.InSpinShoot.kIndexerRPM ,Constants.InSpinShoot.kSpindexerRPM, Constants.InSpinShoot.kShooterRPM, Constants.InSpinShoot.kHoodAngle));
 
     //m_operatorController.rightTrigger().whileTrue(
     //new ShooterCommand(m_shooter, m_indexer, m_spindexer, m_shooterHood, m_turret, m_swerve::getPose));
@@ -127,7 +126,18 @@ public class RobotContainer {
         ));
 
     //Intake buttons
-    m_intake.setDefaultCommand(new IntakeCommand(m_intake));
+    m_intake.setDefaultCommand(new IntakeCommand(m_intake, m_intakeWrist));
+
+    
+    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, m_intakeWrist));
+    NamedCommands.registerCommand("Stationary Shoot Command", 
+            new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, Constants.InSpinShoot.kAutoIndexerRPM, Constants.InSpinShoot.kAutoSpindexerRPM, Constants.InSpinShoot.kAutoShooterRPM, Constants.InSpinShoot.kAutoHoodAngle));
+
+
+    m_autoChooser.addOption("STATIONARY SHOOT", AutoHelper.getStationaryShoot(m_swerve));
+    m_autoChooser.addOption("HUMAN PLAYER", AutoHelper.getHumanPlayer(m_swerve));
+    m_autoChooser.addOption("RIGHT SWEEP 1X THEN HUMAN PLAYER", AutoHelper.getCenterHuman(m_swerve));
+    m_autoChooser.addOption("RIGHT SWEEP 2X THEN HUMAN PLAYER", AutoHelper.getRightSweep(m_swerve));
   }
 
 

@@ -168,6 +168,7 @@ public final class Constants {
     public static final double kS = 0.10;
     public static final double kV = 0.12;
     public static final double kA = 2.0;
+
   }
 
   public static class Spindexer {
@@ -387,5 +388,17 @@ public final class Constants {
       public static final double range8ShooterRpm = 4600;
       public static final double range8HoodAngle = 30;
     }
+  }
+
+  public static final class InSpinShoot {
+    public static final double kAutoIndexerRPM = 3600; 
+    public static final double kAutoSpindexerRPM = 5800;
+    public static final double kAutoShooterRPM = 3000; // TODO: FIX
+    public static final double kAutoHoodAngle = 30; // TODO: FIX
+
+    public static final double kIndexerRPM = 3600;
+    public static final double kSpindexerRPM = 5800;
+    public static final double kShooterRPM = 3000; // TODO: FIX
+    public static final double kHoodAngle = 30; // TODO: FIX
   }
 }

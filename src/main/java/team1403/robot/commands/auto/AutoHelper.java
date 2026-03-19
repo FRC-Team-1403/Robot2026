@@ -37,7 +37,7 @@ public class AutoHelper {
         });
     }
 
-    public static Command StationaryShoot(SwerveSubsystem m_swerve){
+    public static Command getStationaryShoot(SwerveSubsystem m_swerve){
         try{
             return Commands.sequence(
                 NamedCommands.getCommand("Stationary Shoot Command"),
@@ -49,7 +49,7 @@ public class AutoHelper {
         }
     }
 
-    public static Command HumanPlayer(SwerveSubsystem m_swerve) {
+    public static Command getHumanPlayer(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
@@ -64,8 +64,30 @@ public class AutoHelper {
         }
     }
 
+    public static Command getCenterHuman(SwerveSubsystem m_swerve) {
+        try {
+            return Commands.sequence(
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("Center+HumanPt1", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("Center+HumanPt2", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.parallel(
+                    Commands.waitSeconds(5),
+                    NamedCommands.getCommand("Intake Command"),
+                    NamedCommands.getCommand("Stationary Shoot Command")
+                )
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none();
+        }
+    }
 
-    public static Command RightSweep(SwerveSubsystem m_swerve) {
+    public static Command getRightSweep(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
                 Commands.parallel(
@@ -100,30 +122,7 @@ public class AutoHelper {
         }
     }
 
-    public static Command centerHuman(SwerveSubsystem m_swerve) {
-        try {
-            return Commands.sequence(
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("Center+HumanPt1", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("Center+HumanPt2", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.parallel(
-                    Commands.waitSeconds(5),
-                    NamedCommands.getCommand("Intake Command"),
-                    NamedCommands.getCommand("Stationary Shoot Command")
-                )
-            );
-        } catch (Exception e) {
-            System.err.println("Could not load auto: " + e.getMessage());
-            return Commands.none();
-        }
-    }
-
-    // public static Command LeftSweep(SwerveSubsystem m_swerve) {
+    // public static Command getLeftSweep(SwerveSubsystem m_swerve) {
     //     try {
     //         return Commands.sequence(
     //                 AutoUtil.loadPathPlannerPath("LeftSweepPt1", m_swerve, true), // fix names tmr
@@ -141,7 +140,7 @@ public class AutoHelper {
     //     }
     // }
 
-    // public static Command centerDepot(SwerveSubsystem m_swerve) {
+    // public static Command getCenterDepot(SwerveSubsystem m_swerve) {
     //     try {
     //         return Commands.sequence(
     //                 AutoUtil.loadPathPlannerPath("Center+DepotPt1", m_swerve, true), // fix names tmr
