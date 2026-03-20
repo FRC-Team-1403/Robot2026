@@ -108,6 +108,7 @@ public class RobotContainer {
 
     m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     
+
     m_operatorController.b().whileTrue(new IntakeCommand(m_intake, 1));
     m_operatorController.x().onTrue(new IntakeCommand(m_intake, 0));
     m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new WristCommand(m_intakeWrist, -0.3), 
@@ -127,6 +128,19 @@ public class RobotContainer {
         () -> m_driverController.getHID().getRightBumperButton(), // Auto Aim
         () -> m_driverController.getHID().getBButton() // reset gyro
         ));
+
+    // m_swerve.setDefaultCommand(new DefaultSwerveCommand(
+    //     m_swerve, 
+    //     () -> -m_driverController.getLeftX(),               //horozontal
+    //     () -> -m_driverController.getLeftY(),               //vertical
+    //     () -> -m_driverController.getRightX(),              //rotational 
+    //     () -> m_driverController.getHID().getXButton(),        //x-mode  
+    //     () -> false,                                        //robot relative  
+    //     () -> m_driverController.getRightTriggerAxis(),     //acceleration
+    //     () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
+    //     () -> m_operatorController.getHID().getRightTriggerAxis()>0.1, // Auto Aim
+    //     () -> m_driverController.getHID().getBButton() // reset gyro
+    //     ));
     
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
     NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3));
