@@ -23,6 +23,7 @@ public class AutoAlignCommand extends Command {
     public AutoAlignCommand(SwerveSubsystem swerve) {
         m_swerve = swerve;
         m_rotationPID.enableContinuousInput(-Math.PI, Math.PI);
+        m_rotationPID.setTolerance(0.05);
         addRequirements(m_swerve);
     }
 
@@ -60,6 +61,6 @@ public class AutoAlignCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return m_rotationPID.atGoal();
     }
 }
