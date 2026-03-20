@@ -23,6 +23,7 @@ import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
+import team1403.robot.commands.LERPShooter;
 import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.auto.AutoHelper;
 import team1403.robot.subsystems.Indexer;
@@ -113,10 +114,13 @@ public class RobotContainer {
       //against hub 
     m_shooter.setDefaultCommand(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 
                                   0, 0, 0, 0));
-    m_operatorController.rightTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
-                                    Constants.InSpinShoot.kIndexerRPM_hub ,Constants.InSpinShoot.kSpindexerRPM_hub,
-                                    Constants.InSpinShoot.kShooterRPM_hub, Constants.InSpinShoot.kHoodAngle_hub));
+    // m_operatorController.rightTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
+    //                                 Constants.InSpinShoot.kIndexerRPM_hub ,Constants.InSpinShoot.kSpindexerRPM_hub,
+    //                                 Constants.InSpinShoot.kShooterRPM_hub, Constants.InSpinShoot.kHoodAngle_hub));
       //against tower 
+
+    m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.rightTrigger().getAsBoolean()));
+
     m_operatorController.leftTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
                                     Constants.InSpinShoot.kIndexerRPM_tower ,Constants.InSpinShoot.kSpindexerRPM_tower,
                                     Constants.InSpinShoot.kShooterRPM_tower, Constants.InSpinShoot.kHoodAngle_tower));
@@ -148,7 +152,8 @@ public class RobotContainer {
         () -> m_driverController.getHID().getPOV() == 0,    //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
         () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
-        () -> m_driverController.getHID().getStartButton()
+        () -> m_driverController.getHID().getStartButton(),
+        () -> m_driverController.rightBumper().getAsBoolean()
         ));
 
     

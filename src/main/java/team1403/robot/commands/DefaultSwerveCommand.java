@@ -52,6 +52,7 @@ public class DefaultSwerveCommand extends Command {
   private double prev_horizontal = 0;
   private double prev_vertical = 0;
   private static final double kMaxVelocityChange = 13 * Constants.kLoopTime; 
+  private BooleanSupplier m_resetSupplier;
 
   private double m_speedLimiter = 0.2;
 
@@ -85,7 +86,8 @@ public class DefaultSwerveCommand extends Command {
       BooleanSupplier robotRelativeSupplier,
       DoubleSupplier speedSupplier,
       DoubleSupplier snipingMode,
-      BooleanSupplier autoAim) {
+      BooleanSupplier autoAim,
+      BooleanSupplier m_resetSupplier) {
     this.m_drivetrainSubsystem = drivetrain;
     this.m_verticalTranslationSupplier = verticalTranslationSupplier;
     this.m_horizontalTranslationSupplier = horizontalTranslationSupplier;
@@ -96,6 +98,7 @@ public class DefaultSwerveCommand extends Command {
     this.m_robotRelativeMode = robotRelativeSupplier;
     this.m_targetPose = Pose2d.kZero;
     this.m_autoAim = autoAim;
+    this.m_resetSupplier = m_resetSupplier;
 
     m_isFieldRelative = true;
     m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
@@ -133,6 +136,10 @@ public class DefaultSwerveCommand extends Command {
     if (m_xModeSupplier.getAsBoolean()) {
       m_drivetrainSubsystem.setControl(new SwerveRequest.SwerveDriveBrake());
       return;
+    }
+
+    if (m_resetSupplier.getAsBoolean()) {
+      m_drivetrainSubsystem.resetRotation(Rotation2d.kZero);
     }
 
     ChassisSpeeds chassisSpeeds;
@@ -189,7 +196,7 @@ public class DefaultSwerveCommand extends Command {
       double deltaY = target.getY() - turretPivotField.getY();
       double fieldAngleToGoal = Math.atan2(deltaY, deltaX);
       double robotHeading = pose.getRotation().getRadians();
-      double targetAngle = MathUtil.angleModulus(fieldAngleToGoal - Math.PI/2);
+      double targetAngle = MathUtil.angleModulus(fieldAngleToGoal - 3*Math.PI/2);
       angular = m_rotationPID.calculate(robotHeading, targetAngle);
     }
 

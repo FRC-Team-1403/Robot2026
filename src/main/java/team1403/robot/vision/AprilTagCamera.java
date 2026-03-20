@@ -108,6 +108,7 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
     return -1;
   }
 
+  
   private List<PhotonTrackedTarget> getTargets() {
     if(hasPose())
     {

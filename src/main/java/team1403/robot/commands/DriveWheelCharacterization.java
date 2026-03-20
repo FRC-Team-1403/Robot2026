@@ -41,7 +41,7 @@ public class DriveWheelCharacterization extends Command {
 
     @Override
     public void execute() {
-        Rotation2d cur = m_swerve.getPigeon2().getRotation2d();
+        Rotation2d cur = (m_swerve.getPigeon2().getRotation2d());
         angleIGyro += cur.minus(m_prevRot).getRadians();
         m_prevRot = cur;
 

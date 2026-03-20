@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 
 public final class Constants {
 // Variables to used by all subsystems.
@@ -27,7 +28,7 @@ public final class Constants {
   }
 
   public static class ScoringLocation{
-    public static final Translation2d kHubPosition = new Translation2d(4, 4);
+    public static final Translation2d kHubPosition = new Translation2d(4.5, 4);
     public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
     public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
   }
@@ -108,8 +109,12 @@ public final class Constants {
 
     //public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(kCameraOffset, new Rotation3d(0,0,0));;
     //public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(90)));
-    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(0,0,0, new Rotation3d(0,0, Math.toRadians(180)));
-    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(0,0,0, new Rotation3d(0,0, Math.toRadians(270)));
+    //public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(8),Units.inchesToMeters(12.75), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(23), Math.toRadians(180)));
+    //public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(10.76),Units.inchesToMeters(14.4), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(18), Math.toRadians(-85)));\
+    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(-12.75),Units.inchesToMeters(8), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(23), Math.toRadians(0)));
+    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(-14.4),Units.inchesToMeters(10.76), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(18), Math.toRadians(99.7)));
+
+
 
 
     //NEW COMBINED VISION SUBSYSTEM
@@ -145,7 +150,7 @@ public final class Constants {
 
 
     public static final double kMagnetOffset = -0.566;
-    public static final double kFixedHood = 0;
+    public static final double kFixedHood = 20;
   }
 
   public static class Shooter {
@@ -153,7 +158,7 @@ public final class Constants {
     public static final int flywheelFollower1TopRightID = 24;
     public static final int flywheelFollower2BottonRightID = 25;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
-    public static final double rpmTolerance = 90.0;
+    public static final double rpmTolerance = 150.0;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
@@ -162,14 +167,14 @@ public final class Constants {
     public static final double kV = 0.12;
     public static final double kA = 0.2;
     public static final double[][] distanceTable = {
-      {1.0, 2000},
-      {2.0, 2500},
-      {3.0, 3000},
-      {4.0, 3500},
-      {4.5, 4000},
-      {5.0, 4500},
-      {6.0, 5000},
-      {7.0, 5500}
+      {2.01, 1350},
+      {2.29, 1400},
+      {2.5, 1470},
+      {2.8, 1490},
+      {3.2, 1500},
+      {3.69, 1600},
+      {4.5, 1740},
+      {5.3, 1800}
     };
   }
 
@@ -184,7 +189,7 @@ public final class Constants {
     public static final double kS = 0.10;
     public static final double kV = 0.12;
     public static final double kA = 2.0;
-    public static final double m_indexerRPM = 0;
+    public static final double m_indexerRPM = 3600;
 
   }
 
@@ -199,7 +204,7 @@ public final class Constants {
     public static final double kS = 0.10;
     public static final double kV = 0.115;
     public static final double kA = 2.0;
-    public static final double m_spindexerRPM = 0;
+    public static final double m_spindexerRPM = 5800;
   }
 
   public static class Intake {

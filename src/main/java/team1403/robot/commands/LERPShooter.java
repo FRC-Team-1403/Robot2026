@@ -53,8 +53,15 @@ public class LERPShooter extends Command {
         double diffY = new Pose2d(Blackbox.getActiveTarget(currentPose), Rotation2d.kZero).getY() - currentPose.getY();
         double distance = Math.sqrt((diffX * diffX) + (diffY * diffY)); 
         double flywheelRPM = lerp(Constants.Shooter.distanceTable, distance);
-        m_shooter.setFlywheelTargetRPM(flywheelRPM);
-
+        
+        if (m_shoot.getAsBoolean()) {
+            m_shooter.setFlywheelTargetRPM(flywheelRPM);
+        }
+        else {
+            m_shooter.setFlywheelTargetRPM(0);
+            m_indexer.setIndexerRPM(0);
+            m_spindexer.setSpindexerRPM(0);
+        }
         if (FieldZoneUtil.getZone(currentPose) == Zone.CROSSING) {
             m_shooterHood.setSetpoint(0);
         }
