@@ -88,7 +88,8 @@ public class DefaultSwerveCommand extends Command {
       DoubleSupplier speedSupplier,
       DoubleSupplier snipingMode,
       BooleanSupplier autoAim,
-      BooleanSupplier m_resetSupplier) {
+      BooleanSupplier m_resetSupplier
+      ) {
     this.m_drivetrainSubsystem = drivetrain;
     this.m_verticalTranslationSupplier = verticalTranslationSupplier;
     this.m_horizontalTranslationSupplier = horizontalTranslationSupplier;
@@ -208,6 +209,7 @@ public class DefaultSwerveCommand extends Command {
       double temp_angular = m_rotationPID.calculate(robotHeading, targetAngle);
       if (m_autoAim.getAsBoolean())
         angular = temp_angular;
+
     }
 
     {

@@ -125,7 +125,7 @@ public class RobotContainer {
         () -> false,                                        //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
         () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
-        () -> m_driverController.getHID().getRightBumperButton(), // Auto Aim
+        () -> m_operatorController.getRightTriggerAxis()>0.3, // Auto Aim
         () -> m_driverController.getHID().getBButton() // reset gyro
         ));
 
