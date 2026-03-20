@@ -76,7 +76,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3).withTimeout(1).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, 
                                   m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
-    NamedCommands.registerCommand("Auto Aim", new AutoAlignCommand(m_swerve).withTimeout(2.0).asProxy());
+    NamedCommands.registerCommand("Auto Aim", new AutoAlignCommand(m_swerve).
+    asProxy());
 
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(
         m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
