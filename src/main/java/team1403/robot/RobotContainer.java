@@ -111,9 +111,10 @@ public class RobotContainer {
 
     m_operatorController.b().whileTrue(new IntakeCommand(m_intake, 1));
     m_operatorController.x().onTrue(new IntakeCommand(m_intake, 0));
-    m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new WristCommand(m_intakeWrist, -0.3), 
+    m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new WristCommand(m_intakeWrist, -0.2), 
                                                                     new IntakeCommand(m_intake, 1)));
     m_operatorController.povDown().whileTrue(new WristCommand(m_intakeWrist, 0.3));
+    m_operatorController.rightTrigger().onFalse(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
 
     //swerve buttons 
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
@@ -138,9 +139,11 @@ public class RobotContainer {
     //     () -> false,                                        //robot relative  
     //     () -> m_driverController.getRightTriggerAxis(),     //acceleration
     //     () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
-    //     () -> m_operatorController.getHID().getRightTriggerAxis()>0.1, // Auto Aim
+    //     () -> m_driverController.getHID().getRightBumperButton(), // Auto Aim
     //     () -> m_driverController.getHID().getBButton() // reset gyro
     //     ));
+
+    
     
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
     NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3));

@@ -149,7 +149,7 @@ public final class Constants {
     public static final double kG = 0.2;
 
 
-    public static final double kMagnetOffset = -0.566;
+    public static final double kMagnetOffset = 0.432;
     public static final double kFixedHood = 20;
   }
 

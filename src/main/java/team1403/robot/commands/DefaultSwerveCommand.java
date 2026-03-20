@@ -197,7 +197,7 @@ public class DefaultSwerveCommand extends Command {
     if (true) {
       //AutoLook at the hub
 
-      Pose2d pose = m_drivetrainSubsystem.getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCW_90deg));
+      Pose2d pose = m_drivetrainSubsystem.getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg));
       Translation2d turretPivotField = pose.getTranslation();
       Translation2d target = Blackbox.getActiveTarget(pose);
       Logger.recordOutput("targetPose", pose);

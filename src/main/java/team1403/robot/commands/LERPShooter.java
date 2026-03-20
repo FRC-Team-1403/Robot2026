@@ -56,53 +56,48 @@ public class LERPShooter extends Command {
 
     @Override
     public void execute() {
-        if (wasShooting != isShooting) {
-            backupTimer.start();
-            wasShooting = isShooting;
-        }
-
-        if (backupTimer.get() < 0.1 && backupTimer.isRunning()) {
-            m_indexer.setIndexerRPM(-1800);
-            m_spindexer.setSpindexerRPM(-5800);
-        }
-        else {
-            backupTimer.stop();
+        if (wasShooting && !isShooting) {
             backupTimer.reset();
+            backupTimer.start();
         }
+        wasShooting = isShooting;
 
         Pose2d currentPose = m_pose.get().transformBy(new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d()));
         double diffX = Blackbox.getActiveTarget(currentPose).getX() - currentPose.getX();
         double diffY = Blackbox.getActiveTarget(currentPose).getY() - currentPose.getY();
         double distance = Math.hypot(diffX, diffY);
         double flywheelRPM = lerp(Constants.Shooter.distanceTable, distance);
-        
-        //Flywheel only spin when held
+
         if (m_shoot.getAsDouble() > 0.3) {
             m_shooter.setFlywheelTargetRPM(flywheelRPM);
-        }
-        else {
+
+            if (FieldZoneUtil.getZone(currentPose) == Zone.CROSSING) {
+                m_shooterHood.setSetpoint(0);
+            } else if (FieldZoneUtil.getZone(currentPose) == Zone.NEUTRAL) {
+                m_shooterHood.setSetpoint(28);
+            } else {
+                m_shooterHood.setSetpoint(Constants.ShooterHood.kFixedHood);
+            }
+        } else {
             isShooting = false;
             m_shooter.setFlywheelTargetRPM(0);
-            m_indexer.setIndexerRPM(0);
-            m_spindexer.setSpindexerRPM(0);
-        }
-
-        //Hood Angle based of zone
-        if (FieldZoneUtil.getZone(currentPose) == Zone.CROSSING) {
             m_shooterHood.setSetpoint(0);
-        }
-        else if (FieldZoneUtil.getZone(currentPose) == Zone.NEUTRAL) {
-            m_shooterHood.setSetpoint(28);
-        }
-        else {
-            m_shooterHood.setSetpoint(Constants.ShooterHood.kFixedHood);
+
+            if (backupTimer.isRunning() && backupTimer.get() < 0.2) {
+                m_spindexer.setSpindexerRPM(-2000);
+                m_indexer.setIndexerRPM(-1800);
+            } else {
+                backupTimer.stop();
+                backupTimer.reset();
+                m_spindexer.setSpindexerRPM(0);
+                m_indexer.setIndexerRPM(0);
+            }
         }
 
-        //Act start shooting
         if (m_shooter.isFlywheelAtSpeed() && m_shooterHood.atSetpoint() && m_shoot.getAsDouble() > 0.3 && distance > 1.6) {
             isShooting = true;
-            m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
+            m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
         }
 
         Logger.recordOutput("Shooter In Range", distance > 1.6);
@@ -112,8 +107,8 @@ public class LERPShooter extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_indexer.stop();
         m_spindexer.stop();
+        m_indexer.stop();
         m_shooter.stop();
         m_shooterHood.setSetpoint(0);
     }
@@ -124,20 +119,16 @@ public class LERPShooter extends Command {
     }
 
     public static double lerp(double[][] table, double input) {
-    // Below minimum — clamp to first entry
-    if (input <= table[0][0]) return table[0][1];
+        if (input <= table[0][0]) return table[0][1];
+        if (input >= table[table.length - 1][0]) return table[table.length - 1][1];
 
-    // Above maximum — clamp to last entry
-    if (input >= table[table.length - 1][0]) return table[table.length - 1][1];
-
-    // Find the two surrounding entries and interpolate
-    for (int i = 0; i < table.length - 1; i++) {
-        if (input >= table[i][0] && input < table[i + 1][0]) {
-            double t = (input - table[i][0]) / (table[i + 1][0] - table[i][0]);
-            return table[i][1] + t * (table[i + 1][1] - table[i][1]);
+        for (int i = 0; i < table.length - 1; i++) {
+            if (input >= table[i][0] && input < table[i + 1][0]) {
+                double t = (input - table[i][0]) / (table[i + 1][0] - table[i][0]);
+                return table[i][1] + t * (table[i + 1][1] - table[i][1]);
+            }
         }
-    }
 
-    return table[table.length - 1][1]; // Fallback
-}
+        return table[table.length - 1][1];
+    }
 }
