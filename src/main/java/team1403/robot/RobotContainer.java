@@ -91,15 +91,15 @@ public class RobotContainer {
     if(!Constants.ENABLE_SYSID){
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
         m_swerve,
-        () -> -m_driverController.getLeftX(),
-        () -> -m_driverController.getLeftY(),
-        () -> -m_driverController.getRightX(),
-        () -> m_driverController.getHID().getPOV() == 180,
-        () -> m_driverController.getHID().getPOV() == 0,
-        () -> m_driverController.getHID().getAButton(),
-        () -> m_driverController.getRightTriggerAxis(),
-        () -> m_driverController.getLeftTriggerAxis(),
-        () -> m_driverController.getHID().getStartButton()));
+        () -> -m_driverController.getLeftX(), //horo 
+        () -> -m_driverController.getLeftY(), //vert
+        () -> -m_driverController.getRightX(),//rot
+        () -> m_driverController.getHID().getPOV() == 180, //xmode
+        () -> m_driverController.getHID().getPOV() == 0,//roborel
+        () -> m_driverController.getHID().getAButton(),//autortate
+        () -> m_driverController.getRightTriggerAxis(),//speed
+        () -> m_driverController.getLeftTriggerAxis(),//snipping
+        () -> m_driverController.getHID().getStartButton()));//autoaim
 
     Command vibrationCmd = new ControllerVibrationCommand(m_driverController.getHID(), 0.28, 1);
     Command opVibrationCmd = new ControllerVibrationCommand(m_operatorController.getHID(), 0.28, 1);

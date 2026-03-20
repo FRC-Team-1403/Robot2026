@@ -123,7 +123,7 @@ public class DefaultSwerveCommand extends Command {
 
     //****got rid of snipping mode becase the intake was same butto and robot kept slowing down which was not needed for current testing 
 
-    //m_speedLimiter = 0.3 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + squareNum(m_speedSupplier.getAsDouble()) * 0.7;
+    m_speedLimiter = 0.3 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + squareNum(m_speedSupplier.getAsDouble()) * 0.7;
   
     if (DriverStation.isAutonomousEnabled()) {
       m_drivetrainSubsystem.drive(new ChassisSpeeds());
@@ -134,6 +134,7 @@ public class DefaultSwerveCommand extends Command {
       m_drivetrainSubsystem.setControl(new SwerveRequest.SwerveDriveBrake());
       return;
     }
+  
 
     ChassisSpeeds chassisSpeeds;
     double horizontal = m_horizontalTranslationSupplier.getAsDouble();
