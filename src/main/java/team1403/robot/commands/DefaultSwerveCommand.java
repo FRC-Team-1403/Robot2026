@@ -14,6 +14,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -188,15 +189,20 @@ public class DefaultSwerveCommand extends Command {
 
     if (m_autoAim.getAsBoolean()) {
       //AutoLook at the hub
-      Pose2d pose = m_drivetrainSubsystem.getPose();
+
+/* transformBy: new Pose3d(
+        m_translation.plus(other.getTranslation().rotateBy(m_rotation)),
+        other.getRotation().rotateBy(m_rotation)); */
+
+      Pose2d pose = m_drivetrainSubsystem.getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCW_90deg));
       Translation2d turretPivotField = pose.getTranslation();
       Translation2d target = Blackbox.getActiveTarget(pose);
-      Logger.recordOutput("targetPose", new Pose2d(target, Rotation2d.kZero));
+      Logger.recordOutput("targetPose", pose);
       double deltaX = target.getX() - turretPivotField.getX();
       double deltaY = target.getY() - turretPivotField.getY();
       double fieldAngleToGoal = Math.atan2(deltaY, deltaX);
-      double robotHeading = pose.getRotation().getRadians();
-      double targetAngle = MathUtil.angleModulus(fieldAngleToGoal - 3*Math.PI/2);
+      double robotHeading = MathUtil.angleModulus(pose.getRotation().getRadians());
+      double targetAngle = MathUtil.angleModulus(fieldAngleToGoal);
       angular = m_rotationPID.calculate(robotHeading, targetAngle);
     }
 

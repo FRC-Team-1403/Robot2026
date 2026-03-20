@@ -8,7 +8,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -21,7 +20,6 @@ import team1403.robot.commands.ControllerVibrationCommand;
 import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
-import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
 import team1403.robot.commands.WristCommand;
@@ -110,37 +108,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //Shooting Commands 
-      //against hub 
-    m_shooter.setDefaultCommand(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 
-                                  0, 0, 0, 0));
-    // m_operatorController.rightTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
-    //                                 Constants.InSpinShoot.kIndexerRPM_hub ,Constants.InSpinShoot.kSpindexerRPM_hub,
-    //                                 Constants.InSpinShoot.kShooterRPM_hub, Constants.InSpinShoot.kHoodAngle_hub));
-      //against tower 
+    //testing command for elastic
+    // m_operatorController.leftTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
 
-    m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.rightTrigger().getAsBoolean()));
-
-    m_operatorController.leftTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
-                                    Constants.InSpinShoot.kIndexerRPM_tower ,Constants.InSpinShoot.kSpindexerRPM_tower,
-                                    Constants.InSpinShoot.kShooterRPM_tower, Constants.InSpinShoot.kHoodAngle_tower));
-      //feed depo side (left)
-    m_operatorController.leftBumper().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
-                                    Constants.InSpinShoot.kIndexerRPM_left ,Constants.InSpinShoot.kSpindexerRPM_left,
-                                    Constants.InSpinShoot.kShooterRPM_left, Constants.InSpinShoot.kHoodAngle_left));
-      //feed human player side (right) 
-    m_operatorController.rightBumper().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
-                                    Constants.InSpinShoot.kIndexerRPM_right ,Constants.InSpinShoot.kSpindexerRPM_right,
-                                    Constants.InSpinShoot.kShooterRPM_right, Constants.InSpinShoot.kHoodAngle_right));
-
+    m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     
     m_operatorController.b().whileTrue(new IntakeCommand(m_intake, 1));
     m_operatorController.x().onTrue(new IntakeCommand(m_intake, 0));
     m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new WristCommand(m_intakeWrist, -0.3), 
                                                                     new IntakeCommand(m_intake, 1)));
     m_operatorController.povDown().whileTrue(new WristCommand(m_intakeWrist, 0.3));
-    
-
 
     //swerve buttons 
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
@@ -148,21 +125,20 @@ public class RobotContainer {
         () -> -m_driverController.getLeftX(),               //horozontal
         () -> -m_driverController.getLeftY(),               //vertical
         () -> -m_driverController.getRightX(),              //rotational 
-        () -> m_driverController.getHID().getPOV() == 180,  //x-mode  
-        () -> m_driverController.getHID().getPOV() == 0,    //robot relative  
+        () -> m_driverController.getHID().getXButton(),        //x-mode  
+        () -> false,                                        //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
         () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
-        () -> m_driverController.getHID().getStartButton(),
-        () -> m_driverController.rightBumper().getAsBoolean()
+        () -> m_driverController.getHID().getRightBumperButton(), // Auto Aim
+        () -> false // reset gyro
         ));
-
     
-    // //NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake));
-    // NamedCommands.registerCommand("Stationary Shoot Command", 
-    //         new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 
-   // Constants.InSpinShoot.kAutoIndexerRPM, Constants.InSpinShoot.kAutoSpindexerRPM, 
-    //Constants.InSpinShoot.kAutoShooterRPM, Constants.InSpinShoot.kAutoHoodAngle));
-
+    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
+    NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3));
+    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3));
+    
+    NamedCommands.registerCommand("Shoot Command", 
+             new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, () -> m_swerve.getPose(), () -> 1.0));
 
     m_autoChooser.addOption("STATIONARY SHOOT", AutoHelper.getStationaryShoot(m_swerve));
     m_autoChooser.addOption("HUMAN PLAYER", AutoHelper.getHumanPlayer(m_swerve));

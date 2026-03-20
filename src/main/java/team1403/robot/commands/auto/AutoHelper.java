@@ -8,7 +8,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
 import team1403.robot.util.AutoUtil;
 import team1403.robot.util.CougarUtil;
 import team1403.robot.swerve.SwerveSubsystem;
@@ -40,8 +42,20 @@ public class AutoHelper {
     public static Command getStationaryShoot(SwerveSubsystem m_swerve){
         try{
             return Commands.sequence(
-                NamedCommands.getCommand("Stationary Shoot Command"),
-                Commands.waitSeconds(10)
+                Commands.deadline(
+                    Commands.waitSeconds(1),
+                    NamedCommands.getCommand("Wrist Down Command")
+                ),
+                Commands.deadline(
+                    Commands.waitSeconds(10),
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.sequence(
+                        NamedCommands.getCommand("Wrist Down Command"),
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Up Command"),
+                        Commands.waitSeconds(1.5)
+                    ).repeatedly()
+                )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
@@ -49,13 +63,18 @@ public class AutoHelper {
         }
     }
 
+
     public static Command getHumanPlayer(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
+                Commands.deadline(
+                    Commands.waitSeconds(1),
+                    NamedCommands.getCommand("Wrist Down Command")
+                ),
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
-                Commands.parallel(
-                    NamedCommands.getCommand("Stationary Shoot Command"),
-                    Commands.waitSeconds(10) // TODO: change to parallel deadline
+                Commands.deadline(
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.waitSeconds(10)
                 )
             );
         } catch (Exception e) {
@@ -67,6 +86,10 @@ public class AutoHelper {
     public static Command getCenterHuman(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
+                Commands.deadline(
+                    Commands.waitSeconds(1),
+                    NamedCommands.getCommand("Wrist Down Command")
+                ),
                 Commands.parallel(
                     AutoUtil.loadPathPlannerPath("Center+HumanPt1", m_swerve, true),
                     NamedCommands.getCommand("Intake Command")
@@ -75,10 +98,9 @@ public class AutoHelper {
                     AutoUtil.loadPathPlannerPath("Center+HumanPt2", m_swerve, true),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                Commands.parallel(
+                Commands.deadline(
                     Commands.waitSeconds(5),
-                    NamedCommands.getCommand("Intake Command"),
-                    NamedCommands.getCommand("Stationary Shoot Command")
+                    NamedCommands.getCommand("Shoot Command")
                 )
             );
         } catch (Exception e) {
@@ -90,6 +112,10 @@ public class AutoHelper {
     public static Command getRightSweep(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
+                Commands.deadline(
+                    Commands.waitSeconds(1),
+                    NamedCommands.getCommand("Wrist Down Command")
+                ),
                 Commands.parallel(
                     AutoUtil.loadPathPlannerPath("RightSweepPt1", m_swerve, true),
                     NamedCommands.getCommand("Intake Command")
@@ -98,9 +124,9 @@ public class AutoHelper {
                     AutoUtil.loadPathPlannerPath("RightSweepPt2", m_swerve, true),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                Commands.parallel(
-                    NamedCommands.getCommand("Stationary Shoot Command"),
-                    Commands.waitSeconds(5) // TODO: parallel deadline
+                Commands.deadline(
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.waitSeconds(5) 
                 ),
                 Commands.parallel(
                     AutoUtil.loadPathPlannerPath("RightSweepPt3", m_swerve, true),
@@ -110,10 +136,9 @@ public class AutoHelper {
                     AutoUtil.loadPathPlannerPath("RightSweepPt4", m_swerve, true),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                Commands.parallel(
+                Commands.deadline(
                     Commands.waitSeconds(5),
-                    NamedCommands.getCommand("Intake Command"),
-                    NamedCommands.getCommand("Stationary Shoot Command")
+                    NamedCommands.getCommand("Shoot Command")
                 )
             );
         } catch (Exception e) {

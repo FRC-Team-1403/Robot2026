@@ -1,6 +1,7 @@
 package team1403.robot.commands;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -24,7 +25,7 @@ public class LERPShooter extends Command {
     private final Shooter m_shooter;
     private final ShooterHood m_shooterHood;
     private final Supplier<Pose2d> m_pose;
-    private final BooleanSupplier m_shoot;
+    private final DoubleSupplier m_shoot;
 
     public LERPShooter(
             Indexer indexer,
@@ -32,7 +33,7 @@ public class LERPShooter extends Command {
             Shooter shooter,
             ShooterHood hood,
             Supplier<Pose2d> pose,
-            BooleanSupplier shoot) {
+            DoubleSupplier shoot) {
         m_indexer = indexer;
         m_spindexer = spindexer;
         m_shooter = shooter;
@@ -49,12 +50,13 @@ public class LERPShooter extends Command {
     @Override
     public void execute() {
         Pose2d currentPose = m_pose.get().transformBy(new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d()));
-        double diffX = new Pose2d(Blackbox.getActiveTarget(currentPose), Rotation2d.kZero).getX() - currentPose.getX();
-        double diffY = new Pose2d(Blackbox.getActiveTarget(currentPose), Rotation2d.kZero).getY() - currentPose.getY();
-        double distance = Math.sqrt((diffX * diffX) + (diffY * diffY)); 
+        double diffX = Blackbox.getActiveTarget(currentPose).getX() - currentPose.getX();
+        double diffY = Blackbox.getActiveTarget(currentPose).getY() - currentPose.getY();
+        double distance = Math.hypot(diffX, diffY);
         double flywheelRPM = lerp(Constants.Shooter.distanceTable, distance);
         
-        if (m_shoot.getAsBoolean()) {
+        //Flywheel only spin when held
+        if (m_shoot.getAsDouble() > 0.3) {
             m_shooter.setFlywheelTargetRPM(flywheelRPM);
         }
         else {
@@ -62,18 +64,24 @@ public class LERPShooter extends Command {
             m_indexer.setIndexerRPM(0);
             m_spindexer.setSpindexerRPM(0);
         }
+
+        //Hood Angle based of zone
         if (FieldZoneUtil.getZone(currentPose) == Zone.CROSSING) {
             m_shooterHood.setSetpoint(0);
+        }
+        else if (FieldZoneUtil.getZone(currentPose) == Zone.NEUTRAL) {
+            m_shooterHood.setSetpoint(28);
         }
         else {
             m_shooterHood.setSetpoint(Constants.ShooterHood.kFixedHood);
         }
 
-        if (m_shooter.isFlywheelAtSpeed() && m_shooterHood.atSetpoint() && m_shoot.getAsBoolean()) {
+        //Act start shooting
+        if (m_shooter.isFlywheelAtSpeed() && m_shooterHood.atSetpoint() && m_shoot.getAsDouble() > 0.3 && distance > 1.6) {
             m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
         }
-
+        Logger.recordOutput("Shooter In Range", distance > 1.6);
         Logger.recordOutput("Debug/distance", distance);
         Logger.recordOutput("Debug/turret pose", currentPose);
     }
