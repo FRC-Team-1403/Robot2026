@@ -158,8 +158,8 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
             .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
 
         if(Robot.isReal()){
-            m_cameras.add(new AprilTagCamera("ThriftyCam1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCam2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
+            //m_cameras.add(new AprilTagCamera("ThriftyCam1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
+            //m_cameras.add(new AprilTagCamera("ThriftyCam2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
             m_cameras.add(new AprilTagCamera("ThriftyCam3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
             m_cameras.add(new AprilTagCamera("ThriftyCam4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
         }

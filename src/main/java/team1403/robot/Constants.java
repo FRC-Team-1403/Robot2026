@@ -106,10 +106,10 @@ public final class Constants {
 
     public static final boolean kExtraVisionDebugInfo = true;
 
-    public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(kCameraOffset, new Rotation3d(0,0,0));;
-    public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(90)));
-    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(180)));
-    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(270)));
+    //public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(kCameraOffset, new Rotation3d(0,0,0));;
+    //public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(90)));
+    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(0,0,0, new Rotation3d(0,0, Math.toRadians(180)));
+    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(0,0,0, new Rotation3d(0,0, Math.toRadians(270)));
 
 
     //NEW COMBINED VISION SUBSYSTEM
