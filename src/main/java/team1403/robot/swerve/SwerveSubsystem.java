@@ -161,12 +161,14 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
             .withRobotPose(this::getPose, () -> Timer.getFPGATimestamp()) /* find a way to convert m_state.Timestamp to fpga time */
             .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
 
-        if(Robot.isReal()){
-            //m_cameras.add(new AprilTagCamera("ThriftyCam1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
-            //m_cameras.add(new AprilTagCamera("ThriftyCam2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCam3.0", () -> Constants.Vision.kCameraTransfromThriftyCamera3, this::getPose));
-            m_cameras.add(new AprilTagCamera("ThriftyCam4.0", () -> Constants.Vision.kCameraTransfromThriftyCamera4, this::getPose));
-        }
+        //m_cameras.add(new AprilTagCamera("ThriftyCam1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
+        //m_cameras.add(new AprilTagCamera("ThriftyCam2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam3.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera3)));
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam4.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera4)));
 
         SmartDashboard.putData("Gyro", super.getPigeon2());
 

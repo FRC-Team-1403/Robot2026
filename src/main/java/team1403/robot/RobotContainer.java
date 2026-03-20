@@ -33,8 +33,6 @@ import team1403.robot.subsystems.Spindexer;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
 import team1403.robot.util.CougarUtil;
-import team1403.robot.vision.Vision;
-
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -46,7 +44,6 @@ public class RobotContainer {
   private final Shooter m_shooter;
   private final ShooterHood m_shooterHood;
   private final SwerveSubsystem m_swerve;
-  private final Vision m_vision; 
 
   private final Timer m_teleopTimer;
 
@@ -68,8 +65,6 @@ public class RobotContainer {
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
     m_shooterHood = new ShooterHood();
-    m_vision = new Vision();
-
     
     //for vibration command
     m_teleopTimer = new Timer();

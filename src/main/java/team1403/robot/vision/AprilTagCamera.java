@@ -40,13 +40,18 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
   private EstimatedRobotPose m_estPos;
   private final Supplier<Pose2d> m_referencePose;
   private final Alert m_cameraAlert;
-  private static final Matrix<N3, N1> kDefaultStdv = VecBuilder.fill(2, 2, 10);
+  private final Matrix<N3, N1> kDefaultStdv;
 
-  public AprilTagCamera(String cameraName, Supplier<Transform3d> cameraTransform, Supplier<Pose2d> referenceSupplier) {
+  public AprilTagCamera(VisionConfigurator config) {
     // Photonvision
     // PortForwarder.add(5800, 
     // "photonvision.local", 5800);
-    m_camera = new PhotonCamera(cameraName);
+    m_camera = new PhotonCamera(config.getName());
+
+    m_estPos = null;
+    m_referencePose = config.getRobotPose();
+    m_cameraTransform = config.getTransform3d();
+    kDefaultStdv = config.getDeviations();
 
     if (Robot.isSimulation()) {
       SimCameraProperties cameraProp = new SimCameraProperties();
@@ -63,23 +68,16 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
 
       m_cameraSim = new PhotonCameraSim(m_camera, cameraProp);
 
-      VisionSimUtil.addCamera(m_cameraSim, cameraTransform.get());
+      VisionSimUtil.addCamera(m_cameraSim, m_cameraTransform.get());
     }
 
     // 0: April Tags
-
-
-    // 1: Reflective Tape
     m_camera.setPipelineIndex(0);
 
-    m_poseEstimator = new PhotonPoseEstimator(Constants.Vision.kFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraTransform.get());
+    m_poseEstimator = new PhotonPoseEstimator(Constants.Vision.kFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_cameraTransform.get());
     m_poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.AVERAGE_BEST_TARGETS);
 
-    m_estPos = null;
-    m_referencePose = referenceSupplier;
-    m_cameraTransform = cameraTransform;
-
-    m_cameraAlert = new Alert("Photon Camera " + cameraName + " Disconnected!", AlertType.kError);
+    m_cameraAlert = new Alert("Photon Camera " + config.getName() + " Disconnected!", AlertType.kError);
   }
 
   @Override
