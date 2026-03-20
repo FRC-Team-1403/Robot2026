@@ -73,8 +73,14 @@ public class AutoHelper {
                 ),
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
                 Commands.deadline(
+                    Commands.waitSeconds(10),
                     NamedCommands.getCommand("Shoot Command"),
-                    Commands.waitSeconds(10)
+                    Commands.sequence(
+                        NamedCommands.getCommand("Wrist Down Command"),
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Up Command"),
+                        Commands.waitSeconds(1.5)
+                    ).repeatedly()
                 )
             );
         } catch (Exception e) {
@@ -99,8 +105,14 @@ public class AutoHelper {
                     NamedCommands.getCommand("Intake Command")
                 ),
                 Commands.deadline(
-                    Commands.waitSeconds(5),
-                    NamedCommands.getCommand("Shoot Command")
+                    Commands.waitSeconds(10),
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.sequence(
+                        NamedCommands.getCommand("Wrist Down Command"),
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Up Command"),
+                        Commands.waitSeconds(1.5)
+                    ).repeatedly()
                 )
             );
         } catch (Exception e) {
@@ -125,8 +137,14 @@ public class AutoHelper {
                     NamedCommands.getCommand("Intake Command")
                 ),
                 Commands.deadline(
+                    Commands.waitSeconds(10),
                     NamedCommands.getCommand("Shoot Command"),
-                    Commands.waitSeconds(5) 
+                    Commands.sequence(
+                        NamedCommands.getCommand("Wrist Down Command"),
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Up Command"),
+                        Commands.waitSeconds(1.5)
+                    ).repeatedly()
                 ),
                 Commands.parallel(
                     AutoUtil.loadPathPlannerPath("RightSweepPt3", m_swerve, true),
@@ -137,8 +155,14 @@ public class AutoHelper {
                     NamedCommands.getCommand("Intake Command")
                 ),
                 Commands.deadline(
-                    Commands.waitSeconds(5),
-                    NamedCommands.getCommand("Shoot Command")
+                    Commands.waitSeconds(10),
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.sequence(
+                        NamedCommands.getCommand("Wrist Down Command"),
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Up Command"),
+                        Commands.waitSeconds(1.5)
+                    ).repeatedly()
                 )
             );
         } catch (Exception e) {

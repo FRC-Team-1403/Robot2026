@@ -112,6 +112,9 @@ public class DefaultSwerveCommand extends Command {
   @Override
   public void initialize() {
     prev_horizontal = prev_vertical = 0;
+    Pose2d pose = m_drivetrainSubsystem.getPose();
+    // if the initial position is incorrect our velocity will be wrong too
+    m_rotationPID.reset(MathUtil.angleModulus(pose.getRotation().getRadians()));
   }
 
   @Override

@@ -130,7 +130,7 @@ public class RobotContainer {
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
         () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)
         () -> m_driverController.getHID().getRightBumperButton(), // Auto Aim
-        () -> false // reset gyro
+        () -> m_driverController.getHID().getBButton() // reset gyro
         ));
     
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
