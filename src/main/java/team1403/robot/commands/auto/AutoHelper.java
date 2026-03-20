@@ -50,7 +50,7 @@ public class AutoHelper {
             return Commands.sequence(
                 NamedCommands.getCommand("Wrist Down Command"),
                 AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
-                NamedCommands.getCommand("Auto Aim"),
+                //NamedCommands.getCommand("Auto Aim"),
                 NamedCommands.getCommand("Shoot Command"),
                 Commands.waitSeconds(10),
                 NamedCommands.getCommand("Decelerate Shooter Flywheel")
@@ -66,21 +66,11 @@ public class AutoHelper {
     public static Command getHumanPlayer(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
-                Commands.deadline(
-                    Commands.waitSeconds(1),
-                    NamedCommands.getCommand("Wrist Down Command")
-                ),
+                NamedCommands.getCommand("Wrist Down Command"),
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
-                Commands.deadline(
-                    Commands.waitSeconds(10),
-                    NamedCommands.getCommand("Shoot Command"),
-                    Commands.sequence(
-                        NamedCommands.getCommand("Wrist Down Command"),
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(1.5)
-                    ).repeatedly()
-                )
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(10),
+                NamedCommands.getCommand("Decelerate Shooter Flywheel")
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
