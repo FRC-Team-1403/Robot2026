@@ -48,10 +48,27 @@ public class AutoHelper {
     public static Command getStationaryShoot(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
-        NamedCommands.getCommand("Wrist Down Command"),
-        AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
-        NamedCommands.getCommand("Auto Aim"),       
-        NamedCommands.getCommand("Shoot Command")  
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryShootAutoAlign(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim"),
+            NamedCommands.getCommand("Shoot Command"),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel")
             
         );
         } catch (Exception e) {
