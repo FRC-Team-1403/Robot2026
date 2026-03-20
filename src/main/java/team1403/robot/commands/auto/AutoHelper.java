@@ -13,6 +13,12 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
 import team1403.robot.util.AutoUtil;
 import team1403.robot.util.CougarUtil;
+import team1403.robot.subsystems.Indexer;
+import team1403.robot.subsystems.Intake;
+import team1403.robot.subsystems.IntakeWrist;
+import team1403.robot.subsystems.Shooter;
+import team1403.robot.subsystems.ShooterHood;
+import team1403.robot.subsystems.Spindexer;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -42,20 +48,12 @@ public class AutoHelper {
     public static Command getStationaryShoot(SwerveSubsystem m_swerve){
         try{
             return Commands.sequence(
-                Commands.waitSeconds(1.5),
-                Commands.parallel(
-                    Commands.waitSeconds(2),
-                    NamedCommands.getCommand("Wrist Down Command")
-                ),
+                NamedCommands.getCommand("Wrist Down Command"),
                 AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
-                Commands.parallel(
-                    Commands.waitSeconds(5),
-                    NamedCommands.getCommand("Shoot Command")
-                ),
-                Commands.parallel(
-                    Commands.waitSeconds(2),
-                    NamedCommands.getCommand("Decelerate Shooter Flywheel")
-                )
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(5),
+                NamedCommands.getCommand("Decelerate Shooter Flywheel")
+                
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());

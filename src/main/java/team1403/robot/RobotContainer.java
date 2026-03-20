@@ -70,13 +70,12 @@ public class RobotContainer {
     //for vibration command
     m_teleopTimer = new Timer();
 
-    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
-    NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3));
-    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3));
+    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
+    NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
+    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3).withTimeout(1).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, 
-                                  m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
-    NamedCommands.registerCommand("Shoot Command", new ParallelCommandGroup(
-        new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0),
+                                  m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
+    NamedCommands.registerCommand("Shoot Command", new SequentialCommandGroup(
         new DefaultSwerveCommand(
             m_swerve,
             () -> 0.0,
@@ -88,7 +87,22 @@ public class RobotContainer {
             () -> 0.0,
             () -> true,
             () -> false
-        )
+        ).withTimeout(2.0),
+        new ParallelCommandGroup(
+            new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0),
+            new DefaultSwerveCommand(
+                m_swerve,
+                () -> 0.0,
+                () -> 0.0,
+                () -> 0.0,
+                () -> false,
+                () -> false,
+                () -> 0.0,
+                () -> 0.0,
+                () -> true,
+                () -> false
+            )
+        ).asProxy()
     ));
 
     
