@@ -156,9 +156,11 @@ public class RobotContainer {
 
   
 
-    m_autoChooser.addOption("STATIONARY SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryShoot(m_swerve));
-    m_autoChooser.addOption("NEEDS TO BE TESTING AUTO ALIGN STATIONARY SHOOT", AutoHelper.getStationaryShootAutoAlign(m_swerve));
-    m_autoChooser.addOption("HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayer(m_swerve));
+    m_autoChooser.addOption("NO AUTO ALIGN STATIONARY SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryShoot(m_swerve));
+    m_autoChooser.addOption("AUTO ALIGN STATIONARY SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryShootAutoAlign(m_swerve));
+    m_autoChooser.addOption("NO AUTO ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayer(m_swerve));
+    m_autoChooser.addOption("ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayerAutoAlign(m_swerve));
+
     m_autoChooser.addOption("TEST AUTO ALIGN", AutoHelper.getAutoAlignTest(m_swerve));
     m_autoChooser.addOption("INTAKE JIGGLE TEST", AutoHelper.getIntakeJiggleTest(m_swerve));
   

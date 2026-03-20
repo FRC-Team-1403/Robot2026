@@ -75,7 +75,7 @@ public class AutoHelper {
         }
     }
 
-                    
+                     
     public static Command getStationaryShoot(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
@@ -131,7 +131,7 @@ public class AutoHelper {
             return Commands.sequence(
                 NamedCommands.getCommand("Wrist Down Command"),
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
-                Commands.waitSeconds(7),
+                Commands.waitSeconds(4),
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt2", m_swerve, true), 
                 NamedCommands.getCommand("Auto Aim Command"),
                 NamedCommands.getCommand("Shoot Command"),
