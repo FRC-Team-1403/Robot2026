@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -68,6 +69,27 @@ public class RobotContainer {
     
     //for vibration command
     m_teleopTimer = new Timer();
+
+    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
+    NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3));
+    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3));
+    NamedCommands.registerCommand("Decelerate Shooter Flywheel", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, 
+                                  m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
+    NamedCommands.registerCommand("Shoot Command", new ParallelCommandGroup(
+        new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0),
+        new DefaultSwerveCommand(
+            m_swerve,
+            () -> 0.0,
+            () -> 0.0,
+            () -> 0.0,
+            () -> false,
+            () -> false,
+            () -> 0.0,
+            () -> 0.0,
+            () -> true,
+            () -> false
+        )
+    ));
 
     
     if (AutoBuilder.isConfigured())
@@ -143,19 +165,14 @@ public class RobotContainer {
     //     () -> m_driverController.getHID().getBButton() // reset gyro
     //     ));
 
-    
-    
-    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
-    NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3));
-    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3));
-    
-    NamedCommands.registerCommand("Shoot Command", 
-             new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, () -> m_swerve.getPose(), () -> 1.0));
+  
 
     m_autoChooser.addOption("STATIONARY SHOOT", AutoHelper.getStationaryShoot(m_swerve));
     m_autoChooser.addOption("HUMAN PLAYER", AutoHelper.getHumanPlayer(m_swerve));
     m_autoChooser.addOption("RIGHT SWEEP 1X THEN HUMAN PLAYER", AutoHelper.getCenterHuman(m_swerve));
-    m_autoChooser.addOption("RIGHT SWEEP 2X THEN HUMAN PLAYER", AutoHelper.getRightSweep(m_swerve));
+    //m_autoChooser.addOption("RIGHT SWEEP 2X THEN HUMAN PLAYER", AutoHelper.getRightSweep(m_swerve));
+
+    
   }
 
 

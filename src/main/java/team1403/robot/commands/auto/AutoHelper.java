@@ -38,18 +38,23 @@ public class AutoHelper {
             return AutoBuilder.pathfindToPose(target, TunerConstants.kPathConstraints);
         });
     }
-
+    
     public static Command getStationaryShoot(SwerveSubsystem m_swerve){
         try{
             return Commands.sequence(
-                Commands.deadline(
-                    Commands.waitSeconds(1),
+                Commands.waitSeconds(1.5),
+                Commands.parallel(
+                    Commands.waitSeconds(2),
                     NamedCommands.getCommand("Wrist Down Command")
                 ),
                 AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
-                Commands.deadline(
-                    Commands.waitSeconds(10),
+                Commands.parallel(
+                    Commands.waitSeconds(5),
                     NamedCommands.getCommand("Shoot Command")
+                ),
+                Commands.parallel(
+                    Commands.waitSeconds(2),
+                    NamedCommands.getCommand("Decelerate Shooter Flywheel")
                 )
             );
         } catch (Exception e) {
@@ -116,55 +121,55 @@ public class AutoHelper {
         }
     }
 
-    public static Command getRightSweep(SwerveSubsystem m_swerve) {
-        try {
-            return Commands.sequence(
-                Commands.deadline(
-                    Commands.waitSeconds(1),
-                    NamedCommands.getCommand("Wrist Down Command")
-                ),
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("RightSweepPt1", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("RightSweepPt2", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.deadline(
-                    Commands.waitSeconds(10),
-                    NamedCommands.getCommand("Shoot Command"),
-                    Commands.sequence(
-                        NamedCommands.getCommand("Wrist Down Command"),
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(1.5)
-                    ).repeatedly()
-                ),
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("RightSweepPt3", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("RightSweepPt4", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.deadline(
-                    Commands.waitSeconds(10),
-                    NamedCommands.getCommand("Shoot Command"),
-                    Commands.sequence(
-                        NamedCommands.getCommand("Wrist Down Command"),
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(1.5)
-                    ).repeatedly()
-                )
-            );
-        } catch (Exception e) {
-            System.err.println("Could not load auto: " + e.getMessage());
-            return Commands.none();
-        }
-    }
+    // public static Command getRightSweep(SwerveSubsystem m_swerve) {
+    //     try {
+    //         return Commands.sequence(
+    //             Commands.deadline(
+    //                 Commands.waitSeconds(1),
+    //                 NamedCommands.getCommand("Wrist Down Command")
+    //             ),
+    //             Commands.parallel(
+    //                 AutoUtil.loadPathPlannerPath("RightSweepPt1", m_swerve, true),
+    //                 NamedCommands.getCommand("Intake Command")
+    //             ),
+    //             Commands.parallel(
+    //                 AutoUtil.loadPathPlannerPath("RightSweepPt2", m_swerve, true),
+    //                 NamedCommands.getCommand("Intake Command")
+    //             ),
+    //             Commands.deadline(
+    //                 Commands.waitSeconds(10),
+    //                 NamedCommands.getCommand("Shoot Command"),
+    //                 Commands.sequence(
+    //                     NamedCommands.getCommand("Wrist Down Command"),
+    //                     Commands.waitSeconds(1.5),
+    //                     NamedCommands.getCommand("Wrist Up Command"),
+    //                     Commands.waitSeconds(1.5)
+    //                 ).repeatedly()
+    //             ),
+    //             Commands.parallel(
+    //                 AutoUtil.loadPathPlannerPath("RightSweepPt3", m_swerve, true),
+    //                 NamedCommands.getCommand("Intake Command")
+    //             ),
+    //             Commands.parallel(
+    //                 AutoUtil.loadPathPlannerPath("RightSweepPt4", m_swerve, true),
+    //                 NamedCommands.getCommand("Intake Command")
+    //             ),
+    //             Commands.deadline(
+    //                 Commands.waitSeconds(10),
+    //                 NamedCommands.getCommand("Shoot Command"),
+    //                 Commands.sequence(
+    //                     NamedCommands.getCommand("Wrist Down Command"),
+    //                     Commands.waitSeconds(1.5),
+    //                     NamedCommands.getCommand("Wrist Up Command"),
+    //                     Commands.waitSeconds(1.5)
+    //                 ).repeatedly()
+    //             )
+    //         );
+    //     } catch (Exception e) {
+    //         System.err.println("Could not load auto: " + e.getMessage());
+    //         return Commands.none();
+    //     }
+    // }
 
     // public static Command getLeftSweep(SwerveSubsystem m_swerve) {
     //     try {

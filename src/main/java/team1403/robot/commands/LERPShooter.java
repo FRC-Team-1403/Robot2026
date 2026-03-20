@@ -100,7 +100,7 @@ public class LERPShooter extends Command {
             m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
         }
 
-        Logger.recordOutput("Shooter In Range", distance > 1.6);
+        Logger.recordOutput("Debug/Shooter In Range", distance > 1.6);
         Logger.recordOutput("Debug/distance", distance);
         Logger.recordOutput("Debug/turret pose", currentPose);
     }
