@@ -145,6 +145,7 @@ public final class Constants {
 
 
     public static final double kMagnetOffset = -0.566;
+    public static final double kFixedHood = 0;
   }
 
   public static class Shooter {
@@ -160,6 +161,16 @@ public final class Constants {
     public static final double kS = 0.1;
     public static final double kV = 0.12;
     public static final double kA = 0.2;
+    public static final double[][] distanceTable = {
+      {1.0, 2000},
+      {2.0, 2500},
+      {3.0, 3000},
+      {4.0, 3500},
+      {4.5, 4000},
+      {5.0, 4500},
+      {6.0, 5000},
+      {7.0, 5500}
+    };
   }
 
   public static class Indexer {
@@ -173,6 +184,7 @@ public final class Constants {
     public static final double kS = 0.10;
     public static final double kV = 0.12;
     public static final double kA = 2.0;
+    public static final double m_indexerRPM = 0;
 
   }
 
@@ -187,6 +199,7 @@ public final class Constants {
     public static final double kS = 0.10;
     public static final double kV = 0.115;
     public static final double kA = 2.0;
+    public static final double m_spindexerRPM = 0;
   }
 
   public static class Intake {
