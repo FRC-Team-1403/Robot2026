@@ -7,6 +7,7 @@ package team1403.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import team1403.robot.swerve.SwerveSubsystem;
@@ -38,6 +39,7 @@ public class Robot extends LoggedRobot {
     Logger.addDataReceiver(new NT4Publisher());
     Logger.addDataReceiver(new WPILOGWriter());
     Logger.start();
+    SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
   /**
