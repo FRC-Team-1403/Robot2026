@@ -21,6 +21,7 @@ import team1403.robot.commands.ControllerVibrationCommand;
 import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
+import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.auto.AutoHelper;
@@ -61,7 +62,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_swerve = TunerConstants.createDrivetrain();
-    
+
     m_intake = new Intake();
     m_intakeWrist = new IntakeWrist();
     m_indexer= new Indexer();
@@ -69,6 +70,7 @@ public class RobotContainer {
     m_shooter = new Shooter();
     m_shooterHood = new ShooterHood();
     m_vision = new Vision();
+
     
     //for vibration command
     m_teleopTimer = new Timer();
@@ -111,7 +113,7 @@ public class RobotContainer {
       //against hub 
     m_shooter.setDefaultCommand(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 
                                   0, 0, 0, 0));
-    m_operatorController.rightTrigger().whileTrue(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
+    m_operatorController.rightTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 
                                     Constants.InSpinShoot.kIndexerRPM_hub ,Constants.InSpinShoot.kSpindexerRPM_hub,
                                     Constants.InSpinShoot.kShooterRPM_hub, Constants.InSpinShoot.kHoodAngle_hub));
       //against tower 
