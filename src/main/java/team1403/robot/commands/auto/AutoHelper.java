@@ -50,9 +50,8 @@ public class AutoHelper {
             return Commands.sequence(
                 NamedCommands.getCommand("Wrist Down Command"),
                 AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
-                NamedCommands.getCommand("Auto Aim"),
                 NamedCommands.getCommand("Shoot Command"),
-                Commands.waitSeconds(5),
+                Commands.waitSeconds(10),
                 NamedCommands.getCommand("Decelerate Shooter Flywheel")
                 
             );
