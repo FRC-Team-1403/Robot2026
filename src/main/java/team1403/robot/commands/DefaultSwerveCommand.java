@@ -143,7 +143,10 @@ public class DefaultSwerveCommand extends Command {
     }
 
     if (m_resetSupplier.getAsBoolean()) {
-      m_drivetrainSubsystem.resetRotation(Rotation2d.kZero);
+      if(DriverStation.getAlliance().get() == Alliance.Red)
+        m_drivetrainSubsystem.resetRotation(Rotation2d.kPi);
+      else
+        m_drivetrainSubsystem.resetRotation(Rotation2d.kZero);
     }
 
     ChassisSpeeds chassisSpeeds;
