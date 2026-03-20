@@ -68,6 +68,7 @@ public class AutoHelper {
             AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
             NamedCommands.getCommand("Auto Aim"),
             NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel")
             
         );

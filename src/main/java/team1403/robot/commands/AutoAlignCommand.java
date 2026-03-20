@@ -43,7 +43,9 @@ public class AutoAlignCommand extends Command {
 
         m_targetAngle = MathUtil.angleModulus(Math.atan2(deltaY, deltaX));
 
-        m_rotationPID.reset(MathUtil.angleModulus(pose.getRotation().getRadians()));
+        double currentAngle = MathUtil.angleModulus(pose.getRotation().getRadians());
+        m_rotationPID.reset(currentAngle);
+        m_rotationPID.setGoal(m_targetAngle);
     }
 
     @Override

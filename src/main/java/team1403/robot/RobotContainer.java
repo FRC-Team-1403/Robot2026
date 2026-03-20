@@ -74,16 +74,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
     NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
     NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3).withTimeout(1).asProxy());
-    NamedCommands.registerCommand("Decelerate Shooter Flywheel", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, 
-                                  m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
-    NamedCommands.registerCommand("Auto Aim", new AutoAlignCommand(m_swerve).
-    asProxy());
-
-
-  NamedCommands.registerCommand("Spinup Command", new LERPShooter(
-      m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
-  ).withTimeout(3.0));
-
+    NamedCommands.registerCommand("Decelerate Shooter Flywheel", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
+    NamedCommands.registerCommand("Auto Aim", new AutoAlignCommand(m_swerve).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(
         m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
     ));
@@ -165,6 +157,7 @@ public class RobotContainer {
   
 
     m_autoChooser.addOption("STATIONARY SHOOT", AutoHelper.getStationaryShoot(m_swerve));
+    m_autoChooser.addOption("NEEDS TO BE TESTING AUTO ALIGN STATIONARY SHOOT", AutoHelper.getStationaryShootAutoAlign(m_swerve));
     m_autoChooser.addOption("HUMAN PLAYER", AutoHelper.getHumanPlayer(m_swerve));
     m_autoChooser.addOption("RIGHT SWEEP 1X THEN HUMAN PLAYER", AutoHelper.getCenterHuman(m_swerve));
     //m_autoChooser.addOption("RIGHT SWEEP 2X THEN HUMAN PLAYER", AutoHelper.getRightSweep(m_swerve));
