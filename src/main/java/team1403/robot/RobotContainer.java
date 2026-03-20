@@ -79,9 +79,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("Auto Aim", new AutoAlignCommand(m_swerve).
     asProxy());
 
-      NamedCommands.registerCommand("Shoot Command", new LERPShooter(
-      m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
-  ).withTimeout(2.0));
 
   NamedCommands.registerCommand("Spinup Command", new LERPShooter(
       m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
