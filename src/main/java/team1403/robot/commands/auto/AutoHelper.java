@@ -46,15 +46,10 @@ public class AutoHelper {
                     Commands.waitSeconds(1),
                     NamedCommands.getCommand("Wrist Down Command")
                 ),
+                AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
                 Commands.deadline(
                     Commands.waitSeconds(10),
-                    NamedCommands.getCommand("Shoot Command"),
-                    Commands.sequence(
-                        NamedCommands.getCommand("Wrist Down Command"),
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(1.5)
-                    ).repeatedly()
+                    NamedCommands.getCommand("Shoot Command")
                 )
             );
         } catch (Exception e) {

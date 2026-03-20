@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "StationaryPt1"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 10.0
