@@ -20,21 +20,17 @@ public class AutoAlignCommand extends Command {
     private final ProfiledPIDController m_rotationPID = new ProfiledPIDController(5, 0, 0,
         new TrapezoidProfile.Constraints(TunerConstants.kMaxAngularRate, 14));
 
+    private double m_targetAngle;
+
     public AutoAlignCommand(SwerveSubsystem swerve) {
         m_swerve = swerve;
         m_rotationPID.enableContinuousInput(-Math.PI, Math.PI);
-        m_rotationPID.setTolerance(0.05);
+        m_rotationPID.setTolerance(0.08, 0.15);
         addRequirements(m_swerve);
     }
 
     @Override
     public void initialize() {
-        Pose2d pose = m_swerve.getPose();
-        m_rotationPID.reset(MathUtil.angleModulus(pose.getRotation().getRadians()));
-    }
-
-    @Override
-    public void execute() {
         Pose2d pose = m_swerve.getPose().transformBy(
             new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg)
         );
@@ -44,12 +40,21 @@ public class AutoAlignCommand extends Command {
 
         double deltaX = target.getX() - turretPivotField.getX();
         double deltaY = target.getY() - turretPivotField.getY();
-        double fieldAngleToGoal = Math.atan2(deltaY, deltaX);
+
+        m_targetAngle = MathUtil.angleModulus(Math.atan2(deltaY, deltaX));
+
+        m_rotationPID.reset(MathUtil.angleModulus(pose.getRotation().getRadians()));
+    }
+
+    @Override
+    public void execute() {
+        Pose2d pose = m_swerve.getPose().transformBy(
+            new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg)
+        );
 
         double robotHeading = MathUtil.angleModulus(pose.getRotation().getRadians());
-        double targetAngle = MathUtil.angleModulus(fieldAngleToGoal);
 
-        double angular = m_rotationPID.calculate(robotHeading, targetAngle);
+        double angular = m_rotationPID.calculate(robotHeading, m_targetAngle);
 
         m_swerve.drive(new ChassisSpeeds(0, 0, angular));
     }
