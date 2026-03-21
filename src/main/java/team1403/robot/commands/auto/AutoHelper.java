@@ -74,8 +74,7 @@ public class AutoHelper {
             return Commands.none(); 
         }
     }
-
-                     
+                 
     public static Command getStationaryShoot(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
