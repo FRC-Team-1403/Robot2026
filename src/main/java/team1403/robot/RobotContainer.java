@@ -156,8 +156,12 @@ public class RobotContainer {
 
   
 
-    m_autoChooser.addOption("NO AUTO ALIGN STATIONARY SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryShoot(m_swerve));
-    m_autoChooser.addOption("AUTO ALIGN STATIONARY SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryShootAutoAlign(m_swerve));
+    m_autoChooser.addOption("NO AUTO ALIGN STATIONARY CENTER SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryCenterShoot(m_swerve));
+    //m_autoChooser.addOption("NO AUTO ALIGN STATIONARY LEFT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryLeftShoot(m_swerve));
+    //m_autoChooser.addOption("NO AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShoot(m_swerve));
+    m_autoChooser.addOption("AUTO ALIGN STATIONARY CENTER SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryCenterShootAutoAlign(m_swerve));
+    //m_autoChooser.addOption("AUTO ALIGN STATIONARY LEFT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryLeftShootAutoAlign(m_swerve));
+    //m_autoChooser.addOption("AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShootAutoAlign(m_swerve));
     m_autoChooser.addOption("NO AUTO ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayer(m_swerve));
     m_autoChooser.addOption("ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayerAutoAlign(m_swerve));
     m_autoChooser.addOption("MIDDLE HUB DEPOT SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepot(m_swerve));

@@ -75,11 +75,11 @@ public class AutoHelper {
         }
     }
                  
-    public static Command getStationaryShoot(SwerveSubsystem m_swerve){
+    public static Command getStationaryCenterShoot(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryCenterPt1", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -91,11 +91,77 @@ public class AutoHelper {
         }
     }
 
-    public static Command getStationaryShootAutoAlign(SwerveSubsystem m_swerve){
+    public static Command getStationaryLeftShoot(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryLeftPt1", m_swerve, true),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryRightShoot(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryRightPt1", m_swerve, true),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryCenterShootAutoAlign(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryCenterPt1", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim Command"),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryLeftShootAutoAlign(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryLeftPt1", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim Command"),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryRightShootAutoAlign(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryRightPt1", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
