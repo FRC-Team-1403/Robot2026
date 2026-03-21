@@ -61,6 +61,7 @@ public final class Constants {
     public static final double kUnitsPerRampTime = 100;
 
     public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
+    public static final Rotation2d rotationCorrectionOffset = Rotation2d.fromDegrees(-2);  
   }
 
   public static class Swerve {
