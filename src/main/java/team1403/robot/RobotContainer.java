@@ -76,7 +76,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
     NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3).withTimeout(1).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
-    NamedCommands.registerCommand("Auto Aim Command", new AutoAlignCommand(m_swerve).asProxy());
+    NamedCommands.registerCommand("Auto Aim Command", new AutoAlignCommand(m_swerve));
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(
         m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
     ));
@@ -157,10 +157,15 @@ public class RobotContainer {
 
   
 
-    m_autoChooser.addOption("NO AUTO ALIGN STATIONARY SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryShoot(m_swerve));
-    m_autoChooser.addOption("AUTO ALIGN STATIONARY SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryShootAutoAlign(m_swerve));
+    m_autoChooser.addOption("NO AUTO ALIGN STATIONARY CENTER SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryCenterShoot(m_swerve));
+    //m_autoChooser.addOption("NO AUTO ALIGN STATIONARY LEFT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryLeftShoot(m_swerve));
+    //m_autoChooser.addOption("NO AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShoot(m_swerve));
+    m_autoChooser.addOption("AUTO ALIGN STATIONARY CENTER SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryCenterShootAutoAlign(m_swerve));
+    //m_autoChooser.addOption("AUTO ALIGN STATIONARY LEFT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryLeftShootAutoAlign(m_swerve));
+    //m_autoChooser.addOption("AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShootAutoAlign(m_swerve));
     m_autoChooser.addOption("NO AUTO ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayer(m_swerve));
     m_autoChooser.addOption("ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayerAutoAlign(m_swerve));
+    m_autoChooser.addOption("MIDDLE HUB DEPOT SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepot(m_swerve));
 
     m_autoChooser.addOption("TEST AUTO ALIGN", AutoHelper.getAutoAlignTest(m_swerve));
     m_autoChooser.addOption("INTAKE JIGGLE TEST", AutoHelper.getIntakeJiggleTest(m_swerve));

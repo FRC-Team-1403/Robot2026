@@ -32,7 +32,7 @@ public class AutoAlignCommand extends Command {
     @Override
     public void initialize() {
         Pose2d pose = m_swerve.getPose().transformBy(
-            new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg)
+            new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg.plus(Constants.Turret.rotationCorrectionOffset))
         );
 
         Translation2d turretPivotField = pose.getTranslation();
@@ -51,7 +51,7 @@ public class AutoAlignCommand extends Command {
     @Override
     public void execute() {
         Pose2d pose = m_swerve.getPose().transformBy(
-            new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg)
+            new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg.plus(Constants.Turret.rotationCorrectionOffset))
         );
 
         double robotHeading = MathUtil.angleModulus(pose.getRotation().getRadians());

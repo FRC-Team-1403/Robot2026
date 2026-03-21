@@ -61,11 +61,11 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             Commands.race(
-                    Commands.sequence(
-                        NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("Wrist Down Command"),
-                        Commands.waitSeconds(1.5)
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(9),
+                Commands.sequence(
+                    NamedCommands.getCommand("Wrist Up Command"),
+                    Commands.waitSeconds(0.8)
                 ).repeatedly()
             )   
         );
@@ -74,13 +74,12 @@ public class AutoHelper {
             return Commands.none(); 
         }
     }
-
-                     
-    public static Command getStationaryShoot(SwerveSubsystem m_swerve){
+                 
+    public static Command getStationaryCenterShoot(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -92,11 +91,43 @@ public class AutoHelper {
         }
     }
 
-    public static Command getStationaryShootAutoAlign(SwerveSubsystem m_swerve){
+    public static Command getStationaryLeftShoot(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryLeftTrench", m_swerve, true),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryRightShoot(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryRightTrench", m_swerve, true),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryCenterShootAutoAlign(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
@@ -108,6 +139,67 @@ public class AutoHelper {
             return Commands.none(); 
         }
     }
+
+    public static Command getStationaryLeftShootAutoAlign(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryLeftTrench", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim Command"),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getStationaryRightShootAutoAlign(SwerveSubsystem m_swerve){
+        try{
+           return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("StationaryRightTrench", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim Command"),
+            NamedCommands.getCommand("Shoot Command"),
+            Commands.waitSeconds(10),
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            
+        );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
+    public static Command getMiddleHubDepot(SwerveSubsystem m_swerve){
+    try{
+       return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
+            Commands.race(
+                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim Command"),
+            Commands.race(
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(9),
+                Commands.sequence(
+                    NamedCommands.getCommand("Wrist Up Command"),
+                    Commands.waitSeconds(0.8)
+                ).repeatedly()
+            ),   
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+        );
+    } catch (Exception e) {
+        System.err.println("Could not load auto: " + e.getMessage());
+        return Commands.none(); 
+    }
+}
 
     public static Command getHumanPlayer(SwerveSubsystem m_swerve) {
         try {
