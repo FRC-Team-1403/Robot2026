@@ -52,11 +52,12 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             Commands.race(
-                //NamedCommands.getCommand("Shoot Command"),
+                NamedCommands.getCommand("Intake Command"),
+                NamedCommands.getCommand("Shoot Command"),
                 Commands.waitSeconds(9),
                 Commands.sequence(
                     NamedCommands.getCommand("Wrist Up Command"),
-                    Commands.waitSeconds(0.3),
+                    Commands.waitSeconds(0.35),
                     NamedCommands.getCommand("Wrist Down Command Jiggle")
                 ).repeatedly()
             )   
@@ -182,10 +183,10 @@ public class AutoHelper {
                 Commands.waitSeconds(9),
                 Commands.sequence(
                     NamedCommands.getCommand("Wrist Up Command"),
-                    Commands.waitSeconds(0.3),
+                    Commands.waitSeconds(0.35),
                     NamedCommands.getCommand("Wrist Down Command Jiggle")
                 ).repeatedly()
-            ),    
+            ),     
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
         );
     } catch (Exception e) {
@@ -210,7 +211,7 @@ public class AutoHelper {
                     Commands.waitSeconds(9),
                     Commands.sequence(
                         NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(0.3),
+                        Commands.waitSeconds(0.35),
                         NamedCommands.getCommand("Wrist Down Command Jiggle")
                     ).repeatedly()
                 ),    

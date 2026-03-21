@@ -75,7 +75,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
     NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
-    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3).withTimeout(0.13).asProxy());
+    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.4).withTimeout(0.2).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
     NamedCommands.registerCommand("Auto Aim Command", new AutoAlignCommand(m_swerve));
     NamedCommands.registerCommand("Wrist Down Command Jiggle", new WristCommand(m_intakeWrist,0.07
@@ -145,7 +145,6 @@ public class RobotContainer {
         () -> m_driverController.getHID().getBButton() // reset gyro
         ));
 
-      m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooterHood.stopMotor(), m_shooterHood));
     // m_swerve.setDefaultCommand(new DefaultSwerveCommand(
     //     m_swerve, 
     //     () -> -m_driverController.getLeftX(),               //horozontal
