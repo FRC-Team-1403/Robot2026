@@ -61,11 +61,11 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             Commands.race(
-                    Commands.sequence(
-                        NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("Wrist Down Command"),
-                        Commands.waitSeconds(1.5)
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(9),
+                Commands.sequence(
+                    NamedCommands.getCommand("Wrist Up Command"),
+                    Commands.waitSeconds(0.8)
                 ).repeatedly()
             )   
         );
@@ -79,7 +79,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryCenterPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -95,7 +95,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryLeftPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryLeftTrench", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -111,7 +111,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryRightPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryRightTrench", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -127,7 +127,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryCenterPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
@@ -144,7 +144,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryLeftPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryLeftTrench", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
@@ -161,7 +161,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryRightPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryRightTrench", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
@@ -173,6 +173,33 @@ public class AutoHelper {
             return Commands.none(); 
         }
     }
+
+    public static Command getMiddleHubDepot(SwerveSubsystem m_swerve){
+    try{
+       return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
+            Commands.race(
+                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim Command"),
+            Commands.race(
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(9),
+                Commands.sequence(
+                    NamedCommands.getCommand("Wrist Up Command"),
+                    Commands.waitSeconds(0.8)
+                ).repeatedly()
+            ),   
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+        );
+    } catch (Exception e) {
+        System.err.println("Could not load auto: " + e.getMessage());
+        return Commands.none(); 
+    }
+}
 
     public static Command getHumanPlayer(SwerveSubsystem m_swerve) {
         try {

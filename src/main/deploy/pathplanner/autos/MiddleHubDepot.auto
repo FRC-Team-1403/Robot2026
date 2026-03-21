@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "StationaryHub"
+            "pathName": "MiddleHubDepotPt1"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 10.0
+            "pathName": "MiddleHubDepotPt2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleHubDepotPt3"
           }
         }
       ]

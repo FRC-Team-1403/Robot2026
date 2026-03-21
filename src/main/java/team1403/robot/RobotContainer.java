@@ -164,6 +164,7 @@ public class RobotContainer {
     //m_autoChooser.addOption("AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShootAutoAlign(m_swerve));
     m_autoChooser.addOption("NO AUTO ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayer(m_swerve));
     m_autoChooser.addOption("ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayerAutoAlign(m_swerve));
+    m_autoChooser.addOption("MIDDLE HUB DEPOT SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepot(m_swerve));
 
     m_autoChooser.addOption("TEST AUTO ALIGN", AutoHelper.getAutoAlignTest(m_swerve));
     m_autoChooser.addOption("INTAKE JIGGLE TEST", AutoHelper.getIntakeJiggleTest(m_swerve));
