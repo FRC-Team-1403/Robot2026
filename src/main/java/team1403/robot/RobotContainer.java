@@ -22,6 +22,7 @@ import team1403.robot.commands.ControllerVibrationCommand;
 import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
+import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
 import team1403.robot.commands.WristCommand;
@@ -115,7 +116,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //testing command for elastic
-    // m_operatorController.leftTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
+    //m_operatorController.leftTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
 
     m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     
