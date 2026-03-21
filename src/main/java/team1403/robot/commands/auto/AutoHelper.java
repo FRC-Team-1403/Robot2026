@@ -176,6 +176,10 @@ public class AutoHelper {
                 AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
                 NamedCommands.getCommand("Intake Command")
             ),
+            Commands.race(
+                Commands.waitSeconds(2),
+                NamedCommands.getCommand("Intake Command")
+            ),
             AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Trench", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             Commands.race(
@@ -202,6 +206,10 @@ public class AutoHelper {
                 AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    Commands.waitSeconds(2),
                     NamedCommands.getCommand("Intake Command")
                 ),
                 AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Hub", m_swerve, true),
