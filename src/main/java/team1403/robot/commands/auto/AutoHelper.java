@@ -8,20 +8,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
-import team1403.robot.util.AutoUtil;
-import team1403.robot.util.CougarUtil;
-import team1403.robot.subsystems.Indexer;
-import team1403.robot.subsystems.Intake;
-import team1403.robot.subsystems.IntakeWrist;
-import team1403.robot.subsystems.Shooter;
-import team1403.robot.subsystems.ShooterHood;
-import team1403.robot.subsystems.Spindexer;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
-import com.pathplanner.lib.auto.NamedCommands;
+import team1403.robot.util.AutoUtil;
+import team1403.robot.util.CougarUtil;
 
 public class AutoHelper {
 
@@ -48,6 +38,7 @@ public class AutoHelper {
     public static Command getAutoAlignTest(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
+            AutoUtil.loadPathPlannerPath("Practice Field Test", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command")            
         );
@@ -61,11 +52,12 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             Commands.race(
-                NamedCommands.getCommand("Shoot Command"),
+                //NamedCommands.getCommand("Shoot Command"),
                 Commands.waitSeconds(9),
                 Commands.sequence(
                     NamedCommands.getCommand("Wrist Up Command"),
-                    Commands.waitSeconds(0.8)
+                    Commands.waitSeconds(0.3),
+                    NamedCommands.getCommand("Wrist Down Command Jiggle")
                 ).repeatedly()
             )   
         );
@@ -174,7 +166,7 @@ public class AutoHelper {
         }
     }
 
-    public static Command getMiddleHubDepot(SwerveSubsystem m_swerve){
+    public static Command getMiddleHubDepotEndTrench(SwerveSubsystem m_swerve){
     try{
        return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
@@ -183,16 +175,17 @@ public class AutoHelper {
                 AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
                 NamedCommands.getCommand("Intake Command")
             ),
-            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Trench", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             Commands.race(
                 NamedCommands.getCommand("Shoot Command"),
                 Commands.waitSeconds(9),
                 Commands.sequence(
                     NamedCommands.getCommand("Wrist Up Command"),
-                    Commands.waitSeconds(0.8)
+                    Commands.waitSeconds(0.3),
+                    NamedCommands.getCommand("Wrist Down Command Jiggle")
                 ).repeatedly()
-            ),   
+            ),    
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
         );
     } catch (Exception e) {
@@ -200,6 +193,34 @@ public class AutoHelper {
         return Commands.none(); 
     }
 }
+
+    public static Command getMiddleHubDepotEndHub(SwerveSubsystem m_swerve){
+        try{
+        return Commands.sequence(
+                NamedCommands.getCommand("Wrist Down Command"),
+                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Hub", m_swerve, true),
+                NamedCommands.getCommand("Auto Aim Command"),
+                Commands.race(
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.waitSeconds(9),
+                    Commands.sequence(
+                        NamedCommands.getCommand("Wrist Up Command"),
+                        Commands.waitSeconds(0.3),
+                        NamedCommands.getCommand("Wrist Down Command Jiggle")
+                    ).repeatedly()
+                ),    
+                NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
 
     public static Command getHumanPlayer(SwerveSubsystem m_swerve) {
         try {

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -74,9 +75,11 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
     NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
-    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3).withTimeout(1).asProxy());
+    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.3).withTimeout(0.13).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
     NamedCommands.registerCommand("Auto Aim Command", new AutoAlignCommand(m_swerve));
+    NamedCommands.registerCommand("Wrist Down Command Jiggle", new WristCommand(m_intakeWrist,0.07
+    ).withTimeout(0.08).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(
         m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
     ));
@@ -142,6 +145,7 @@ public class RobotContainer {
         () -> m_driverController.getHID().getBButton() // reset gyro
         ));
 
+      m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooterHood.stopMotor(), m_shooterHood));
     // m_swerve.setDefaultCommand(new DefaultSwerveCommand(
     //     m_swerve, 
     //     () -> -m_driverController.getLeftX(),               //horozontal
@@ -165,7 +169,8 @@ public class RobotContainer {
     //m_autoChooser.addOption("AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShootAutoAlign(m_swerve));
     m_autoChooser.addOption("NO AUTO ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayer(m_swerve));
     m_autoChooser.addOption("ALIGN HUMAN PLAYER SHOOTER FACES BACKWARDS", AutoHelper.getHumanPlayerAutoAlign(m_swerve));
-    m_autoChooser.addOption("MIDDLE HUB DEPOT SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepot(m_swerve));
+    m_autoChooser.addOption("MIDDLE HUB DEPOT END TRENCH SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepotEndTrench(m_swerve));
+    m_autoChooser.addOption("MIDDLE HUB DEPOT END HUB SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepotEndHub(m_swerve));
 
     m_autoChooser.addOption("TEST AUTO ALIGN", AutoHelper.getAutoAlignTest(m_swerve));
     m_autoChooser.addOption("INTAKE JIGGLE TEST", AutoHelper.getIntakeJiggleTest(m_swerve));
