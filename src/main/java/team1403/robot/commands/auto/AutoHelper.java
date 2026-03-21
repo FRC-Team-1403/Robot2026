@@ -79,7 +79,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryCenterPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -95,7 +95,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryLeftPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryLeftTrench", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -111,7 +111,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryRightPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryRightTrench", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -127,7 +127,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryCenterPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
@@ -144,7 +144,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryLeftPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryLeftTrench", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
@@ -161,7 +161,7 @@ public class AutoHelper {
         try{
            return Commands.sequence(
             NamedCommands.getCommand("Wrist Down Command"),
-            AutoUtil.loadPathPlannerPath("StationaryRightPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("StationaryRightTrench", m_swerve, true),
             NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
