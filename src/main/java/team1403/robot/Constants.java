@@ -29,7 +29,7 @@ public final class Constants {
 
   public static class ScoringLocation{
     public static final Translation2d kHubPosition = new Translation2d(4.5, 4);
-    public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
+    public static final Translation2d kFeedTopPosition    = new Translation2d(3, 5.5);
     public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
   }
 
