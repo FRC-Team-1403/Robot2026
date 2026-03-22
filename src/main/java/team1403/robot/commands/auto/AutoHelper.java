@@ -238,8 +238,16 @@ public class AutoHelper {
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt1", m_swerve, true), 
                 Commands.waitSeconds(4),
                 AutoUtil.loadPathPlannerPath("HumanPlayerPt2", m_swerve, true), 
-                NamedCommands.getCommand("Shoot Command"),
-                Commands.waitSeconds(10),
+                NamedCommands.getCommand("Auto Aim Command"),
+                Commands.race(
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.waitSeconds(9),
+                    Commands.sequence(
+                        NamedCommands.getCommand("Wrist Up Command"),
+                        Commands.waitSeconds(0.35),
+                        NamedCommands.getCommand("Wrist Down Command Jiggle")
+                    ).repeatedly()
+                ),
                 NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
             );
         } catch (Exception e) {
