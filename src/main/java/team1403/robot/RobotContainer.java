@@ -169,6 +169,8 @@ public class RobotContainer {
 
     m_autoChooser.addOption("TEST AUTO ALIGN", AutoHelper.getAutoAlignTest(m_swerve));
     m_autoChooser.addOption("INTAKE JIGGLE TEST", AutoHelper.getIntakeJiggleTest(m_swerve));
+
+    m_autoChooser.addOption("DOUBLE SWEEP RIGHT TRENCH", AutoHelper.getDoubleSweepRightTrench(m_swerve));
   
     //m_autoChooser.addOption("RIGHT SWEEP 1X THEN HUMAN PLAYER", AutoHelper.getCenterHuman(m_swerve));
     //m_autoChooser.addOption("RIGHT SWEEP 2X THEN HUMAN PLAYER", AutoHelper.getRightSweep(m_swerve));

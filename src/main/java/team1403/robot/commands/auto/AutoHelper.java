@@ -268,6 +268,58 @@ public class AutoHelper {
         }
     }
 
+    public static Command getDoubleSweepRightTrench(SwerveSubsystem m_swerve){
+    try{
+       return Commands.sequence(
+            NamedCommands.getCommand("Wrist Down Command"),
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt1", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt2", m_swerve, true),
+            Commands.race(
+                AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt3", m_swerve, true),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt4", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt5", m_swerve, true),
+            NamedCommands.getCommand("Auto Aim Command"),
+            Commands.race(
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(9),
+                Commands.sequence(
+                    NamedCommands.getCommand("Wrist Up Command"),
+                    Commands.waitSeconds(0.8)
+                ).repeatedly()
+            ),   
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command"),
+
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt6", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt7", m_swerve, true),
+
+            Commands.race(
+                AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt8", m_swerve, true),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt9", m_swerve, true),
+            AutoUtil.loadPathPlannerPath("DoubleSweepRightTrenchPt10", m_swerve, true),
+
+            NamedCommands.getCommand("Auto Aim Command"),
+            Commands.race(
+                NamedCommands.getCommand("Shoot Command"),
+                Commands.waitSeconds(9),
+                Commands.sequence(
+                    NamedCommands.getCommand("Wrist Up Command"),
+                    Commands.waitSeconds(0.8)
+                ).repeatedly()
+            ),   
+            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+
+        );
+    } catch (Exception e) {
+        System.err.println("Could not load auto: " + e.getMessage());
+        return Commands.none(); 
+    }
+}
+
+
     // public static Command getRightSweep(SwerveSubsystem m_swerve) {
     //     try {
     //         return Commands.sequence(

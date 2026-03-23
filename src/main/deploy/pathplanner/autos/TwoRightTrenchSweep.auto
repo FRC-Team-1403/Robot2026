@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt9"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DoubleSweepRightTrenchPt10"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
