@@ -41,24 +41,19 @@ public final class Constants {
     public static final double kMinAngleDegrees = -128;
     public static final double kMaxAngleDegrees = 140;
 
-    public static final double kGain = 0.4;
-    public static final double kMaxSpeed = 35.0;
-    public static final double kMinSpeed = 8.0;
-
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
-    public static final double kP = 1;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kMaxVelocityDegreesPerSec =90;
-    public static final double kMaxAccelerationDegreesPerSec  = 180;
+    public static final double kP = 3.2;
+    public static final double kI = 0.0;
+    public static final double kD = 0.1;
+    public static final double kS = 0.1;
+    public static final double kV = 0.0;
+    public static final double kA = 0.0;
+    public static final double kG = 0.2;
 
     public static final double kToleranceDegrees = 2.0;
-    public static final double kRampUpTime = 0.01;
-    public static final double kRampDownTime = 0.001;
-    public static final double kLoopTime = 0.02;
-    public static final double kUnitsPerRampTime = 100;
+  
 
     public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
     public static final Rotation2d rotationCorrectionOffset = Rotation2d.fromDegrees(0);  
@@ -128,18 +123,10 @@ public final class Constants {
     public static final double kMinAngleDegrees = 0.1;
     public static final double kMaxAngleDegrees = 30;
 
-    public static final double kGain = 4;
-    public static final double kMaxSpeed = 12.0;
-    public static final double kMinSpeed = 2.0;
 
     public static final double kToleranceDegrees = 0.3;
     public static final double kGearRatioEncoder = (54.0 / 18.0);
     public static final double kGearRatioHoodAngleRatio = (54.0 / 18.0) * (175.0 / 10.0);
-
-    public static final double kRampUpTime = 0.01;
-    public static final double kRampDownTime = 0.001;
-    public static final double kLoopTime = 0.02;
-    public static final double kUnitsPerRampTime = 100;
 
     public static final double kP = 3.2;
     public static final double kI = 0.0;
@@ -230,16 +217,13 @@ public final class Constants {
   public static final class IntakeWrist {
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
-    public static final double kS = 0.0;
-    public static final double kG = 2.5;
-    public static final double kV = 0;
-    public static final double kA = 0;
-
+  
     public static final double kMagnetOffset = 0.15;
-    public static final double kGearRatioEncoder = 1.0/1.0;
+    public static final double kGearRatioEncoder = 2.0/1.0;
     public static final double kGearRatioWristAngleRatio = 23.4/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
 
-    public static final double kGearRatio = 1.0;
+    public static final double kToleranceDegrees = 2.0;
+
     public static final double kDeployedAngle = 185.0;
     public static final double kStowedAngle = 100.0;
     public static final double kMinAngleDegrees = 2.0;
@@ -247,14 +231,13 @@ public final class Constants {
 
     public static final double  wristPowerStartAngle = 90.0;
 
-    public static final double kGain = 1.0;
-    public static final double kToleranceDegrees = 3.0;
-    public static final double kRampUpTime = 0.01;;
-    public static final double kRampDownTime = 0.001;
-    public static final double kUnitsPerRampTime = 100.0;
-    public static final double kMaxSpeed = 5.0;
-    public static final double kMinSpeed = 0.0;
-    public static final double kLoopTime = 0.02;
+    public static final double kP = 3.2;
+    public static final double kI = 0.0;
+    public static final double kD = 0.1;
+    public static final double kS = 0.1;
+    public static final double kV = 0.0;
+    public static final double kA = 0.0;
+    public static final double kG = 0.2;
   }
 
   public static final class Hopper {

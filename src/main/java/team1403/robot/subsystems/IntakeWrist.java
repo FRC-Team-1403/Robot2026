@@ -45,7 +45,7 @@ public class IntakeWrist extends SubsystemBase {
 
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0;
+    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
     encoderConfig.MagnetSensor.MagnetOffset = Constants.IntakeWrist.kMagnetOffset;
 
     m_intakeWristEncoder.getConfigurator().apply(encoderConfig);
@@ -105,6 +105,7 @@ public class IntakeWrist extends SubsystemBase {
 
   @Override
   public void periodic() {
+  
     currentAngle = getWristAngle();
 
     Logger.recordOutput("IntakeWrist/Intake Wrist Current Angle", currentAngle);
