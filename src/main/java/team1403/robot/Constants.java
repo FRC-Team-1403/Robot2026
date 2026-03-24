@@ -164,6 +164,19 @@ public final class Constants {
       {4.5, 1740},
       {5.3, 1800}
     };
+    
+    public static final double kLatencyCompensation = 0.1; 
+
+    public static final double[][] tofTable = {
+      { 1.5,  0.38 },
+      { 2.0,  0.45 },
+      { 2.5,  0.52 },
+      { 3.0,  0.60 },
+      { 3.5,  0.68 },
+      { 4.0,  0.76 },
+      { 4.5,  0.85 },
+      { 5.0,  0.94 },
+    };
   }
 
   public static class Indexer {
