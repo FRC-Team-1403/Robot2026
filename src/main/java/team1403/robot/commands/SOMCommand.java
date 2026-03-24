@@ -35,7 +35,7 @@ public class SOMCommand extends Command {
     private Timer backupTimer;
     private boolean wasShooting;
 
-    public LERPShooter(
+    public SOMCommand(
             Indexer indexer,
             Spindexer spindexer,
             Shooter shooter,
