@@ -56,7 +56,10 @@ public final class Constants {
   
 
     public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
-    public static final Rotation2d rotationCorrectionOffset = Rotation2d.fromDegrees(0);  
+    public static final Rotation2d rotationCorrectionOffset = Rotation2d.fromDegrees(0);
+    public static final double kSpringK = 0;
+    public static final double kSpringNeutralAngle = 0;
+    public static final double kSpringForce = 5.94;  // lbs cause im dum
   }
 
   public static class Swerve {

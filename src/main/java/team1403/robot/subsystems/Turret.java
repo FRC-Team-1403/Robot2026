@@ -129,6 +129,12 @@ public class Turret extends SubsystemBase {
     m_turretMotor.setControl(m_turretDutyCycleRequest);
   }
 
+  private double getSpringFeedforward(double angleDegrees) {
+    double displacement = angleDegrees - Constants.Turret.kSpringNeutralAngle;
+    double sign = Math.signum(displacement);
+    return Constants.Turret.kSpringK * sign * Constants.Turret.kSpringForce;
+  }
+
   @Override
   public void periodic() {
     currentAngle = getTurretAngle();
@@ -137,12 +143,14 @@ public class Turret extends SubsystemBase {
 
     double smallestError = getError(setpoint, currentAngle);
 
+    double ff = getSpringFeedforward(currentAngle);
+
     if (currentAngle >= Constants.Turret.kMaxAngleDegrees && smallestError > 0) {
       m_turretMotor.setControl(m_neutralRequest);
     } else if (currentAngle <= Constants.Turret.kMinAngleDegrees && smallestError < 0) {
       m_turretMotor.setControl(m_neutralRequest);
     } else {
-      m_turretMotor.setControl(m_positionVoltageRequest.withPosition(setpointRotations));
+      m_turretMotor.setControl(m_positionVoltageRequest.withPosition(setpointRotations).withFeedForward(ff));
     }
 
     Logger.recordOutput("Turret/Current Angle", currentAngle);
