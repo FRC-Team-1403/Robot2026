@@ -48,7 +48,7 @@ public class TurretTrackingCommand extends Command {
         double distance = Math.hypot(diffX, diffY);
 
         Translation2d targetDirection = new Translation2d(diffX, diffY).div(distance);
-        double baselineToF = LERPShooter.lerp(Constants.Shooter.tofTable, distance);
+        double baselineToF = LERPShooter.lerp(Constants.Shooter.kTOFTable, distance);
         double baselineHorizontalVelocity = distance / baselineToF;
 
         Translation2d targetVelocityVector = targetDirection.times(baselineHorizontalVelocity);
