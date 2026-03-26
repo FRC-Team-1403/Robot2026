@@ -106,15 +106,10 @@ public final class Constants {
 
     public static final boolean kExtraVisionDebugInfo = true;
 
-    //public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(kCameraOffset, new Rotation3d(0,0,0));;
-    //public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(kCameraOffset, new Rotation3d(0,0, Math.toRadians(90)));
-    //public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(8),Units.inchesToMeters(12.75), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(23), Math.toRadians(180)));
-    //public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(10.76),Units.inchesToMeters(14.4), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(18), Math.toRadians(-85)));\
+    public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(0,0,0, new Rotation3d(0,0,0));;
+    public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(0,0,0, new Rotation3d(0,0, Math.toRadians(90)));
     public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(-12.75),Units.inchesToMeters(8), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(0)));
     public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(-14.4),Units.inchesToMeters(10.76), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(99.7)));
-
-
-
 
     //NEW COMBINED VISION SUBSYSTEM
   }
@@ -235,8 +230,8 @@ public final class Constants {
     public static final int kEncoderID = 44;
   
     public static final double kMagnetOffset = 0.15;
-    public static final double kGearRatioEncoder = 2.0/1.0;
-    public static final double kGearRatioWristAngleRatio = 23.4/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
+    public static final double kGearRatioEncoder = 23.4/1.0;
+    public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
 
     public static final double kToleranceDegrees = 2.0;
 

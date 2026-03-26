@@ -161,8 +161,12 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
             .withRobotPose(this::getPose, () -> Timer.getFPGATimestamp()) /* find a way to convert m_state.Timestamp to fpga time */
             .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
 
-        //m_cameras.add(new AprilTagCamera("ThriftyCam1.0", () -> Constants.Vision.kCameraTransfromThriftyCamera1, this::getPose));
-        //m_cameras.add(new AprilTagCamera("ThriftyCam2.0", () -> Constants.Vision.kCameraTransfromThriftyCamera2, this::getPose));
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam1.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera1)));
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam2.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera2)));
         m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam3.0")
                                                 .withDeviations(VecBuilder.fill(2, 2, 10))
                                                 .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera3)));
