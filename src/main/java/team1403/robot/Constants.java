@@ -135,7 +135,7 @@ public final class Constants {
     public static final double kG = 0.2;
 
 
-    public static final double kMagnetOffset = -0.203;
+    public static final double kMagnetOffset = -0.202880859375;
     public static final double kFixedHood = 20;
   }
 
@@ -242,13 +242,13 @@ public final class Constants {
 
     public static final double  wristPowerStartAngle = 90.0;
 
-    public static final double kP = 3.2;
+    public static final double kP = 0.0;
     public static final double kI = 0.0;
-    public static final double kD = 0.1;
-    public static final double kS = 0.1;
+    public static final double kD = 0.0;
+    public static final double kS = 0.0;
     public static final double kV = 0.0;
     public static final double kA = 0.0;
-    public static final double kG = 0.2;
+    public static final double kG = 0.0;
   }
 
   public static final class Hopper {
