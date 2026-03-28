@@ -64,8 +64,8 @@ public class LERPShooter extends Command {
 
     @Override
     public void execute() {
-        ChassisSpeeds robotVelocity = m_chassisSupplier.get();
         Pose2d robotPose = m_pose.get();
+        ChassisSpeeds robotVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(m_chassisSupplier.get(), robotPose.getRotation());
 
         // ── Backup timer logic (unchanged) ──────────────────────────────────
         if (wasShooting && !isShooting) {
