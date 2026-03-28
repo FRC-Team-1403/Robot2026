@@ -128,7 +128,7 @@ public class RobotContainer {
 
     m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
-    m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
+    //m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
     
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     // m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 50)); 
