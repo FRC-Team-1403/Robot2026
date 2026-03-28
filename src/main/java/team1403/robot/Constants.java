@@ -165,14 +165,14 @@ public final class Constants {
     public static final double kLatencyCompensation = 0.1; 
 
     public static final double[][] kTOFTable = {
-      { 2.01,  0.38 },
-      { 2.29,  0.50 },
-      { 2.5,  0.75 },
-      { 2.8,  0.90 },
-      { 3.2,  1.15 },
-      { 4.69,  1.30 },
-      { 4.5,  1.45 },
-      { 5.3,  1.60 },
+      { 2.01,  0.75 },
+      { 2.29,  0.82 },
+      { 2.5,  0.92 },
+      { 2.8,  1.15 },
+      { 3.2,  1.30 },
+      { 4.69,  1.45 },
+      { 4.5,  1.60 },
+      { 5.3,  1.75 },
     };
   }
 
