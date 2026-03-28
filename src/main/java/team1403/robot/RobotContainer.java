@@ -128,7 +128,7 @@ public class RobotContainer {
 
     m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
-    //m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
+    m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
     
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     // m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 50)); 
@@ -149,7 +149,7 @@ public class RobotContainer {
         () -> false,                                        //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
         () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)-> m_operatorController.getRightTriggerAxis()>0.3
-        () -> m_operatorController.getRightTriggerAxis()>0.3, // Auto Aim
+        () ->false, // Auto Aim
         () -> m_driverController.getHID().getBButton() // reset gyro
         ));
 
