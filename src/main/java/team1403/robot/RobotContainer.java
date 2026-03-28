@@ -94,7 +94,7 @@ public class RobotContainer {
         () -> -m_driverController.getLeftX(), //horo 
         () -> -m_driverController.getLeftY(), //vert
         () -> -m_driverController.getRightX(),//rot
-        () -> m_driverController.getHID().getPOV() == 180, //xmode
+        () -> m_driverController.getHID().getXButton(), //xmode
         () -> m_driverController.getHID().getPOV() == 0,//roborel
         () -> m_driverController.getHID().getAButton(),//autortate
         () -> m_driverController.getRightTriggerAxis(),//speed
