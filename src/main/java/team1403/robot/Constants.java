@@ -232,15 +232,13 @@ public final class Constants {
     public static final double kGearRatioEncoder = 23.4/1.0;
     public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
     public static final double kAbsoluteGearRatio = 2.0/1.0;
-    public static final double kToleranceDegrees = 2.0;
+    public static final double kToleranceDegrees = 4.0;
     public static final double kSlewRate = 0.2;
 
-    public static final double kDeployedAngle = 185.0;
-    public static final double kStowedAngle = 100.0;
-    public static final double kMinAngleDegrees = 2.0;
-    public static final double kMaxAngleDegrees = 175.0;
 
-    public static final double  wristPowerStartAngle = 90.0;
+    public static final double kMinAngleDegrees = 0.0;
+    public static final double kMaxAngleDegrees = 95.0;
+
 
     public static final double kP = 30.0;
     public static final double kI = 0.0;

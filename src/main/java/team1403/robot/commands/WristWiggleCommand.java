@@ -12,6 +12,7 @@ public class WristWiggleCommand extends Command {
   private final SlewRateLimiter m_slewRateLimiter;
   private boolean m_goingUp;
   private double m_slewedSetpoint;
+  private double m_targetSetpoint;
 
   public WristWiggleCommand(IntakeWrist m_intakeWrist, Intake m_intake) {
     this.m_intakeWrist = m_intakeWrist;
@@ -25,21 +26,21 @@ public class WristWiggleCommand extends Command {
     m_goingUp = true;
     m_slewRateLimiter.reset(m_intakeWrist.getWristAngle());
     m_slewedSetpoint = m_intakeWrist.getWristAngle();
-    m_intakeWrist.setSetpoint(50);
+    m_targetSetpoint = 50;
   }
 
   @Override
   public void execute() {
-    if (m_intakeWrist.atSetpoint()) {
+    if (Math.abs(m_slewedSetpoint - m_targetSetpoint) <= Constants.IntakeWrist.kToleranceDegrees) {
       m_goingUp = !m_goingUp;
       if (m_goingUp) {
-        m_intakeWrist.setSetpoint(50);
+        m_targetSetpoint = 50;
       } else {
-        m_intakeWrist.setSetpoint(95);
+        m_targetSetpoint = 95;
       }
     }
 
-    m_slewedSetpoint = m_slewRateLimiter.calculate(m_intakeWrist.getSetpoint());
+    m_slewedSetpoint = m_slewRateLimiter.calculate(m_targetSetpoint);
     m_intakeWrist.setSetpoint(m_slewedSetpoint);
     m_intake.setIntakePower(1);
   }
