@@ -249,7 +249,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
         });
         }
 
-            Pose2d currentPose = getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d()));
+        Pose2d currentPose = getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d()));
         double diffX = new Pose2d(Blackbox.getActiveTarget(currentPose), Rotation2d.kZero).getX() - currentPose.getX();
         double diffY = new Pose2d(Blackbox.getActiveTarget(currentPose), Rotation2d.kZero).getY() - currentPose.getY();
         double distance = Math.sqrt((diffX * diffX) + (diffY * diffY)); 

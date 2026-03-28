@@ -36,7 +36,7 @@ public final class Constants {
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = -0.06;
+    public static final double kMagnetOffset = 0.05;
     public static final double kMinAngleDegrees = -257;
     public static final double kMaxAngleDegrees = 103;
 
