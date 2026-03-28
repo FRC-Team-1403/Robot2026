@@ -37,7 +37,7 @@ public class IntakeWrist extends SubsystemBase {
 
     TalonFXConfiguration wristMotorConfig = new TalonFXConfiguration();
     wristMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    wristMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    wristMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     wristMotorConfig.Feedback.FeedbackRemoteSensorID = Constants.IntakeWrist.kEncoderID;
     wristMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
