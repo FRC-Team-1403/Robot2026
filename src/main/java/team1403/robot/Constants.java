@@ -36,20 +36,20 @@ public final class Constants {
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = -0.05;
-    public static final double kMinAngleDegrees = -128;
-    public static final double kMaxAngleDegrees = 140;
+    public static final double kMagnetOffset = -0.06;
+    public static final double kMinAngleDegrees = -270;
+    public static final double kMaxAngleDegrees = 112;
 
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
-    public static final double kP = 3.2;
+    public static final double kP = 5.5;
     public static final double kI = 0.0;
-    public static final double kD = 0.1;
-    public static final double kS = 0.1;
+    public static final double kD = 0.2;
+    public static final double kS = 0.0;
     public static final double kV = 0.0;
     public static final double kA = 0.0;
-    public static final double kG = 0.2;
+    public static final double kG = 0.0;
 
     public static final double kToleranceDegrees = 2.0;
   
