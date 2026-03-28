@@ -85,9 +85,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Auto Aim Command", new AutoAlignCommand(m_swerve));
   //   NamedCommands.registerCommand("Wrist Down Command Jiggle", new WristCommand(m_intakeWrist,0.07
   //  ).withTimeout(0.08).asProxy());
-    NamedCommands.registerCommand("Shoot Command", new LERPShooter(
-        m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
-    ));
+    // NamedCommands.registerCommand("Shoot Command", new LERPShooter(
+    //     m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
+    // ));
 
     
     if (AutoBuilder.isConfigured())
@@ -126,7 +126,7 @@ public class RobotContainer {
     //testing command for elastic
     m_operatorController.rightBumper().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
 
-    m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
+    m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
     m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
     
