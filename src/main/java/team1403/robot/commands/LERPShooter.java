@@ -1,18 +1,14 @@
 package team1403.robot.commands;
 
-import java.io.CharArrayReader;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,13 +17,11 @@ import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.ShooterHood;
 import team1403.robot.subsystems.Spindexer;
-import team1403.robot.subsystems.Turret;
 import team1403.robot.util.Blackbox;
 import team1403.robot.util.FieldZoneUtil;
 import team1403.robot.util.FieldZoneUtil.Zone;
 
 public class LERPShooter extends Command {
-    private final Turret m_turret;
     private final Indexer m_indexer;
     private final Spindexer m_spindexer;
     private final Shooter m_shooter;
@@ -37,19 +31,14 @@ public class LERPShooter extends Command {
     private boolean isShooting;
     private Timer backupTimer;
     private boolean wasShooting;
-    private Supplier<ChassisSpeeds> chassisSupplier;
 
     public LERPShooter(
-            Supplier<ChassisSpeeds> chassisSupplier,
-            Turret turret,
             Indexer indexer,
             Spindexer spindexer,
             Shooter shooter,
             ShooterHood hood,
             Supplier<Pose2d> pose,
             DoubleSupplier shoot) {
-        this.chassisSupplier = chassisSupplier;
-        m_turret = turret;
         m_indexer = indexer;
         m_spindexer = spindexer;
         m_shooter = shooter;
@@ -59,7 +48,7 @@ public class LERPShooter extends Command {
         isShooting = false;
         wasShooting = false;
         backupTimer = new Timer();
-        addRequirements(indexer, spindexer, shooter, hood, turret);
+        addRequirements(indexer, spindexer, shooter, hood);
     }
 
     @Override
@@ -68,37 +57,17 @@ public class LERPShooter extends Command {
 
     @Override
     public void execute() {
-        ChassisSpeeds robotVelocity = chassisSupplier.get();
-
         if (wasShooting && !isShooting) {
             backupTimer.reset();
             backupTimer.start();
         }
         wasShooting = isShooting;
-        
+
         Pose2d currentPose = m_pose.get().transformBy(new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d()));
         double diffX = Blackbox.getActiveTarget(currentPose).getX() - currentPose.getX();
         double diffY = Blackbox.getActiveTarget(currentPose).getY() - currentPose.getY();
         double distance = Math.hypot(diffX, diffY);
-
-        double shotTime = lerp(Constants.Shooter.kTOFTable, distance);
-        double robotX = shotTime * robotVelocity.vxMetersPerSecond;
-        double robotY = shotTime * robotVelocity.vyMetersPerSecond;
-
-        Pose2d projectedPose = currentPose.plus(new Transform2d(new Translation2d(robotX, robotY), new Rotation2d()));
-
-        double projectedDiffX = Blackbox.getActiveTarget(currentPose).getX() - projectedPose.getX();
-        double projectedDiffY = Blackbox.getActiveTarget(currentPose).getY() - projectedPose.getY();
-        double projectedDistance = Math.hypot(diffX, diffY);
-
-        double fieldAngleToGoal = Math.toDegrees(Math.atan2(projectedDiffX, projectedDiffY));
-        double robotHeading = currentPose.getRotation().getDegrees();
-        double turretAngle = MathUtil.inputModulus(fieldAngleToGoal - robotHeading + 90,
-            Constants.Turret.kMinAngleDegrees, Constants.Turret.kMaxAngleDegrees);
-    
-        m_turret.setSetpoint(turretAngle);
-
-        double flywheelRPM = lerp(Constants.Shooter.distanceTable, projectedDistance);
+        double flywheelRPM = lerp(Constants.Shooter.distanceTable, distance);
 
         if (m_shoot.getAsDouble() > 0.3) {
             m_shooter.setFlywheelTargetRPM(flywheelRPM);
@@ -126,7 +95,7 @@ public class LERPShooter extends Command {
             }
         }
 
-        if (m_shooter.isFlywheelAtSpeed() && m_shooterHood.atSetpoint() && m_shoot.getAsDouble() > 0.3 && projectedDistance > 1.6) {
+        if (m_shooter.isFlywheelAtSpeed() && m_shooterHood.atSetpoint() && m_shoot.getAsDouble() > 0.3 && distance > 1.6) {
             isShooting = true;
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
             m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
