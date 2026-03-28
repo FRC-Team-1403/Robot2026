@@ -119,8 +119,8 @@ public class SOTMCommand extends Command {
             Pose2d projectedPose = currentPose.plus(
                 new Transform2d(positionAdjustment, rotationAdjustment));
 
-            double diffX = Blackbox.getActiveTarget(currentPose).getX() - projectedPose.getX();
-            double diffY = Blackbox.getActiveTarget(currentPose).getY() - projectedPose.getY();
+            double diffX = Blackbox.getActiveTarget(projectedPose).getX() - projectedPose.getX();
+            double diffY = Blackbox.getActiveTarget(projectedPose).getY() - projectedPose.getY();
 
             turretAngle = Math.atan2(diffY, diffX);
             distance    = Math.hypot(diffX, diffY);
