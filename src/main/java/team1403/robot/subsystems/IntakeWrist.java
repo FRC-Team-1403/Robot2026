@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -38,6 +39,9 @@ public class IntakeWrist extends SubsystemBase {
     wristMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     wristMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
+    wristMotorConfig.Feedback.FeedbackRemoteSensorID = Constants.IntakeWrist.kEncoderID;
+    wristMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+
     wristMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
     wristMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     wristMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
@@ -53,7 +57,7 @@ public class IntakeWrist extends SubsystemBase {
     wristPIDConfigs.kV = Constants.IntakeWrist.kV;
     wristPIDConfigs.kA = Constants.IntakeWrist.kA;
     wristPIDConfigs.kG = Constants.IntakeWrist.kG;
-    wristPIDConfigs.GravityType = GravityTypeValue.Elevator_Static;
+    wristPIDConfigs.GravityType = GravityTypeValue.Arm_Cosine;
     wristPIDConfigs.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
 
     m_intakeWristMotor.getConfigurator().apply(wristMotorConfig);
@@ -68,9 +72,9 @@ public class IntakeWrist extends SubsystemBase {
 
     m_intakeWristEncoder.getConfigurator().apply(encoderConfig);
 
-    double absoluteRotations = getAbsolutePosition();
-    double wristRotations = absoluteRotations * Constants.IntakeWrist.kGearRatioEncoder;
-    m_intakeWristMotor.setPosition(wristRotations);
+    // double absoluteRotations = getAbsolutePosition();
+    // double wristRotations = absoluteRotations * Constants.IntakeWrist.kGearRatioEncoder;
+    // m_intakeWristMotor.setPosition(wristRotations);
 
     currentAngle = getWristAngle();
     setpoint = currentAngle;
@@ -81,9 +85,14 @@ public class IntakeWrist extends SubsystemBase {
   }
 
   public double getWristAngle() {
-    double motorRotations = m_intakeWristMotor.getPosition().getValueAsDouble();
-    double hoodRotations = motorRotations / Constants.IntakeWrist.kGearRatioWristAngleRatio;
-    return Units.rotationsToDegrees(hoodRotations);
+    double absoluteRotations = getAbsolutePosition();
+    double wristRotations = absoluteRotations * Constants.IntakeWrist.kAbsoluteGearRatio;
+    return Units.rotationsToDegrees(wristRotations);
+    //m_intakeWristMotor.setPosition(wristRotations);
+
+    // double motorRotations = m_intakeWristMotor.getPosition().getValueAsDouble();
+    // double hoodRotations = motorRotations / Constants.IntakeWrist.kGearRatioWristAngleRatio;
+    // return Units.rotationsToDegrees(hoodRotations);
   }
 
   public void setSetpoint(double degrees) {
@@ -119,7 +128,7 @@ public class IntakeWrist extends SubsystemBase {
   public void periodic() {
     currentAngle = getWristAngle();
 
-    double setpointRotations = Units.degreesToRotations(setpoint) * Constants.IntakeWrist.kGearRatioWristAngleRatio;
+    double setpointRotations = Units.degreesToRotations(setpoint) / Constants.IntakeWrist.kAbsoluteGearRatio;
     m_intakeWristMotor.setControl(m_positionVoltageRequest.withPosition(setpointRotations));
 
     Logger.recordOutput("IntakeWrist/Intake Wrist Current Angle", currentAngle);
