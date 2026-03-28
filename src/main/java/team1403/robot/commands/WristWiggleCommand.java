@@ -52,7 +52,7 @@ public class WristWiggleCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    m_intakeWrist.stopMotor();
+    m_intakeWrist.setSetpoint(95);
     m_intake.stop();
   }
 }
