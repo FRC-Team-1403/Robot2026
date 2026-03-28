@@ -36,8 +36,7 @@ public final class Constants {
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = 0.03;
-
+    public static final double kMagnetOffset = -0.05;
     public static final double kMinAngleDegrees = -128;
     public static final double kMaxAngleDegrees = 140;
 
@@ -135,7 +134,7 @@ public final class Constants {
     public static final double kG = 0.2;
 
 
-    public static final double kMagnetOffset = -0.202880859375;
+    public static final double kMagnetOffset = -0.09;
     public static final double kFixedHood = 20;
   }
 
@@ -229,7 +228,7 @@ public final class Constants {
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = 0.15;
+    public static final double kMagnetOffset = 0.19;
     public static final double kGearRatioEncoder = 23.4/1.0;
     public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
 
@@ -242,7 +241,7 @@ public final class Constants {
 
     public static final double  wristPowerStartAngle = 90.0;
 
-    public static final double kP = 0.0;
+    public static final double kP = 30.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kS = 0.0;

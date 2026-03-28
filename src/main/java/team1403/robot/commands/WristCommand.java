@@ -22,7 +22,8 @@ public class WristCommand extends Command {
   
     @Override
   public void execute() {
-    m_intakeWrist.setMotorOutput(wristSpeed);
+    //m_intakeWrist.setMotorOutput(wristSpeed);
+    m_intakeWrist.setSetpoint(wristSpeed);
     
   }
 

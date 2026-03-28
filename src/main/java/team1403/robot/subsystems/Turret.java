@@ -153,7 +153,7 @@ public class Turret extends SubsystemBase {
       m_turretMotor.setControl(m_positionVoltageRequest.withPosition(setpointRotations).withFeedForward(ff));
     }
 
-    Logger.recordOutput("Turret/Current Angle", currentAngle);
+    Logger.recordOutput("Turret/Turret Current Angle", currentAngle);
     Logger.recordOutput("Turret/Absolute", getAbsolutePosition());
     Logger.recordOutput("Turret/Setpoint", setpoint);
     Logger.recordOutput("Turret/At Setpoint", atSetpoint());

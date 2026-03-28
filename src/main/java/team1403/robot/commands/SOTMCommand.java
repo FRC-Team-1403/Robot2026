@@ -30,6 +30,8 @@ public class SOTMCommand extends Command {
     private static final double MIN_SHOOT_DISTANCE     = 1.6;
     private static final double SHOOT_TRIGGER_DEADBAND = 0.3;
     private static final double BACKUP_DURATION        = 0.2;
+    private static final double LATENCY                = 0.01;
+    private static final double SHOOTER_DELAY          = 0.08;
 
     private final Turret          m_turret;
     private final Indexer         m_indexer;
@@ -87,6 +89,14 @@ public class SOTMCommand extends Command {
 
         ChassisSpeeds robotVelocity = m_swerve.getState().Speeds;
 
+        Translation2d latencyAdjustment = new Translation2d(
+            -LATENCY * robotVelocity.vxMetersPerSecond,
+            -LATENCY * robotVelocity.vyMetersPerSecond);
+        Rotation2d latencyRotation = new Rotation2d(
+            -LATENCY * robotVelocity.omegaRadiansPerSecond);
+        currentPose = currentPose.plus(
+            new Transform2d(latencyAdjustment, latencyRotation));
+
         double turretAngle = 0;
         double distance = Math.hypot(
             Blackbox.getActiveTarget(currentPose).getX() - currentPose.getX(),
@@ -99,11 +109,13 @@ public class SOTMCommand extends Command {
         do {
             lastTOF = currentTOF;
 
+            double totalTime = currentTOF + LATENCY + SHOOTER_DELAY;
+
             Translation2d positionAdjustment = new Translation2d(
-                currentTOF * robotVelocity.vxMetersPerSecond,
-                currentTOF * robotVelocity.vyMetersPerSecond);
+                totalTime * robotVelocity.vxMetersPerSecond,
+                totalTime * robotVelocity.vyMetersPerSecond);
             Rotation2d rotationAdjustment = new Rotation2d(
-                currentTOF * robotVelocity.omegaRadiansPerSecond);
+                totalTime * robotVelocity.omegaRadiansPerSecond);
             Pose2d projectedPose = currentPose.plus(
                 new Transform2d(positionAdjustment, rotationAdjustment));
 

@@ -26,6 +26,7 @@ import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
+import team1403.robot.commands.SOTMCommand;
 import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.auto.AutoHelper;
 import team1403.robot.subsystems.Indexer;
@@ -34,6 +35,7 @@ import team1403.robot.subsystems.IntakeWrist;
 import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.ShooterHood;
 import team1403.robot.subsystems.Spindexer;
+import team1403.robot.subsystems.Turret;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
 import team1403.robot.util.CougarUtil;
@@ -42,7 +44,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
   private final Intake m_intake;
-  private final IntakeWrist m_intakeWrist;
+  //private final IntakeWrist m_intakeWrist;
+  private final Turret m_turret;
   private final Indexer m_indexer;
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
@@ -62,9 +65,10 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_swerve = TunerConstants.createDrivetrain();
+    m_turret = new Turret();
 
     m_intake = new Intake();
-    m_intakeWrist = new IntakeWrist();
+    //m_intakeWrist = new IntakeWrist();
     m_indexer= new Indexer();
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
@@ -74,12 +78,12 @@ public class RobotContainer {
     m_teleopTimer = new Timer();
 
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
-    NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
-    NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.4).withTimeout(0.2).asProxy());
+    //NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
+    //NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.4).withTimeout(0.2).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
     NamedCommands.registerCommand("Auto Aim Command", new AutoAlignCommand(m_swerve));
-    NamedCommands.registerCommand("Wrist Down Command Jiggle", new WristCommand(m_intakeWrist,0.07
-    ).withTimeout(0.08).asProxy());
+    // NamedCommands.registerCommand("Wrist Down Command Jiggle", new WristCommand(m_intakeWrist,0.07
+    // ).withTimeout(0.08).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(
         m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
     ));
@@ -119,16 +123,20 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //testing command for elastic
-    //m_operatorController.leftTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
+    m_operatorController.leftTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
 
     m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
-    
+    //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
 
     m_operatorController.b().whileTrue(new IntakeCommand(m_intake, 1));
     m_operatorController.x().onTrue(new IntakeCommand(m_intake, 0));
-    m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new WristCommand(m_intakeWrist, -0.2), 
-                                                                    new IntakeCommand(m_intake, 1)));
-    m_operatorController.povDown().whileTrue(new WristCommand(m_intakeWrist, 0.3));
+    // m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new WristCommand(m_intakeWrist, -0.2), 
+    //                                                                 new IntakeCommand(m_intake, 1)));
+    //m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 100)); 
+    //m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, 50)); 
+
+                                                                                                                 
+    //m_operatorController.povDown().whileTrue(new WristCommand(m_intakeWrist, 0.3));
     m_operatorController.rightTrigger().onFalse(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
 
     //swerve buttons 
