@@ -63,7 +63,7 @@ public class IntakeWrist extends SubsystemBase {
     m_intakeWristMotor.getConfigurator().apply(wristMotorConfig);
     m_intakeWristMotor.getConfigurator().apply(wristPIDConfigs);
 
-    m_intakeWristEncoder = new CANcoder(Constants.IntakeWrist.kEncoderID);
+    m_intakeWristEncoder = new CANcoder(Constants.IntakeWrist.kEncoderID, "Bus 2");
 
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
