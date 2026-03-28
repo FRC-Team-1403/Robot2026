@@ -26,7 +26,7 @@ import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
-import team1403.robot.commands.SOTMCommand;
+import team1403.robot.commands.TurretTrackingCommand;
 import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.WristWiggleCommand;
 import team1403.robot.commands.auto.AutoHelper;
@@ -128,7 +128,8 @@ public class RobotContainer {
 
     m_shooter.setDefaultCommand(new LERPShooter(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
-
+    m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
+    
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 50)); 
     m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, 95)); 
