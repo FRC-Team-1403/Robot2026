@@ -17,7 +17,8 @@ public final class Constants {
   public static final boolean DEBUG_MODE = false;
   public static final boolean ENABLE_SYSID = true;
   //controls if the debug tab is used on shuffleboard
-  public static final double brownOutVoltage = 9.5;
+  public static final double brownOutVoltage = 8.0;
+public static final double minimumBatteryVoltage = 11.0;
 
 
   public static class Operator {

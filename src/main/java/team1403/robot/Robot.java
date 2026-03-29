@@ -81,6 +81,9 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     if (!DriverStation.isFMSAttached()) {
       RobotController.setBrownoutVoltage(Constants.brownOutVoltage);
+      if (RobotController.getBatteryVoltage() < Constants.minimumBatteryVoltage) {
+        throw new RuntimeException("GG Time to Replace the Battery! Currently at: " + RobotController.getBatteryVoltage() + " Current Minimum: " + Constants.minimumBatteryVoltage);
+      }
     }
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -93,13 +96,7 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    if (!DriverStation.isFMSAttached()) {
-      if (RobotController.isBrownedOut()) {
-        throw new RuntimeException("GG Time to Replace the Battery");
-      }
-    }
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
