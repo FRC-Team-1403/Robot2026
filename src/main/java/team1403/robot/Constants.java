@@ -139,14 +139,14 @@ public final class Constants {
     public static final double kFixedHood = 20;
 
     public static final double[][] distanceTable = {
-      {2.01, 0},
-      {2.29, 1},
-      {2.5, 2},
-      {2.8, 3},
-      {3.2, 4},
-      {3.69, 5},
-      {4.5, 6},
-      {5.3, 7}
+      {2.01, 20},
+      {2.29, 20},
+      {2.5, 20},
+      {2.8, 20},
+      {3.2, 20},
+      {3.69, 20},
+      {4.5, 20},
+      {5.3, 20}
     };
   }
 
