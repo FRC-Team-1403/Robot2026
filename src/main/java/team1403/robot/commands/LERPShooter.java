@@ -64,69 +64,72 @@ public class LERPShooter extends Command {
 
     @Override
     public void execute() {
+        //Get updated values
         Pose2d robotPose = m_pose.get();
         ChassisSpeeds robotVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(m_chassisSupplier.get(), robotPose.getRotation());
+        boolean humanInput = m_shoot.getAsDouble() > 0.3;
 
-        // ── Backup timer logic (unchanged) ──────────────────────────────────
-        if (wasShooting && !isShooting) {
-            backupTimer.reset();
-            backupTimer.start();
-        }
-        wasShooting = isShooting;
-
-        // ── Step 1: turret pivot in field coords (mirrors TurretTrackingCommand) ──
+        //Transform robot into turret
         Translation2d turretPivotField = robotPose.getTranslation()
                 .plus(Constants.Turret.kTurretOffset.rotateBy(robotPose.getRotation()));
 
-        // ── Step 2: raw distance to target from turret pivot ─────────────────
+        //Calculate current values
         Translation2d target = Blackbox.getActiveTarget(robotPose);
         double deltaX = target.getX() - turretPivotField.getX();
         double deltaY = target.getY() - turretPivotField.getY();
         double distance = Math.hypot(deltaX, deltaY);
 
-        // ── Step 3: project turret pivot forward by shot time × robot velocity ─
+        //Calculate future values
         double shotTime = lerp(Constants.Shooter.kTOFTable, distance);
+        shotTime += Constants.Shooter.latency;
         double offsetX = shotTime * robotVelocity.vxMetersPerSecond;
         double offsetY = shotTime * robotVelocity.vyMetersPerSecond;
-        Translation2d projectedPivot = new Translation2d(
+        double offsetRotation = shotTime * robotVelocity.omegaRadiansPerSecond;
+        Pose2d projectedPivot = new Pose2d(
                 turretPivotField.getX() + offsetX,
-                turretPivotField.getY() + offsetY);
+                turretPivotField.getY() + offsetY,
+                robotPose.getRotation().plus(new Rotation2d(offsetRotation)));
 
-        // ── Step 4: recompute deltas and distance from PROJECTED pivot ────────
+        //Recompute distance
         double projDeltaX = target.getX() - projectedPivot.getX();
         double projDeltaY = target.getY() - projectedPivot.getY();
         double projectedDistance = Math.hypot(projDeltaX, projDeltaY);
 
-        // ── Step 5: turret angle (same formula as TurretTrackingCommand) ──────
+        //Find and set turret
         double fieldAngleToGoal = Math.toDegrees(Math.atan2(projDeltaY, projDeltaX));
-        double robotHeading = robotPose.getRotation().getDegrees();
+        double robotHeading = projectedPivot.getRotation().getDegrees();
         double turretAngle = MathUtil.inputModulus(
                 fieldAngleToGoal - robotHeading - 90,
                 Constants.Turret.kMinAngleDegrees,
                 Constants.Turret.kMaxAngleDegrees);
-
         m_turret.setSetpoint(turretAngle);
 
-        // ── Step 6: flywheel + hood + feed logic (unchanged) ─────────────────
+        //LERP flywheel and hood speed/angle
         double flywheelRPM = lerp(Constants.Shooter.distanceTable, projectedDistance);
+        double hoodAngle = lerp(Constants.ShooterHood.distanceTable, projectedDistance);
 
-        if (m_shoot.getAsDouble() > 0.3) {
+        //If shoot button is pressed
+        if (humanInput) {
+            //Set flywheel
             m_shooter.setFlywheelTargetRPM(flywheelRPM);
 
+            //Set hood
             Zone zone = FieldZoneUtil.getZone(robotPose);
             if (zone == Zone.CROSSING) {
                 m_shooterHood.setSetpoint(0);
-            } else if (zone == Zone.NEUTRAL) {
-                m_shooterHood.setSetpoint(28);
-            } else {
-                m_shooterHood.setSetpoint(Constants.ShooterHood.kFixedHood);
             }
-        } else {
+            else {
+                m_shooterHood.setSetpoint(hoodAngle);
+            }
+        } 
+        //Otherwise reset to safe conditions
+        else {
             isShooting = false;
             m_shooter.setFlywheelTargetRPM(0);
             m_shooterHood.setSetpoint(0);
 
-            if (backupTimer.isRunning() && backupTimer.get() < 0.2) {
+            //If currently backing up
+            if (backupTimer.isRunning() && backupTimer.get() < Constants.Shooter.kBackupTime) {
                 m_spindexer.setSpindexerRPM(-2000);
                 m_indexer.setIndexerRPM(-1800);
             } else {
@@ -137,32 +140,39 @@ public class LERPShooter extends Command {
             }
         }
 
+        //Should we actually start shooting
         if (m_shooter.isFlywheelAtSpeed()
                 && m_shooterHood.atSetpoint()
-                && m_shoot.getAsDouble() > 0.3
-                && projectedDistance > 1.6) {
+                && humanInput
+                && m_turret.atSetpoint()) {
             isShooting = true;
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
             m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
         }
 
-        // ── Logging ───────────────────────────────────────────────────────────
-        SmartDashboard.putBoolean("Debug/Shooter In Range", distance > 1.6);
+        //If shooting changed from true to false
+        if (wasShooting && !isShooting) {
+            backupTimer.reset();
+            backupTimer.start();
+        }
+
+        //Update wasShooting
+        wasShooting = isShooting;
+
+        //Logging
         SmartDashboard.putNumber("Debug/distance", distance);
         Logger.recordOutput("LERPShooter/RobotPose", robotPose);
-        Logger.recordOutput("LERPShooter/TurretPivotField",
-                new Pose2d(turretPivotField, new Rotation2d()));
-        Logger.recordOutput("LERPShooter/ProjectedPivot",
-                new Pose2d(projectedPivot, new Rotation2d()));
-        Logger.recordOutput("LERPShooter/ActiveTarget",
-                new Pose2d(target, new Rotation2d()));
+        Logger.recordOutput("LERPShooter/ProjectedPivot", projectedPivot);
+        Logger.recordOutput("LERPShooter/ActiveTarget", new Pose2d(target, new Rotation2d()));
         Logger.recordOutput("LERPShooter/FieldAngleToGoal", fieldAngleToGoal);
+        Logger.recordOutput("LERPShooter/HoodAngle", hoodAngle);
         Logger.recordOutput("LERPShooter/TurretAngle", turretAngle);
         Logger.recordOutput("LERPShooter/ProjectedDistance", projectedDistance);
         Logger.recordOutput("LERPShooter/FlywheelRPM", flywheelRPM);
         Logger.recordOutput("LERPShooter/IsShooting", isShooting);
     }
 
+    //Should never run (Default Command)
     @Override
     public void end(boolean interrupted) {
         m_spindexer.stop();
@@ -171,11 +181,13 @@ public class LERPShooter extends Command {
         m_shooterHood.setSetpoint(0);
     }
 
+    //Should never run (Default Command)
     @Override
     public boolean isFinished() {
         return false;
     }
 
+    //LERP helper method
     public static double lerp(double[][] table, double input) {
         if (input <= table[0][0]) return table[0][1];
         if (input >= table[table.length - 1][0]) return table[table.length - 1][1];

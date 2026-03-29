@@ -17,6 +17,7 @@ public final class Constants {
   public static final boolean DEBUG_MODE = false;
   public static final boolean ENABLE_SYSID = true;
   //controls if the debug tab is used on shuffleboard
+  public static final double brownOutVoltage = 9.5;
 
 
   public static class Operator {
@@ -136,6 +137,17 @@ public final class Constants {
 
     public static final double kMagnetOffset = 0.01611;
     public static final double kFixedHood = 20;
+
+    public static final double[][] distanceTable = {
+      {2.01, 0},
+      {2.29, 1},
+      {2.5, 2},
+      {2.8, 3},
+      {3.2, 4},
+      {3.69, 5},
+      {4.5, 6},
+      {5.3, 7}
+    };
   }
 
   public static class Shooter {
@@ -174,6 +186,8 @@ public final class Constants {
       { 4.5,  1.60 },
       { 5.3,  1.75 },
     };
+    public static final double latency = 0;
+    public static final double kBackupTime = 0.2;
   }
 
   public static class Indexer {
