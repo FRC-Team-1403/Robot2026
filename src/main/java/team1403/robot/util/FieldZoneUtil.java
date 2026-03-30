@@ -12,11 +12,16 @@ public class FieldZoneUtil {
   // Width of crossing band (only extends INTO neutral)
   public static final double kCrossingWidth = 0.5;
 
+  public static final double kHubSide = 1.19;
+  public static final double kHubHalf = kHubSide / 2.0;
+  public static final double kHubY    = kFieldWidth / 2.0;
+
   public enum Zone {
     MY_ALLIANCE,
     NEUTRAL,
     OPPOSING_ALLIANCE,
-    CROSSING
+    CROSSING,
+    HUB_SHADOW
   }
 
   public enum Side {
@@ -26,6 +31,7 @@ public class FieldZoneUtil {
 
   public static Zone getZone(Pose2d robotPose) {
     double x = robotPose.getX();
+    double y = robotPose.getY();
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
 
     if (alliance == Alliance.Blue) {
@@ -45,6 +51,8 @@ public class FieldZoneUtil {
         return Zone.MY_ALLIANCE;
       } else if (x > (kFieldLength - kAllianceZoneDepth)) {
         return Zone.OPPOSING_ALLIANCE;
+      } else if (y >= kHubY - kHubHalf && y <= kHubY + kHubHalf) {
+        return Zone.HUB_SHADOW;
       } else {
         return Zone.NEUTRAL;
       }
@@ -67,6 +75,8 @@ public class FieldZoneUtil {
         return Zone.MY_ALLIANCE;
       } else if (x < kAllianceZoneDepth) {
         return Zone.OPPOSING_ALLIANCE;
+      } else if (y >= kHubY - kHubHalf && y <= kHubY + kHubHalf) {
+        return Zone.HUB_SHADOW;
       } else {
         return Zone.NEUTRAL;
       }

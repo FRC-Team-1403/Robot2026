@@ -107,14 +107,15 @@ public class LERPShooter extends Command {
         //LERP flywheel and hood speed/angle
         double flywheelRPM = lerp(Constants.Shooter.distanceTable, projectedDistance);
         double hoodAngle = lerp(Constants.ShooterHood.distanceTable, projectedDistance);
+        Zone zone = FieldZoneUtil.getZone(robotPose);
+        boolean isInHubShadow = zone.equals(Zone.HUB_SHADOW);
 
         //If shoot button is pressed
-        if (humanInput) {
+        if (humanInput && !isInHubShadow) {
             //Set flywheel
             m_shooter.setFlywheelTargetRPM(flywheelRPM);
 
             //Set hood
-            Zone zone = FieldZoneUtil.getZone(robotPose);
             if (zone == Zone.CROSSING) {
                 m_shooterHood.setSetpoint(0);
             }
@@ -144,6 +145,7 @@ public class LERPShooter extends Command {
         if (m_shooter.isFlywheelAtSpeed()
                 && m_shooterHood.atSetpoint()
                 && humanInput
+                && !isInHubShadow
                 && m_turret.atSetpoint()) {
             isShooting = true;
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
