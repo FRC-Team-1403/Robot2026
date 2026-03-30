@@ -165,16 +165,25 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kV = 0.12;
     public static final double kA = 0.2;
     public static final double[][] distanceTable = {
-      {2.01, 1350},
-      {2.29, 1400},
-      {2.5, 1470},
-      {2.8, 1490},
-      {3.2, 1500},
-      {3.69, 1600},
-      {4.5, 1740},
-      {5.3, 1800}
+      {2.01, 1373},
+      {2.29, 1409},
+      {2.5, 1438},
+      {2.8, 1478},
+      {3.2, 1532},
+      {3.69, 1597},
+      {4.5, 1707},
+      {5.3, 1818} 
     };
-    
+
+      // {2.01, 1350},
+      // {2.29, 1400},
+      // {2.5, 1470},
+      // {2.8, 1490},
+      // {3.2, 1500},
+      // {3.69, 1600},
+      // {4.5, 1740},
+      // {5.3, 1800}
+      
     public static final double kLatencyCompensation = 0.1; 
 
     public static final double[][] kTOFTable = {
