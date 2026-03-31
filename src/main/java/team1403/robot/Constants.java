@@ -197,7 +197,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double[][] kTOFTable = {
       {1.15, 0.66},
       {1.4, 0.7},
-      {1.7, 0.86},
+      {1.7, 0.84},
       {2.12, 0.8},
       {2.37, 0.84},
       {2.7, 0.81},
