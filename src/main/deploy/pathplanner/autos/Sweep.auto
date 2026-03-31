@@ -21,6 +21,36 @@
           "data": {
             "pathName": "SweepPt3"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SweepPt4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SweepPt5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SweepPt6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SweepPt7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SweepPt8"
+          }
         }
       ]
     }

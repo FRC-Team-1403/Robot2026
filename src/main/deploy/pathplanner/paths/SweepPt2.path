@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.703,
-        "y": 6.859068181818182
+        "x": 6.096305278174036,
+        "y": 7.392582025677603
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.750441073477754,
-        "y": 6.551802218358825
+        "x": 6.327265185239355,
+        "y": 7.488276964563519
       },
       "isLocked": true,
       "linkedName": "SweepPt1End"
     },
     {
       "anchor": {
-        "x": 7.8165,
-        "y": 4.55
+        "x": 7.791269614835947,
+        "y": 7.120870185449359
       },
       "prevControl": {
-        "x": 7.76342682751972,
-        "y": 4.81371241601957
+        "x": 6.984862614563388,
+        "y": 6.928884730392718
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 3.0,
-    "rotation": -90.0
+    "rotation": -178.87669728592465
   },
   "useDefaultConstraints": true
 }
