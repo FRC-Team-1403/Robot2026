@@ -126,7 +126,7 @@ public class LERPShooter extends Command {
         double fieldAngleToGoal = Math.toDegrees(Math.atan2(projDeltaY, projDeltaX));
         double robotHeading = projectedPivot.getRotation().getDegrees();
         double turretAngle = MathUtil.inputModulus(
-                fieldAngleToGoal - robotHeading - 82, // Changed from -90 to -82
+                fieldAngleToGoal - robotHeading - 90,
                 Constants.Turret.kMinAngleDegrees,
                 Constants.Turret.kMaxAngleDegrees
         );
