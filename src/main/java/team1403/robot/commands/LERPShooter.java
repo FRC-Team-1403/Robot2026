@@ -84,11 +84,13 @@ public class LERPShooter extends Command {
         shotTime += Constants.Shooter.latency;
         double offsetX = shotTime * robotVelocity.vxMetersPerSecond;
         double offsetY = shotTime * robotVelocity.vyMetersPerSecond;
-        double offsetRotation = shotTime * robotVelocity.omegaRadiansPerSecond;
+        Translation2d turret = Constants.Turret.kTurretOffset.rotateBy(robotPose.getRotation());
+        double turretX = -1 * shotTime * robotVelocity.omegaRadiansPerSecond * turret.getY();
+        double turretY =  1 * shotTime * robotVelocity.omegaRadiansPerSecond * turret.getX();
         Pose2d projectedPivot = new Pose2d(
-                turretPivotField.getX() + offsetX,
-                turretPivotField.getY() + offsetY,
-                robotPose.getRotation().plus(new Rotation2d(offsetRotation)));
+                turretPivotField.getX() + offsetX + turretX,
+                turretPivotField.getY() + offsetY + turretY,
+                robotPose.getRotation());
 
         //Recompute distance
         double projDeltaX = target.getX() - projectedPivot.getX();
