@@ -64,6 +64,15 @@ public class LERPShooter extends Command {
 
     @Override
     public void execute() {
+        //If shooting changed from true to false
+        if (wasShooting && !isShooting) {
+            backupTimer.reset();
+            backupTimer.start();
+        }
+
+        //Update wasShooting
+        wasShooting = isShooting;
+
         //Get updated values
         Pose2d robotPose = m_pose.get();
         ChassisSpeeds robotVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(m_chassisSupplier.get(), robotPose.getRotation());
@@ -84,11 +93,10 @@ public class LERPShooter extends Command {
         shotTime += Constants.Shooter.latency;
         double offsetX = shotTime * robotVelocity.vxMetersPerSecond;
         double offsetY = shotTime * robotVelocity.vyMetersPerSecond;
-        double offsetRotation = shotTime * robotVelocity.omegaRadiansPerSecond;
         Pose2d projectedPivot = new Pose2d(
                 turretPivotField.getX() + offsetX,
                 turretPivotField.getY() + offsetY,
-                robotPose.getRotation().plus(new Rotation2d(offsetRotation)));
+                robotPose.getRotation());
 
         //Recompute distance
         double projDeltaX = target.getX() - projectedPivot.getX();
@@ -151,15 +159,6 @@ public class LERPShooter extends Command {
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
             m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
         }
-
-        //If shooting changed from true to false
-        if (wasShooting && !isShooting) {
-            backupTimer.reset();
-            backupTimer.start();
-        }
-
-        //Update wasShooting
-        wasShooting = isShooting;
 
         //Logging
         SmartDashboard.putNumber("Debug/distance", distance);

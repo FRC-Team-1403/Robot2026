@@ -38,7 +38,7 @@ public static final double minimumBatteryVoltage = 11.0;
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = 0.033;
+    public static final double kMagnetOffset = -0.39;
     public static final double kMinAngleDegrees = -257;
     public static final double kMaxAngleDegrees = 103;
 
@@ -107,10 +107,15 @@ public static final double minimumBatteryVoltage = 11.0;
 
     public static final boolean kExtraVisionDebugInfo = true;
 
-    public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(Units.inchesToMeters(-14.554),Units.inchesToMeters(9.034), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(278.3)));
-    public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(Units.inchesToMeters(-11.73),Units.inchesToMeters(11.57), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(180)));
-    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(-12.75),Units.inchesToMeters(8), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(0)));
-    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(-14.4),Units.inchesToMeters(10.76), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(99.7)));
+    //public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(Units.inchesToMeters(-14.554),Units.inchesToMeters(-9.034), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(278.3)));
+    //public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(Units.inchesToMeters(-11.73),Units.inchesToMeters(-11.57), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(180)));
+    //public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(-12.75),Units.inchesToMeters(8), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(0)));
+    //public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(-14.4),Units.inchesToMeters(10.76), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(99.7)));
+
+    public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(Units.inchesToMeters(-9.034),Units.inchesToMeters(-14.554), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(278.3)));
+    public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(Units.inchesToMeters(-11.57),Units.inchesToMeters(-11.73), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(180)));
+    public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(-8),Units.inchesToMeters(12.75), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(0)));
+    public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(-10.76),Units.inchesToMeters(14.4), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(99.7)));
 
     //NEW COMBINED VISION SUBSYSTEM
   }
@@ -140,15 +145,21 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kFixedHood = 20;
 
     public static final double[][] distanceTable = {
-      {2.01, 20},
-      {2.29, 20},
-      {2.5, 20},
-      {2.8, 20},
-      {3.2, 20},
-      {3.69, 20},
+      {1.15, 5},
+      {1.4, 10},
+      {1.7, 10},
+      {2.12, 15},
+      {2.37, 15},
+      {2.7, 20},
+      {3.0, 20},
+      {3.3, 20}, 
+      {3.59, 20},
+      {3.89, 20},
+      {4.22, 20},
       {4.5, 20},
-      {5.3, 20}
-    };
+      {4.89, 20},
+      {5.2, 20}
+    }; //finished 
   }
 
   public static class Shooter {
@@ -165,37 +176,40 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kV = 0.12;
     public static final double kA = 0.2;
     public static final double[][] distanceTable = {
-      {2.01, 1373},
-      {2.29, 1409},
-      {2.5, 1438},
-      {2.8, 1478},
-      {3.2, 1532},
-      {3.69, 1597},
-      {4.5, 1707},
-      {5.3, 1818} 
-    };
-
-      // {2.01, 1350},
-      // {2.29, 1400},
-      // {2.5, 1470},
-      // {2.8, 1490},
-      // {3.2, 1500},
-      // {3.69, 1600},
-      // {4.5, 1740},
-      // {5.3, 1800}
+      {1.15, 1250},
+      {1.4, 1280},
+      {1.7, 1310},
+      {2.12, 1330},
+      {2.37, 1375},
+      {2.7, 1410},
+      {3.0, 1430},
+      {3.3, 1490}, 
+      {3.59, 1550}, //big jump
+      {3.89, 1650},//big jump
+      {4.22, 1710},
+      {4.5, 1750},
+      {4.89, 1805},
+      {5.2, 1835}
+    }; //finished 
       
     public static final double kLatencyCompensation = 0.1; 
 
     public static final double[][] kTOFTable = {
-      { 2.01,  0.75 },
-      { 2.29,  0.82 },
-      { 2.5,  0.92 },
-      { 2.8,  1.15 },
-      { 3.2,  1.30 },
-      { 4.69,  1.45 },
-      { 4.5,  1.60 },
-      { 5.3,  1.75 },
-    };
+      {1.15, 0.66},
+      {1.4, 0.7},
+      {1.7, 0.86},
+      {2.12, 0.8},
+      {2.37, 0.84},
+      {2.7, 0.81},
+      {3.0, 0.83},
+      {3.3, 0.86}, 
+      {3.59, 0.93},
+      {3.89, 1.05},
+      {4.22, 1.14},
+      {4.5, 1.27},
+      {4.89, 1.31},
+      {5.2, 1.34}
+    };//finished 
     public static final double latency = 0;
     public static final double kBackupTime = 0.2;
   }

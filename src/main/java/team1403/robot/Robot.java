@@ -79,12 +79,12 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    if (!DriverStation.isFMSAttached()) {
-      RobotController.setBrownoutVoltage(Constants.brownOutVoltage);
-      if (RobotController.getBatteryVoltage() < Constants.minimumBatteryVoltage) {
-        throw new RuntimeException("GG Time to Replace the Battery! Currently at: " + RobotController.getBatteryVoltage() + " Current Minimum: " + Constants.minimumBatteryVoltage);
-      }
-    }
+    // if (!DriverStation.isFMSAttached()) {
+    //   RobotController.setBrownoutVoltage(Constants.brownOutVoltage);
+    //   if (RobotController.getBatteryVoltage() < Constants.minimumBatteryVoltage) {
+    //     throw new RuntimeException("GG Time to Replace the Battery! Currently at: " + RobotController.getBatteryVoltage() + " Current Minimum: " + Constants.minimumBatteryVoltage);
+    //   }
+    // }
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
