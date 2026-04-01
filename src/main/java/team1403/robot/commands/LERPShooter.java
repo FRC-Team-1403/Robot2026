@@ -100,7 +100,7 @@ public class LERPShooter extends Command {
             double deltaY = target.getY() - projectedPivot.getY();
             projectedDistance = Math.hypot(deltaX, deltaY);
 
-            double shotTime = lerp(Constants.Shooter.kTOFTable, projectedDistance) + Constants.Shooter.latency;
+            double shotTime = lerp(Constants.Shooter.kTOFTable, projectedDistance) + Constants.Shooter.kLatencyCompensation;
 
             // Predict translational offset
             double offsetX = shotTime * robotVelocity.vxMetersPerSecond;
