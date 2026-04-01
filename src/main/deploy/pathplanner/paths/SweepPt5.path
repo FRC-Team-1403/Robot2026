@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8875178316690437,
-        "y": 7.35376604850214
+        "x": 3.379186875891583,
+        "y": 7.496091298145506
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.707486617426273,
-        "y": 7.35376604850214
+        "x": 4.1991556616488115,
+        "y": 7.496091298145506
       },
       "isLocked": false,
       "linkedName": "SweepPt4End"
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": -178.87669728592465
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -179.29268063145577
+    "velocity": 3.0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

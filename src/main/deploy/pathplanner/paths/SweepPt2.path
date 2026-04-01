@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.327265185239355,
-        "y": 7.488276964563519
+        "x": 6.34141520380055,
+        "y": 7.44178694778266
       },
       "isLocked": true,
       "linkedName": "SweepPt1End"
     },
     {
       "anchor": {
-        "x": 7.545435092724677,
-        "y": 7.146747503566334
+        "x": 7.674821683309556,
+        "y": 7.133808844507846
       },
       "prevControl": {
-        "x": 6.739028092452118,
-        "y": 6.954762048509693
+        "x": 6.89633077586507,
+        "y": 6.986605776583195
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,8 +47,8 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 3.0,
-    "rotation": -178.87669728592465
+    "velocity": 4.0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

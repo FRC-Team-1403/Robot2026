@@ -3,69 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.545435092724677,
-        "y": 7.146747503566334
+        "x": 7.674821683309556,
+        "y": 7.133808844507846
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.185930245751853,
-        "y": 5.837256456735212
+        "x": 7.725912424083442,
+        "y": 6.220840192171014
       },
       "isLocked": false,
       "linkedName": "SweepPt2End"
     },
     {
       "anchor": {
-        "x": 6.963195435092723,
-        "y": 4.597831669044222
+        "x": 7.817146932952923,
+        "y": 4.559015691868759
       },
       "prevControl": {
-        "x": 8.214919352900111,
-        "y": 4.624308279151776
-      },
-      "nextControl": {
-        "x": 6.565998344174482,
-        "y": 4.589430109912462
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.419771754636234,
-        "y": 5.1930099857346645
-      },
-      "prevControl": {
-        "x": 6.378452948491445,
-        "y": 4.944812233937978
-      },
-      "nextControl": {
-        "x": 6.612898471264078,
-        "y": 6.353101995918538
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.368017118402282,
-        "y": 7.405520684736091
-      },
-      "prevControl": {
-        "x": 6.382771804895864,
-        "y": 5.966532186299684
+        "x": 7.830793944447617,
+        "y": 4.309388451613887
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "SweepPt3End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.701492537313423,
-      "rotationDegrees": 91.78355956505422
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -78,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 179.59365376669098
+    "velocity": 0.0,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": -90.0
   },
   "useDefaultConstraints": true
