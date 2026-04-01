@@ -152,11 +152,9 @@ public static final double minimumBatteryVoltage = 11.0;
       {2.37, 15},
       {2.7, 20},
       {3.0, 20},
-      {3.3, 20}, 
       {3.59, 20},
       {3.89, 20},
       {4.22, 20},
-      {4.5, 20},
       {4.89, 20},
       {5.2, 20}
     }; //finished 
@@ -183,11 +181,9 @@ public static final double minimumBatteryVoltage = 11.0;
       {2.37, 1375},
       {2.7, 1410},
       {3.0, 1430},
-      {3.3, 1490}, 
       {3.59, 1550}, //big jump
       {3.89, 1650},//big jump
       {4.22, 1710},
-      {4.5, 1750},
       {4.89, 1805},
       {5.2, 1835}
     }; //finished 
@@ -197,18 +193,16 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double[][] kTOFTable = {
       {1.15, 0.66},
       {1.4, 0.7},
-      {1.7, 0.84},//0.86
+      {1.7, 0.86},
       {2.12, 0.8},
       {2.37, 0.84},
       {2.7, 0.81},
       {3.0, 0.83},
-      {3.3, 0.86}, 
       {3.59, 0.93},
-      {3.89, 1.00},//1.05
-      {4.22, 1.08},//1.14
-      {4.5, 1.15},//1.27
-      {4.89, 1.24},//1.31
-      {5.2, 1.31}//1.34
+      {3.89, 1.05},
+      {4.22, 1.14},
+      {4.89, 1.31},
+      {5.2, 1.34}
     };//finished 
     public static final double latency = 0;
     public static final double kBackupTime = 0.2;
