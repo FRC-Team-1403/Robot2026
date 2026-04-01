@@ -26,6 +26,7 @@ import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
+import team1403.robot.commands.SOTMVectorSubCommand;
 import team1403.robot.commands.TurretTrackingCommand;
 import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.WristWiggleCommand;
@@ -126,7 +127,7 @@ public class RobotContainer {
     //testing command for elastic
     //m_operatorController.rightTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
 
-    m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
+    m_shooter.setDefaultCommand(new SOTMVectorSubCommand(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
     //m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
     

@@ -113,7 +113,7 @@ public class SOTMVectorSubCommand extends Command {
         double robotHeading = robotPose.getRotation().getDegrees();
         // Convert field angle to turret-relative angle
         double turretAngle = MathUtil.inputModulus(
-                fieldAngleToGoal - robotHeading - 90,
+                fieldAngleToGoal - robotHeading-2,
                 Constants.Turret.kMinAngleDegrees,
                 Constants.Turret.kMaxAngleDegrees
         );

@@ -30,6 +30,7 @@ public static final double minimumBatteryVoltage = 11.0;
   }
 
   public static class ScoringLocation{
+    //4.63 4.035
     public static final Translation2d kHubPosition = new Translation2d(4.63, 4.035);
     public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
     public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
@@ -38,9 +39,9 @@ public static final double minimumBatteryVoltage = 11.0;
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = -0.39;
-    public static final double kMinAngleDegrees = -257;
-    public static final double kMaxAngleDegrees = 103;
+    public static final double kMagnetOffset = -0.27417;
+    public static final double kMinAngleDegrees = -162;
+    public static final double kMaxAngleDegrees = 198;
 
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
@@ -193,77 +194,81 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kV = 0.12;
     public static final double kA = 0.2;
 
-    public static final double[][] distanceTable = {
-      {1.15, 1250},
-      {1.4, 1280},
-      {1.7, 1310},
-      {2.12, 1330},
-      {2.37, 1375},
-      {2.7, 1410},
-      {3.0, 1430},
-      {3.3, 1490}, 
-      {3.59, 1550}, //big jump
-      {3.89, 1650},//big jump
-      {4.22, 1710},
-      {4.5,1750},
-      {4.89, 1805},
-      {5.2, 1835}
-    }; //finished 
-      
-    public static final double kLatencyCompensation = 0; 
+    public static final double rpmoffset = 10;
 
-    public static final double[][] kTOFTable = {
-      {1.15, 0.66},
-      {1.4, 0.7},
-      {1.7, 0.84},
-      {2.12, 0.8},
-      {2.37, 0.84},
-      {2.7, 0.81},
-      {3.0, 0.83},
-      {3.3, 0.86}, 
-      {3.59, 0.93},
-      {3.89, 1.05},
-      {4.22, 1.14},
-      {4.5, 1.27},
-      {4.89, 1.31},
-      {5.2, 1.34}
-    };
+    //REGULAR
+    // public static final double[][] distanceTable = {
+    //   {1.15, 1250},
+    //   {1.4, 1280},
+    //   {1.7, 1310},
+    //   {2.12, 1330},
+    //   {2.37, 1375},
+    //   {2.7, 1410},
+    //   {3.0, 1430},
+    //   {3.3, 1490}, 
+    //   {3.59, 1550}, //big jump
+    //   {3.89, 1650},//big jump
+    //   {4.22, 1710},
+    //   {4.5,1750},
+    //   {4.89, 1805},
+    //   {5.2, 1835}
+    // }; //finished 
+      
+    public static final double kLatencyCompensation = 0.15; 
+    //REGULAR
+    // public static final double[][] kTOFTable = {
+    //   {1.15, 0.66},
+    //   {1.4, 0.7},
+    //   {1.7, 0.84},
+    //   {2.12, 0.8},
+    //   {2.37, 0.84},
+    //   {2.7, 0.81},
+    //   {3.0, 0.83},
+    //   {3.3, 0.86}, 
+    //   {3.59, 0.93},
+    //   {3.89, 1.05},
+    //   {4.22, 1.14},
+    //   {4.5, 1.27},
+    //   {4.89, 1.31},
+    //   {5.2, 1.34}
+    // };
     public static final double kBackupTime = 0.2;
 
     //CURVE FITTED TABLES
-    // public static final double[][] kTOFTable = {
-    //   {1.15, 0.72},
-    //   {1.4, 0.73},
-    //   {1.7, 0.74},
-    //   {2.12, 0.77},
-    //   {2.37, 0.80},
-    //   {2.7, 0.84},
-    //   {3, 0.88},
-    //   {3.3, 0.93},
-    //   {3.59, 0.98},
-    //   {3.89, 1.04},
-    //   {4.22, 1.12},
-    //   {4.5, 1.19},
-    //   {4.89, 1.29},
-    //   {5.2, 1.39}
-    // };
+    public static final double[][] kTOFTable = {
+      {1.15, 0.72},
+      {1.4, 0.73},
+      {1.7, 0.74},
+      {2.12, 0.77},
+      {2.37, 0.80},
+      {2.7, 0.84},
+      {3, 0.88},
+      {3.3, 0.93},
+      {3.59, 0.98},
+      {3.89, 1.04},
+      {4.22, 1.12},
+      {4.5, 1.19},
+      {4.89, 1.29},
+      {5.2, 1.39}
+    };
 
-    // public static final double[][] distanceTable = {
-    //   {1.15, 1246},
-    //   {1.4, 1269},
-    //   {1.7, 1299},
-    //   {2.12, 1346},
-    //   {2.37, 1377},
-    //   {2.7, 1421},
-    //   {3, 1464},
-    //   {3.3, 1510},
-    //   {3.59, 1558},
-    //   {3.89, 1610},
-    //   {4.22, 1671},
-    //   {4.5, 1726},
-    //   {4.89, 1806},
-    //   {5.2, 1873}
-    // };
+    //CURVE
+    public static final double[][] distanceTable = {
+      {1.15, 1246-rpmoffset},
+      {1.4, 1269-rpmoffset},
+      {1.7, 1299-rpmoffset},
+      {2.12, 1346-rpmoffset},
+      {2.37, 1377-rpmoffset},
+      {2.7, 1421-rpmoffset},
+      {3, 1464-rpmoffset},
+      {3.3, 1510-rpmoffset},
+      {3.59, 1558-rpmoffset},
+      {3.89, 1610-rpmoffset},
+      {4.22, 1671-rpmoffset},
+      {4.5, 1750-rpmoffset},
+      {4.89, 1806-rpmoffset},
+      {5.2, 1835-rpmoffset}
+    };
 
 
 
