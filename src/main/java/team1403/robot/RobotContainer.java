@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import team1403.robot.commands.AutoAlignCommand;
 import team1403.robot.commands.ControllerVibrationCommand;
 import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
@@ -82,7 +81,6 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
     // NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.4).withTimeout(0.2).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
-    NamedCommands.registerCommand("Auto Aim Command", new AutoAlignCommand(m_swerve));
   //   NamedCommands.registerCommand("Wrist Down Command Jiggle", new WristCommand(m_intakeWrist,0.07
   //  ).withTimeout(0.08).asProxy());
     // NamedCommands.registerCommand("Shoot Command", new LERPShooter(

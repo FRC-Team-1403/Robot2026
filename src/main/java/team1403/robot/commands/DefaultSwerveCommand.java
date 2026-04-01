@@ -194,24 +194,6 @@ public class DefaultSwerveCommand extends Command {
       prev_vertical = vertical;
     }
 
-    if (true) {
-      //AutoLook at the hub
-
-      Pose2d pose = m_drivetrainSubsystem.getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, Rotation2d.kCCW_90deg.plus(Constants.Turret.rotationCorrectionOffset)));
-      Translation2d turretPivotField = pose.getTranslation();
-      Translation2d target = Blackbox.getActiveTarget(pose);
-      Logger.recordOutput("targetPose", pose);
-      double deltaX = target.getX() - turretPivotField.getX();
-      double deltaY = target.getY() - turretPivotField.getY();
-      double fieldAngleToGoal = Math.atan2(deltaY, deltaX);
-      double robotHeading = MathUtil.angleModulus(pose.getRotation().getRadians());
-      double targetAngle = MathUtil.angleModulus(fieldAngleToGoal);
-      double temp_angular = m_rotationPID.calculate(robotHeading, targetAngle);
-      if (m_autoAim.getAsBoolean())
-        angular = temp_angular;
-
-    }
-
     {
       if (m_isFieldRelative) {
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(vertical, horizontal, angular, m_drivetrainSubsystem.getShallowRotation());

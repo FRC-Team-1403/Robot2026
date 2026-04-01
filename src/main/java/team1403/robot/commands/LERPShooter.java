@@ -10,10 +10,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import team1403.robot.Constants;
+import team1403.robot.Robot;
 import team1403.robot.subsystems.Indexer;
 import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.ShooterHood;
@@ -101,7 +103,7 @@ public class LERPShooter extends Command {
         double fieldAngleToGoal = Math.toDegrees(Math.atan2(projDeltaY, projDeltaX));
         double robotHeading = projectedPivot.getRotation().getDegrees();
         double turretAngle = MathUtil.inputModulus(
-                fieldAngleToGoal - robotHeading - 90,
+                fieldAngleToGoal - robotHeading - Constants.Turret.rotationCorrectionOffset,
                 Constants.Turret.kMinAngleDegrees,
                 Constants.Turret.kMaxAngleDegrees);
         m_turret.setSetpoint(turretAngle);
@@ -146,10 +148,22 @@ public class LERPShooter extends Command {
         if (m_shooter.isFlywheelAtSpeed()
                 && m_shooterHood.atSetpoint()
                 && humanInput
-                && m_turret.atSetpoint()) {
+                && m_turret.atSetpoint()
+                || Robot.isSimulation()
+                && humanInput) {
             isShooting = true;
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
             m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
+
+        SimShots.fire(
+            turretPivotField,
+            turretAngle,
+            hoodAngle,
+            flywheelRPM,
+            robotPose.getRotation(),
+            robotVelocity
+    );
+
         }
 
         //If shooting changed from true to false
@@ -172,6 +186,8 @@ public class LERPShooter extends Command {
         Logger.recordOutput("LERPShooter/ProjectedDistance", projectedDistance);
         Logger.recordOutput("LERPShooter/FlywheelRPM", flywheelRPM);
         Logger.recordOutput("LERPShooter/IsShooting", isShooting);
+        Logger.recordOutput("LERPShooter/Turret Posistion", new Pose2d(turretPivotField.getX(), turretPivotField.getY(), new Rotation2d(turretAngle*Math.PI/180).plus(robotPose.getRotation()))
+);
     }
 
     //Should never run (Default Command)
