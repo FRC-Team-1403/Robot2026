@@ -44,8 +44,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
   private final Intake m_intake;
-  //private final IntakeWrist m_intakeWrist;
-  private final Turret m_turret;
+  private final IntakeWrist m_intakeWrist;
+  //private final Turret m_turret;
   private final Indexer m_indexer;
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
@@ -65,10 +65,10 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_swerve = TunerConstants.createDrivetrain();
-    m_turret = new Turret();
+    //m_turret = new Turret();
 
     m_intake = new Intake();
-    //m_intakeWrist = new IntakeWrist();
+    m_intakeWrist = new IntakeWrist();
     m_indexer= new Indexer();
     m_spindexer = new Spindexer();
     m_shooter = new Shooter();
@@ -124,14 +124,14 @@ public class RobotContainer {
     //testing command for elastic
     m_operatorController.rightBumper().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
 
-    m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
+    //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
     //m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
     
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
-    // m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 50)); 
-    // m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, 95)); 
-    // m_operatorController.b().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
+    //m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 0.4)); 
+    //m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, 0.67)); 
+    m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
 
                                                                                                                  
     //m_operatorController.povDown().whileTrue(new WristCommand(m_intakeWrist, 0.3));

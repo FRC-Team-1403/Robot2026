@@ -31,16 +31,16 @@ public static final double minimumBatteryVoltage = 11.0;
 
   public static class ScoringLocation{
     public static final Translation2d kHubPosition = new Translation2d(4.63, 4.035);
-    public static final Translation2d kFeedTopPosition    = new Translation2d(3, 5.5);
+    public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
     public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
   }
 
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = -0.39;
-    public static final double kMinAngleDegrees = -257;
-    public static final double kMaxAngleDegrees = 103;
+    public static final double kMagnetOffset = -0.27417;
+    public static final double kMinAngleDegrees = -162;
+    public static final double kMaxAngleDegrees = 198;
 
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
@@ -57,7 +57,7 @@ public static final double minimumBatteryVoltage = 11.0;
   
 
     public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
-    public static final double rotationCorrectionOffset = 0;
+    public static final double rotationCorrectionOffset = 2;
     public static final double kSpringK = 0;
     public static final double kSpringNeutralAngle = 0;
     public static final double kSpringForce = 5.94;  // lbs cause im dum
@@ -260,25 +260,25 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = 0.19;
+    public static final double kMagnetOffset = -0.16;
     public static final double kGearRatioEncoder = 23.4/1.0;
     public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
     public static final double kAbsoluteGearRatio = 2.0/1.0;
-    public static final double kToleranceDegrees = 4.0;
+    public static final double kToleranceDegrees = 0.1;
     public static final double kSlewRate = 0.2;
 
 
-    public static final double kMinAngleDegrees = 0.0;
-    public static final double kMaxAngleDegrees = 95.0;
+    public static final double kMinRotations = 0.0;
+    public static final double kMaxRotations = 0.55;
 
 
-    public static final double kP = 30.0;
+    public static final double kP = 18.0;
     public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kD = 0.5;
     public static final double kS = 0.0;
     public static final double kV = 0.0;
     public static final double kA = 0.0;
-    public static final double kG = 0.0;
+    public static final double kG = 0.45;
   }
 
   public static final class Hopper {

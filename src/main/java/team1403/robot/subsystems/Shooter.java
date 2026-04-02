@@ -49,10 +49,10 @@ public class Shooter extends SubsystemBase {
     flywheelLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     flywheelLeaderConfig.CurrentLimits.StatorCurrentLimit = 120;
     flywheelLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimit = 50;
+    flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimit = 60;
     flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     flywheelLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
-    flywheelLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    flywheelLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 
     Slot0Configs flywheelPIDConfig = new Slot0Configs();
     flywheelPIDConfig.kP = Constants.Shooter.kP;
@@ -71,8 +71,8 @@ public class Shooter extends SubsystemBase {
     flywheelFollowerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimit = 50;
     flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
-    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerLimit = 60;
+    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 
     m_flywheelFollower.getConfigurator().apply(flywheelFollowerConfig);
     
@@ -83,10 +83,10 @@ public class Shooter extends SubsystemBase {
     flywheelFollower2Config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     flywheelFollower2Config.CurrentLimits.StatorCurrentLimit = 120;
     flywheelFollower2Config.CurrentLimits.StatorCurrentLimitEnable = true;
-    flywheelFollower2Config.CurrentLimits.SupplyCurrentLimit = 50;
+    flywheelFollower2Config.CurrentLimits.SupplyCurrentLimit = 60;
     flywheelFollower2Config.CurrentLimits.SupplyCurrentLimitEnable = true;
     flywheelFollower2Config.CurrentLimits.SupplyCurrentLowerLimit = 30;
-    flywheelFollower2Config.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+    flywheelFollower2Config.CurrentLimits.SupplyCurrentLowerTime = 2.0;
     
     m_flywheelFollower2.getConfigurator().apply(flywheelFollower2Config);
     m_flywheelFollower2.setControl(new Follower(Constants.Shooter.flywheelLeaderID, MotorAlignmentValue.Opposed));
