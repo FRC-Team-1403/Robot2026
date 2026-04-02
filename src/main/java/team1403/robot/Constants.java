@@ -271,6 +271,8 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kMinRotations = 0.0;
     public static final double kMaxRotations = 0.55;
 
+    public static final double downPos = 0.0;
+    public static final double upPos = 0.35;
 
     public static final double kP = 18.0;
     public static final double kI = 0.0;

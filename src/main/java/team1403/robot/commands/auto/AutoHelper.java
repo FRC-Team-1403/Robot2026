@@ -40,9 +40,8 @@ public class AutoHelper {
     public static Command getStationaryCenterShootAutoAlign(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
-            NamedCommands.getCommand("Wrist Down Command"),
+            NamedCommands.getCommand("IntakeWrist Down Command"),
             AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
-            NamedCommands.getCommand("Auto Aim Command"),
             NamedCommands.getCommand("Shoot Command"),
             Commands.waitSeconds(10),
             NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
@@ -57,7 +56,7 @@ public class AutoHelper {
     public static Command getMiddleHubDepotEndTrench(SwerveSubsystem m_swerve){
     try{
        return Commands.sequence(
-            NamedCommands.getCommand("Wrist Down Command"),
+            NamedCommands.getCommand("IntakeWrist Down Commandd"),
             AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
             Commands.race(
                 AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
@@ -68,7 +67,6 @@ public class AutoHelper {
                 NamedCommands.getCommand("Intake Command")
             ),
             AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Trench", m_swerve, true),
-            NamedCommands.getCommand("Auto Aim Command"),
             Commands.race(
                 NamedCommands.getCommand("Shoot Command"),
                 Commands.waitSeconds(9),

@@ -20,7 +20,7 @@ public class WristWiggleCommand extends Command {
   @Override
   public void initialize() {
     m_goingUp = true;
-    m_targetSetpoint = 0.35;
+    m_targetSetpoint = Constants.IntakeWrist.upPos;
     m_intakeWrist.setSetpoint(m_targetSetpoint);
   }
 
@@ -29,10 +29,10 @@ public class WristWiggleCommand extends Command {
     if (m_intakeWrist.atSetpoint()) {
       if (m_goingUp) {
         m_goingUp = false;
-        m_targetSetpoint = 0.0;
+        m_targetSetpoint = Constants.IntakeWrist.downPos;
       } else {
         m_goingUp = true;
-        m_targetSetpoint = 0.35;
+        m_targetSetpoint = Constants.IntakeWrist.upPos;
       }
       m_intakeWrist.setSetpoint(m_targetSetpoint);
     }
@@ -47,7 +47,7 @@ public class WristWiggleCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    m_intakeWrist.setSetpoint(0.0);
+    m_intakeWrist.setSetpoint(Constants.IntakeWrist.downPos);
     m_intake.stop();
   }
 }
