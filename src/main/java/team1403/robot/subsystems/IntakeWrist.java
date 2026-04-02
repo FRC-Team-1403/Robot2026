@@ -94,7 +94,7 @@ public class IntakeWrist extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    return Math.abs(setpoint - currentPosition) <= Constants.IntakeWrist.kToleranceDegrees;
+    return Math.abs(setpoint - currentPosition) <= Constants.IntakeWrist.kToleranceRotations;
   }
 
   public void adjustSetpoint(double rotations) {
