@@ -45,7 +45,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   private final Intake m_intake;
   private final IntakeWrist m_intakeWrist;
-  //private final Turret m_turret;
+  private final Turret m_turret;
   private final Indexer m_indexer;
   private final Spindexer m_spindexer;
   private final Shooter m_shooter;
@@ -65,8 +65,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_swerve = TunerConstants.createDrivetrain();
-    //m_turret = new Turret();
-
+    m_turret = new Turret();
     m_intake = new Intake();
     m_intakeWrist = new IntakeWrist();
     m_indexer= new Indexer();
@@ -78,6 +77,9 @@ public class RobotContainer {
     m_teleopTimer = new Timer();
 
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
+    NamedCommands.registerCommand("Intake Down Command", new WristCommand(m_intakeWrist, 0).asProxy());
+    NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
+    NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
  
     if (AutoBuilder.isConfigured())

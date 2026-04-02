@@ -116,4 +116,16 @@ public class AutoHelper {
         }
     }
 
+    public static Command getLeftTrenchDoubleSweep(SwerveSubsystem m_swerve){
+        try{
+        return Commands.sequence(
+                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true)
+                
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none(); 
+        }
+    }
+
 }
