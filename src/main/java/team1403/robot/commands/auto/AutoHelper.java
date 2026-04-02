@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import team1403.robot.commands.WristWiggleCommand;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
 import team1403.robot.util.AutoUtil;
@@ -116,16 +118,48 @@ public class AutoHelper {
         }
     }
 
-    public static Command getLeftTrenchDoubleSweep(SwerveSubsystem m_swerve){
-        try{
-        return Commands.sequence(
-                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true)
-                
+    public static Command getLeftTrenchDoubleSweep(SwerveSubsystem m_swerve) {
+        try {
+            return Commands.sequence(
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt1", m_swerve, true),
+                    Commands.sequence(
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("IntakeWrist Down Command")
+                    )
+                ),
+                Commands.parallel(
+                    Commands.sequence(
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt2", m_swerve, true),
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt3", m_swerve, true),
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt4", m_swerve, true)
+                    ),
+                    NamedCommands.getCommand("intake Command")
+                ),
+                Commands.race(
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command"),
+                    Commands.waitSeconds(5.0)
+                ),
+
+                AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt5", m_swerve, true),
+
+                Commands.parallel(
+                    Commands.sequence(
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt6", m_swerve, true),
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt7", m_swerve, true),
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt8", m_swerve, true)
+                    ),
+                    NamedCommands.getCommand("intake Command")
+                ),
+                Commands.race(
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command")
+                )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
-            return Commands.none(); 
+            return Commands.none();
         }
     }
-
 }

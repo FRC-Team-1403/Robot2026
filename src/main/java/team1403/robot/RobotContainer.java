@@ -77,9 +77,9 @@ public class RobotContainer {
     m_teleopTimer = new Timer();
 
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
-    NamedCommands.registerCommand("Intake Down Command", new WristCommand(m_intakeWrist, 0).asProxy());
+    NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, 0).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
-    NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake).asProxy());
+    NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake));
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
  
     if (AutoBuilder.isConfigured())
