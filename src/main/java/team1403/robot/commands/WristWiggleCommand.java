@@ -21,6 +21,7 @@ public class WristWiggleCommand extends Command {
   public void initialize() {
     m_goingUp = true;
     m_targetSetpoint = 0.35;
+    m_intakeWrist.setSetpoint(m_targetSetpoint);
   }
 
   @Override
@@ -33,9 +34,9 @@ public class WristWiggleCommand extends Command {
         m_goingUp = true;
         m_targetSetpoint = 0.35;
       }
+      m_intakeWrist.setSetpoint(m_targetSetpoint);
     }
 
-    m_intakeWrist.setSetpoint(m_targetSetpoint);
     m_intake.setIntakePower(1);
   }
 

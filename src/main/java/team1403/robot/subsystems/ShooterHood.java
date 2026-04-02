@@ -39,9 +39,9 @@ public class ShooterHood extends SubsystemBase {
     hoodMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     hoodMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
     hoodMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    hoodMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
+    hoodMotorConfig.CurrentLimits.SupplyCurrentLimit = 30;
     hoodMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    hoodMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
+    hoodMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 20;
     hoodMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
 
     Slot0Configs hoodPIDConfigs = new Slot0Configs();
