@@ -71,10 +71,6 @@ public class IntakeWrist extends SubsystemBase {
 
     m_intakeWristEncoder.getConfigurator().apply(encoderConfig);
 
-    // double absoluteRotations = getAbsolutePosition();
-    // double wristRotations = absoluteRotations * Constants.IntakeWrist.kGearRatioEncoder;
-    // m_intakeWristMotor.setPosition(wristRotations);
-
     currentPosition = getAbsolutePosition();
     setpoint = currentPosition;
   }
@@ -90,6 +86,7 @@ public class IntakeWrist extends SubsystemBase {
             Constants.IntakeWrist.kMinRotations,
             Constants.IntakeWrist.kMaxRotations);
     setpoint = correctedRotations;
+    m_intakeWristMotor.setControl(m_positionVoltageRequest.withPosition(setpoint));
   }
 
   public double getSetpoint() {
@@ -115,7 +112,6 @@ public class IntakeWrist extends SubsystemBase {
   @Override
   public void periodic() {
     currentPosition = getAbsolutePosition();
-    m_intakeWristMotor.setControl(m_positionVoltageRequest.withPosition(setpoint));
 
     Logger.recordOutput("IntakeWrist/Current Position", currentPosition);
     Logger.recordOutput("IntakeWrist/Setpoint", setpoint);

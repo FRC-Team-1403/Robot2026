@@ -26,11 +26,12 @@ public class WristWiggleCommand extends Command {
   @Override
   public void execute() {
     if (m_intakeWrist.atSetpoint()) {
-      m_goingUp = !m_goingUp;
       if (m_goingUp) {
-        m_targetSetpoint = 0.35;
-      } else {
+        m_goingUp = false;
         m_targetSetpoint = 0.0;
+      } else {
+        m_goingUp = true;
+        m_targetSetpoint = 0.35;
       }
     }
 
