@@ -132,7 +132,16 @@ public class RobotContainer {
     m_operatorController.a().whileTrue(new WristPowerCommand(m_intakeWrist, -0.3)); 
     
     //Wiggle
-    m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake)); 
+    m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
+    
+    //Another wiggle methid
+    // m_operatorController.povUp().whileTrue(
+    // Commands.sequence(
+    //     new WristCommand(m_intakeWrist, 0.35),
+    //     new WristCommand(m_intakeWrist, 0.0)
+    // ).repeatedly()
+    // .finallyDo(() -> new WristCommand(m_intakeWrist, 0.0).schedule())
+    // );  
     
     //Decelerate Shooter                                                                                                            
     m_operatorController.rightTrigger().onFalse(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
