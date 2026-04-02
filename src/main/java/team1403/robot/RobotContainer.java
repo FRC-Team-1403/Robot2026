@@ -25,8 +25,8 @@ import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
-import team1403.robot.commands.TurretTrackingCommand;
 import team1403.robot.commands.WristCommand;
+import team1403.robot.commands.WristPowerCommand;
 import team1403.robot.commands.WristWiggleCommand;
 import team1403.robot.commands.auto.AutoHelper;
 import team1403.robot.subsystems.Indexer;
@@ -78,16 +78,8 @@ public class RobotContainer {
     m_teleopTimer = new Timer();
 
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
-    // NamedCommands.registerCommand("Wrist Down Command", new WristCommand(m_intakeWrist,0.3).withTimeout(0.2).asProxy());
-    // NamedCommands.registerCommand("Wrist Up Command", new WristCommand(m_intakeWrist,-0.4).withTimeout(0.2).asProxy());
     NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
-  //   NamedCommands.registerCommand("Wrist Down Command Jiggle", new WristCommand(m_intakeWrist,0.07
-  //  ).withTimeout(0.08).asProxy());
-    // NamedCommands.registerCommand("Shoot Command", new LERPShooter(
-    //     m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0
-    // ));
-
-    
+ 
     if (AutoBuilder.isConfigured())
       m_autoChooser =
           new LoggedDashboardChooser<Command>("Auto Chooser", AutoBuilder.buildAutoChooser());
@@ -107,7 +99,6 @@ public class RobotContainer {
       m_autoChooser.addOption("Drive Wheel Characterization", new DriveWheelCharacterization(m_swerve));
     }
 
-
     configureBindings();
   }
 
@@ -122,19 +113,26 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //testing command for elastic
-    m_operatorController.rightBumper().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
-
-    //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
-    //m_shooter.setDefaultCommand(new SOTMCommand(m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve, ()->m_operatorController.getHID().getRightTriggerAxis()));
-    //m_turret.setDefaultCommand(new TurretTrackingCommand(m_turret, m_swerve::getPose));
+    //m_operatorController.rightBumper().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
     
+    //Shooting Command
+    //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
+    
+    //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
-    //m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 0.4)); 
-    //m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, 0.67)); 
-    m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
-
-                                                                                                                 
-    //m_operatorController.povDown().whileTrue(new WristCommand(m_intakeWrist, 0.3));
+    
+    //Setpoint Wrist
+    m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, 0.4)); 
+    m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, 0));
+    
+    //Manual Wrist
+    m_operatorController.y().whileTrue(new WristPowerCommand(m_intakeWrist, 0.3)); 
+    m_operatorController.a().whileTrue(new WristPowerCommand(m_intakeWrist, -0.3)); 
+    
+    //Wiggle
+    m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake)); 
+    
+    //Decelerate Shooter                                                                                                            
     m_operatorController.rightTrigger().onFalse(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
 
     //swerve buttons 
@@ -143,7 +141,7 @@ public class RobotContainer {
         () -> -m_driverController.getLeftX(),               //horozontal
         () -> -m_driverController.getLeftY(),               //vertical
         () -> -m_driverController.getRightX(),              //rotational 
-        () -> m_driverController.getHID().getXButton(),        //x-mode  
+        () -> m_driverController.getHID().getXButton(),     //x-mode  
         () -> false,                                        //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
         () -> m_driverController.getLeftTriggerAxis(),      //snipping mode (slow down)-> m_operatorController.getRightTriggerAxis()>0.3
@@ -152,21 +150,9 @@ public class RobotContainer {
         ));
 
     
-
-  
-
-    //m_autoChooser.addOption("NO AUTO ALIGN STATIONARY LEFT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryLeftShoot(m_swerve));
-    //m_autoChooser.addOption("NO AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShoot(m_swerve));
     m_autoChooser.addOption("AUTO ALIGN STATIONARY CENTER SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryCenterShootAutoAlign(m_swerve));
-    //m_autoChooser.addOption("AUTO ALIGN STATIONARY LEFT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryLeftShootAutoAlign(m_swerve));
-    //m_autoChooser.addOption("AUTO ALIGN STATIONARY RIGHT SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryRightShootAutoAlign(m_swerve));
     m_autoChooser.addOption("MIDDLE HUB DEPOT END TRENCH SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepotEndTrench(m_swerve));
     m_autoChooser.addOption("MIDDLE HUB DEPOT END HUB SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepotEndHub(m_swerve));
-
-  
-    //m_autoChooser.addOption("RIGHT SWEEP 1X THEN HUMAN PLAYER", AutoHelper.getCenterHuman(m_swerve));
-    //m_autoChooser.addOption("RIGHT SWEEP 2X THEN HUMAN PLAYER", AutoHelper.getRightSweep(m_swerve));
-
     
   }
 

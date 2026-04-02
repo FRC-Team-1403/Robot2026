@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -24,6 +25,7 @@ public class IntakeWrist extends SubsystemBase {
   private final TalonFX m_intakeWristMotor;
   private final CANcoder m_intakeWristEncoder;
   private final PositionVoltage m_positionVoltageRequest;
+  private final DutyCycleOut m_dutyCycleRequest;
   private final NeutralOut m_neutralRequest;
 
   private double currentPosition;
@@ -32,6 +34,7 @@ public class IntakeWrist extends SubsystemBase {
   public IntakeWrist() {
     m_intakeWristMotor = new TalonFX(Constants.IntakeWrist.kWristMotorID, "Bus 2");
     m_positionVoltageRequest = new PositionVoltage(0);
+    m_dutyCycleRequest = new DutyCycleOut(0);
     m_neutralRequest = new NeutralOut();
 
     TalonFXConfiguration wristMotorConfig = new TalonFXConfiguration();
@@ -87,6 +90,11 @@ public class IntakeWrist extends SubsystemBase {
             Constants.IntakeWrist.kMaxRotations);
     setpoint = correctedRotations;
     m_intakeWristMotor.setControl(m_positionVoltageRequest.withPosition(setpoint));
+  }
+
+  public void setPower(double power) {
+    m_dutyCycleRequest.Output = power;
+    m_intakeWristMotor.setControl(m_dutyCycleRequest);
   }
 
   public double getSetpoint() {
