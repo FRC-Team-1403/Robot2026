@@ -146,7 +146,8 @@ public class LERPShooter extends Command {
                                 && m_shooterHood.atSetpoint()
                                 && humanInput
                                 && m_turret.atSetpoint()
-                                && Math.abs(robotVelocity.omegaRadiansPerSecond) < 0.75;
+                                && Math.abs(robotVelocity.omegaRadiansPerSecond) < 0.75
+                                && Math.hypot(robotVelocity.vxMetersPerSecond, robotVelocity.vyMetersPerSecond) < 2.0;
 
         //Should we actually start shooting
         if (allowedToShoot) {
