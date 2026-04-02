@@ -75,7 +75,6 @@ public class RobotContainer {
     
     //for vibration command
     m_teleopTimer = new Timer();
-
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
     NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, 0).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
@@ -120,6 +119,9 @@ public class RobotContainer {
     //Shooting Command
     //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     
+    // RobotModeTriggers.teleop().whileTrue(
+    //   new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
+    // );
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     
@@ -135,16 +137,24 @@ public class RobotContainer {
     m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
     
     //Another wiggle methid
-    // m_operatorController.povUp().whileTrue(
-    // Commands.sequence(
-    //     new WristCommand(m_intakeWrist, 0.35),
-    //     new WristCommand(m_intakeWrist, 0.0)
-    // ).repeatedly()
-    // .finallyDo(() -> new WristCommand(m_intakeWrist, 0.0).schedule())
-    // );  
     
     //Decelerate Shooter                                                                                                            
     m_operatorController.rightTrigger().onFalse(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
+
+    // m_operatorController.povUp().whileTrue(
+    //   Commands.parallel(
+    //     new IntakeCommand(m_intake, 1),
+    //     Commands.sequence(
+    //       new WristCommand(m_intakeWrist, 0.35),
+    //       new WristCommand(m_intakeWrist, 0.0)
+    //     ).repeatedly()
+    //   )
+    // ).onFalse(
+    //   Commands.parallel(
+    //     new IntakeCommand(m_intake, 0),
+    //     new WristCommand(m_intakeWrist, 0.0)
+    //   )
+    // );
 
     //swerve buttons 
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
