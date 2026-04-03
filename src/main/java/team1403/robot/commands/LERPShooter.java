@@ -128,7 +128,6 @@ public class LERPShooter extends Command {
         } 
         //Otherwise reset to safe conditions
         else {
-            isShooting = false;
             m_shooter.setFlywheelTargetRPM(0);
             m_shooterHood.setSetpoint(0);
 
@@ -153,13 +152,16 @@ public class LERPShooter extends Command {
                                 && m_shooterHood.atSetpoint()
                                 && humanInput
                                 && m_turret.atSetpoint()
-                                && stabilityScore < 0.02;
+                                && stabilityScore < 1000; //Tune this
 
         //Should we actually start shooting
         if (allowedToShoot) {
             isShooting = true;
             m_spindexer.setSpindexerRPM(Constants.Spindexer.m_spindexerRPM);
             m_indexer.setIndexerRPM(Constants.Indexer.m_indexerRPM);
+        }
+        else {
+            isShooting = false;
         }
 
         //If shooting changed from true to false
