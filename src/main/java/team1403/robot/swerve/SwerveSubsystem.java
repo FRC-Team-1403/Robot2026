@@ -198,7 +198,7 @@ public class SwerveSubsystem
             new AprilTagCamera(
                 config
                     .withName("ThriftyCam1.0")
-                    .withDeviations(VecBuilder.fill(2, 2, 10))
+                    .withDeviations(VecBuilder.fill(2, 2, 3))
                     .withTransform(() ->
                         Constants.Vision.kCameraTransfromThriftyCamera1
                     )
@@ -208,7 +208,7 @@ public class SwerveSubsystem
             new AprilTagCamera(
                 config
                     .withName("ThriftyCam2.0")
-                    .withDeviations(VecBuilder.fill(2, 2, 10))
+                    .withDeviations(VecBuilder.fill(2, 2, 3))
                     .withTransform(() ->
                         Constants.Vision.kCameraTransfromThriftyCamera2
                     )
@@ -218,7 +218,7 @@ public class SwerveSubsystem
             new AprilTagCamera(
                 config
                     .withName("ThriftyCam3.0")
-                    .withDeviations(VecBuilder.fill(2, 2, 10))
+                    .withDeviations(VecBuilder.fill(2, 2, 3))
                     .withTransform(() ->
                         Constants.Vision.kCameraTransfromThriftyCamera3
                     )
@@ -228,7 +228,7 @@ public class SwerveSubsystem
             new AprilTagCamera(
                 config
                     .withName("ThriftyCam4.0")
-                    .withDeviations(VecBuilder.fill(2, 2, 10))
+                    .withDeviations(VecBuilder.fill(2, 2, 3))
                     .withTransform(() ->
                         Constants.Vision.kCameraTransfromThriftyCamera4
                     )
