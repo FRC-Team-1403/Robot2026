@@ -79,7 +79,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
     NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake));
-    NamedCommands.registerCommand("Decelerate Shooter Flywheel Command", new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5).asProxy());
  
     if (AutoBuilder.isConfigured())
       m_autoChooser =
@@ -135,26 +134,7 @@ public class RobotContainer {
     
     //Wiggle
     m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
-    
-    //Another wiggle methid
-    
-    //Decelerate Shooter                                                                                                            
-    m_operatorController.rightTrigger().onFalse(new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, 0, 0, 750, 0).withTimeout(0.5));
 
-    // m_operatorController.povUp().whileTrue(
-    //   Commands.parallel(
-    //     new IntakeCommand(m_intake, 1),
-    //     Commands.sequence(
-    //       new WristCommand(m_intakeWrist, Constants.IntakeWrist.upPos),
-    //       new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos)
-    //     ).repeatedly()
-    //   )
-    // ).onFalse(
-    //   Commands.parallel(
-    //     new IntakeCommand(m_intake, 0),
-    //     new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos)
-    //   )
-    // );
 
     //swerve buttons 
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
