@@ -35,6 +35,7 @@ public class LERPShooter extends Command {
     private boolean isShooting;
     private boolean wasShooting;
     private Timer backupTimer;
+    private Pose2d m_lastProjectedPivot;
 
     public LERPShooter(
             Supplier<ChassisSpeeds> chassisSupplier,
@@ -56,6 +57,7 @@ public class LERPShooter extends Command {
         isShooting = false;
         wasShooting = false;
         backupTimer = new Timer();
+        m_lastProjectedPivot = new Pose2d();
         addRequirements(indexer, spindexer, shooter, hood, turret);
     }
 
@@ -142,12 +144,16 @@ public class LERPShooter extends Command {
             }
         }
 
+        //Calculate sum stuff
+        double translationDelta = m_lastProjectedPivot.getTranslation().getDistance(projectedPivot.getTranslation());
+        double rotationDelta = Math.abs(MathUtil.angleModulus(projectedPivot.getRotation().getRadians() - m_lastProjectedPivot.getRotation().getRadians()));
+        double stabilityScore = translationDelta + 2.0 * rotationDelta;
+
         boolean allowedToShoot = m_shooter.isFlywheelAtSpeed()
                                 && m_shooterHood.atSetpoint()
                                 && humanInput
                                 && m_turret.atSetpoint()
-                                && Math.abs(robotVelocity.omegaRadiansPerSecond) < 0.75
-                                && Math.hypot(robotVelocity.vxMetersPerSecond, robotVelocity.vyMetersPerSecond) < 2.0;
+                                && stabilityScore < 0.02;
 
         //Should we actually start shooting
         if (allowedToShoot) {
@@ -162,8 +168,9 @@ public class LERPShooter extends Command {
             backupTimer.start();
         }
 
-        //Update wasShooting
+        //Update values
         wasShooting = isShooting;
+        m_lastProjectedPivot = projectedPivot;
 
         //Logging
         SmartDashboard.putNumber("Debug/distance", distance);
@@ -177,6 +184,7 @@ public class LERPShooter extends Command {
         Logger.recordOutput("LERPShooter/FlywheelRPM", flywheelRPM);
         Logger.recordOutput("LERPShooter/IsShooting", isShooting);
         Logger.recordOutput("LERPShooter", allowedToShoot);
+        Logger.recordOutput("LERPShooter/Stability", stabilityScore);
         Logger.recordOutput("LERPShooter/Turret Posistion", new Pose2d(turretPivotField.getX(), turretPivotField.getY(), new Rotation2d(turretAngle*Math.PI/180).plus(robotPose.getRotation()))
 );
     }

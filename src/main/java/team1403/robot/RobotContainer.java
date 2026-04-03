@@ -76,7 +76,6 @@ public class RobotContainer {
     //for vibration command
     m_teleopTimer = new Timer();
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
-    NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
     NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake));
  
@@ -123,10 +122,6 @@ public class RobotContainer {
     );
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
-    
-    //Setpoint Wrist
-    m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, Constants.IntakeWrist.upPos)); 
-    m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos));
     
     //Manual Wrist
     m_operatorController.y().whileTrue(new WristPowerCommand(m_intakeWrist, 0.3)); 
