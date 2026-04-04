@@ -147,6 +147,38 @@ public class AutoHelper {
     }
 }
 
+public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
+    try {
+        return Commands.sequence(
+            Commands.race(
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt1", m_swerve, true),
+                    NamedCommands.getCommand("IntakeWrist Down Command")
+                ),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            Commands.race(
+                NamedCommands.getCommand("Shoot Command"),
+                NamedCommands.getCommand("Wrist Wiggle Command"),
+                Commands.waitSeconds(1.2)
+            ),
+            Commands.race(
+                AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt2", m_swerve, true),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            Commands.race(
+                AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt3", m_swerve, true),
+                NamedCommands.getCommand("Shoot Command"),
+                NamedCommands.getCommand("Intake Command")
+                Commands.waitSeconds(7.0)
+            )
+        );
+    } catch (Exception e) {
+        System.err.println("Could not load auto: " + e.getMessage());
+        return Commands.none();
+    }
+}
+
     public static Command getRightTrenchDoubleSweep(SwerveSubsystem m_swerve) {
         try {
             // return Commands.sequence(
