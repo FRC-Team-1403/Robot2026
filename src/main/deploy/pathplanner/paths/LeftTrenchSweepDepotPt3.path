@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.560328102710413,
-        "y": 7.4702139800285305
+        "x": 3.6120827389443653,
+        "y": 7.43
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.155831325301205,
-        "y": 7.171253012048193
+        "x": 3.207585961535158,
+        "y": 7.131039032019662
       },
       "isLocked": false,
-      "linkedName": "LeftTrenchSweepPt2End"
+      "linkedName": "LeftTrenchSweepDepotPt2End"
     },
     {
       "anchor": {

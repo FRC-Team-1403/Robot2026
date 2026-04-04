@@ -152,7 +152,7 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
         return Commands.sequence(
             Commands.race(
                 Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt1", m_swerve, true),
+                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt1", m_swerve, true),
                     NamedCommands.getCommand("IntakeWrist Down Command")
                 ),
                 NamedCommands.getCommand("Intake Command")
@@ -160,10 +160,10 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
             Commands.race(
                 NamedCommands.getCommand("Shoot Command"),
                 NamedCommands.getCommand("Wrist Wiggle Command"),
-                Commands.waitSeconds(1.2)
+                Commands.waitSeconds(3)
             ),
             Commands.race(
-                AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt2", m_swerve, true),
+                AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt2", m_swerve, true),
                 NamedCommands.getCommand("Intake Command")
             ),
             Commands.race(
