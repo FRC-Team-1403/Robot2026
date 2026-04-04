@@ -78,6 +78,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
     NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake));
+    NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos).asProxy());
  
     if (AutoBuilder.isConfigured())
       m_autoChooser =
@@ -120,6 +121,7 @@ public class RobotContainer {
     RobotModeTriggers.teleop().whileTrue(
       new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
     );
+    
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     
@@ -129,6 +131,10 @@ public class RobotContainer {
     
     //Wiggle
     m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
+
+    //Setpoint Wrist
+    m_operatorController.povUp().onTrue(new WristCommand(m_intakeWrist, Constants.IntakeWrist.upPos)); 
+    m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos));
 
 
     //swerve buttons 
