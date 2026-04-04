@@ -152,39 +152,26 @@ public class AutoHelper {
         try {
             return Commands.sequence(
                 Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("RightTrenchSweepPt1", m_swerve, true),
                     Commands.sequence(
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("IntakeWrist Down Command")
-                    )
-                ),
-                Commands.parallel(
-                    Commands.sequence(
+                        AutoUtil.loadPathPlannerPath("RightTrenchSweepPt1", m_swerve, true),
                         AutoUtil.loadPathPlannerPath("RightTrenchSweepPt2", m_swerve, true),
+                        Commands.race(
+                            NamedCommands.getCommand("Shoot Command"),
+                            NamedCommands.getCommand("Wrist Wiggle Command"),
+                            Commands.waitSeconds(4.0)
+                        ),
                         AutoUtil.loadPathPlannerPath("RightTrenchSweepPt3", m_swerve, true),
-                        AutoUtil.loadPathPlannerPath("RightTrenchSweepPt4", m_swerve, true)
+                        Commands.race(
+                            NamedCommands.getCommand("Shoot Command"),
+                            NamedCommands.getCommand("Wrist Wiggle Command"),
+                            Commands.waitSeconds(4.0)
+                        )
                     ),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command"),
-                    Commands.waitSeconds(5.0)
-                ),
-
-                AutoUtil.loadPathPlannerPath("RightTrenchSweepPt5", m_swerve, true),
-
-                Commands.parallel(
                     Commands.sequence(
-                        AutoUtil.loadPathPlannerPath("RightTrenchSweepPt6", m_swerve, true),
-                        AutoUtil.loadPathPlannerPath("RightTrenchSweepPt7", m_swerve, true),
-                        AutoUtil.loadPathPlannerPath("RightTrenchSweepPt8", m_swerve, true)
-                    ),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command")
+                        Commands.waitSeconds(0.5),
+                        NamedCommands.getCommand("IntakeWrist Down Command"),
+                        NamedCommands.getCommand("Intake Command")
+                    )
                 )
             );
         } catch (Exception e) {
