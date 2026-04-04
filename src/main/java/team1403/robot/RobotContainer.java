@@ -184,6 +184,9 @@ public class RobotContainer {
     m_autoChooser.addOption("AUTO ALIGN STATIONARY CENTER SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryCenterShootAutoAlign(m_swerve));
     m_autoChooser.addOption("MIDDLE HUB DEPOT END TRENCH SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepotEndTrench(m_swerve));
     m_autoChooser.addOption("MIDDLE HUB DEPOT END HUB SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepotEndHub(m_swerve));
+    m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP INTAKE FACES FORWARD", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
+    m_autoChooser.addOption("RIGHT TRENCH DOUBLE SWEEP INTAKE FACES FORWARD", AutoHelper.getRightTrenchDoubleSweep(m_swerve));
+
     
   }
 
