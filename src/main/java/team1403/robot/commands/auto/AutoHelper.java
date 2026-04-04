@@ -232,4 +232,48 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
             return Commands.none();
         }
     }
+
+    public static Command getLeftBumpDoubleSweepDepot(SwerveSubsystem m_swerve) {
+        try {    
+            return Commands.sequence(
+                Commands.race(
+                    Commands.parallel(
+                        AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt1", m_swerve, true),
+                        NamedCommands.getCommand("IntakeWrist Down Command")
+                    ),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt2", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt3", m_swerve, true),
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt4", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt5", m_swerve, true),
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command")                    
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt6", m_swerve, true),
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Intake Command")                    
+                )
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none();
+        }
+    }
+
+
+    
+
 }
