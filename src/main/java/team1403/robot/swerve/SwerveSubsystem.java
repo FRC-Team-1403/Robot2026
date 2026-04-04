@@ -2,13 +2,19 @@ package team1403.robot.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -29,80 +35,68 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
+import team1403.robot.util.Blackbox;
+import team1403.robot.util.CougarUtil;
 import team1403.robot.Constants;
 import team1403.robot.Constants.Swerve;
 import team1403.robot.Robot;
-import team1403.robot.swerve.SwerveHeadingCorrector;
 import team1403.robot.swerve.TunerConstants.TunerSwerveDrivetrain;
-import team1403.robot.util.Blackbox;
-import team1403.robot.util.CougarUtil;
+import team1403.robot.swerve.SwerveHeadingCorrector;
 import team1403.robot.vision.AprilTagCamera;
 import team1403.robot.vision.ITagCamera;
-import team1403.robot.vision.VisionConfigurator;
 import team1403.robot.vision.VisionSimUtil;
+import team1403.robot.vision.VisionConfigurator;
 
-public class SwerveSubsystem
-    extends TunerSwerveDrivetrain
-    implements Subsystem, Sendable
-{
-
+public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem, Sendable {
     private static final double kSimLoopPeriod = 0.005;
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-    private final SwerveHeadingCorrector m_headingCorrector =
-        new SwerveHeadingCorrector();
-    private final Alert m_gyroDisconnected = new Alert(
-        "Gyroscope Disconnected!",
-        AlertType.kError
-    );
+    private final SwerveHeadingCorrector m_headingCorrector = new SwerveHeadingCorrector();
+    private final Alert m_gyroDisconnected = new Alert("Gyroscope Disconnected!", AlertType.kError);
     private Rotation2d m_headingOffset = Rotation2d.kZero;
     private SwerveDriveState m_state;
 
-    private static final Rotation2d kBlueAlliancePerspectiveRotation =
-        Rotation2d.kZero;
-    private static final Rotation2d kRedAlliancePerspectiveRotation =
-        Rotation2d.k180deg;
+    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
+    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     private boolean m_hasAppliedOperatorPerspective = false;
 
-    private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization =
-        new SwerveRequest.SysIdSwerveTranslation();
-    private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization =
-        new SwerveRequest.SysIdSwerveSteerGains();
-    private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization =
-        new SwerveRequest.SysIdSwerveRotation();
+    private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
+    private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
+    private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
     private List<ITagCamera> m_cameras = new ArrayList<>();
 
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
-        new SysIdRoutine.Config(null, Volts.of(4), null, state ->
-            SignalLogger.writeString("SysIdTranslation_State", state.toString())
+        new SysIdRoutine.Config(
+            null,
+            Volts.of(4),
+            null,
+            state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
         ),
         new SysIdRoutine.Mechanism(
-            output ->
-                setControl(m_translationCharacterization.withVolts(output)),
+            output -> setControl(m_translationCharacterization.withVolts(output)),
             null,
             this
         )
     );
 
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
-        new SysIdRoutine.Config(null, Volts.of(7), null, state ->
-            SignalLogger.writeString("SysIdSteer_State", state.toString())
+        new SysIdRoutine.Config(
+            null,
+            Volts.of(7),
+            null,
+            state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
         ),
         new SysIdRoutine.Mechanism(
             volts -> setControl(m_steerCharacterization.withVolts(volts)),
@@ -116,19 +110,11 @@ public class SwerveSubsystem
             Volts.of(Math.PI / 6).per(Second),
             Volts.of(Math.PI),
             null,
-            state ->
-                SignalLogger.writeString(
-                    "SysIdRotation_State",
-                    state.toString()
-                )
+            state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
         ),
         new SysIdRoutine.Mechanism(
             output -> {
-                setControl(
-                    m_rotationCharacterization.withRotationalRate(
-                        output.in(Volts)
-                    )
-                );
+                setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
                 SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
             },
             null,
@@ -142,26 +128,25 @@ public class SwerveSubsystem
 
     public void setCameras(List<ITagCamera> cameras) {
         m_cameras = cameras;
-    }
+    }    
 
     private void onConstruct() {
-        m_state = getState();
-        super.resetPose(CougarUtil.getInitialRobotPose());
+      m_state = getState();
+      super.resetPose(CougarUtil.getInitialRobotPose());
 
-        AutoBuilder.configure(
-            this::getPose,
-            this::resetOdometry,
-            () -> m_state.Speeds,
-            (s, ff) -> drive(s, ff),
-            new PPHolonomicDriveController(
-                TunerConstants.kTranslationPID,
-                TunerConstants.kRotationPID,
-                Constants.kLoopTime
-            ),
-            CougarUtil.loadRobotConfig(),
-            () -> CougarUtil.shouldMirrorPath(),
-            this
-        );
+      AutoBuilder.configure(
+        this::getPose,
+        this::resetOdometry,
+        () -> m_state.Speeds,
+        (s, ff) -> drive(s, ff),
+        new PPHolonomicDriveController(
+            TunerConstants.kTranslationPID,
+            TunerConstants.kRotationPID,
+            Constants.kLoopTime
+        ),
+        CougarUtil.loadRobotConfig(),
+        () -> CougarUtil.shouldMirrorPath(),
+        this);
 
         Pathfinding.setPathfinder(new LocalADStar());
 
@@ -173,67 +158,21 @@ public class SwerveSubsystem
         VisionSimUtil.initVisionSim();
 
         VisionConfigurator config = new VisionConfigurator()
-            .withRobotPose(this::getPose, () ->
-                Timer.getFPGATimestamp()
-            ) /* find a way to convert m_state.Timestamp to fpga time */
-            .withYawRate(() ->
-                getPigeon2()
-                    .getAngularVelocityZWorld()
-                    .getValue()
-                    .in(RadiansPerSecond)
-            )
-            .withTrigSolve(false)
-            /* this updates our robot position */
-            .withVisionConsumer((ITagCamera.VisionData data) -> {
-                if (data.pose != null) {
-                    addVisionMeasurement(
-                        data.pose.toPose2d(),
-                        data.timestamp,
-                        data.stdv
-                    );
-                }
-            });
+            .withRobotPose(this::getPose, () -> Timer.getFPGATimestamp()) /* find a way to convert m_state.Timestamp to fpga time */
+            .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
 
-        m_cameras.add(
-            new AprilTagCamera(
-                config
-                    .withName("ThriftyCam1.0")
-                    .withDeviations(VecBuilder.fill(2, 2, 10))
-                    .withTransform(() ->
-                        Constants.Vision.kCameraTransfromThriftyCamera1
-                    )
-            )
-        );
-        // m_cameras.add(
-        //     new AprilTagCamera(
-        //         config
-        //             .withName("ThriftyCam2.0")
-        //             .withDeviations(VecBuilder.fill(2, 2, 10))
-        //             .withTransform(() ->
-        //                 Constants.Vision.kCameraTransfromThriftyCamera2
-        //             )
-        //     )
-        // );
-        m_cameras.add(
-            new AprilTagCamera(
-                config
-                    .withName("ThriftyCam3.0")
-                    .withDeviations(VecBuilder.fill(2, 2, 10))
-                    .withTransform(() ->
-                        Constants.Vision.kCameraTransfromThriftyCamera3
-                    )
-            )
-        );
-        m_cameras.add(
-            new AprilTagCamera(
-                config
-                    .withName("ThriftyCam4.0")
-                    .withDeviations(VecBuilder.fill(2, 2, 10))
-                    .withTransform(() ->
-                        Constants.Vision.kCameraTransfromThriftyCamera4
-                    )
-            )
-        );
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam1.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera1)));
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam2.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera2)));
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam3.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera3)));
+        m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam4.0")
+                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera4)));
 
         SmartDashboard.putData("Gyro", super.getPigeon2());
 
@@ -270,13 +209,7 @@ public class SwerveSubsystem
         Matrix<N3, N1> visionStandardDeviation,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
-        super(
-            drivetrainConstants,
-            odometryUpdateFrequency,
-            odometryStandardDeviation,
-            visionStandardDeviation,
-            modules
-        );
+        super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -313,29 +246,27 @@ public class SwerveSubsystem
                         : kBlueAlliancePerspectiveRotation
                 );
                 m_hasAppliedOperatorPerspective = true;
-            });
+        });
         }
 
-        Pose2d currentPose = getPose().transformBy(
-            new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d())
-        );
-        double diffX =
-            new Pose2d(
-                Blackbox.getActiveTarget(currentPose),
-                Rotation2d.kZero
-            ).getX() -
-            currentPose.getX();
-        double diffY =
-            new Pose2d(
-                Blackbox.getActiveTarget(currentPose),
-                Rotation2d.kZero
-            ).getY() -
-            currentPose.getY();
-        double distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
+        Pose2d currentPose = getPose().transformBy(new Transform2d(Constants.Turret.kTurretOffset, new Rotation2d()));
+        double diffX = new Pose2d(Blackbox.getActiveTarget(currentPose), Rotation2d.kZero).getX() - currentPose.getX();
+        double diffY = new Pose2d(Blackbox.getActiveTarget(currentPose), Rotation2d.kZero).getY() - currentPose.getY();
+        double distance = Math.sqrt((diffX * diffX) + (diffY * diffY)); 
         Logger.recordOutput("Distance", distance);
-        Logger.recordOutput("Active Target", Blackbox.getActiveTarget(getPose()));
+        Logger.recordOutput("qwerty", Blackbox.getActiveTarget(getPose()));
 
         VisionSimUtil.update(getPose());
+
+        for (ITagCamera camera : m_cameras) {
+            if (camera.checkVisionResult()) {
+                addVisionMeasurement(
+                    camera.getPose().toPose2d(),
+                    camera.getTimestamp(),
+                    camera.getEstStdv()
+                );
+            }
+        }
 
         m_state = getState();
 
@@ -351,55 +282,19 @@ public class SwerveSubsystem
         builder.setSmartDashboardType("SwerveDrive");
         SwerveModuleState[] states = m_state.ModuleStates;
 
-        builder.addDoubleProperty(
-            "Front Left Angle",
-            () -> states[0].angle.getRadians(),
-            null
-        );
-        builder.addDoubleProperty(
-            "Front Left Velocity",
-            () -> states[0].speedMetersPerSecond,
-            null
-        );
+        builder.addDoubleProperty("Front Left Angle", () -> states[0].angle.getRadians(), null);
+        builder.addDoubleProperty("Front Left Velocity", () -> states[0].speedMetersPerSecond, null);
 
-        builder.addDoubleProperty(
-            "Front Right Angle",
-            () -> states[1].angle.getRadians(),
-            null
-        );
-        builder.addDoubleProperty(
-            "Front Right Velocity",
-            () -> states[1].speedMetersPerSecond,
-            null
-        );
+        builder.addDoubleProperty("Front Right Angle", () -> states[1].angle.getRadians(), null);
+        builder.addDoubleProperty("Front Right Velocity", () -> states[1].speedMetersPerSecond, null);
 
-        builder.addDoubleProperty(
-            "Back Left Angle",
-            () -> states[2].angle.getRadians(),
-            null
-        );
-        builder.addDoubleProperty(
-            "Back Left Velocity",
-            () -> states[2].speedMetersPerSecond,
-            null
-        );
+        builder.addDoubleProperty("Back Left Angle", () -> states[2].angle.getRadians(), null);
+        builder.addDoubleProperty("Back Left Velocity", () -> states[2].speedMetersPerSecond, null);
 
-        builder.addDoubleProperty(
-            "Back Right Angle",
-            () -> states[3].angle.getRadians(),
-            null
-        );
-        builder.addDoubleProperty(
-            "Back Right Velocity",
-            () -> states[3].speedMetersPerSecond,
-            null
-        );
+        builder.addDoubleProperty("Back Right Angle", () -> states[3].angle.getRadians(), null);
+        builder.addDoubleProperty("Back Right Velocity", () -> states[3].speedMetersPerSecond, null);
 
-        builder.addDoubleProperty(
-            "Robot Angle",
-            () -> getRotation().getRadians(),
-            null
-        );
+        builder.addDoubleProperty("Robot Angle", () -> getRotation().getRadians(), null);
     }
 
     private void startSimThread() {
@@ -414,7 +309,7 @@ public class SwerveSubsystem
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
-
+    
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
      * while still accounting for measurement noise.
@@ -423,14 +318,8 @@ public class SwerveSubsystem
      * @param timestampSeconds The timestamp of the vision measurement in seconds.
      */
     @Override
-    public void addVisionMeasurement(
-        Pose2d visionRobotPoseMeters,
-        double timestampSeconds
-    ) {
-        super.addVisionMeasurement(
-            visionRobotPoseMeters,
-            Utils.fpgaToCurrentTime(timestampSeconds)
-        );
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
     /**
@@ -452,11 +341,7 @@ public class SwerveSubsystem
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
-        super.addVisionMeasurement(
-            visionRobotPoseMeters,
-            Utils.fpgaToCurrentTime(timestampSeconds),
-            visionMeasurementStdDevs
-        );
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
     public Pose2d getPose() {
@@ -476,37 +361,28 @@ public class SwerveSubsystem
     }
 
     public void resetShallowHeading() {
-        if (CougarUtil.getAlliance() == Alliance.Red) resetShallowHeading(
-            getRotation().plus(Rotation2d.k180deg)
-        );
-        else resetShallowHeading(getRotation());
+        if(CougarUtil.getAlliance() == Alliance.Red)
+            resetShallowHeading(getRotation().plus(Rotation2d.k180deg));
+        else
+            resetShallowHeading(getRotation());
     }
 
-    private SwerveRequest.ApplyRobotSpeeds req =
-        new SwerveRequest.ApplyRobotSpeeds();
+    private SwerveRequest.ApplyRobotSpeeds req = new SwerveRequest.ApplyRobotSpeeds();
 
     private boolean m_rotDriftCorrect = true;
 
     private ChassisSpeeds rotationalDriftCorrection(ChassisSpeeds speeds) {
-        ChassisSpeeds corrected = m_headingCorrector.update(
-            speeds,
-            m_state.Speeds,
-            super.getPigeon2().getRotation2d(),
-            super
-                .getPigeon2()
-                .getAngularVelocityZWorld()
-                .getValue()
-                .in(DegreesPerSecond)
-        );
-        if (m_rotDriftCorrect && !DriverStation.isAutonomousEnabled()) {
-            return corrected;
+        ChassisSpeeds corrected = m_headingCorrector.update(speeds, m_state.Speeds, 
+            super.getPigeon2().getRotation2d(), super.getPigeon2().getAngularVelocityZWorld().getValue().in(DegreesPerSecond));
+        if (m_rotDriftCorrect && !DriverStation.isAutonomousEnabled())
+        {
+          return corrected;
         }
-
+    
         return speeds;
     }
 
     private static final double[] kEmptyDoubleArr = {};
-
     public void drive(ChassisSpeeds s) {
         drive(s, null);
     }
@@ -517,7 +393,7 @@ public class SwerveSubsystem
         req.DriveRequestType = DriveRequestType.Velocity;
         req.SteerRequestType = SteerRequestType.Position;
         req.CenterOfRotation = Translation2d.kZero;
-        if (ff != null) {
+        if(ff != null) {
             req.WheelForceFeedforwardsX = ff.robotRelativeForcesXNewtons();
             req.WheelForceFeedforwardsY = ff.robotRelativeForcesYNewtons();
         } else {
