@@ -121,7 +121,7 @@ public class IntakeWrist extends SubsystemBase {
   public void periodic() {
     currentPosition = getAbsolutePosition();
 
-    Logger.recordOutput("IntakeWrist/Current Position", currentPosition);
+    Logger.recordOutput("IntakeWrist/Wrist Current Position", currentPosition);
     Logger.recordOutput("IntakeWrist/Setpoint", setpoint);
     Logger.recordOutput("IntakeWrist/At Setpoint", atSetpoint());
     Logger.recordOutput("IntakeWrist/Encoder Rotations", m_intakeWristEncoder.getPosition().getValueAsDouble());

@@ -141,7 +141,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kG = 0.2;
 
 
-    public static final double kMagnetOffset = 0.2617;
+    public static final double kMagnetOffset = 0.2631;
     public static final double kFixedHood = 20;
 
     public static final double[][] distanceTable = {
@@ -271,8 +271,8 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kMinRotations = 0.0;
     public static final double kMaxRotations = 0.55;
 
-    public static final double downPos = 0.03;
-    public static final double upPos = 0.4;
+    public static final double downPos = 0.04;
+    public static final double upPos = 0.45;
 
     public static final double kP = 10.0;
     public static final double kI = 0.0;

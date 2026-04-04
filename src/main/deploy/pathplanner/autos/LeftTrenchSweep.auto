@@ -15,12 +15,6 @@
           "data": {
             "pathName": "LeftTrenchSweepPt2"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftTrenchSweepPt3"
-          }
         }
       ]
     }

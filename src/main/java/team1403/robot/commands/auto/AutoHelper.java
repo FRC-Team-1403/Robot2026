@@ -119,28 +119,28 @@ public class AutoHelper {
     public static Command getLeftTrenchDoubleSweep(SwerveSubsystem m_swerve) {
     try {
         return Commands.sequence(
-            Commands.parallel(
-                Commands.sequence(
+            Commands.race(
+                Commands.parallel(
                     AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt1", m_swerve, true),
-                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt2", m_swerve, true),
-                    Commands.race(
-                        NamedCommands.getCommand("Shoot Command"),
-                        NamedCommands.getCommand("Wrist Wiggle Command"),
-                        Commands.waitSeconds(4.0)
-                    ),
-                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt3", m_swerve, true),
-                    Commands.race(
-                        NamedCommands.getCommand("Shoot Command"),
-                        NamedCommands.getCommand("Wrist Wiggle Command"),
-                        Commands.waitSeconds(4.0)
-                    )
+                    NamedCommands.getCommand("IntakeWrist Down Command")
                 ),
-                Commands.sequence(
-                    Commands.waitSeconds(0.5),
-                    NamedCommands.getCommand("IntakeWrist Down Command"),
-                    NamedCommands.getCommand("Intake Command")
-                )
+                NamedCommands.getCommand("Intake Command")
+            ),
+            Commands.race(
+                NamedCommands.getCommand("Shoot Command"),
+                NamedCommands.getCommand("Wrist Wiggle Command"),
+                Commands.waitSeconds(4.0)
+            ),
+            Commands.race(
+                AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt2", m_swerve, true),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            Commands.race(
+                NamedCommands.getCommand("Shoot Command"),
+                NamedCommands.getCommand("Wrist Wiggle Command"),
+                Commands.waitSeconds(4.0)
             )
+
         );
     } catch (Exception e) {
         System.err.println("Could not load auto: " + e.getMessage());

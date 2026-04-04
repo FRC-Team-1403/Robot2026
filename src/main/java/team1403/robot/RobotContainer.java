@@ -77,10 +77,10 @@ public class RobotContainer {
     m_teleopTimer = new Timer();
 
     //autonomous coomands  
-    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1).asProxy());
+    NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
     NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake));
-    NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos).asProxy());
+    NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos));
  
     if (AutoBuilder.isConfigured())
       m_autoChooser =
