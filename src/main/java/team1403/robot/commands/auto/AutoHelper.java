@@ -169,7 +169,7 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
             Commands.race(
                 AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt3", m_swerve, true),
                 NamedCommands.getCommand("Shoot Command"),
-                NamedCommands.getCommand("Intake Command")
+                NamedCommands.getCommand("Intake Command"),
                 Commands.waitSeconds(7.0)
             )
         );
