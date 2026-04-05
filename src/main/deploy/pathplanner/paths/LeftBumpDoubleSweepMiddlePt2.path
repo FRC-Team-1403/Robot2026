@@ -12,7 +12,7 @@
         "y": 4.750654868025012
       },
       "isLocked": false,
-      "linkedName": "LeftBumpDoubleSweepDepotPt1End"
+      "linkedName": "LeftBumpDoubleSweepMiddlePt1End"
     },
     {
       "anchor": {
@@ -41,13 +41,13 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftBumpDoubleSweepDepotPt2End"
+      "linkedName": "LeftBumpDoubleSweepMiddlePt2End"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1.2281449893390153,
-      "rotationDegrees": -43.02725061124719
+      "rotationDegrees": 135.0
     }
   ],
   "constraintZones": [
@@ -76,13 +76,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.2,
-    "rotation": -45.0
+    "velocity": 0.0,
+    "rotation": 135.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 1.5,
     "rotation": -90.0
   },
   "useDefaultConstraints": true

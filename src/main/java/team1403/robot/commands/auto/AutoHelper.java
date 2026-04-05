@@ -274,6 +274,42 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
     }
 
 
-    
+    public static Command getLeftBumpDoubleSweepMiddle(SwerveSubsystem m_swerve) {
+        try {    
+            return Commands.sequence(
+                Commands.race(
+                    Commands.parallel(
+                        AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt1", m_swerve, true),
+                        NamedCommands.getCommand("IntakeWrist Down Command")
+                    ),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt2", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt3", m_swerve, true),
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt4", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command"),
+                    Commands.waitSeconds(5.0)
+
+                ),
+                AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt5", m_swerve, true)
+
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none();
+        }
+    }    
 
 }

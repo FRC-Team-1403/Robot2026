@@ -186,7 +186,9 @@ public class RobotContainer {
     m_autoChooser.addOption("MIDDLE HUB DEPOT END HUB SHOOTER FACES BACKWARDS", AutoHelper.getMiddleHubDepotEndHub(m_swerve));
     m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP INTAKE FACES FORWARD", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
     m_autoChooser.addOption("RIGHT TRENCH DOUBLE SWEEP INTAKE FACES FORWARD", AutoHelper.getRightTrenchDoubleSweep(m_swerve));
-    m_autoChooser.addOption("DEPOT LEFT TRENCH DOUBLE SWEEP INTAKE FACES FORWARD", AutoHelper.getLeftTrenchDoubleSweepDepot(m_swerve));
+    m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP END DEPOT INTAKE FACES FORWARD", AutoHelper.getLeftTrenchDoubleSweepDepot(m_swerve));
+    m_autoChooser.addOption("LEFT BUMP DOUBLE SWEEP END MIDDLE INTAKE FACES FORWARD", AutoHelper.getLeftBumpDoubleSweepMiddle(m_swerve));
+    m_autoChooser.addOption("LEFT BUMP DOUBLE SWEEP END DEPOT INTAKE FACES FORWARD", AutoHelper.getLeftBumpDoubleSweepDepot(m_swerve));
 
     
   }
