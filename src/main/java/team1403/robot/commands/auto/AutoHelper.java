@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import team1403.robot.Constants;
 import team1403.robot.commands.WristWiggleCommand;
 import team1403.robot.swerve.SwerveSubsystem;
 import team1403.robot.swerve.TunerConstants;
@@ -292,4 +293,45 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
         }
     }    
 
+    public static Command ChoreoTesting(SwerveSubsystem m_swerve) {
+            try {
+                return Commands.sequence(
+                    // Start sweep + intake down + intake 
+                    Commands.deadline(
+                        AutoUtil.loadChoreoPath("Sweep1", m_swerve),
+                        Commands.parallel(
+                            NamedCommands.getCommand("IntakeWrist Down Command"),
+                            NamedCommands.getCommand("Intake Command")
+                        )
+                    ),
+                    // Shoot
+                    Commands.race(
+                        NamedCommands.getCommand("Shoot Command"),
+                        NamedCommands.getCommand("Wrist Wiggle Command"),
+                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout)
+                    ),
+                    // Sweep 2 + Intake
+                    Commands.deadline(
+                        AutoUtil.loadChoreoPath("Sweep2", m_swerve),
+                        NamedCommands.getCommand("Intake Command")
+                    ),
+                    // Shoot
+                    Commands.race(
+                        NamedCommands.getCommand("Shoot Command"),
+                        NamedCommands.getCommand("Wrist Wiggle Command"),
+                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout)
+                    ),
+                    // Sweep 3 :skull:
+                    Commands.deadline(
+                        AutoUtil.loadChoreoPath("Sweep2", m_swerve),
+                        NamedCommands.getCommand("Intake Command"),
+                        NamedCommands.getCommand("Shoot Command")
+                    )
+                );
+            }
+            catch (Exception e) {
+                System.err.println("Could not load auto: " + e.getMessage());
+                return Commands.none();
+            }
+        }
 }

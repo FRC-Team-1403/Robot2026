@@ -300,4 +300,10 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kHoodAngle_right = 30;
 
   }
+
+  public static final class Autos {
+
+    public static final double TestingShootTimeout = 4.0;
+
+  }
 }

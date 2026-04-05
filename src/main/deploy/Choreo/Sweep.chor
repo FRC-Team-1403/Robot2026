@@ -1,0 +1,84 @@
+{
+ "name":"Sweep",
+ "version":2,
+ "type":"Swerve",
+ "variables":{
+  "expressions":{},
+  "poses":{}
+ },
+ "config":{
+  "frontLeft":{
+   "x":{
+    "exp":"0.273 m",
+    "val":0.273
+   },
+   "y":{
+    "exp":"0.273 m",
+    "val":0.273
+   }
+  },
+  "backLeft":{
+   "x":{
+    "exp":"-0.273 m",
+    "val":-0.273
+   },
+   "y":{
+    "exp":"0.273 m",
+    "val":0.273
+   }
+  },
+  "mass":{
+   "exp":"62.324 lbs",
+   "val":28.26969086788
+  },
+  "inertia":{
+   "exp":"6.883 kg m ^ 2",
+   "val":6.883
+  },
+  "gearing":{
+   "exp":"6.746031746031747",
+   "val":6.746031746031747
+  },
+  "radius":{
+   "exp":"1.975 in",
+   "val":0.050165
+  },
+  "vmax":{
+   "exp":"6000 RPM",
+   "val":628.3185307179587
+  },
+  "tmax":{
+   "exp":"0.711 N * m",
+   "val":0.711
+  },
+  "cof":{
+   "exp":"1.2",
+   "val":1.2
+  },
+  "bumper":{
+   "front":{
+    "exp":"15.27 in",
+    "val":0.387858
+   },
+   "side":{
+    "exp":"18.27 in",
+    "val":0.464058
+   },
+   "back":{
+    "exp":"15.27 in",
+    "val":0.387858
+   }
+  },
+  "differentialTrackWidth":{
+   "exp":"22 in",
+   "val":0.5588
+  }
+ },
+ "generationFeatures":[],
+ "codegen":{
+  "root":"Java",
+  "genVars":true,
+  "genTrajData":true,
+  "useChoreoLib":true
+ }
+}

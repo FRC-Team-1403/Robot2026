@@ -143,16 +143,16 @@ public class LERPShooter extends Command {
             }
         }
 
-        //Calculate sum stuff
+        //Calculate shot stability
         double translationDelta = m_lastProjectedPivot.getTranslation().getDistance(projectedPivot.getTranslation());
         double rotationDelta = Math.abs(MathUtil.angleModulus(projectedPivot.getRotation().getRadians() - m_lastProjectedPivot.getRotation().getRadians()));
-        double stabilityScore = translationDelta + 2.0 * rotationDelta;
+        double stabilityScore = 100 * translationDelta + 500 * rotationDelta;
 
         boolean allowedToShoot = m_shooter.isFlywheelAtSpeed()
                                 && m_shooterHood.atSetpoint()
                                 && humanInput
                                 && m_turret.atSetpoint()
-                                && stabilityScore < 1000; //Tune this
+                                && stabilityScore < 6; //Tuned
 
         //Should we actually start shooting
         if (allowedToShoot) {
