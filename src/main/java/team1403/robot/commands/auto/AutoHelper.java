@@ -56,27 +56,29 @@ public class AutoHelper {
     public static Command getMiddleHubDepotEndTrench(SwerveSubsystem m_swerve){
     try{
        return Commands.sequence(
-            NamedCommands.getCommand("IntakeWrist Down Commandd"),
-            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
             Commands.race(
-                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
+                    NamedCommands.getCommand("IntakeWrist Down Command")
+                ),
                 NamedCommands.getCommand("Intake Command")
             ),
             Commands.race(
-                Commands.waitSeconds(2),
+                 Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
+                    NamedCommands.getCommand("Shoot Command")
+                ),
                 NamedCommands.getCommand("Intake Command")
-            ),
-            AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Trench", m_swerve, true),
+            ), 
             Commands.race(
-                NamedCommands.getCommand("Shoot Command"),
-                Commands.waitSeconds(9),
-                Commands.sequence(
-                    NamedCommands.getCommand("Wrist Up Command"),
-                    Commands.waitSeconds(0.35),
-                    NamedCommands.getCommand("Wrist Down Command Jiggle")
-                ).repeatedly()
-            ),     
-            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Trench", m_swerve, true),
+                NamedCommands.getCommand("Intake Command")
+            ), 
+            Commands.race(
+                NamedCommands.getCommand("ShootCommand"),
+                NamedCommands.getCommand("Wrist Wiggle Command"),
+                Commands.waitSeconds(4.0)
+            )
         );
     } catch (Exception e) {
         System.err.println("Could not load auto: " + e.getMessage());
@@ -87,28 +89,29 @@ public class AutoHelper {
     public static Command getMiddleHubDepotEndHub(SwerveSubsystem m_swerve){
         try{
         return Commands.sequence(
-                NamedCommands.getCommand("Wrist Down Command"),
-                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
-                Commands.race(
+            Commands.race(
+                Commands.parallel(
+                    AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
+                    NamedCommands.getCommand("IntakeWrist Down Command")
+                ),
+                NamedCommands.getCommand("Intake Command")
+            ),
+            Commands.race(
+                 Commands.parallel(
                     AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
+                    NamedCommands.getCommand("Shoot Command")
                 ),
-                Commands.race(
-                    Commands.waitSeconds(2),
-                    NamedCommands.getCommand("Intake Command")
-                ),
+                NamedCommands.getCommand("Intake Command")
+            ), 
+            Commands.race(
                 AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Hub", m_swerve, true),
-                NamedCommands.getCommand("Auto Aim Command"),
-                Commands.race(
-                    NamedCommands.getCommand("Shoot Command"),
-                    Commands.waitSeconds(9),
-                    Commands.sequence(
-                        NamedCommands.getCommand("Wrist Up Command"),
-                        Commands.waitSeconds(0.35),
-                        NamedCommands.getCommand("Wrist Down Command Jiggle")
-                    ).repeatedly()
-                ),    
-                NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+                NamedCommands.getCommand("Intake Command")
+            ), 
+            Commands.race(
+                NamedCommands.getCommand("ShootCommand"),
+                NamedCommands.getCommand("Wrist Wiggle Command"),
+                Commands.waitSeconds(4.0)
+            )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
