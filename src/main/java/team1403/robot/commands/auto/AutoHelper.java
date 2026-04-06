@@ -305,10 +305,10 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
                         )
                     ),
                     // Shoot
-                    Commands.race(
+                    Commands.deadline(
+                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout),
                         NamedCommands.getCommand("Shoot Command"),
-                        NamedCommands.getCommand("Wrist Wiggle Command"),
-                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout)
+                        NamedCommands.getCommand("Wrist Wiggle Command")
                     ),
                     // Sweep 2 + Intake
                     Commands.deadline(
@@ -316,10 +316,10 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
                         NamedCommands.getCommand("Intake Command")
                     ),
                     // Shoot
-                    Commands.race(
+                    Commands.deadline(
+                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout),
                         NamedCommands.getCommand("Shoot Command"),
-                        NamedCommands.getCommand("Wrist Wiggle Command"),
-                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout)
+                        NamedCommands.getCommand("Wrist Wiggle Command")
                     ),
                     // Sweep 3 :skull:
                     Commands.deadline(
