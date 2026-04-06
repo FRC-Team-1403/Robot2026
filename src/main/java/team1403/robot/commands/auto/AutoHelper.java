@@ -325,7 +325,7 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
                     Commands.deadline(
                         AutoUtil.loadChoreoPath("Sweep2", m_swerve),
                         NamedCommands.getCommand("Intake Command"),
-                        NamedCommands.getCommand("Shoot Command")
+                        NamedCommands.getCommand("Shoot Command") //Not sure if u want passing here
                     )
                 );
             }
