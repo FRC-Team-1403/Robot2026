@@ -312,7 +312,7 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
                     ),
                     // Sweep 2 + Intake
                     Commands.deadline(
-                        AutoUtil.loadChoreoPath("Sweep2", m_swerve),
+                        AutoUtil.loadChoreoPath("Sweep3", m_swerve),
                         NamedCommands.getCommand("Intake Command")
                     ),
                     // Shoot
@@ -323,7 +323,7 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
                     ),
                     // Sweep 3 :skull:
                     Commands.deadline(
-                        AutoUtil.loadChoreoPath("Sweep2", m_swerve),
+                        AutoUtil.loadChoreoPath("Sweep3", m_swerve),
                         NamedCommands.getCommand("Intake Command"),
                         NamedCommands.getCommand("Shoot Command") //Not sure if u want passing here
                     )
