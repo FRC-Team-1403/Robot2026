@@ -146,10 +146,10 @@ public class AutoHelper {
                 Commands.parallel(
                     NamedCommands.getCommand("Shoot Command"),
                     NamedCommands.getCommand("Wrist Wiggle Command")
-                    )
                 ),
                 Commands.waitSeconds(5.0)
-            );
+            )
+        );
     } catch (Exception e) {
         System.err.println("Could not load auto: " + e.getMessage());
         return Commands.none();
