@@ -3,94 +3,94 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.560328102710413,
-        "y": 7.392582025677603
+        "x": 3.6250213980028523,
+        "y": 0.64
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.846747927949024,
-        "y": 7.289347030366458
+        "x": 4.970641940085592,
+        "y": 0.5739087018544944
       },
       "isLocked": false,
-      "linkedName": "LeftBumpDoubleSweepDepotPt3End"
+      "linkedName": "RightTrenchDoubleSweepPt1End"
     },
     {
       "anchor": {
-        "x": 6.484465049928673,
-        "y": 7.302011412268189
+        "x": 6.497403708987161,
+        "y": 0.9232524964336677
       },
       "prevControl": {
-        "x": 6.234029364100964,
-        "y": 7.56030018093571
+        "x": 6.352420885639785,
+        "y": 0.7195861493504484
       },
       "nextControl": {
-        "x": 7.900210725112812,
-        "y": 5.841871233039701
+        "x": 7.04082738944365,
+        "y": 1.6866333808844538
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.1480599144079875,
-        "y": 4.222610556348074
+        "x": 6.368017118402282,
+        "y": 3.9767760342368046
       },
       "prevControl": {
-        "x": 5.19484929193511,
-        "y": 5.322192467854817
+        "x": 5.304056013098672,
+        "y": 3.245881014071715
       },
       "nextControl": {
-        "x": 7.435304165469493,
-        "y": 2.73770212080601
+        "x": 7.855962910128387,
+        "y": 4.998930099857347
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.1480599144079875,
-        "y": 7.43
+        "x": 6.497403708987161,
+        "y": 0.64
       },
       "prevControl": {
-        "x": 9.65822918735186,
-        "y": 7.366513205528379
+        "x": 9.447417974322395,
+        "y": 0.8197432239657632
       },
       "nextControl": {
-        "x": 5.075642962358206,
-        "y": 7.4493963052287695
+        "x": 5.79958152473273,
+        "y": 0.5974819652139992
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6120827389443653,
-        "y": 7.43
+        "x": 3.780285306704707,
+        "y": 0.64
       },
       "prevControl": {
-        "x": 4.111774289059612,
-        "y": 7.335897782579648
+        "x": 4.789500713266761,
+        "y": 0.5092154065620549
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftBumpDoubleSweepDepotPt4End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6567164179104547,
+      "waypointRelativePos": 0.48614072494669613,
       "rotationDegrees": 0.0
     },
     {
       "waypointRelativePos": 1.4925373134328308,
-      "rotationDegrees": -96.498040795874
+      "rotationDegrees": 96.498
     },
     {
       "waypointRelativePos": 2.3539445628997826,
-      "rotationDegrees": 27.934097385623836
+      "rotationDegrees": -59.45640068656641
     },
     {
-      "waypointRelativePos": 3.0191897654584343,
+      "waypointRelativePos": 2.9424307036247326,
       "rotationDegrees": 180.0
     }
   ],
@@ -113,14 +113,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.2,
+    "velocity": 0.0,
     "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 1.2,
-    "rotation": 0.6295986084102249
+    "velocity": 0.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
