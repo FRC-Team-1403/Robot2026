@@ -181,11 +181,14 @@ public class RobotContainer {
     //   );
     // }
 
+    //HOW TO NAME AUTOS: "AUTO: POSITIONING OF THE BOT"
     
-    m_autoChooser.addOption("AUTO ALIGN STATIONARY CENTER SHOOT SHOOTER FACES BACKWARDS", AutoHelper.getStationaryCenterShootAutoAlign(m_swerve));
-    m_autoChooser.addOption("MIDDLE HUB DEPOT ", AutoHelper.getMiddleHubDepotEndTrench(m_swerve));
-    m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP INTAKE FACES FORWARD", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
-    m_autoChooser.addOption("RIGHT TRENCH DOUBLE SWEEP INTAKE FACES FORWARD", AutoHelper.getRightTrenchDoubleSweep(m_swerve));
+    m_autoChooser.addOption("SHOOT PRELOADED FUEL AT HUB: INTAKE FACES LEFT OR RIGHT", AutoHelper.getPreloadedFuelHub(m_swerve));
+    m_autoChooser.addOption("SHOOT PRELOADED FUEL AT LEFT TRENCH: INTAKE FACES FORWARD", AutoHelper.getPreloadedFuelLeftTrench(m_swerve));
+    m_autoChooser.addOption("SHOOT PRELOADED FUEL AT RIGHT TRENCH: INTAKE FACES FORWARD", AutoHelper.getPreloadedFuelRightTrench(m_swerve));
+    m_autoChooser.addOption("START AT HUB AND GO TO DEPOT: INTAKE FACES RIGHT: CORNER OF BOT TO RIGHT EDGE OF HUB", AutoHelper.getHubDepot(m_swerve));
+    m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP: INTAKE FACES FORWARD", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
+    m_autoChooser.addOption("RIGHT TRENCH DOUBLE SWEEP: INTAKE FACES FORWARD", AutoHelper.getRightTrenchDoubleSweep(m_swerve));
   }
 
 

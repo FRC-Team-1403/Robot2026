@@ -8,43 +8,32 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7230385164051356,
-        "y": 4.326119828815978
+        "x": 1.6324679029957199,
+        "y": 4.662524964336662
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.201768901569186,
-        "y": 5.6070470756062765
+        "x": 1.7489158345221112,
+        "y": 5.956390870185448
       },
       "prevControl": {
-        "x": 2.4883034202518726,
-        "y": 5.296634680366699
-      },
-      "nextControl": {
-        "x": 1.8912410841654772,
-        "y": 5.943452211126961
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.2572467902995716,
-        "y": 6.0081455064194005
-      },
-      "prevControl": {
-        "x": 1.8912410841654772,
-        "y": 6.085777460770328
+        "x": 1.809674647089008,
+        "y": 5.713886505904182
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MiddleHubDepotPt1End"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3539445628997844,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -64,7 +53,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 88.49256424122504
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
