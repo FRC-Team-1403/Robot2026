@@ -131,20 +131,28 @@ public class AutoHelper {
                 NamedCommands.getCommand("Intake Command")
             ),
             Commands.race(
-                NamedCommands.getCommand("Shoot Command"),
-                NamedCommands.getCommand("Wrist Wiggle Command"),
-                Commands.waitSeconds(4.0)
+                Commands.parallel(  
+                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepTurretTrackingPt2", m_swerve, true),
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.sequence(
+                        Commands.waitSeconds(2.5),
+                        NamedCommands.getCommand("Wrist Wiggle Command")
+                    )
+                ),
+                Commands.waitSeconds(6.0)
             ),
             Commands.race(
-                AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt2", m_swerve, true),
+                AutoUtil.loadPathPlannerPath("LeftTrenchSweepMoreLoopyPt3", m_swerve, true),
                 NamedCommands.getCommand("Intake Command")
             ),
             Commands.race(
-                NamedCommands.getCommand("Shoot Command"),
-                NamedCommands.getCommand("Wrist Wiggle Command"),
-                Commands.waitSeconds(4.0)
-            )
-        );
+                Commands.parallel(
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command")
+                    )
+                ),
+                Commands.waitSeconds(5.0)
+            );
     } catch (Exception e) {
         System.err.println("Could not load auto: " + e.getMessage());
         return Commands.none();
@@ -269,20 +277,30 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
                     AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt2", m_swerve, true),
                     NamedCommands.getCommand("Intake Command")
                 ),
+                Commands.waitSeconds(0.5),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt3", m_swerve, true),
                     NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command")
+                    Commands.sequence(
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Wiggle Command")
+                    ),
+                    Commands.waitSeconds(6)
+
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt4", m_swerve, true),
                     NamedCommands.getCommand("Intake Command")
                 ),
                 Commands.race(
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command"),
+                    Commands.parallel(
+                        NamedCommands.getCommand("Shoot Command"),
+                        Commands.sequence(
+                            Commands.waitSeconds(1.5),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
+                        )
+                    ),
                     Commands.waitSeconds(5.0)
-
                 ),
                 AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt5", m_swerve, true)
 
@@ -291,7 +309,7 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
             System.err.println("Could not load auto: " + e.getMessage());
             return Commands.none();
         }
-    }    
+    }
 
     public static Command ChoreoTesting(SwerveSubsystem m_swerve) {
             try {

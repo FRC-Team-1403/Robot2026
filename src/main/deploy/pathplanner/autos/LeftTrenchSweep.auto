@@ -13,7 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftTrenchSweepMoreLoopyPt2"
+            "pathName": "LeftTrenchSweepTurretTrackingPt2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftTrenchSweepMoreLoopyPt3"
           }
         }
       ]

@@ -30,7 +30,7 @@ public class WristWiggleCommand extends Command {
 
   @Override
   public void execute() {
-    if (m_intakeWrist.atSetpoint() || m_timer.hasElapsed(1.5)) {
+    if (m_intakeWrist.atSetpoint() || m_timer.hasElapsed(1)) {
       if (m_goingUp) {
         m_goingUp = false;
         m_targetSetpoint = Constants.IntakeWrist.downPos;

@@ -32,9 +32,9 @@ public class Indexer extends SubsystemBase {
     indexerLeaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     indexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 120;
     indexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 70;
+    indexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 40;
     indexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    indexerLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    indexerLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 25;
     indexerLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0; 
 
     Slot0Configs indexerPIDConfig = new Slot0Configs();

@@ -10,7 +10,7 @@ public class FieldZoneUtil {
   public static final double kAllianceZoneDepth = 4.03;
 
   // Width of crossing band (only extends INTO neutral)
-  public static final double kCrossingWidth = 0.5;
+  public static final double kCrossingWidth = 0.3;
 
   public enum Zone {
     MY_ALLIANCE,

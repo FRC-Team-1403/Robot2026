@@ -38,7 +38,7 @@ public static final double minimumBatteryVoltage = 11.0;
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = 0.1003;
+    public static final double kMagnetOffset = 0.09155;
     public static final double kMinAngleDegrees = -180;
     public static final double kMaxAngleDegrees = 180;
 
@@ -53,11 +53,11 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kA = 0.0;
     public static final double kG = 0.0;
 
-    public static final double kToleranceDegrees = 2.0;
+    public static final double kToleranceDegrees = 5.0;
   
 
     public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
-    public static final double rotationCorrectionOffset = 5;
+    public static final double rotationCorrectionOffset = 0;
     public static final double kSpringK = 0;
     public static final double kSpringNeutralAngle = 0;
     public static final double kSpringForce = 5.94;  // lbs cause im dum
@@ -94,13 +94,6 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final String kCamera2 = "ThriftyCam2.0";
     public static final String kCamera3 = "ThriftyCam3.0";
     public static final String kCamera4 = "ThriftyCam4.0";
-    public static Transform3d kCamera1Transform = new Transform3d();
-    public static Transform3d kCamera2Transform =
-        new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(90)));
-    public static Transform3d kCamera3Transform =
-        new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(180)));
-    public static Transform3d kCamera4Transform =
-        new Transform3d(0, 0, 0, new Rotation3d(0, 0, Math.toRadians(270)));
   
     //ETAASH METHOD + MATCHED TO THRIFTY. FIX THESE:
     public static final Translation3d kCameraOffset = new Translation3d();
@@ -262,7 +255,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = -0.08;
+    public static final double kMagnetOffset = 0.0;
     public static final double kGearRatioEncoder = 23.4/1.0;
     public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
     public static final double kAbsoluteGearRatio = 2.0/1.0;
@@ -273,8 +266,8 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kMinRotations = 0.0;
     public static final double kMaxRotations = 0.55;
 
-    public static final double downPos = 0.04;
-    public static final double upPos = 0.5;
+    public static final double downPos = 0.03;
+    public static final double upPos = 0.45;
 
     public static final double kP = 10.0;
     public static final double kI = 0.0;

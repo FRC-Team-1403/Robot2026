@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4826961483594863,
-        "y": 7.43
+        "x": 3.560328102710413,
+        "y": 7.4702139800285305
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7691159735980975,
-        "y": 7.326765004688855
+        "x": 3.8107941639037772,
+        "y": 7.396489623386
       },
       "isLocked": false,
-      "linkedName": "LeftTrenchSweepPt1End"
+      "linkedName": "LeftTrenchSweepPt2End"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 7.302011412268189
       },
       "prevControl": {
-        "x": 6.234029364100964,
-        "y": 7.56030018093571
+        "x": 6.307698264905121,
+        "y": 7.4787980172823625
       },
       "nextControl": {
-        "x": 7.900210725112812,
-        "y": 5.841871233039701
+        "x": 7.820591102547869,
+        "y": 5.9657355464030815
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 4.222610556348074
       },
       "prevControl": {
-        "x": 5.19484929193511,
-        "y": 5.322192467854817
+        "x": 5.423495007132667,
+        "y": 5.218887303851641
       },
       "nextControl": {
-        "x": 7.435304165469493,
-        "y": 2.73770212080601
+        "x": 7.331554943979568,
+        "y": 2.5953048906871485
       },
       "isLocked": false,
       "linkedName": null
@@ -52,28 +52,28 @@
         "y": 7.43
       },
       "prevControl": {
-        "x": 9.65822918735186,
-        "y": 7.366513205528379
+        "x": 9.679563563398018,
+        "y": 7.349588568485622
       },
       "nextControl": {
-        "x": 5.075642962358206,
-        "y": 7.4493963052287695
+        "x": 5.309768063607415,
+        "y": 7.449087690244633
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6120827389443653,
+        "x": 3.780285306704707,
         "y": 7.43
       },
       "prevControl": {
-        "x": 4.111774289059612,
-        "y": 7.335897782579648
+        "x": 4.289134945528116,
+        "y": 7.362034668479064
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftTrenchSweepMoreLoopyEnd"
     }
   ],
   "rotationTargets": [
@@ -119,7 +119,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 1.2,
+    "velocity": 0.0,
     "rotation": 0.0
   },
   "useDefaultConstraints": false

@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase {
     flywheelLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimit = 60;
     flywheelLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    flywheelLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
+    flywheelLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
     flywheelLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 
     Slot0Configs flywheelPIDConfig = new Slot0Configs();
@@ -69,9 +69,9 @@ public class Shooter extends SubsystemBase {
     flywheelFollowerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     flywheelFollowerConfig.CurrentLimits.StatorCurrentLimit = 120;
     flywheelFollowerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimit = 50;
+    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimit = 60;
     flywheelFollowerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerLimit = 60;
+    flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
     flywheelFollowerConfig.CurrentLimits.SupplyCurrentLowerTime = 2.0;
 
     m_flywheelFollower.getConfigurator().apply(flywheelFollowerConfig);
@@ -85,7 +85,7 @@ public class Shooter extends SubsystemBase {
     flywheelFollower2Config.CurrentLimits.StatorCurrentLimitEnable = true;
     flywheelFollower2Config.CurrentLimits.SupplyCurrentLimit = 60;
     flywheelFollower2Config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    flywheelFollower2Config.CurrentLimits.SupplyCurrentLowerLimit = 30;
+    flywheelFollower2Config.CurrentLimits.SupplyCurrentLowerLimit = 40;
     flywheelFollower2Config.CurrentLimits.SupplyCurrentLowerTime = 2.0;
     
     m_flywheelFollower2.getConfigurator().apply(flywheelFollower2Config);

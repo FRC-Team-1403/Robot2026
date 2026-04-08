@@ -152,9 +152,9 @@ public class LERPShooter extends Command {
         boolean allowedToShoot = m_shooter.isFlywheelAtSpeed()
                                 && m_shooterHood.atSetpoint()
                                 && humanInput
-                                && m_turret.atSetpoint()
-                                && translationDelta < Constants.Shooter.maxAllowedTranslationAccel
-                                && rotationDelta < Constants.Shooter.maxAllowedRotationalAccel;
+                                && m_turret.atSetpoint();
+                                //&& translationDelta < Constants.Shooter.maxAllowedTranslationAccel
+                                //&& rotationDelta < Constants.Shooter.maxAllowedRotationalAccel;
 
         //Should we actually start shooting
         if (allowedToShoot) {

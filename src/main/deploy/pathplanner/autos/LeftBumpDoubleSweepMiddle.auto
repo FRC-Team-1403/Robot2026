@@ -27,6 +27,12 @@
           "data": {
             "pathName": "LeftBumpDoubleSweepMiddlePt4"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftBumpDoubleSweepMiddlePt5"
+          }
         }
       ]
     }
