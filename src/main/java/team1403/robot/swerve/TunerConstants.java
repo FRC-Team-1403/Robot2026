@@ -40,10 +40,10 @@ public class TunerConstants {
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
-    private static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
+    private static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
     // The closed-loop output type to use for the drive motors;
     // This affects the PID/FF gains for the drive motors
-    private static final ClosedLoopOutputType kDriveClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
+    private static final ClosedLoopOutputType kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
     // The type of motor used for the drive motor
     private static final DriveMotorArrangement kDriveMotorType = DriveMotorArrangement.TalonFX_Integrated;
@@ -63,10 +63,10 @@ public class TunerConstants {
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                .withSupplyCurrentLimit(Amps.of(60))
+                .withSupplyCurrentLimit(Amps.of(70))
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLowerLimit(Amps.of(40))
-                .withSupplyCurrentLowerTime(Seconds.of(0.5))
+                .withSupplyCurrentLowerTime(Seconds.of(1.5))
         )
         .withMotorOutput(new MotorOutputConfigs()
             .withNeutralMode(NeutralModeValue.Brake)
@@ -81,7 +81,7 @@ public class TunerConstants {
                 .withSupplyCurrentLimit(Amps.of(30))
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLowerLimit(Amps.of(20))
-                .withSupplyCurrentLowerTime(Seconds.of(0.5))
+                .withSupplyCurrentLowerTime(Seconds.of(1.5))
         )
         .withMotorOutput(new MotorOutputConfigs()
             .withNeutralMode(NeutralModeValue.Brake)

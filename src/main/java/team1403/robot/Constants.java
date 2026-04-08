@@ -38,16 +38,16 @@ public static final double minimumBatteryVoltage = 11.0;
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = 0.09155;
+    public static final double kMagnetOffset = -0.1037;
     public static final double kMinAngleDegrees = -180;
     public static final double kMaxAngleDegrees = 180;
 
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
-    public static final double kP = 5.5;
+    public static final double kP = 5.8;
     public static final double kI = 0.0;
-    public static final double kD = 0.2;
+    public static final double kD = 0.22;
     public static final double kS = 0.0;
     public static final double kV = 0.0;
     public static final double kA = 0.0;
@@ -57,7 +57,7 @@ public static final double minimumBatteryVoltage = 11.0;
   
 
     public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
-    public static final double rotationCorrectionOffset = 0;
+    public static final double rotationCorrectionOffset = 180;
     public static final double kSpringK = 0;
     public static final double kSpringNeutralAngle = 0;
     public static final double kSpringForce = 5.94;  // lbs cause im dum
@@ -134,7 +134,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kG = 0.2;
 
 
-    public static final double kMagnetOffset = 0.2631;
+    public static final double kMagnetOffset = -0.055;
     public static final double kFixedHood = 20;
 
     public static final double[][] distanceTable = {
@@ -154,9 +154,9 @@ public static final double minimumBatteryVoltage = 11.0;
   }
 
   public static class Shooter {
-    public static final int flywheelLeaderID = 23;
-    public static final int flywheelFollower1TopRightID = 24;
-    public static final int flywheelFollower2BottonRightID = 25;
+    public static final int flywheelLeaderID = 25;
+    public static final int flywheelFollower1TopLeftID = 24;
+    public static final int flywheelFollower2BottonLeftID = 23;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 150.0;
 
@@ -266,8 +266,8 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kMinRotations = 0.0;
     public static final double kMaxRotations = 0.55;
 
-    public static final double downPos = 0.03;
-    public static final double upPos = 0.45;
+    public static final double downPos = 0.01;
+    public static final double upPos = 0.4;
 
     public static final double kP = 10.0;
     public static final double kI = 0.0;

@@ -89,11 +89,11 @@ public class AutoHelper {
                     Commands.parallel(
                         NamedCommands.getCommand("Shoot Command"),
                         Commands.sequence(
-                            Commands.waitSeconds(2.0),
+                            Commands.waitSeconds(1.5),
                             NamedCommands.getCommand("Wrist Wiggle Command")
                         )
                     ),
-                    Commands.waitSeconds(5.0)
+                    Commands.waitSeconds(4.5)
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("LeftTrenchDoubleSweepPt2", m_swerve, true),
@@ -125,11 +125,11 @@ public class AutoHelper {
                     Commands.parallel(
                         NamedCommands.getCommand("Shoot Command"),
                         Commands.sequence(
-                            Commands.waitSeconds(2.0),
+                            Commands.waitSeconds(1.5),
                             NamedCommands.getCommand("Wrist Wiggle Command")
                         )
                     ),
-                    Commands.waitSeconds(5.0)
+                    Commands.waitSeconds(4.5)
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("RightTrenchDoubleSweepPt2", m_swerve, true),

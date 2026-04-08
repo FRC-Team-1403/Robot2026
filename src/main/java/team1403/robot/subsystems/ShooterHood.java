@@ -36,7 +36,7 @@ public class ShooterHood extends SubsystemBase {
 
     TalonFXConfiguration hoodMotorConfig = new TalonFXConfiguration();
     hoodMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    hoodMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    hoodMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     hoodMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
     hoodMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     hoodMotorConfig.CurrentLimits.SupplyCurrentLimit = 30;
@@ -59,7 +59,7 @@ public class ShooterHood extends SubsystemBase {
     m_hoodMotor.getConfigurator().apply(hoodPIDConfigs);
 
     CANcoderConfiguration config = new CANcoderConfiguration();
-    config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
     config.MagnetSensor.MagnetOffset = Constants.ShooterHood.kMagnetOffset;
 
