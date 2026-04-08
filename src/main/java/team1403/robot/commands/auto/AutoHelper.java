@@ -125,18 +125,22 @@ public class AutoHelper {
         return Commands.sequence(
             Commands.race(
                 Commands.parallel(
-                    NamedCommands.getCommand("IntakeWrist Down Command"),
                     AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt1", m_swerve, true),
+                    NamedCommands.getCommand("IntakeWrist Down Command"),
                     Commands.sequence(
-                        Commands.waitSeconds(6.0),
-                        Commands.parallel(
-                            NamedCommands.getCommand("Shoot Command"),
-                            Commands.waitSeconds(2.5),
-                            NamedCommands.getCommand("Wrist Wiggle Command")
-                        )
+                        Commands.waitSeconds(4.0),
+                        NamedCommands.getCommand("Shoot Command")
+                        
                     )
                 ),
                 NamedCommands.getCommand("Intake Command")
+            ),
+            Commands.race(
+                Commands.parallel(
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command")
+                ),
+                Commands.waitSeconds(5.0)
             ),
             Commands.race(
                 AutoUtil.loadPathPlannerPath("LeftTrenchSweepMoreLoopyPt3", m_swerve, true),
@@ -162,7 +166,14 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
             Commands.race(
                 Commands.parallel(
                     AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt1", m_swerve, true),
-                    NamedCommands.getCommand("IntakeWrist Down Command")
+                    NamedCommands.getCommand("IntakeWrist Down Command"),
+                    Commands.sequence(
+                        Commands.waitSeconds(3.0),
+                        Commands.parallel(
+                            NamedCommands.getCommand("Shoot Command"),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
+                        )
+                    )
                 ),
                 NamedCommands.getCommand("Intake Command")
             ),
