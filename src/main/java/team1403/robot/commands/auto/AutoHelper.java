@@ -38,14 +38,15 @@ public class AutoHelper {
         });
     }
 
+
+    //shoot in front of hub -- FIX!!!
     public static Command getStationaryCenterShootAutoAlign(SwerveSubsystem m_swerve){
         try{
            return Commands.sequence(
             NamedCommands.getCommand("IntakeWrist Down Command"),
             AutoUtil.loadPathPlannerPath("StationaryHub", m_swerve, true),
             NamedCommands.getCommand("Shoot Command"),
-            Commands.waitSeconds(10),
-            NamedCommands.getCommand("Decelerate Shooter Flywheel Command")
+            Commands.waitSeconds(10)
             
         );
         } catch (Exception e) {
@@ -54,6 +55,7 @@ public class AutoHelper {
         }
     }
 
+    //Depo -- FIX!!!!!
     public static Command getMiddleHubDepotEndTrench(SwerveSubsystem m_swerve){
     try{
        return Commands.sequence(
@@ -87,39 +89,7 @@ public class AutoHelper {
     }
 }
 
-    public static Command getMiddleHubDepotEndHub(SwerveSubsystem m_swerve){
-        try{
-        return Commands.sequence(
-            Commands.race(
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("MiddleHubDepotPt1", m_swerve, true),
-                    NamedCommands.getCommand("IntakeWrist Down Command")
-                ),
-                NamedCommands.getCommand("Intake Command")
-            ),
-            Commands.race(
-                 Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("MiddleHubDepotPt2", m_swerve, true),
-                    NamedCommands.getCommand("Shoot Command")
-                ),
-                NamedCommands.getCommand("Intake Command")
-            ), 
-            Commands.race(
-                AutoUtil.loadPathPlannerPath("MiddleHubDepotPt3Hub", m_swerve, true),
-                NamedCommands.getCommand("Intake Command")
-            ), 
-            Commands.race(
-                NamedCommands.getCommand("ShootCommand"),
-                NamedCommands.getCommand("Wrist Wiggle Command"),
-                Commands.waitSeconds(4.0)
-            )
-            );
-        } catch (Exception e) {
-            System.err.println("Could not load auto: " + e.getMessage());
-            return Commands.none(); 
-        }
-    }
-
+    //Left trench double sweep 
     public static Command getLeftTrenchDoubleSweep(SwerveSubsystem m_swerve) {
     try {
         return Commands.sequence(
@@ -130,7 +100,6 @@ public class AutoHelper {
                     Commands.sequence(
                         Commands.waitSeconds(4.0),
                         NamedCommands.getCommand("Shoot Command")
-                        
                     )
                 ),
                 NamedCommands.getCommand("Intake Command")
@@ -159,46 +128,7 @@ public class AutoHelper {
         return Commands.none();
     }
 }
-
-public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
-    try {
-        return Commands.sequence(
-            Commands.race(
-                Commands.parallel(
-                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt1", m_swerve, true),
-                    NamedCommands.getCommand("IntakeWrist Down Command"),
-                    Commands.sequence(
-                        Commands.waitSeconds(3.0),
-                        Commands.parallel(
-                            NamedCommands.getCommand("Shoot Command"),
-                            NamedCommands.getCommand("Wrist Wiggle Command")
-                        )
-                    )
-                ),
-                NamedCommands.getCommand("Intake Command")
-            ),
-            Commands.race(
-                NamedCommands.getCommand("Shoot Command"),
-                NamedCommands.getCommand("Wrist Wiggle Command"),
-                Commands.waitSeconds(3)
-            ),
-            Commands.race(
-                AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt2", m_swerve, true),
-                NamedCommands.getCommand("Intake Command")
-            ),
-            Commands.race(
-                AutoUtil.loadPathPlannerPath("LeftTrenchSweepDepotPt3", m_swerve, true),
-                NamedCommands.getCommand("Shoot Command"),
-                NamedCommands.getCommand("Intake Command"),
-                Commands.waitSeconds(7.0)
-            )
-        );
-    } catch (Exception e) {
-        System.err.println("Could not load auto: " + e.getMessage());
-        return Commands.none();
-    }
-}
-
+    //right trench double sweep 
     public static Command getRightTrenchDoubleSweep(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
@@ -229,135 +159,5 @@ public static Command getLeftTrenchDoubleSweepDepot(SwerveSubsystem m_swerve) {
             return Commands.none();
         }
     }
-
-    public static Command getLeftBumpDoubleSweepDepot(SwerveSubsystem m_swerve) {
-        try {    
-            return Commands.sequence(
-                Commands.race(
-                    Commands.parallel(
-                        AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt1", m_swerve, true),
-                        NamedCommands.getCommand("IntakeWrist Down Command")
-                    ),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt2", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt3", m_swerve, true),
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command")
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt4", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt5", m_swerve, true),
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command")                    
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepDepotPt6", m_swerve, true),
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Intake Command")                    
-                )
-            );
-        } catch (Exception e) {
-            System.err.println("Could not load auto: " + e.getMessage());
-            return Commands.none();
-        }
-    }
-
-
-    public static Command getLeftBumpDoubleSweepMiddle(SwerveSubsystem m_swerve) {
-        try {    
-            return Commands.sequence(
-                Commands.race(
-                    Commands.parallel(
-                        AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt1", m_swerve, true),
-                        NamedCommands.getCommand("IntakeWrist Down Command")
-                    ),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt2", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.waitSeconds(0.5),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt3", m_swerve, true),
-                    NamedCommands.getCommand("Shoot Command"),
-                    Commands.sequence(
-                        Commands.waitSeconds(1.5),
-                        NamedCommands.getCommand("Wrist Wiggle Command")
-                    ),
-                    Commands.waitSeconds(6)
-
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt4", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    Commands.parallel(
-                        NamedCommands.getCommand("Shoot Command"),
-                        Commands.sequence(
-                            Commands.waitSeconds(1.5),
-                            NamedCommands.getCommand("Wrist Wiggle Command")
-                        )
-                    ),
-                    Commands.waitSeconds(5.0)
-                ),
-                AutoUtil.loadPathPlannerPath("LeftBumpDoubleSweepMiddlePt5", m_swerve, true)
-
-            );
-        } catch (Exception e) {
-            System.err.println("Could not load auto: " + e.getMessage());
-            return Commands.none();
-        }
-    }
-
-    public static Command ChoreoTesting(SwerveSubsystem m_swerve) {
-            try {
-                return Commands.sequence(
-                    // Start sweep + intake down + intake 
-                    Commands.deadline(
-                        AutoUtil.loadChoreoPath("Sweep1", m_swerve),
-                        Commands.parallel(
-                            NamedCommands.getCommand("IntakeWrist Down Command"),
-                            NamedCommands.getCommand("Intake Command")
-                        )
-                    ),
-                    // Shoot
-                    Commands.deadline(
-                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout),
-                        NamedCommands.getCommand("Shoot Command"),
-                        NamedCommands.getCommand("Wrist Wiggle Command")
-                    ),
-                    // Sweep 2 + Intake
-                    Commands.deadline(
-                        AutoUtil.loadChoreoPath("Sweep3", m_swerve),
-                        NamedCommands.getCommand("Intake Command")
-                    ),
-                    // Shoot
-                    Commands.deadline(
-                        Commands.waitSeconds(Constants.Autos.TestingShootTimeout),
-                        NamedCommands.getCommand("Shoot Command"),
-                        NamedCommands.getCommand("Wrist Wiggle Command")
-                    ),
-                    // Sweep 3 :skull:
-                    Commands.deadline(
-                        AutoUtil.loadChoreoPath("Sweep3", m_swerve),
-                        NamedCommands.getCommand("Intake Command"),
-                        NamedCommands.getCommand("Shoot Command") //Not sure if u want passing here
-                    )
-                );
-            }
-            catch (Exception e) {
-                System.err.println("Could not load auto: " + e.getMessage());
-                return Commands.none();
-            }
-        }
+       
 }
