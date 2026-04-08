@@ -125,21 +125,18 @@ public class AutoHelper {
         return Commands.sequence(
             Commands.race(
                 Commands.parallel(
+                    NamedCommands.getCommand("IntakeWrist Down Command"),
                     AutoUtil.loadPathPlannerPath("LeftTrenchSweepPt1", m_swerve, true),
-                    NamedCommands.getCommand("IntakeWrist Down Command")
-                ),
-                NamedCommands.getCommand("Intake Command")
-            ),
-            Commands.race(
-                Commands.parallel(  
-                    AutoUtil.loadPathPlannerPath("LeftTrenchSweepTurretTrackingPt2", m_swerve, true),
-                    NamedCommands.getCommand("Shoot Command"),
                     Commands.sequence(
-                        Commands.waitSeconds(2.5),
-                        NamedCommands.getCommand("Wrist Wiggle Command")
+                        Commands.waitSeconds(6.0),
+                        Commands.parallel(
+                            NamedCommands.getCommand("Shoot Command"),
+                            Commands.waitSeconds(2.5),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
+                        )
                     )
                 ),
-                Commands.waitSeconds(6.0)
+                NamedCommands.getCommand("Intake Command")
             ),
             Commands.race(
                 AutoUtil.loadPathPlannerPath("LeftTrenchSweepMoreLoopyPt3", m_swerve, true),

@@ -48,15 +48,15 @@
     },
     {
       "anchor": {
-        "x": 6.704422253922965,
+        "x": 6.9502567760342355,
         "y": 7.291457831325301
       },
       "prevControl": {
-        "x": 6.9481586698689135,
+        "x": 7.193993191980184,
         "y": 7.235847045124927
       },
       "nextControl": {
-        "x": 6.116221196144281,
+        "x": 6.362055718255551,
         "y": 7.425661508441069
       },
       "isLocked": false,
@@ -64,16 +64,16 @@
     },
     {
       "anchor": {
-        "x": 5.953980028530669,
+        "x": 3.8708559201141224,
         "y": 7.43
       },
       "prevControl": {
-        "x": 6.195647983915984,
+        "x": 4.112523875499438,
         "y": 7.365995317828449
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftTrenchSweepPt1End"
     }
   ],
   "rotationTargets": [
@@ -84,6 +84,10 @@
     {
       "waypointRelativePos": 1.6034115138592666,
       "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 2.874200426439231,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [
