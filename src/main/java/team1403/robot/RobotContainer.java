@@ -124,7 +124,7 @@ public class RobotContainer {
     RobotModeTriggers.teleop().whileTrue(
       new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
     );
-    
+        
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     
@@ -153,33 +153,6 @@ public class RobotContainer {
         () ->false,                                         // Auto Aim
         () -> m_driverController.getHID().getBButton()      // reset gyro
     ));
-
-    // //vibration command - not tested 
-    // RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> {
-    // m_teleopTimer.reset();
-    // m_teleopTimer.start();
-    // }));
-
-    // // 140 - shiftTime = elapsed time when shift occurs
-    // // shift times remaining: 130, 105, 80, 55, 30
-    // // elapsed equivalents:    10, 35, 60, 85
-    // double[] shiftTimesElapsed = {10, 35, 60, 85};
-
-    // for (double time : shiftTimesElapsed) {
-    //   // driver: 5 seconds early
-    //   new Trigger(() -> DriverStation.isTeleopEnabled()
-    //     && m_teleopTimer.get() >= (time - 5) - 0.5
-    //     && m_teleopTimer.get() <= (time - 5) + 0.5)
-    //     .onTrue(new ControllerVibrationCommand(m_driverController.getHID(), 0.6, 0.5).asProxy()
-    //   );
-
-    //   // operator: 3 seconds early
-    //   new Trigger(() -> DriverStation.isTeleopEnabled()
-    //     && m_teleopTimer.get() >= (time - 3) - 0.5
-    //     && m_teleopTimer.get() <= (time - 3) + 0.5)
-    //     .onTrue(new ControllerVibrationCommand(m_operatorController.getHID(), 0.6, 0.5).asProxy()
-    //   );
-    // }
 
     //HOW TO NAME AUTOS: "AUTO: POSITIONING OF THE BOT"
     
