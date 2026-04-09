@@ -167,13 +167,13 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput(
         "Flywheel/Leader Stator Current", m_flywheelLeader.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput(
-        "Flywheel/Follower Stator Current",
-        m_flywheelFollower.getStatorCurrent().getValueAsDouble());
+        "Flywheel/Follower Supply Current",
+        m_flywheelFollower.getSupplyCurrent().getValueAsDouble());
     Logger.recordOutput(
-        "Flywheel/Follower2 Stator Current",
-        m_flywheelFollower2.getStatorCurrent().getValueAsDouble());
+        "Flywheel/Follower2 Supply Current",
+        m_flywheelFollower2.getSupplyCurrent().getValueAsDouble());
     Logger.recordOutput(
-        "Flywheel/Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
+        "Flywheel/Leader Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
     Logger.recordOutput(
         "Flywheel/Torque Current", m_flywheelLeader.getTorqueCurrent().getValueAsDouble());
     Logger.recordOutput(

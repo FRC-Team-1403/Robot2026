@@ -45,7 +45,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kGearRatioEncoder = (85.0 / 10.0); // 12.0 50
     public static final double kGearRatioTurretAngleRatio = (50.0 / 12.0) * (85.0 / 10.0);
 
-    public static final double kP = 5.8;
+    public static final double kP = 6.2;
     public static final double kI = 0.0;
     public static final double kD = 0.22;
     public static final double kS = 0.0;
@@ -197,7 +197,7 @@ public static final double minimumBatteryVoltage = 11.0;
       {4.89, 1.31},
       {5.2, 1.34}
     };//finished 
-    public static final double latency = 0.2;
+    public static final double latency = 0.16;
     public static final double kBackupTime = 0.2;
     public static final double maxAllowedTranslationAccel = 1000; // Untuned
     public static final double maxAllowedRotationalAccel = 1000; // Untuned

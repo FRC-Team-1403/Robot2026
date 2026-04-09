@@ -125,7 +125,16 @@ public class DefaultSwerveCommand extends Command {
     SmartDashboard.putBoolean("isFieldRelative", m_isFieldRelative);
     //if (Constants.DEBUG_MODE) SmartDashboard.putBoolean("Aimbot", m_aimbotSupplier.getAsBoolean());
 
-    m_speedLimiter = 0.3 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + (m_speedSupplier.getAsDouble() * 0.7);
+    //m_speedLimiter = 0.5 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + (m_speedSupplier.getAsDouble() * 0.7);
+
+    if(m_snipingMode.getAsDouble()==1){
+        m_speedLimiter = 0.3;
+    } else if(m_speedSupplier.getAsDouble()==1){
+        m_speedLimiter = 0.7;
+    } else {
+      m_speedLimiter = 0.5;
+    }
+    
     if (CougarUtil.getAlliance() == Alliance.Red) {
       m_targetPose = Constants.Vision.kredGoalPose;
     }
