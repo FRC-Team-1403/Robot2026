@@ -73,7 +73,7 @@ public class AutoHelper {
             }
         }
 
-    //Left ouble sweep 
+    //Left Double sweep 
     public static Command getLeftTrenchDoubleSweep(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
@@ -143,6 +143,52 @@ public class AutoHelper {
                     NamedCommands.getCommand("Intake Command")
                 ),
                 
+                Commands.parallel(
+                    NamedCommands.getCommand("Shoot Command"),
+                    NamedCommands.getCommand("Wrist Wiggle Command")
+                )    
+            );
+        } catch (Exception e) {
+            System.err.println("Could not load auto: " + e.getMessage());
+            return Commands.none();
+        }
+    }
+
+    //Left Single Sweep Double Wait
+    public static Command getLeftTrenchSingleSweepDepot(SwerveSubsystem m_swerve) {
+        try {
+            return Commands.sequence(
+                Commands.race(
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.waitSeconds(5)
+                ),
+                Commands.race(
+                    Commands.parallel(
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt1", m_swerve, true),
+                        NamedCommands.getCommand("IntakeWrist Down Command")
+                    ),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret and Shooter Ramp Up")
+                    ),
+                    NamedCommands.getCommand("Intake Command")
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt2", m_swerve, true),
+                    Commands.parallel(
+                        NamedCommands.getCommand("Shoot Command"),
+                        Commands.sequence(
+                            Commands.waitSeconds(1.5),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
+                        )
+                    )
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt3", m_swerve, true),
+                    NamedCommands.getCommand("Intake Command"),
+                    NamedCommands.getCommand("Shoot Command")                     
+                ),
+
                 Commands.parallel(
                     NamedCommands.getCommand("Shoot Command"),
                     NamedCommands.getCommand("Wrist Wiggle Command")
