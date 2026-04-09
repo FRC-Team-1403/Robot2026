@@ -197,7 +197,7 @@ public static final double minimumBatteryVoltage = 11.0;
       {4.89, 1.31},
       {5.2, 1.34}
     };//finished 
-    public static final double latency = 0.16;
+    public static final double latency = 0.2;
     public static final double kBackupTime = 0.2;
     public static final double maxAllowedTranslationAccel = 1000; // Untuned
     public static final double maxAllowedRotationalAccel = 1000; // Untuned

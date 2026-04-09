@@ -129,8 +129,8 @@ public class RobotContainer {
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     
     //Manual Wrist
-    m_operatorController.y().whileTrue(new WristPowerCommand(m_intakeWrist, 0.3)); 
-    m_operatorController.a().whileTrue(new WristPowerCommand(m_intakeWrist, -0.3)); 
+    m_operatorController.y().whileTrue(new WristPowerCommand(m_intakeWrist, 0.2)); 
+    m_operatorController.a().whileTrue(new WristPowerCommand(m_intakeWrist, -0.2)); 
     
     //Wiggle
     m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));
