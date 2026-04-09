@@ -2,7 +2,6 @@ package team1403.robot.commands.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import team1403.robot.swerve.SwerveSubsystem;
@@ -83,6 +82,10 @@ public class AutoHelper {
                         AutoUtil.loadPathPlannerPath("LeftTrenchDoubleSweepPt1", m_swerve, true),
                         NamedCommands.getCommand("IntakeWrist Down Command")
                     ),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret and Shooter Ramp Up")
+                    ),
                     NamedCommands.getCommand("Intake Command")
                 ),
                 Commands.race(
@@ -97,6 +100,10 @@ public class AutoHelper {
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("LeftTrenchDoubleSweepPt2", m_swerve, true),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret and Shooter Ramp Up")
+                    ),
                     NamedCommands.getCommand("Intake Command")
                 ),
                 

@@ -25,6 +25,7 @@ import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
+import team1403.robot.commands.TurretShooterRampUpCommand;
 import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.WristPowerCommand;
 import team1403.robot.commands.WristWiggleCommand;
@@ -79,7 +80,7 @@ public class RobotContainer {
     //autonomous coomands  
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
     NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
-    NamedCommands.registerCommand("Turret Tracking", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 0.0));
+    NamedCommands.registerCommand("Turret and Shooter Ramp Up", new TurretShooterRampUpCommand(() -> m_swerve.getState().Speeds, m_turret, m_shooter, m_swerve::getPose));
     NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake));
     NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos));
  
