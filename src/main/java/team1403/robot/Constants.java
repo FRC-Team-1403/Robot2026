@@ -174,7 +174,6 @@ public static final double minimumBatteryVoltage = 11.0;
       {16.0, 20},
       {16.5, 20},
       {17.0, 20},
-      {17.5, 20},
     }; 
   }
 
