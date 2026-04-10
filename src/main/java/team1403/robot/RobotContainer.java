@@ -163,6 +163,8 @@ public class RobotContainer {
     m_autoChooser.addOption("START AT HUB AND GO TO DEPOT: INTAKE FACES RIGHT: CORNER OF BOT TO RIGHT EDGE OF HUB", AutoHelper.getHubDepot(m_swerve));
     m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP: INTAKE FACES RIGHT", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
     m_autoChooser.addOption("RIGHT TRENCH DOUBLE SWEEP: INTAKE FACES LEFT", AutoHelper.getRightTrenchDoubleSweep(m_swerve));
+    m_autoChooser.addOption("DEPOT LEFT TRENCH SINGLE SWEEP DELAYED: INTAKE FACES RIGHT", AutoHelper.getLeftTrenchSingleSweepDepot(m_swerve));
+
   }
 
 
