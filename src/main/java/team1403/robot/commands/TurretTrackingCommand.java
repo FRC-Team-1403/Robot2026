@@ -16,24 +16,21 @@ import team1403.robot.subsystems.Shooter;
 import team1403.robot.subsystems.Turret;
 import team1403.robot.util.Blackbox;
 
-public class TurretShooterRampUpCommand extends Command {
+public class TurretTrackingCommand extends Command {
     private final Turret m_turret;
-    private final Shooter m_shooter;
     private final Supplier<Pose2d> m_pose;
     private final Supplier<ChassisSpeeds> m_chassisSupplier;
     private ChassisSpeeds m_lastVelocity;
 
-    public TurretShooterRampUpCommand(
+    public TurretTrackingCommand(
             Supplier<ChassisSpeeds> chassisSupplier,
             Turret turret,
-            Shooter shooter,
             Supplier<Pose2d> pose) {
         m_chassisSupplier = chassisSupplier;
         m_turret = turret;
-        m_shooter = shooter;
         m_pose = pose;
         m_lastVelocity = new ChassisSpeeds();
-        addRequirements(shooter, turret);
+        addRequirements(turret);
     }
 
     @Override
@@ -84,16 +81,10 @@ public class TurretShooterRampUpCommand extends Command {
                 Constants.Turret.kMaxAngleDegrees);
         m_turret.setSetpoint(turretAngle);
 
-        //LERP flywheel and hood speed/angle
-        double flywheelRPM = lerp(Constants.Shooter.distanceTable, projectedDistance);
+        
 
-        //Set flywheel
-        m_shooter.setFlywheelTargetRPM(flywheelRPM);
-
-        //Calculate shot stability
-        double translationDelta = 50 * Math.hypot(robotVelocity.vxMetersPerSecond - m_lastVelocity.vxMetersPerSecond, robotVelocity.vyMetersPerSecond - m_lastVelocity.vyMetersPerSecond);
-        double rotationDelta = 50 * Math.abs(robotVelocity.omegaRadiansPerSecond - m_lastVelocity.omegaRadiansPerSecond);
-
+    
+        
         //Update values
         m_lastVelocity = robotVelocity;
 
@@ -105,16 +96,12 @@ public class TurretShooterRampUpCommand extends Command {
         Logger.recordOutput("TurretShooterRampUpCommand/FieldAngleToGoal", fieldAngleToGoal);
         Logger.recordOutput("TurretShooterRampUpCommand/TurretAngle", turretAngle);
         Logger.recordOutput("TurretShooterRampUpCommand/ProjectedDistance", projectedDistance);
-        Logger.recordOutput("TurretShooterRampUpCommand/FlywheelRPM", flywheelRPM);
-        Logger.recordOutput("TurretShooterRampUpCommand/Transational Accel", translationDelta);
-        Logger.recordOutput("TurretShooterRampUpCommand/Rotational Accel", rotationDelta);
         Logger.recordOutput("TurretShooterRampUpCommand/Turret Posistion", new Pose2d(turretPivotField.getX(), turretPivotField.getY(), new Rotation2d(turretAngle*Math.PI/180).plus(robotPose.getRotation())));
     }
 
     //Should never run (Default Command)
     @Override
     public void end(boolean interrupted) {
-        m_shooter.stop();
     }
 
     //Should never run (Default Command)

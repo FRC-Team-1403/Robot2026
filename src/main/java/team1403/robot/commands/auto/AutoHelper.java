@@ -84,7 +84,7 @@ public class AutoHelper {
                     ),
                     Commands.sequence(
                         Commands.waitSeconds(3),
-                        NamedCommands.getCommand("Turret and Shooter Ramp Up")
+                        NamedCommands.getCommand("Turret Ramp Up")
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),
@@ -102,7 +102,7 @@ public class AutoHelper {
                     AutoUtil.loadPathPlannerPath("LeftTrenchDoubleSweepPt2", m_swerve, true),
                     Commands.sequence(
                         Commands.waitSeconds(3),
-                        NamedCommands.getCommand("Turret and Shooter Ramp Up")
+                        NamedCommands.getCommand("Turret Ramp Up")
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),
@@ -169,7 +169,7 @@ public class AutoHelper {
                     ),
                     Commands.sequence(
                         Commands.waitSeconds(3),
-                        NamedCommands.getCommand("Turret and Shooter Ramp Up")
+                        NamedCommands.getCommand("Turret Ramp Up")
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),

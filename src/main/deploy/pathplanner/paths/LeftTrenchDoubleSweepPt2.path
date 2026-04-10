@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.560328102710413,
-        "y": 7.586661911554922
+        "x": 3.301554921540655,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3332439555734177,
-        "y": 7.482101928200564
+        "x": 3.07447077440366,
+        "y": 7.395440016645642
       },
       "isLocked": false,
       "linkedName": "LeftTrenchDoubleSweepPt1End"
@@ -20,12 +20,12 @@
         "y": 7.2890727532097
       },
       "prevControl": {
-        "x": 4.996519258202567,
-        "y": 7.793680456490727
+        "x": 4.91888730385164,
+        "y": 7.651355206847361
       },
       "nextControl": {
-        "x": 7.190119104772509,
-        "y": 6.9710805140269985
+        "x": 7.219795188166342,
+        "y": 7.065669563567254
       },
       "isLocked": false,
       "linkedName": null
@@ -78,6 +78,10 @@
   ],
   "rotationTargets": [
     {
+      "waypointRelativePos": 0.8272921108742038,
+      "rotationDegrees": 0.0
+    },
+    {
       "waypointRelativePos": 1.4328358208955094,
       "rotationDegrees": -90.0
     },
@@ -116,7 +120,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
