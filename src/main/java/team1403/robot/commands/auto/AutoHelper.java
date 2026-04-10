@@ -106,7 +106,6 @@ public class AutoHelper {
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                
                 Commands.parallel(
                     NamedCommands.getCommand("Shoot Command"),
                     NamedCommands.getCommand("Wrist Wiggle Command")
@@ -117,7 +116,7 @@ public class AutoHelper {
             return Commands.none();
         }
     }
-    //Right Trench double sweep normal waiting to shoot after path 
+    //Right Double Sweep
     public static Command getRightTrenchDoubleSweep(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
@@ -125,6 +124,10 @@ public class AutoHelper {
                     Commands.parallel(
                         AutoUtil.loadPathPlannerPath("RightTrenchDoubleSweepPt1", m_swerve, true),
                         NamedCommands.getCommand("IntakeWrist Down Command")
+                    ),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret Ramp Up")
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),
@@ -140,9 +143,12 @@ public class AutoHelper {
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("RightTrenchDoubleSweepPt2", m_swerve, true),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret Ramp Up")
+                    ),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                
                 Commands.parallel(
                     NamedCommands.getCommand("Shoot Command"),
                     NamedCommands.getCommand("Wrist Wiggle Command")
@@ -154,7 +160,7 @@ public class AutoHelper {
         }
     }
 
-    //Left Single Sweep Double Wait
+    //Left Single Sweep Double Wait Depot
     public static Command getLeftTrenchSingleSweepDepot(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
