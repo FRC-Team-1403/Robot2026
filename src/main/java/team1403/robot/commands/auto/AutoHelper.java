@@ -160,14 +160,14 @@ public class AutoHelper {
         }
     }
 
-    //Left Single Sweep Double Wait Depot
-    public static Command getLeftTrenchSingleSweepDepot(SwerveSubsystem m_swerve) {
+    //Delayed Single Sweep
+    public static Command getLeftTrenchSingleSweepDelayed(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
                 NamedCommands.getCommand("IntakeWrist Down Command"),
                 Commands.race(
                     NamedCommands.getCommand("Shoot Command"),
-                    Commands.waitSeconds(2)
+                    Commands.waitSeconds(3.5)
                 ),
                 Commands.race(
                     Commands.parallel(
@@ -179,26 +179,14 @@ public class AutoHelper {
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt2", m_swerve, true),
-                    Commands.parallel(
-                        NamedCommands.getCommand("Shoot Command"),
-                        Commands.sequence(
-                            Commands.waitSeconds(1.5),
-                            NamedCommands.getCommand("Wrist Wiggle Command")
-                        )
-                    )
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt3", m_swerve, true),
-                    NamedCommands.getCommand("Intake Command"),
-                    NamedCommands.getCommand("Shoot Command")                     
-                ),
 
                 Commands.parallel(
                     NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command")
-                )    
+                    Commands.sequence(
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Wiggle Command")
+                    )
+                ) 
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
