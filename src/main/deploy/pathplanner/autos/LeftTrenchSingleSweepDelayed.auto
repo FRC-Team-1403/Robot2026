@@ -9,18 +9,6 @@
           "data": {
             "pathName": "LeftTrenchSingleSweepDepotPt1"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftTrenchSingleSweepDepotPt2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftTrenchSingleSweepDepotPt3"
-          }
         }
       ]
     }

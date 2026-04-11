@@ -76,6 +76,7 @@ public class IntakeWrist extends SubsystemBase {
 
     currentPosition = getAbsolutePosition();
     setpoint = currentPosition;
+    m_intakeWristEncoder.setPosition(m_intakeWristEncoder.getAbsolutePosition().getValueAsDouble());
   }
 
   public double getAbsolutePosition() {
