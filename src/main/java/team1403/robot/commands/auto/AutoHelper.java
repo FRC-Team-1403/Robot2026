@@ -164,14 +164,14 @@ public class AutoHelper {
     public static Command getLeftTrenchSingleSweepDepot(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
+                NamedCommands.getCommand("IntakeWrist Down Command"),
                 Commands.race(
                     NamedCommands.getCommand("Shoot Command"),
-                    Commands.waitSeconds(5)
+                    Commands.waitSeconds(4)
                 ),
                 Commands.race(
                     Commands.parallel(
-                        AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt1", m_swerve, true),
-                        NamedCommands.getCommand("IntakeWrist Down Command")
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt1", m_swerve, true)
                     ),
                     Commands.sequence(
                         Commands.waitSeconds(3),

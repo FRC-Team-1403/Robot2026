@@ -162,16 +162,16 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
             .withYawRate(() -> getPigeon2().getAngularVelocityZWorld().getValue().in(RadiansPerSecond));
 
         m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam1.0")
-                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withDeviations(VecBuilder.fill(2, 2, 5))
                                                 .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera1)));
         m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam2.0")
-                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withDeviations(VecBuilder.fill(2, 2, 5))
                                                 .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera2)));
         m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam3.0")
-                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withDeviations(VecBuilder.fill(2, 2, 5))
                                                 .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera3)));
         m_cameras.add(new AprilTagCamera(config.withName("ThriftyCam4.0")
-                                                .withDeviations(VecBuilder.fill(2, 2, 10))
+                                                .withDeviations(VecBuilder.fill(2, 2, 5))
                                                 .withTransform(() -> Constants.Vision.kCameraTransfromThriftyCamera4)));
 
         SmartDashboard.putData("Gyro", super.getPigeon2());

@@ -122,9 +122,9 @@ public class RobotContainer {
     //Shooting Command
     //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
     
-    RobotModeTriggers.teleop().whileTrue(
-      new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
-    );
+    // RobotModeTriggers.teleop().whileTrue(
+    //   new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
+    // );
         
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));

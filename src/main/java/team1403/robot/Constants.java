@@ -31,8 +31,8 @@ public static final double minimumBatteryVoltage = 11.0;
 
   public static class ScoringLocation{
     public static final Translation2d kHubPosition = new Translation2d(4.63, 4.035);
-    public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6.5);
-    public static final Translation2d kFeedBottomPosition = new Translation2d(3, 1.5);
+    public static final Translation2d kFeedTopPosition    = new Translation2d(3, 6);
+    public static final Translation2d kFeedBottomPosition = new Translation2d(3, 2);
   }
 
   public static class Turret {
@@ -134,7 +134,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kG = 0.2;
 
 
-    public static final double kMagnetOffset = -0.055;
+    public static final double kMagnetOffset = -0.057;
     public static final double kFixedHood = 20;
 
     public static final double[][] distanceTable = {
@@ -327,7 +327,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = 0.0;
+    public static final double kMagnetOffset = -0.01;
     public static final double kGearRatioEncoder = 23.4/1.0;
     public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
     public static final double kAbsoluteGearRatio = 2.0/1.0;
