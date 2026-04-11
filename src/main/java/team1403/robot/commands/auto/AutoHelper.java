@@ -167,7 +167,7 @@ public class AutoHelper {
                 NamedCommands.getCommand("IntakeWrist Down Command"),
                 Commands.race(
                     NamedCommands.getCommand("Shoot Command"),
-                    Commands.waitSeconds(4)
+                    Commands.waitSeconds(2)
                 ),
                 Commands.race(
                     Commands.parallel(
