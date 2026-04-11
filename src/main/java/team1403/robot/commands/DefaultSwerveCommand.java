@@ -130,9 +130,9 @@ public class DefaultSwerveCommand extends Command {
     if(m_snipingMode.getAsDouble()==1){
         m_speedLimiter = 0.2;
     } else if(m_speedSupplier.getAsDouble()==1){
-        m_speedLimiter = 0.5;
+        m_speedLimiter = 0.6;
     } else {
-      m_speedLimiter = 0.35;
+      m_speedLimiter = 0.5;
     }
     
     if (CougarUtil.getAlliance() == Alliance.Red) {
