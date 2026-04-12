@@ -155,39 +155,39 @@ public class Shooter extends SubsystemBase {
       m_flywheelLeader.setControl(m_flywheelDutyCycleRequest);
     }
 
-    Logger.recordOutput("Flywheel/Target RPM", m_flywheelTargetRPM);
-    Logger.recordOutput("Flywheel/Leader RPM", getFlywheelLeaderRPM());
-    Logger.recordOutput("Flywheel/Follower RPM", getFlywheelFollowerRPM());
-    Logger.recordOutput("Flywheel/Follower2 RPM", getFlywheelFollower2RPM());
-    Logger.recordOutput("Flywheel/RPM Error", getFlywheelRPMError());
-    Logger.recordOutput("Flywheel/At Speed", isFlywheelAtSpeed());
-    Logger.recordOutput("Flywheel/Target Duty Cycle", m_flywheelTargetDutyCycle);
-    Logger.recordOutput(
-        "Flywheel/Leader Voltage", m_flywheelLeader.getMotorVoltage().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Leader Stator Current", m_flywheelLeader.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Follower Supply Current",
-        m_flywheelFollower.getSupplyCurrent().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Follower2 Supply Current",
-        m_flywheelFollower2.getSupplyCurrent().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Leader Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Torque Current", m_flywheelLeader.getTorqueCurrent().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Closed Loop Error", m_flywheelLeader.getClosedLoopError().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Closed Loop Output", m_flywheelLeader.getClosedLoopOutput().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Duty Cycle", m_flywheelLeader.getDutyCycle().getValueAsDouble() * 1000);
-    Logger.recordOutput(
-        "Flywheel/Leader Temp", m_flywheelLeader.getDeviceTemp().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Follower Temp", m_flywheelFollower.getDeviceTemp().getValueAsDouble());
-    Logger.recordOutput(
-        "Flywheel/Follower2 Temp", m_flywheelFollower2.getDeviceTemp().getValueAsDouble());
-    Logger.recordOutput("Flywheel/Using Velocity Control", m_flywheelUseVelocityControl);
+    // Logger.recordOutput("Flywheel/Target RPM", m_flywheelTargetRPM);
+    // Logger.recordOutput("Flywheel/Leader RPM", getFlywheelLeaderRPM());
+    // Logger.recordOutput("Flywheel/Follower RPM", getFlywheelFollowerRPM());
+    // Logger.recordOutput("Flywheel/Follower2 RPM", getFlywheelFollower2RPM());
+    // Logger.recordOutput("Flywheel/RPM Error", getFlywheelRPMError());
+    // Logger.recordOutput("Flywheel/At Speed", isFlywheelAtSpeed());
+    // Logger.recordOutput("Flywheel/Target Duty Cycle", m_flywheelTargetDutyCycle);
+    // Logger.recordOutput(
+    //     "Flywheel/Leader Voltage", m_flywheelLeader.getMotorVoltage().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Leader Stator Current", m_flywheelLeader.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Follower Supply Current",
+    //     m_flywheelFollower.getSupplyCurrent().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Follower2 Supply Current",
+    //     m_flywheelFollower2.getSupplyCurrent().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Leader Supply Current", m_flywheelLeader.getSupplyCurrent().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Torque Current", m_flywheelLeader.getTorqueCurrent().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Closed Loop Error", m_flywheelLeader.getClosedLoopError().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Closed Loop Output", m_flywheelLeader.getClosedLoopOutput().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Duty Cycle", m_flywheelLeader.getDutyCycle().getValueAsDouble() * 1000);
+    // Logger.recordOutput(
+    //     "Flywheel/Leader Temp", m_flywheelLeader.getDeviceTemp().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Follower Temp", m_flywheelFollower.getDeviceTemp().getValueAsDouble());
+    // Logger.recordOutput(
+    //     "Flywheel/Follower2 Temp", m_flywheelFollower2.getDeviceTemp().getValueAsDouble());
+    // Logger.recordOutput("Flywheel/Using Velocity Control", m_flywheelUseVelocityControl);
   }
 }

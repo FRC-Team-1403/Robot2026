@@ -77,6 +77,8 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
     m_poseEstimator = new PhotonPoseEstimator(Constants.Vision.kFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_cameraTransform.get());
     m_poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.AVERAGE_BEST_TARGETS);
 
+    m_poseEstimator.setRobotToCameraTransform(m_cameraTransform.get());
+
     m_cameraAlert = new Alert("Photon Camera " + config.getName() + " Disconnected!", AlertType.kError);
   }
 
@@ -151,7 +153,6 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
   public void periodic() {
 
     m_poseEstimator.setReferencePose(m_referencePose.get());
-    m_poseEstimator.setRobotToCameraTransform(m_cameraTransform.get());
 
     if(m_cameraSim != null) {
       VisionSimUtil.adjustCamera(m_cameraSim, m_cameraTransform.get());
@@ -175,7 +176,7 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
           Pose3d robot_pose_transformed = robot_pose3d.transformBy(m_cameraTransform.get());
           double[] ambiguities = new double[getTargets().size()];
 
-          Logger.recordOutput(m_camera.getName() + "/Camera Transform", robot_pose_transformed);
+          //Logger.recordOutput(m_camera.getName() + "/Camera Transform", robot_pose_transformed);
 
           m_visionTargets.clear();
           m_corners.clear();
@@ -191,16 +192,16 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
               m_corners.add(new Translation2d(c.x, c.y));
           }
 
-          Logger.recordOutput(m_camera.getName() + "/Vision Targets", m_visionTargets.toArray(new Pose3d[m_visionTargets.size()]));
-          Logger.recordOutput(m_camera.getName() + "/Corners", m_corners.toArray(new Translation2d[m_corners.size()]));
-          Logger.recordOutput(m_camera.getName() + "/PoseAmbiguity", ambiguities.clone());
+          //Logger.recordOutput(m_camera.getName() + "/Vision Targets", m_visionTargets.toArray(new Pose3d[m_visionTargets.size()]));
+          //Logger.recordOutput(m_camera.getName() + "/Corners", m_corners.toArray(new Translation2d[m_corners.size()]));
+          //Logger.recordOutput(m_camera.getName() + "/PoseAmbiguity", ambiguities.clone());
         }
 
-        Logger.recordOutput(m_camera.getName() + "/hasPose", hasPose());
+        //Logger.recordOutput(m_camera.getName() + "/hasPose", hasPose());
         
         if(hasPose())
         {
-          Logger.recordOutput(m_camera.getName() + "/Combined Area", getTagAreas());
+          //Logger.recordOutput(m_camera.getName() + "/Combined Area", getTagAreas());
           Logger.recordOutput(m_camera.getName() + "/Pose3d", getPose());
         }
       }

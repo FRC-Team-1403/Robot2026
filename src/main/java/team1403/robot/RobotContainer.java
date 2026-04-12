@@ -22,6 +22,7 @@ import team1403.robot.commands.ControllerVibrationCommand;
 import team1403.robot.commands.DefaultSwerveCommand;
 import team1403.robot.commands.DriveWheelCharacterization;
 import team1403.robot.commands.InSpinShootCommand;
+//import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
@@ -121,17 +122,33 @@ public class RobotContainer {
     
     //Shooting Command
     //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
+    // m_operatorController.rightBumper().whileTrue((new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_turret, 3600, 5800, 1510, 20, 90)));
     
-    RobotModeTriggers.teleop().whileTrue(
-      new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
-    );
+    
+    // RobotModeTriggers.teleop().whileFalse(
+    //   new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
+    // );
+
+    m_operatorController.rightBumper().whileTrue(new InSpinShootCommand(
+    m_indexer, m_spindexer, m_shooter, m_shooterHood, m_turret, 3600, 5800, 1490, 20, 90));
+
+    m_operatorController.rightBumper().onFalse(new LERPShooter(
+        () -> m_swerve.getState().Speeds,
+        m_turret,
+        m_indexer,
+        m_spindexer,
+        m_shooter,
+        m_shooterHood,
+        m_swerve::getPose,
+        () -> m_operatorController.getHID().getRightTriggerAxis()));
         
+    
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
     
     //Manual Wrist
-    m_operatorController.y().whileTrue(new WristPowerCommand(m_intakeWrist, 0.2)); 
-    m_operatorController.a().whileTrue(new WristPowerCommand(m_intakeWrist, -0.2)); 
+    m_operatorController.y().whileTrue(new WristPowerCommand(m_intakeWrist, 0.1)); 
+    m_operatorController.a().whileTrue(new WristPowerCommand(m_intakeWrist, -0.1)); 
     
     //Wiggle
     m_operatorController.leftBumper().whileTrue(new WristWiggleCommand(m_intakeWrist, m_intake));

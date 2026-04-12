@@ -154,13 +154,13 @@ public class Turret extends SubsystemBase {
     }
 
     Logger.recordOutput("Turret/Turret Current Angle", currentAngle);
-    Logger.recordOutput("Turret/Absolute", getAbsolutePosition());
-    Logger.recordOutput("Turret/Setpoint", setpoint);
-    Logger.recordOutput("Turret/At Setpoint", atSetpoint());
-    Logger.recordOutput("Turret/Position Error", smallestError);
-    Logger.recordOutput("Turret/Relative", m_turretMotor.getPosition().getValueAsDouble());
-    Logger.recordOutput("Turret/StatorCurrent", m_turretMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Turret/SupplyCurrent", m_turretMotor.getSupplyCurrent().getValueAsDouble());
-    Logger.recordOutput("Turret/Temperature", m_turretMotor.getDeviceTemp().getValueAsDouble());
+    // Logger.recordOutput("Turret/Absolute", getAbsolutePosition());
+    // Logger.recordOutput("Turret/Setpoint", setpoint);
+    // Logger.recordOutput("Turret/At Setpoint", atSetpoint());
+    // Logger.recordOutput("Turret/Position Error", smallestError);
+    // Logger.recordOutput("Turret/Relative", m_turretMotor.getPosition().getValueAsDouble());
+    // Logger.recordOutput("Turret/StatorCurrent", m_turretMotor.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput("Turret/SupplyCurrent", m_turretMotor.getSupplyCurrent().getValueAsDouble());
+    // Logger.recordOutput("Turret/Temperature", m_turretMotor.getDeviceTemp().getValueAsDouble());
   }
 }

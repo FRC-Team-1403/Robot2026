@@ -116,12 +116,12 @@ public class ShooterHood extends SubsystemBase {
     m_hoodMotor.setControl(m_positionVoltageRequest.withPosition(setpointRotations));
 
     Logger.recordOutput("Hood/Shooter Hood Current Angle", currentAngle);
-    Logger.recordOutput("Hood/Absolute", getAbsolutePosition());
-    Logger.recordOutput("Hood/Setpoint", setpoint);
-    Logger.recordOutput("Hood/At Setpoint", atSetpoint());
-    Logger.recordOutput("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
-    Logger.recordOutput("Hood/StatorCurrent", m_hoodMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Hood/SupplyCurrent", m_hoodMotor.getSupplyCurrent().getValueAsDouble());
-    Logger.recordOutput("Hood/Device Temperature Temperature", m_hoodMotor.getDeviceTemp().getValueAsDouble());
+    // Logger.recordOutput("Hood/Absolute", getAbsolutePosition());
+    // Logger.recordOutput("Hood/Setpoint", setpoint);
+    // Logger.recordOutput("Hood/At Setpoint", atSetpoint());
+    // Logger.recordOutput("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
+    // Logger.recordOutput("Hood/StatorCurrent", m_hoodMotor.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput("Hood/SupplyCurrent", m_hoodMotor.getSupplyCurrent().getValueAsDouble());
+    // Logger.recordOutput("Hood/Device Temperature Temperature", m_hoodMotor.getDeviceTemp().getValueAsDouble());
   }
 }
