@@ -95,22 +95,15 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final String kCamera3 = "ThriftyCam3.0";
     public static final String kCamera4 = "ThriftyCam4.0";
   
-    //ETAASH METHOD + MATCHED TO THRIFTY. FIX THESE:
     public static final Translation3d kCameraOffset = new Translation3d();
 
     public static final boolean kExtraVisionDebugInfo = true;
-
-    //public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(Units.inchesToMeters(-14.554),Units.inchesToMeters(-9.034), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(278.3)));
-    //public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(Units.inchesToMeters(-11.73),Units.inchesToMeters(-11.57), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(180)));
-    //public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(-12.75),Units.inchesToMeters(8), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(0)));
-    //public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(-14.4),Units.inchesToMeters(10.76), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(99.7)));
 
     public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(Units.inchesToMeters(-9.034),Units.inchesToMeters(-14.554), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(278.3)));
     public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(Units.inchesToMeters(-11.57),Units.inchesToMeters(-11.73), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(180)));
     public static final Transform3d kCameraTransfromThriftyCamera3 = new Transform3d(Units.inchesToMeters(-8),Units.inchesToMeters(12.75), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(0)));
     public static final Transform3d kCameraTransfromThriftyCamera4 = new Transform3d(Units.inchesToMeters(-10.76),Units.inchesToMeters(14.4), Units.inchesToMeters(20.25), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(99.7)));
 
-    //NEW COMBINED VISION SUBSYSTEM
   }
 
   public static class ShooterHood {

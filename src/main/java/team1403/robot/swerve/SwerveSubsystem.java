@@ -256,7 +256,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
                 addVisionMeasurement(
                     camera.getPose().toPose2d(),
                     camera.getTimestamp()
-                    //camera.getEstStdv()
                 );
             }
         }
