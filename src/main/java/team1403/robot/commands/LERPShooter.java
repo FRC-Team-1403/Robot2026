@@ -1,5 +1,6 @@
 package team1403.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -32,6 +33,7 @@ public class LERPShooter extends Command {
     private final Supplier<Pose2d> m_pose;
     private final DoubleSupplier m_shoot;
     private final Supplier<ChassisSpeeds> m_chassisSupplier;
+    private final BooleanSupplier m_safeShot;
     private boolean isShooting;
     private boolean wasShooting;
     private Timer backupTimer;
@@ -45,7 +47,8 @@ public class LERPShooter extends Command {
             Shooter shooter,
             ShooterHood hood,
             Supplier<Pose2d> pose,
-            DoubleSupplier shoot) {
+            DoubleSupplier shoot,
+            BooleanSupplier safeShot) {
         m_chassisSupplier = chassisSupplier;
         m_turret = turret;
         m_indexer = indexer;
@@ -54,6 +57,7 @@ public class LERPShooter extends Command {
         m_shooterHood = hood;
         m_pose = pose;
         m_shoot = shoot;
+        m_safeShot = safeShot;
         isShooting = false;
         wasShooting = false;
         backupTimer = new Timer();
@@ -68,6 +72,17 @@ public class LERPShooter extends Command {
 
     @Override
     public void execute() {
+        if (m_safeShot.getAsBoolean()) {
+            m_shooter.setFlywheelTargetRPM(1490);
+            m_shooterHood.setSetpoint(20);
+            m_turret.setSetpoint(90);
+            if (m_shooter.isFlywheelAtSpeed() && m_shooterHood.atSetpoint() && m_turret.atSetpoint()) {
+                m_indexer.setIndexerRPM(3600);
+                m_spindexer.setSpindexerRPM(5800);
+            }
+            return;
+        }
+
         //Get updated values
         Pose2d robotPose = m_pose.get();
         ChassisSpeeds robotVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(m_chassisSupplier.get(), robotPose.getRotation());

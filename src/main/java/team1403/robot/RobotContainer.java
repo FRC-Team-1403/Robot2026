@@ -80,7 +80,7 @@ public class RobotContainer {
 
     //autonomous coomands  
     NamedCommands.registerCommand("Intake Command", new IntakeCommand(m_intake, 1));
-    NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds,m_turret,m_indexer,m_spindexer,m_shooter,m_shooterHood,m_swerve::getPose,() -> 1.0));
+    NamedCommands.registerCommand("Shoot Command", new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> 1.0, () -> false));
     NamedCommands.registerCommand("Turret Ramp Up", new TurretTrackingCommand(() -> m_swerve.getState().Speeds, m_turret, m_swerve::getPose));
     NamedCommands.registerCommand("Wrist Wiggle Command", new WristWiggleCommand(m_intakeWrist, m_intake));
     NamedCommands.registerCommand("IntakeWrist Down Command", new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos));
@@ -122,26 +122,11 @@ public class RobotContainer {
     
     //Shooting Command
     //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
-    // m_operatorController.rightBumper().whileTrue((new InSpinShootCommand(m_indexer, m_spindexer, m_shooter, m_shooterHood, m_turret, 3600, 5800, 1510, 20, 90)));
     
     
-    // RobotModeTriggers.teleop().whileFalse(
-    //   new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis())
-    // );
-
-    m_operatorController.rightBumper().whileTrue(new InSpinShootCommand(
-    m_indexer, m_spindexer, m_shooter, m_shooterHood, m_turret, 3600, 5800, 1490, 20, 90));
-
-    m_operatorController.rightBumper().onFalse(new LERPShooter(
-        () -> m_swerve.getState().Speeds,
-        m_turret,
-        m_indexer,
-        m_spindexer,
-        m_shooter,
-        m_shooterHood,
-        m_swerve::getPose,
-        () -> m_operatorController.getHID().getRightTriggerAxis()));
-        
+  RobotModeTriggers.teleop().whileTrue(
+    new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis(), () -> m_operatorController.getHID().getRightBumper())
+  );
     
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));
