@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import team1403.robot.commands.ControllerVibrationCommand;
+
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -44,25 +44,26 @@ public class Robot extends LoggedRobot {
 
     double now = m_teleopTimer.get();
 
-    for (int i = 0; i < shiftTimesElapsed.length; i++) {
-      double time = shiftTimesElapsed[i];
+    // for (int i = 0; i < shiftTimesElapsed.length; i++) {
+    //   double time = shiftTimesElapsed[i];
 
-      // driver: 5 seconds early
-      if (!driverTriggered[i] && now >= time - 5) {
-        driverTriggered[i] = true;
-        new ControllerVibrationCommand(
-          m_driverController, 0.28, 1.0
-        ).schedule();
-      }
+    //   // driver: 5 seconds early
+    //   if (!driverTriggered[i] && now >= time - 5) {
+    //     driverTriggered[i] = true;
+    //     new ControllerVibrationCommand(
+    //       m_driverController, 0.28, 1.0
+    //     ).schedule();
+    //   }
 
-      // operator: 3 seconds early
-      if (!operatorTriggered[i] && now >= time - 3) {
-        operatorTriggered[i] = true;
-        new ControllerVibrationCommand(
-          m_operatorController, 0.28, 1.0
-        ).schedule();
-      }
-    }
+    //   // operator: 3 seconds early
+    //   if (!operatorTriggered[i] && now >= time - 3) {
+    //     operatorTriggered[i] = true;
+    //     new ControllerVibrationCommand(
+    //       m_operatorController, 0.28, 1.0
+    //     ).schedule();
+    //   }
+    // }
+
   }
 
   @Override
