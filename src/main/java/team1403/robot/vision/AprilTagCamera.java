@@ -163,7 +163,9 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
 
     m_cameraAlert.set(!m_camera.isConnected());
 
-    for(PhotonPipelineResult result : m_camera.getAllUnreadResults())
+    List<PhotonPipelineResult> m_poses = m_camera.getAllUnreadResults();
+
+    for(PhotonPipelineResult result : m_poses)
     {
       //fixme: indentation
         m_estPos = m_poseEstimator.update(result).orElse(null);

@@ -86,9 +86,9 @@ public class Spindexer extends SubsystemBase {
     // Logger.recordOutput("Spindexer/At Speed", isSpindexerAtSpeed());
     // Logger.recordOutput("Spindexer/Voltage", m_spindexerMotor.getMotorVoltage().getValueAsDouble());
     // Logger.recordOutput(
-    //     "Spindexer/Stator Current", m_spindexerMotor.getStatorCurrent().getValueAsDouble());
-    // Logger.recordOutput(
-    //     "Spindexer/Supply Current", m_spindexerMotor.getSupplyCurrent().getValueAsDouble());
+    //      "Spindexer/Stator Current", m_spindexerMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput(
+         "Spindexer/Supply Current", m_spindexerMotor.getSupplyCurrent().getValueAsDouble());
     // Logger.recordOutput(
     //     "Spindexer/Torque Current", m_spindexerMotor.getTorqueCurrent().getValueAsDouble());
     // Logger.recordOutput(

@@ -160,7 +160,7 @@ public class Turret extends SubsystemBase {
     // Logger.recordOutput("Turret/Position Error", smallestError);
     // Logger.recordOutput("Turret/Relative", m_turretMotor.getPosition().getValueAsDouble());
     // Logger.recordOutput("Turret/StatorCurrent", m_turretMotor.getStatorCurrent().getValueAsDouble());
-    // Logger.recordOutput("Turret/SupplyCurrent", m_turretMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("Turret/SupplyCurrent", m_turretMotor.getSupplyCurrent().getValueAsDouble());
     // Logger.recordOutput("Turret/Temperature", m_turretMotor.getDeviceTemp().getValueAsDouble());
   }
 }

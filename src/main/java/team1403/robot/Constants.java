@@ -97,7 +97,7 @@ public static final double minimumBatteryVoltage = 11.0;
   
     public static final Translation3d kCameraOffset = new Translation3d();
 
-    public static final boolean kExtraVisionDebugInfo = true;
+    public static final boolean kExtraVisionDebugInfo = false;
 
     public static final Transform3d kCameraTransfromThriftyCamera1 = new Transform3d(Units.inchesToMeters(-9.034),Units.inchesToMeters(-14.554), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-18), Math.toRadians(278.3)));
     public static final Transform3d kCameraTransfromThriftyCamera2 = new Transform3d(Units.inchesToMeters(-11.57),Units.inchesToMeters(-11.73), Units.inchesToMeters(13.72), new Rotation3d(0,Math.toRadians(-23), Math.toRadians(180)));
@@ -279,7 +279,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kS = 0.10;
     public static final double kV = 0.12;
     public static final double kA = 2.0;
-    public static final double m_indexerRPM = 3600;
+    public static final double m_indexerRPM = 3877 ;
 
   }
 

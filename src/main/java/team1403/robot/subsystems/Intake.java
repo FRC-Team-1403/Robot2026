@@ -127,7 +127,7 @@ public class Intake extends SubsystemBase{
         // Logger.recordOutput("Intake/Target Duty Cycle", m_intakeTargetDutyCycle);
         // Logger.recordOutput("Intake/Leader Voltage", m_intake.getMotorVoltage().getValueAsDouble());
         // Logger.recordOutput("Intake/Leader Stator Current", m_intake.getStatorCurrent().getValueAsDouble());
-        // Logger.recordOutput("Intake/Supply Current", m_intake.getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Intake/Leader Supply Current", m_intake.getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Torque Current", m_intake.getTorqueCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Closed Loop Error", m_intake.getClosedLoopError().getValueAsDouble());
         // Logger.recordOutput("Intake/Closed Loop Output", m_intake.getClosedLoopOutput().getValueAsDouble());
@@ -137,7 +137,7 @@ public class Intake extends SubsystemBase{
         // Logger.recordOutput("Intake/Follower Stator Current", m_intakeFollower.getStatorCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Follower Duty Cycle", m_intakeFollower.getDutyCycle().getValueAsDouble() * 1000);
         // Logger.recordOutput("Intake/Follower Voltage", m_intakeFollower.getMotorVoltage().getValueAsDouble());
-        // Logger.recordOutput("Intake/Follower Supply Current", m_intakeFollower.getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Intake/Follower Supply Current", m_intakeFollower.getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Follower Torque Current", m_intakeFollower.getTorqueCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Follower Temp", m_intakeFollower.getDeviceTemp().getValueAsDouble());
         // Logger.recordOutput("Intake/Follower RPM", m_intakeFollower.getVelocity().getValueAsDouble() * 60.0 / Constants.Intake.intakeGearRatio);

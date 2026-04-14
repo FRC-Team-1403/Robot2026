@@ -53,6 +53,8 @@ public class ShooterHood extends SubsystemBase {
     m_hoodMotor.getConfigurator().apply(hoodMotorConfig);
     m_hoodMotor.getConfigurator().apply(hoodPIDConfigs);
 
+    m_hoodMotor.setPosition(0);
+
     currentAngle = getHoodAngle();
     setpoint = currentAngle;
   }
@@ -101,7 +103,7 @@ public class ShooterHood extends SubsystemBase {
     // Logger.recordOutput("Hood/At Setpoint", atSetpoint());
     // Logger.recordOutput("Hood/Relative", m_hoodMotor.getPosition().getValueAsDouble());
     // Logger.recordOutput("Hood/StatorCurrent", m_hoodMotor.getStatorCurrent().getValueAsDouble());
-    // Logger.recordOutput("Hood/SupplyCurrent", m_hoodMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("Hood/SupplyCurrent", m_hoodMotor.getSupplyCurrent().getValueAsDouble());
     // Logger.recordOutput("Hood/Device Temperature Temperature", m_hoodMotor.getDeviceTemp().getValueAsDouble());
   }
 }
