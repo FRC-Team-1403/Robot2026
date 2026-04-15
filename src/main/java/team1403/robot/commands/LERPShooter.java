@@ -37,7 +37,6 @@ public class LERPShooter extends Command {
     private boolean isShooting;
     private boolean wasShooting;
     private Timer backupTimer;
-    private ChassisSpeeds m_lastVelocity;
 
     public LERPShooter(
             Supplier<ChassisSpeeds> chassisSupplier,
@@ -61,14 +60,11 @@ public class LERPShooter extends Command {
         isShooting = false;
         wasShooting = false;
         backupTimer = new Timer();
-        m_lastVelocity = new ChassisSpeeds();
         addRequirements(indexer, spindexer, shooter, hood, turret);
     }
 
     @Override
-    public void initialize() {
-        m_lastVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(m_chassisSupplier.get(), m_pose.get().getRotation());
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
@@ -116,7 +112,7 @@ public class LERPShooter extends Command {
         double projDeltaY = target.getY() - projectedPivot.getY();
         double projectedDistance = Math.hypot(projDeltaX, projDeltaY);
 
-        //Find and set turret
+        //Find and set turret angle
         double fieldAngleToGoal = Math.toDegrees(Math.atan2(projDeltaY, projDeltaX));
         double robotHeading = projectedPivot.getRotation().getDegrees();
         double turretAngle = MathUtil.inputModulus(
@@ -160,17 +156,11 @@ public class LERPShooter extends Command {
             }
         }
 
-        //Calculate shot stability
-        double translationDelta = 50 * Math.hypot(robotVelocity.vxMetersPerSecond - m_lastVelocity.vxMetersPerSecond, robotVelocity.vyMetersPerSecond - m_lastVelocity.vyMetersPerSecond); 
-        double rotationDelta = 50 * Math.abs(robotVelocity.omegaRadiansPerSecond - m_lastVelocity.omegaRadiansPerSecond);
-
         boolean allowedToShoot = m_shooter.isFlywheelAtSpeed()
                                 && m_shooterHood.atSetpoint()
                                 && humanInput
                                 && m_turret.atSetpoint();
-                                //&& translationDelta < Constants.Shooter.maxAllowedTranslationAccel
-                                //&& rotationDelta < Constants.Shooter.maxAllowedRotationalAccel;
-
+                                
         //Should we actually start shooting
         if (allowedToShoot) {
             isShooting = true;
@@ -189,10 +179,9 @@ public class LERPShooter extends Command {
 
         //Update values
         wasShooting = isShooting;
-        m_lastVelocity = robotVelocity;
 
         //Logging
-        SmartDashboard.putNumber("Debug/distance", distance);
+        SmartDashboard.putNumber("LERPShooter/distance", distance);
         Logger.recordOutput("LERPShooter/RobotPose", robotPose);
         Logger.recordOutput("LERPShooter/ProjectedPivot", projectedPivot);
         Logger.recordOutput("LERPShooter/ActiveTarget", new Pose2d(target, new Rotation2d()));
@@ -203,8 +192,6 @@ public class LERPShooter extends Command {
         Logger.recordOutput("LERPShooter/FlywheelRPM", flywheelRPM);
         Logger.recordOutput("LERPShooter/IsShooting", isShooting);
         Logger.recordOutput("LERPShooter", allowedToShoot);
-        Logger.recordOutput("LERPShooter/Transational Accel", translationDelta);
-        Logger.recordOutput("LERPShooter/Rotational Accel", rotationDelta);
         Logger.recordOutput("LERPShooter/Turret Posistion", new Pose2d(turretPivotField.getX(), turretPivotField.getY(), new Rotation2d(turretAngle*Math.PI/180).plus(robotPose.getRotation()))
 );
     }
