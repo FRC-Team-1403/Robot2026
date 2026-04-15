@@ -235,14 +235,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
-    //TODO Maybe fix
-    // public boolean isAnyTagVisible() {
-    //     for (ITagCamera camera : m_cameras)
-        
-    //         if (camera..hasTargets()) 
-    //         return true;
-    //     return false;
-    // }
 
     @Override
     public void periodic() {
@@ -267,7 +259,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
                 );
             }
         }
-
 
         m_state = getState();
 

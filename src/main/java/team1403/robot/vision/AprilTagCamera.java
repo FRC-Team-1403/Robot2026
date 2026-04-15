@@ -15,7 +15,6 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
-import team1403.robot.commands.ControllerVibrationCommand;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -29,12 +28,9 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import team1403.robot.Constants;
 import team1403.robot.Robot;
-
 
 public class AprilTagCamera extends SubsystemBase implements ITagCamera {
   private final PhotonCamera m_camera;
@@ -45,8 +41,6 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
   private final Supplier<Pose2d> m_referencePose;
   private final Alert m_cameraAlert;
   private final Matrix<N3, N1> kDefaultStdv;
-  private CommandXboxController m_driverController;
-  private CommandXboxController m_operatorController;
 
   public AprilTagCamera(VisionConfigurator config) {
     // Photonvision
@@ -212,17 +206,6 @@ public class AprilTagCamera extends SubsystemBase implements ITagCamera {
           //Logger.recordOutput(m_camera.getName() + "/Combined Area", getTagAreas());
           Logger.recordOutput(m_camera.getName() + "/Pose3d", getPose());
         }
-
-        //CONTROLLER VIBRATION
-        CommandScheduler.getInstance().run();
-        
-        if (result.hasTargets()){
-          new ControllerVibrationCommand(m_driverController, 0.28, 1.0).schedule();
-          new ControllerVibrationCommand(m_operatorController, 0.28, 1.0).schedule();
-        }
-
       }
-
-      
     }
   }
