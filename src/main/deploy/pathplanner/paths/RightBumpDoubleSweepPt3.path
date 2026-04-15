@@ -8,56 +8,72 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.585255395659782,
-        "y": 0.6995730308370856
+        "x": 4.392163049403501,
+        "y": 0.7524611319184211
       },
       "isLocked": false,
       "linkedName": "LeftBumpDoubleSweepPt2End"
     },
     {
       "anchor": {
-        "x": 7.558373751783167,
-        "y": 0.9620684736091312
+        "x": 6.691483594864478,
+        "y": 1.182025677603425
       },
       "prevControl": {
-        "x": 6.90697376389322,
-        "y": 0.4510705021254202
+        "x": 6.670073778339112,
+        "y": -0.06912923125909987
       },
       "nextControl": {
-        "x": 8.301426983191009,
-        "y": 1.5449648521979085
+        "x": 6.7186318773373594,
+        "y": 2.7685272173474855
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.713637660485022,
+        "x": 6.122182596291013,
+        "y": 3.937960057061342
+      },
+      "prevControl": {
+        "x": 5.807076330106748,
+        "y": 3.5443223153448082
+      },
+      "nextControl": {
+        "x": 6.4542875486201075,
+        "y": 4.352832934807465
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.920656205420826,
+        "y": 3.82151212553495
+      },
+      "prevControl": {
+        "x": 7.619390222159866,
+        "y": 4.205390426648177
+      },
+      "nextControl": {
+        "x": 8.074999851622682,
+        "y": 3.6248447950575255
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.687760342368046,
         "y": 2.527646219686162
       },
       "prevControl": {
-        "x": 7.950747581719655,
-        "y": 2.3309675405317756
+        "x": 7.917834918120425,
+        "y": 2.6254505631089513
       },
       "nextControl": {
-        "x": 7.1745475476156955,
-        "y": 2.9748123728030023
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.1480599144079875,
-        "y": 2.7993580599144083
-      },
-      "prevControl": {
-        "x": 6.535455951873487,
-        "y": 2.8417435944234213
-      },
-      "nextControl": {
-        "x": 4.188986730403771,
-        "y": 2.5850131621463524
+        "x": 5.522198112817445,
+        "y": 1.6070690924231181
       },
       "isLocked": false,
       "linkedName": null
@@ -68,8 +84,8 @@
         "y": 2.527646219686162
       },
       "prevControl": {
-        "x": 6.053980987579019,
-        "y": 2.673702353265729
+        "x": 6.394751206505628,
+        "y": 2.8151544676328424
       },
       "nextControl": null,
       "isLocked": false,
@@ -78,23 +94,40 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 0.8635394456289941,
+      "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 1.7654584221748426,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 1.407249466950957,
+      "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 3.0106609808102274,
+      "waypointRelativePos": 3.454157782515988,
+      "rotationDegrees": -72.55665916398839
+    },
+    {
+      "waypointRelativePos": 4.157782515991467,
       "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
     {
       "name": "Bump",
-      "minWaypointRelativePos": 2.884537474679269,
-      "maxWaypointRelativePos": 3.9216745442268746,
+      "minWaypointRelativePos": 3.75,
+      "maxWaypointRelativePos": 4.921674544226875,
+      "constraints": {
+        "maxVelocity": 1.7,
+        "maxAcceleration": 1.7,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Intaking",
+      "minWaypointRelativePos": 0.9831195138419979,
+      "maxWaypointRelativePos": 3.45,
       "constraints": {
         "maxVelocity": 1.7,
         "maxAcceleration": 1.7,
@@ -123,7 +156,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0.6,
-    "rotation": -1.7183580018350284
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

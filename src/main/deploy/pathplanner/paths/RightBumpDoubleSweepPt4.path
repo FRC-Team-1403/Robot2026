@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.2609700428037094,
-        "y": 1.9842225392335018
+        "x": 1.6971611982881591,
+        "y": 1.69957203994294
       },
       "isLocked": false,
       "linkedName": "LeftBumpDoubleSweepPt3End"
@@ -20,15 +20,20 @@
         "y": 0.6903566333808839
       },
       "prevControl": {
-        "x": 0.9208416547788878,
-        "y": 0.5221540656205425
+        "x": 1.7489158345221114,
+        "y": 0.9879457917261072
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.85501066098081,
+      "rotationDegrees": -145.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,8 +46,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -0.7848246029918294
+    "velocity": 0.0,
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,

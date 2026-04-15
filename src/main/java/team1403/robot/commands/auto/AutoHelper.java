@@ -193,59 +193,84 @@ public class AutoHelper {
             return Commands.none();
         }
     }
-
-    //Right Bump Double Sweep
-    public static Command getRightBumpDoubleSweep(SwerveSubsystem m_swerve) {
+public static Command getRightTrenchFeedingAuto(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
                 Commands.race(
                     Commands.parallel(
-                        AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt1", m_swerve, true),
+                        AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt1", m_swerve, true),
                         NamedCommands.getCommand("IntakeWrist Down Command")
                     ),
-                    Commands.sequence(
-                        Commands.waitSeconds(3),
-                        NamedCommands.getCommand("Turret Ramp Up")
-                    ),
+                    NamedCommands.getCommand("Shoot Command"),
                     NamedCommands.getCommand("Intake Command")
                 ),
                 Commands.race(
-                    AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt2", m_swerve, true),
-                    Commands.parallel(
-                        NamedCommands.getCommand("Shoot Command"),
-                        Commands.sequence(
-                            Commands.waitSeconds(1.5),
-                            NamedCommands.getCommand("Wrist Wiggle Command")
-                        )
-                    )
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt3", m_swerve, true),
-                    Commands.sequence(
-                        Commands.waitSeconds(3),
-                        NamedCommands.getCommand("Turret Ramp Up")
-                    ),
+                  
+                        AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt2", m_swerve, true),
+                    
+                    NamedCommands.getCommand("Shoot Command"),
                     NamedCommands.getCommand("Intake Command")
-                ),
-                Commands.race(
-                    AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt4", m_swerve, true),
-                    Commands.parallel(
-                        NamedCommands.getCommand("Shoot Command"),
-                        Commands.sequence(
-                            Commands.waitSeconds(1.5),
-                            NamedCommands.getCommand("Wrist Wiggle Command")
-                        )
-                    )
-                )
+                )  
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
             return Commands.none();
         }
     }
-
-
-
     
-       
+
+    // //Right Bump Double Sweep
+    // public static Command getRightBumpDoubleSweep(SwerveSubsystem m_swerve) {
+    //     try {
+    //         return Commands.sequence(
+    //             Commands.race(
+    //                 Commands.parallel(
+    //                     AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt1", m_swerve, true),
+    //                     NamedCommands.getCommand("IntakeWrist Down Command")
+    //                 ),
+    //                 Commands.sequence(
+    //                     Commands.waitSeconds(3),
+    //                     NamedCommands.getCommand("Turret Ramp Up")
+    //                 ),
+    //                 NamedCommands.getCommand("Intake Command")
+    //             ),
+    //             Commands.deadline(
+    //                 Commands.waitSeconds(5),
+    //                 AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt2", m_swerve, true),
+    //                 Commands.parallel(
+    //                     NamedCommands.getCommand("Shoot Command"),
+    //                     Commands.sequence(
+    //                         Commands.waitSeconds(1.5),
+    //                         NamedCommands.getCommand("Wrist Wiggle Command")
+    //                     )
+    //                 )
+    //             ),
+    //             Commands.race(
+    //                 AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt3", m_swerve, true),
+    //                 Commands.sequence(
+    //                     Commands.waitSeconds(3),
+    //                     NamedCommands.getCommand("Turret Ramp Up")
+    //                 ),
+    //                 NamedCommands.getCommand("Intake Command")
+    //             ),
+    //             Commands.race(
+    //                 AutoUtil.loadPathPlannerPath("RightBumpDoubleSweepPt4", m_swerve, true),
+    //                 Commands.parallel(
+    //                     NamedCommands.getCommand("Shoot Command"),
+    //                     Commands.sequence(
+    //                         Commands.waitSeconds(1.5),
+    //                         NamedCommands.getCommand("Wrist Wiggle Command")
+    //                     )
+    //                 )
+    //             )
+    //         );
+    //     } catch (Exception e) {
+    //         System.err.println("Could not load auto: " + e.getMessage());
+    //         return Commands.none();
+    //     }
+    // }
+
+
+
+  
 }

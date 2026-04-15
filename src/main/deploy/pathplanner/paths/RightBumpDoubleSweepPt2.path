@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.26097004280370895,
-        "y": 1.9842225392335016
+        "x": 2.331155492154065,
+        "y": 1.8160199714693293
       },
       "isLocked": false,
       "linkedName": "LeftBumpDoubleSweepPt1End"
@@ -20,8 +20,8 @@
         "y": 0.6256633380884444
       },
       "prevControl": {
-        "x": 0.8302710413694725,
-        "y": 0.45746077032810295
+        "x": 2.564051355206847,
+        "y": 0.8456205420827394
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0.6,
-    "rotation": -1.7183580018350284
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
