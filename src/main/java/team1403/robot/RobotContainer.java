@@ -166,7 +166,8 @@ public class RobotContainer {
     m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP: INTAKE FACES FORWARD ROBOT START NOT UNDER TRENCH", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
     m_autoChooser.addOption("RIGHT TRENCH DOUBLE SWEEP: INTAKE FACES LEFT ROBOT START UNDER TRENCH", AutoHelper.getRightTrenchDoubleSweep(m_swerve));
     m_autoChooser.addOption("DELAYED LEFT TRENCH SINGLE SWEEP: INTAKE FACES FORWARD ROBOT NOT UNDER TRENCH", AutoHelper.getLeftTrenchSingleSweepDelayed(m_swerve));
-    m_autoChooser.addOption("RIGHT TRENCH FEEDING AUTO: INTAKE FACES LEFT ROBOT UNDER TRENCH", AutoHelper.getRightTrenchFeedingAuto(m_swerve));
+    m_autoChooser.addOption("DELAYED RIGHT TRENCH SINGLE SWEEP: INTAKE FACES LEFT ROBOT UNDER TRENCH", AutoHelper.getRightTrenchSingleSweepDelayed(m_swerve));
+    m_autoChooser.addOption("RIGHT TRENCH FEEDING AUTO: INTAKE FACES LEFT ROBOT START UNDER TRENCH", AutoHelper.getRightTrenchFeedingAuto(m_swerve));
 
   }
 

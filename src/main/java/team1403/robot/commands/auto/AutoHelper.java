@@ -160,14 +160,14 @@ public class AutoHelper {
         }
     }
 
-    //Delayed Single Sweep
+    //Delayed Single Sweep Left Trench
     public static Command getLeftTrenchSingleSweepDelayed(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
                 NamedCommands.getCommand("IntakeWrist Down Command"),
                 Commands.race(
                     NamedCommands.getCommand("Shoot Command"),
-                    Commands.waitSeconds(7)
+                    Commands.waitSeconds(3)
                 ),
                 Commands.race(
                     Commands.parallel(
@@ -193,30 +193,68 @@ public class AutoHelper {
             return Commands.none();
         }
     }
-public static Command getRightTrenchFeedingAuto(SwerveSubsystem m_swerve) {
+    //Delayed Single Sweep Right Trench
+    public static Command getRightTrenchSingleSweepDelayed(SwerveSubsystem m_swerve) {
         try {
             return Commands.sequence(
+                NamedCommands.getCommand("IntakeWrist Down Command"),
                 Commands.race(
-                    Commands.parallel(
-                        AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt1", m_swerve, true),
-                        NamedCommands.getCommand("IntakeWrist Down Command")
-                    ),
                     NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Intake Command")
+                    Commands.waitSeconds(3)
                 ),
                 Commands.race(
-                  
-                        AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt2", m_swerve, true),
-                    
-                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.parallel(
+                        AutoUtil.loadPathPlannerPath("RightTrenchSingleSweepDelayedPt1", m_swerve, true)
+                    ),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret Ramp Up")
+                    ),
                     NamedCommands.getCommand("Intake Command")
-                )  
+                ),
+
+                Commands.parallel(
+                    NamedCommands.getCommand("Shoot Command"),
+                    Commands.sequence(
+                        Commands.waitSeconds(1.5),
+                        NamedCommands.getCommand("Wrist Wiggle Command")
+                    )
+                ) 
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
             return Commands.none();
         }
     }
+
+
+    public static Command getRightTrenchFeedingAuto(SwerveSubsystem m_swerve) {
+            try {
+                return Commands.sequence(
+                    Commands.race(
+                        Commands.parallel(
+                            AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt1", m_swerve, true),
+                            NamedCommands.getCommand("IntakeWrist Down Command")
+                        ),
+                        Commands.sequence(
+                            Commands.waitSeconds(1),
+                            NamedCommands.getCommand("Shoot Command")
+                        ),
+                        NamedCommands.getCommand("Intake Command")
+                    ),
+                    Commands.race(
+                    
+                            AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt2", m_swerve, true),
+                        
+                        NamedCommands.getCommand("Shoot Command"),
+                        NamedCommands.getCommand("Intake Command")
+                    )  
+                );
+            } catch (Exception e) {
+                System.err.println("Could not load auto: " + e.getMessage());
+                return Commands.none();
+            }
+        }
     
 
     // //Right Bump Double Sweep
