@@ -29,9 +29,9 @@ public class Spindexer extends SubsystemBase {
     TalonFXConfiguration spindexerLeaderConfig = new TalonFXConfiguration();
     spindexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 120;
     spindexerLeaderConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 60;
+    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimit = 30;
     spindexerLeaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 40;
+    spindexerLeaderConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
     spindexerLeaderConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
     spindexerLeaderConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 

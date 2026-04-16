@@ -141,7 +141,7 @@ public class LERPShooter extends Command {
         } 
         //Otherwise reset to safe conditions
         else {
-            m_shooter.setFlywheelTargetRPM(0);
+            m_shooter.setFlywheelTargetRPM(1200);
             m_shooterHood.setSetpoint(0);
 
             //If currently backing up

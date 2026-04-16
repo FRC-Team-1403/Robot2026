@@ -44,7 +44,7 @@ public class Turret extends SubsystemBase {
 
     turretMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
     turretMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    turretMotorConfig.CurrentLimits.SupplyCurrentLimit = 50;
+    turretMotorConfig.CurrentLimits.SupplyCurrentLimit = 30;
     turretMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     turretMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
     turretMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 1.0;
@@ -154,7 +154,7 @@ public class Turret extends SubsystemBase {
     }
 
     Logger.recordOutput("Turret/Turret Current Angle", currentAngle);
-    // Logger.recordOutput("Turret/Absolute", getAbsolutePosition());
+    Logger.recordOutput("Turret/Absolute", getAbsolutePosition());
     // Logger.recordOutput("Turret/Setpoint", setpoint);
     // Logger.recordOutput("Turret/At Setpoint", atSetpoint());
     // Logger.recordOutput("Turret/Position Error", smallestError);

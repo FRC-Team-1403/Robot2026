@@ -130,7 +130,7 @@ public class DefaultSwerveCommand extends Command {
     if(m_snipingMode.getAsDouble()>0.3){
         m_speedLimiter = 0.2;
     } else if(m_speedSupplier.getAsDouble()>0.3){
-        m_speedLimiter = 0.6;
+        m_speedLimiter = 0.7;
     } else {
       m_speedLimiter = 0.5;
     }
