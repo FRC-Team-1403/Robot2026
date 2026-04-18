@@ -38,7 +38,7 @@ public static final double minimumBatteryVoltage = 11.0;
   public static class Turret {
     public static final int kTurretMotorID = 21;
     public static final int kEncoderID = 22;
-    public static final double kMagnetOffset = -0.044;
+    public static final double kMagnetOffset = 0.2829;
     public static final double kMinAngleDegrees = -180;
     public static final double kMaxAngleDegrees = 180;
 
@@ -156,18 +156,18 @@ public static final double minimumBatteryVoltage = 11.0;
       {10.0, 20},
       {10.5, 20},
       {11.0, 20},
-      {11.5, 20},
-      {12.0, 20},
-      {12.5, 20},
-      {13.0, 20},
-      {13.5, 20},
-      {14.0, 20},
-      {14.5, 20},
-      {15.0, 20},
-      {15.5, 20},
-      {16.0, 20},
-      {16.5, 20},
-      {17.0, 20},
+      {11.5, 28},
+      {12.0, 28},
+      {12.5, 28},
+      {13.0, 28},
+      {13.5, 28},
+      {14.0, 28},
+      {14.5, 28},
+      {15.0, 28},
+      {15.5, 28},
+      {16.0, 28},
+      {16.5, 28},
+      {17.0, 28},
     }; 
   }
 
@@ -177,6 +177,8 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int flywheelFollower2BottonLeftID = 23;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 150.0;
+
+    public static final double farFeedingRPMConstant = 100.0;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
@@ -209,19 +211,21 @@ public static final double minimumBatteryVoltage = 11.0;
       {10.0, 2584.81},
       {10.5, 2666.43},
       {11.0, 2748.06},
-      {11.5, 2829.68},
-      {12.0, 2911.30},
-      {12.5, 2992.92},
-      {13.0, 3074.54},
-      {13.5, 3156.16},
-      {14.0, 3237.77},
-      {14.5, 3319.39},
-      {15.0, 3401.01},
-      {15.5, 3482.63},
-      {16.0, 3564.26},
-      {16.5, 3645.88},
-      {17.0, 3727.50},
+      {11.5, 2829.68+farFeedingRPMConstant},
+      {12.0, 2911.30+farFeedingRPMConstant},
+      {12.5, 2992.92+farFeedingRPMConstant},
+      {13.0, 3074.54+farFeedingRPMConstant},
+      {13.5, 3156.16+farFeedingRPMConstant},
+      {14.0, 3237.77+farFeedingRPMConstant},
+      {14.5, 3319.39+farFeedingRPMConstant},
+      {15.0, 3401.01+farFeedingRPMConstant},
+      {15.5, 3482.63+farFeedingRPMConstant},
+      {16.0, 3564.26+farFeedingRPMConstant},
+      {16.5, 3645.88+farFeedingRPMConstant},
+      {17.0, 3727.50+farFeedingRPMConstant},
     }; //finished
+
+
       
 
     public static final double[][] kTOFTable = {
@@ -321,7 +325,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = -0.012;
+    public static final double kMagnetOffset = 0.0754;
     
     public static final double kGearRatioEncoder = 23.4/1.0;
     public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
