@@ -121,7 +121,7 @@ public class Intake extends SubsystemBase{
         }
 
         // Logger.recordOutput("Intake/Target RPM", m_intakeTargetRPM);
-        // Logger.recordOutput("Intake/Leader RPM", getIntakeRPM());
+        Logger.recordOutput("Intake/Leader RPM", getIntakeRPM());
         // Logger.recordOutput("Intake/RPM Error", getIntakeRPMError());
         // Logger.recordOutput("Intake/At Speed", isIntakeAtSpeed());
         // Logger.recordOutput("Intake/Target Duty Cycle", m_intakeTargetDutyCycle);
@@ -132,7 +132,7 @@ public class Intake extends SubsystemBase{
         // Logger.recordOutput("Intake/Closed Loop Error", m_intake.getClosedLoopError().getValueAsDouble());
         // Logger.recordOutput("Intake/Closed Loop Output", m_intake.getClosedLoopOutput().getValueAsDouble());
         // Logger.recordOutput("Intake/Duty Cycle", m_intake.getDutyCycle().getValueAsDouble() * 1000);
-        // Logger.recordOutput("Intake/Leader Temp", m_intake.getDeviceTemp().getValueAsDouble());
+        // Logger.recordOutpdut("Intake/Leader Temp", m_intake.getDeviceTemp().getValueAsDouble());
         // Logger.recordOutput("Intake/Using Velocity Control", m_intakeUseVelocityControl);
         // Logger.recordOutput("Intake/Follower Stator Current", m_intakeFollower.getStatorCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Follower Duty Cycle", m_intakeFollower.getDutyCycle().getValueAsDouble() * 1000);
@@ -140,7 +140,7 @@ public class Intake extends SubsystemBase{
         Logger.recordOutput("Intake/Follower Supply Current", m_intakeFollower.getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Follower Torque Current", m_intakeFollower.getTorqueCurrent().getValueAsDouble());
         // Logger.recordOutput("Intake/Follower Temp", m_intakeFollower.getDeviceTemp().getValueAsDouble());
-        // Logger.recordOutput("Intake/Follower RPM", m_intakeFollower.getVelocity().getValueAsDouble() * 60.0 / Constants.Intake.intakeGearRatio);
+        Logger.recordOutput("Intake/Follower RPM", m_intakeFollower.getVelocity().getValueAsDouble() * 60.0 / Constants.Intake.intakeGearRatio);
 
     }
 }
