@@ -178,7 +178,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 150.0;
 
-    public static final double farFeedingRPMConstant = 100.0;
+    public static final double farFeedingRPMConstant = 200.0;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
@@ -325,7 +325,11 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = 0.0754;
+    public static final double kMagnetOffset = 0.2363;
+
+    
+
+
     
     public static final double kGearRatioEncoder = 23.4/1.0;
     public static final double kGearRatioWristAngleRatio = 46.8/1.0;//84/20 78/14 78/20 46.8/1 Motor to Encoder 23.4/1 Encoder to shaft 2/1
