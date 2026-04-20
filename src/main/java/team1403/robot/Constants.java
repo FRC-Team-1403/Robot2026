@@ -178,7 +178,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 150.0;
 
-    public static final double farFeedingRPMConstant = 200.0;
+    public static final double farFeedingRPMConstant = 600.0;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
