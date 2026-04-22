@@ -97,7 +97,7 @@
   "constraintZones": [
     {
       "name": "intaking",
-      "minWaypointRelativePos": 1.3396353814989856,
+      "minWaypointRelativePos": 1.4692775151924415,
       "maxWaypointRelativePos": 2.139095205941923,
       "constraints": {
         "maxVelocity": 1.4,
