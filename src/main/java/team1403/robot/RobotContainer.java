@@ -143,19 +143,34 @@ public class RobotContainer {
     m_operatorController.povDown().onTrue(new WristCommand(m_intakeWrist, Constants.IntakeWrist.downPos));
 
 
-    //swerve buttons 
+    // OLD NO ZONE swerve buttons 
+    // m_swerve.setDefaultCommand(new DefaultSwerveCommand(
+    //     m_swerve, 
+    //     () -> -m_driverController.getLeftX(),               //horozontal
+    //     () -> -m_driverController.getLeftY(),               //vertical
+    //     () -> -m_driverController.getRightX(),              //rotational 
+    //     () -> m_driverController.getHID().getXButton(),     //x-mode  
+    //     () -> false,                                        //robot relative  
+    //     () -> m_driverController.getRightTriggerAxis(),     //acceleration
+    //     () -> Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),      //snipping mode Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),
+    //     () ->false,                                         // Auto Aim
+    //     () -> m_driverController.getHID().getBButton()      // reset gyro
+    // ));
+
+    //NEW ZONE Swerve Buttons
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
-        m_swerve, 
-        () -> -m_driverController.getLeftX(),               //horozontal
-        () -> -m_driverController.getLeftY(),               //vertical
-        () -> -m_driverController.getRightX(),              //rotational 
-        () -> m_driverController.getHID().getXButton(),     //x-mode  
-        () -> false,                                        //robot relative  
-        () -> m_driverController.getRightTriggerAxis(),     //acceleration
-        () -> Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),      //snipping mode Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),
-        () ->false,                                         // Auto Aim
-        () -> m_driverController.getHID().getBButton()      // reset gyro
-    ));
+          m_swerve, 
+          () -> -m_driverController.getLeftX(),                        //horizontal
+          () -> -m_driverController.getLeftY(),                        //vertical
+          () -> -m_driverController.getRightX(),                       //rotational 
+          () -> m_driverController.getHID().getXButton(),              //x-mode  
+          () -> false,                                                  //robot relative  
+          () -> m_driverController.getRightTriggerAxis(),              //acceleration
+          () -> m_driverController.getLeftTriggerAxis(),               //driver sniping mode
+          () -> m_operatorController.getRightTriggerAxis(),            //operator sniping mode
+          () -> false,                                                  // Auto Aim
+          () -> m_driverController.getHID().getBButton()               // reset gyro
+      ));
 
     //HOW TO NAME AUTOS: "AUTO: POSITIONING OF THE BOT"
     
