@@ -144,8 +144,8 @@ public class DefaultSwerveCommand extends Command {
         m_speedLimiter = 0.5;
       }
     } else {
-      if(driverSniping){
-          m_speedLimiter = 0.2;
+      if(operatorSniping || driverSniping){
+          m_speedLimiter = 0.35;
       } else if(m_speedSupplier.getAsDouble()>0.3){
           m_speedLimiter = 0.7;
       } else {
