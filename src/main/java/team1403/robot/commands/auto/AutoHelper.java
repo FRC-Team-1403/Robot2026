@@ -259,7 +259,7 @@ public class AutoHelper {
         public static Command getMiddleHubDepotSingleSweep(SwerveSubsystem m_swerve) {
             try {
                 return Commands.sequence(
-                    //4.49 seconds
+                    //4.82 seconds
                     Commands.race(
                         Commands.parallel(
                             AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt1", m_swerve, true),
@@ -267,7 +267,7 @@ public class AutoHelper {
                         ),
                         NamedCommands.getCommand("Intake Command")
                     ),
-                    //3.19 seconds
+                    //2.66 seconds
                     Commands.race(
                         AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt2", m_swerve, true),
                         Commands.parallel(
