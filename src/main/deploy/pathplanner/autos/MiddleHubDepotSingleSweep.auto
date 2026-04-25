@@ -15,6 +15,12 @@
           "data": {
             "pathName": "MiddleHubDepotSingleSweepPt2"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleHubDepotSingleSweepPt3"
+          }
         }
       ]
     }

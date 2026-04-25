@@ -1,0 +1,126 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.392125534950071,
+        "y": 7.4572753209700435
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.142125534950071,
+        "y": 7.4572753209700435
+      },
+      "isLocked": false,
+      "linkedName": "MiddleHubDepotSingleSweepEndPt2"
+    },
+    {
+      "anchor": {
+        "x": 5.928102710413694,
+        "y": 7.5
+      },
+      "prevControl": {
+        "x": 4.7538623591338895,
+        "y": 7.573917365381574
+      },
+      "nextControl": {
+        "x": 7.428987161198288,
+        "y": 7.405520684736091
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.225691868758916,
+        "y": 4.546077032810271
+      },
+      "prevControl": {
+        "x": 5.329521774948511,
+        "y": 5.079965599335619
+      },
+      "nextControl": {
+        "x": 7.441925820256775,
+        "y": 3.8215121255349507
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.031611982881596,
+        "y": 7.5
+      },
+      "prevControl": {
+        "x": 9.16676786864894,
+        "y": 7.488255499763156
+      },
+      "nextControl": {
+        "x": 5.572196507645556,
+        "y": 7.5017210005991135
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.793223965763195,
+        "y": 7.43
+      },
+      "prevControl": {
+        "x": 4.452565094438435,
+        "y": 7.504920092491774
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9040511727078874,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.6718684099536096,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 2.550106609808093,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 2.925373134328337,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 178.99491399474581
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

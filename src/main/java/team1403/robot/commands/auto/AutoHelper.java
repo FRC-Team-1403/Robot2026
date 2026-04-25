@@ -259,7 +259,7 @@ public class AutoHelper {
         public static Command getMiddleHubDepotSingleSweep(SwerveSubsystem m_swerve) {
             try {
                 return Commands.sequence(
-                    //5.59 seconds
+                    //4.49 seconds
                     Commands.race(
                         Commands.parallel(
                             AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt1", m_swerve, true),
@@ -267,18 +267,27 @@ public class AutoHelper {
                         ),
                         NamedCommands.getCommand("Intake Command")
                     ),
+                    //3.19 seconds
                     Commands.race(
+                        AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt2", m_swerve, true),
                         Commands.parallel(
                             NamedCommands.getCommand("Shoot Command"),
                             Commands.sequence(
                                 Commands.waitSeconds(1.5),
                                 NamedCommands.getCommand("Wrist Wiggle Command")
                             )
+                        )
+                    ),
+                    //2 seconds
+                    Commands.race(
+                        Commands.parallel(
+                            NamedCommands.getCommand("Shoot Command"),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
                         ),
-                        Commands.waitSeconds(4.4)
+                        Commands.waitSeconds(2)
                     ),
                     Commands.race(
-                        AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt2", m_swerve, true),
+                        AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt3", m_swerve, true),
                         Commands.sequence(
                             Commands.waitSeconds(3),
                             NamedCommands.getCommand("Turret Ramp Up")
@@ -287,7 +296,10 @@ public class AutoHelper {
                     ),
                     Commands.parallel(
                         NamedCommands.getCommand("Shoot Command"),
-                        NamedCommands.getCommand("Wrist Wiggle Command")
+                        Commands.sequence(
+                            Commands.waitSeconds(1.5),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
+                        )    
                     )   
                 );
             } catch (Exception e) {
