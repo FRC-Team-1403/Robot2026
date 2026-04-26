@@ -171,7 +171,7 @@ public class AutoHelper {
                 ),
                 Commands.race(
                     Commands.parallel(
-                        AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDepotPt1", m_swerve, true)
+                        AutoUtil.loadPathPlannerPath("LeftTrenchSingleSweepDelayedPt1", m_swerve, true)
                     ),
                     Commands.sequence(
                         Commands.waitSeconds(3),
@@ -308,9 +308,56 @@ public class AutoHelper {
             }
         }
 
-    
 
-
-
-  
+        public static Command getLeftBumpDelayedSingleSweepDepot(SwerveSubsystem m_swerve) {
+            try {
+                return Commands.sequence(
+                    //Intake wrist down
+                    NamedCommands.getCommand("IntakeWrist Down Command"),
+                    //Shoot preloaded 8 for 2 seconds
+                    Commands.race(
+                        NamedCommands.getCommand("Shoot Command"),    
+                        Commands.waitSeconds(2)
+                    ),
+                    //Shift over to the trench
+                    AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt1", m_swerve, true),
+                    //Single loopy sweep
+                    Commands.race(   
+                        AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt2", m_swerve, true),
+                        Commands.sequence(
+                            Commands.waitSeconds(3),
+                            NamedCommands.getCommand("Turret Ramp Up")
+                        ),
+                        NamedCommands.getCommand("Intake Command")
+                    ),
+                    //Since coming over bump see a tag tune this
+                    Commands.waitSeconds(0.75),
+                    //Shoot sweep balls
+                    Commands.race(
+                        Commands.parallel(
+                            NamedCommands.getCommand("Shoot Command"),
+                            Commands.sequence(
+                                Commands.waitSeconds(1.5),
+                                NamedCommands.getCommand("Wrist Wiggle Command")
+                            )
+                        ),
+                        Commands.waitSeconds(5)
+                    ),
+                    // Go to depot
+                    Commands.race(
+                        AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt3", m_swerve, true),
+                        NamedCommands.getCommand("Intake Command")
+                    ),
+                    //Shoot the rest of the balls
+                    Commands.parallel(
+                        NamedCommands.getCommand("Shoot Command"),
+                        NamedCommands.getCommand("Wrist Wiggle Command")
+                    )
+                );
+            } catch (Exception e) {
+                System.err.println("Could not load auto: " + e.getMessage());
+                return Commands.none();
+            }
+        }
+ 
 }
