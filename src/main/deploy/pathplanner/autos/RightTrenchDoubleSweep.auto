@@ -15,6 +15,12 @@
           "data": {
             "pathName": "RightTrenchDoubleSweepPt2"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchDoubleSweepPt3"
+          }
         }
       ]
     }

@@ -16,48 +16,48 @@
     },
     {
       "anchor": {
-        "x": 6.368017118402282,
-        "y": 1.6607560627674753
+        "x": 6.237445783132531,
+        "y": 1.7620361445783135
       },
       "prevControl": {
-        "x": 7.260784593437946,
-        "y": 0.6515406562054205
+        "x": 6.984861742148614,
+        "y": 0.6409122060541921
       },
       "nextControl": {
-        "x": 5.610255692126728,
-        "y": 2.517355935948536
+        "x": 5.647349397590362,
+        "y": 2.647180722891566
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.743238231098432,
-        "y": 3.756818830242511
+        "x": 7.1335180722891565,
+        "y": 3.7508795180722894
       },
       "prevControl": {
-        "x": 5.78150325579045,
-        "y": 3.756818830242511
+        "x": 6.171783096981175,
+        "y": 3.7508795180722894
       },
       "nextControl": {
-        "x": 7.778330955777461,
-        "y": 3.756818830242511
+        "x": 8.168610796968192,
+        "y": 3.7508795180722894
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.669329529243937,
-        "y": 0.6
+        "x": 5.691060240963855,
+        "y": 0.64
       },
       "prevControl": {
-        "x": 8.874633324465147,
-        "y": 0.4024283705138385
+        "x": 8.182578313253012,
+        "y": 0.8003975903614469
       },
       "nextControl": {
-        "x": 5.057811425715853,
-        "y": 0.6376933469939602
+        "x": 5.079647226513435,
+        "y": 0.6006387867203501
       },
       "isLocked": false,
       "linkedName": null
@@ -73,16 +73,16 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RightTrenchDoubleSweepPt2End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.597014925373132,
+      "waypointRelativePos": 0.3087136929460529,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 1.074626865671651,
+      "waypointRelativePos": 1.2912863070539498,
       "rotationDegrees": 90.0
     },
     {
@@ -90,7 +90,7 @@
       "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 2.908315565031998,
+      "waypointRelativePos": 3.269709543568455,
       "rotationDegrees": 180.0
     }
   ],

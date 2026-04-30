@@ -106,10 +106,24 @@ public class AutoHelper {
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                Commands.parallel(
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command")
-                )    
+                Commands.race(
+                    Commands.parallel(
+                        NamedCommands.getCommand("Shoot Command"),
+                        Commands.sequence(
+                            Commands.waitSeconds(1.5),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
+                        )
+                    ),
+                    Commands.waitSeconds(4.5)
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("LeftTrenchDoubleSweepPt3", m_swerve, true),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret Ramp Up")
+                    ),
+                    NamedCommands.getCommand("Intake Command")
+                )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
@@ -149,10 +163,24 @@ public class AutoHelper {
                     ),
                     NamedCommands.getCommand("Intake Command")
                 ),
-                Commands.parallel(
-                    NamedCommands.getCommand("Shoot Command"),
-                    NamedCommands.getCommand("Wrist Wiggle Command")
-                )    
+                Commands.race(
+                    Commands.parallel(
+                        NamedCommands.getCommand("Shoot Command"),
+                        Commands.sequence(
+                            Commands.waitSeconds(1.5),
+                            NamedCommands.getCommand("Wrist Wiggle Command")
+                        )
+                    ),
+                    Commands.waitSeconds(4.5)
+                ),
+                Commands.race(
+                    AutoUtil.loadPathPlannerPath("RightTrenchDoubleSweepPt3", m_swerve, true),
+                    Commands.sequence(
+                        Commands.waitSeconds(3),
+                        NamedCommands.getCommand("Turret Ramp Up")
+                    ),
+                    NamedCommands.getCommand("Intake Command")
+                )
             );
         } catch (Exception e) {
             System.err.println("Could not load auto: " + e.getMessage());
@@ -244,7 +272,7 @@ public class AutoHelper {
                     ),
                     Commands.race(
                     
-                            AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt2", m_swerve, true),
+                        AutoUtil.loadPathPlannerPath("RightTrenchFeedingAutoPt2", m_swerve, true),
                         
                         NamedCommands.getCommand("Shoot Command"),
                         NamedCommands.getCommand("Intake Command")
@@ -284,7 +312,7 @@ public class AutoHelper {
                             NamedCommands.getCommand("Shoot Command"),
                             NamedCommands.getCommand("Wrist Wiggle Command")
                         ),
-                        Commands.waitSeconds(2)
+                        Commands.waitSeconds(3)
                     ),
                     Commands.race(
                         AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt3", m_swerve, true),
@@ -321,6 +349,7 @@ public class AutoHelper {
                     ),
                     //Shift over to the trench
                     AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt1", m_swerve, true),
+                    //Commands.waitSeconds(2),
                     //Single loopy sweep
                     Commands.race(   
                         AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt2", m_swerve, true),

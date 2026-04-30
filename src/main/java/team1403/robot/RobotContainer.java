@@ -178,12 +178,12 @@ public class RobotContainer {
     m_autoChooser.addOption("SHOOT PRELOADED FUEL AT LEFT TRENCH: INTAKE FACES FORWARD; NOT UNDER TRENCH", AutoHelper.getPreloadedFuelLeftTrench(m_swerve));
     m_autoChooser.addOption("SHOOT PRELOADED FUEL AT RIGHT TRENCH: INTAKE FACES FORWARD; NOT UNDER TRENCH", AutoHelper.getPreloadedFuelRightTrench(m_swerve));
     m_autoChooser.addOption("START AT HUB AND GO TO DEPOT: INTAKE FACES RIGHT: CORNER OF BOT TO RIGHT EDGE OF HUB", AutoHelper.getHubDepot(m_swerve));
-    m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP: INTAKE FACES FORWARD ROBOT START NOT UNDER TRENCH", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
+    m_autoChooser.addOption("LEFT TRENCH DOUBLE SWEEP: INTAKE FACES RIGHT ROBOT START UNDER TRENCH", AutoHelper.getLeftTrenchDoubleSweep(m_swerve));
     m_autoChooser.addOption("RIGHT TRENCH DOUBLE SWEEP: INTAKE FACES LEFT ROBOT START UNDER TRENCH", AutoHelper.getRightTrenchDoubleSweep(m_swerve));
     m_autoChooser.addOption("DELAYED LEFT TRENCH SINGLE SWEEP: INTAKE FACES FORWARD ROBOT NOT UNDER TRENCH", AutoHelper.getLeftTrenchSingleSweepDelayed(m_swerve));
     m_autoChooser.addOption("DELAYED RIGHT TRENCH SINGLE SWEEP: INTAKE FACES FORWARD ROBOT NOT UNDER TRENCH", AutoHelper.getRightTrenchSingleSweepDelayed(m_swerve));
     m_autoChooser.addOption("RIGHT TRENCH FEEDING AUTO: INTAKE FACES LEFT ROBOT START UNDER TRENCH", AutoHelper.getRightTrenchFeedingAuto(m_swerve));
-    m_autoChooser.addOption("MIDDLE HUB DEPOT SINGLE LEFT TRENCH SWEEP: INTAKE FACES AWAY FROM HUB: LEFT BUMPER IS ALIGN TO LEFT EDGE HUB", AutoHelper.getMiddleHubDepotSingleSweep(m_swerve));
+    m_autoChooser.addOption("MIDDLE HUB DEPOT SINGLE LEFT TRENCH SWEEP: INTAKE FACES RIGHT: LEFT BUMPER IS ALIGN TO LEFT EDGE HUB", AutoHelper.getMiddleHubDepotSingleSweep(m_swerve));
     m_autoChooser.addOption("COMPLEMENTARY LEFT BUMP DELAYED SINGLE SWEEP DEPOT: INTAKE FACES AWAY FROM HUB: LEFT BUMPER IS ALIGN TO LEFT EDGE BUMP", AutoHelper.getLeftBumpDelayedSingleSweepDepot(m_swerve));
 
   }
