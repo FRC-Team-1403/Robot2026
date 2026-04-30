@@ -63,9 +63,9 @@ public class TunerConstants {
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                .withSupplyCurrentLimit(Amps.of(40))
+                .withSupplyCurrentLimit(Amps.of(60))
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLowerLimit(Amps.of(30))
+                .withSupplyCurrentLowerLimit(Amps.of(40))
                 .withSupplyCurrentLowerTime(Seconds.of(1.5))
         )
         .withMotorOutput(new MotorOutputConfigs()
