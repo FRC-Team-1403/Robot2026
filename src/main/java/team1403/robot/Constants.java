@@ -111,7 +111,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kEncoderID = 27;
 
     public static final double kMinAngleDegrees = 0.1;
-    public static final double kMaxAngleDegrees = 30;
+    public static final double kMaxAngleDegrees = 29.75;
 
 
     public static final double kToleranceDegrees = 0.3;
@@ -148,25 +148,25 @@ public static final double minimumBatteryVoltage = 11.0;
       {6.5, 20},
       {7.0, 20},
       {7.5, 20},
-      {8.0, 20},
-      {8.5, 20},
-      {9.0, 20},
-      {9.5, 20},
-      {10.0, 20},
-      {10.5, 20},
-      {11.0, 20},
-      {11.5, 28},
-      {12.0, 28},
-      {12.5, 28},
-      {13.0, 28},
-      {13.5, 28},
-      {14.0, 28},
-      {14.5, 28},
-      {15.0, 28},
-      {15.5, 28},
-      {16.0, 28},
-      {16.5, 28},
-      {17.0, 28},
+      {8.0, 29.75},
+      {8.5, 29.75},
+      {9.0, 29.75},
+      {9.5, 29.75},
+      {10.0, 29.75},
+      {10.5, 29.75},
+      {11.0, 29.75},
+      {11.5, 29.75},
+      {12.0, 29.75},
+      {12.5, 29.75},
+      {13.0, 29.75},
+      {13.5, 29.75},
+      {14.0, 29.75},
+      {14.5, 29.75},
+      {15.0, 29.75},
+      {15.5, 29.75},
+      {16.0, 29.75},
+      {16.5, 29.75},
+      {17.0, 29.75},
     }; 
   }
 
@@ -177,7 +177,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 150.0;
 
-    public static final double farFeedingRPMConstant = 467.0;
+    public static final double farFeedingRPMConstant = 550;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
@@ -324,7 +324,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = -0.66;
+    public static final double kMagnetOffset = -0.59;
 
     
 
