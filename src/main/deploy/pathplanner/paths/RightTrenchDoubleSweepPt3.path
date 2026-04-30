@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.780285306704707,
-        "y": 0.64
+        "x": 3.5862054208273886,
+        "y": 0.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.684676627063648,
-        "y": 0.671633313050809
+        "x": 4.490596741186329,
+        "y": 0.531633313050809
       },
       "isLocked": false,
       "linkedName": "RightTrenchDoubleSweepPt2End"
