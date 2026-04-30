@@ -38,6 +38,7 @@ public class Intake extends SubsystemBase{
         m_intakelDutyCycleRequest = new DutyCycleOut(0);
 
         TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
+        intakeConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.3;
         intakeConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
@@ -57,6 +58,7 @@ public class Intake extends SubsystemBase{
         intakeConfig.Slot0 = intakePIDConfig;
 
         TalonFXConfiguration intakeFollowerConfg = new TalonFXConfiguration();
+        intakeFollowerConfg.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.3;
         intakeFollowerConfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         intakeFollowerConfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         intakeFollowerConfg.CurrentLimits.StatorCurrentLimit = 120;
