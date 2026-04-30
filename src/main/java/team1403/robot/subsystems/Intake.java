@@ -85,6 +85,7 @@ public class Intake extends SubsystemBase{
     public void setIntakePower(double dutyCycle) {
         m_intakeTargetDutyCycle = dutyCycle;
         m_intakelDutyCycleRequest.Output = dutyCycle;
+        m_intakelDutyCycleRequest.EnableFOC = true;
         m_intakeUseVelocityControl = false;
     }
 
