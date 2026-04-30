@@ -177,7 +177,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 150.0;
 
-    public static final double farFeedingRPMConstant = 600.0;
+    public static final double farFeedingRPMConstant = 467.0;
 
     public static final double kP = 0.075;
     public static final double kI = 0;
@@ -203,13 +203,13 @@ public static final double minimumBatteryVoltage = 11.0;
       {6.5, 2013.57},
       {7.0, 2095.09},
       {7.5, 2176.71},
-      {8.0, 2258.33},
-      {8.5, 2339.95},
-      {9.0, 2421.57},
-      {9.5, 2503.19},
-      {10.0, 2584.81},
-      {10.5, 2666.43},
-      {11.0, 2748.06},
+      {8.0, 2258.33+farFeedingRPMConstant},
+      {8.5, 2339.95+farFeedingRPMConstant},
+      {9.0, 2421.57+farFeedingRPMConstant},
+      {9.5, 2503.19+farFeedingRPMConstant},
+      {10.0, 2584.81+farFeedingRPMConstant},
+      {10.5, 2666.43+farFeedingRPMConstant},
+      {11.0, 2748.06+farFeedingRPMConstant},
       {11.5, 2829.68+farFeedingRPMConstant},
       {12.0, 2911.30+farFeedingRPMConstant},
       {12.5, 2992.92+farFeedingRPMConstant},
@@ -324,7 +324,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final int kWristMotorID = 43;
     public static final int kEncoderID = 44;
   
-    public static final double kMagnetOffset = 0.2363;
+    public static final double kMagnetOffset = -0.66;
 
     
 

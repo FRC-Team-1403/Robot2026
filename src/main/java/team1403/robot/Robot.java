@@ -1,12 +1,14 @@
 package team1403.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import team1403.robot.commands.ControllerVibrationCommand;
 
+import org.littletonrobotics.junction.LoggedPowerDistribution;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -27,6 +29,7 @@ public class Robot extends LoggedRobot {
   public Robot() {
     Logger.addDataReceiver(new NT4Publisher());
     Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/matchlogs"));
+    //LoggedPowerDistribution.getInstance(50, ModuleType.kRev);
     Logger.start();
 
     m_robotContainer = new RobotContainer();

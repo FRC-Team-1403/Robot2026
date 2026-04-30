@@ -269,29 +269,29 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
         m_telemetry.telemeterize(m_state);
 
         // // Drive motors
-        // Logger.recordOutput("Swerve/FrontLeft/Drive/SupplyCurrent", getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/FrontLeft/Drive/SupplyCurrent", getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/FrontLeft/Drive/Temperature", getModule(0).getDriveMotor().getDeviceTemp().getValueAsDouble());
 
-        // Logger.recordOutput("Swerve/FrontRight/Drive/SupplyCurrent", getModule(1).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/FrontRight/Drive/SupplyCurrent", getModule(1).getDriveMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/FrontRight/Drive/Temperature", getModule(1).getDriveMotor().getDeviceTemp().getValueAsDouble());
 
-        // Logger.recordOutput("Swerve/BackLeft/Drive/SupplyCurrent", getModule(2).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/BackLeft/Drive/SupplyCurrent", getModule(2).getDriveMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/BackLeft/Drive/Temperature", getModule(2).getDriveMotor().getDeviceTemp().getValueAsDouble());
 
-        // Logger.recordOutput("Swerve/BackRight/Drive/SupplyCurrent", getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/BackRight/Drive/SupplyCurrent", getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/BackRight/Drive/Temperature", getModule(3).getDriveMotor().getDeviceTemp().getValueAsDouble());
 
         // // Steer motors
-        // Logger.recordOutput("Swerve/FrontLeft/Steer/SupplyCurrent", getModule(0).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/FrontLeft/Steer/SupplyCurrent", getModule(0).getSteerMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/FrontLeft/Steer/Temperature", getModule(0).getSteerMotor().getDeviceTemp().getValueAsDouble());
 
-        // Logger.recordOutput("Swerve/FrontRight/Steer/SupplyCurrent", getModule(1).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/FrontRight/Steer/SupplyCurrent", getModule(1).getSteerMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/FrontRight/Steer/Temperature", getModule(1).getSteerMotor().getDeviceTemp().getValueAsDouble());
 
-        // Logger.recordOutput("Swerve/BackLeft/Steer/SupplyCurrent", getModule(2).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/BackLeft/Steer/SupplyCurrent", getModule(2).getSteerMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/BackLeft/Steer/Temperature", getModule(2).getSteerMotor().getDeviceTemp().getValueAsDouble());
 
-        // Logger.recordOutput("Swerve/BackRight/Steer/SupplyCurrent", getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+        Logger.recordOutput("Swerve/BackRight/Steer/SupplyCurrent", getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble());
         // Logger.recordOutput("Swerve/BackRight/Steer/Temperature", getModule(3).getSteerMotor().getDeviceTemp().getValueAsDouble());
 
     }

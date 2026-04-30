@@ -155,11 +155,11 @@ public class Shooter extends SubsystemBase {
       m_flywheelLeader.setControl(m_flywheelDutyCycleRequest);
     }
 
-    // Logger.recordOutput("Flywheel/Target RPM", m_flywheelTargetRPM);
-    // Logger.recordOutput("Flywheel/Leader RPM", getFlywheelLeaderRPM());
-    // Logger.recordOutput("Flywheel/Follower RPM", getFlywheelFollowerRPM());
-    // Logger.recordOutput("Flywheel/Follower2 RPM", getFlywheelFollower2RPM());
-    // Logger.recordOutput("Flywheel/RPM Error", getFlywheelRPMError());
+    Logger.recordOutput("Flywheel/Target RPM", m_flywheelTargetRPM);
+    Logger.recordOutput("Flywheel/Leader RPM", getFlywheelLeaderRPM());
+    Logger.recordOutput("Flywheel/Follower RPM", getFlywheelFollowerRPM());
+    Logger.recordOutput("Flywheel/Follower2 RPM", getFlywheelFollower2RPM());
+    Logger.recordOutput("Flywheel/RPM Error", getFlywheelRPMError());
     // Logger.recordOutput("Flywheel/At Speed", isFlywheelAtSpeed());
     // Logger.recordOutput("Flywheel/Target Duty Cycle", m_flywheelTargetDutyCycle);
     // Logger.recordOutput(

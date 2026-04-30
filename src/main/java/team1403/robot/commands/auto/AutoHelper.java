@@ -96,7 +96,7 @@ public class AutoHelper {
                             NamedCommands.getCommand("Wrist Wiggle Command")
                         )
                     ),
-                    Commands.waitSeconds(4.5)
+                    Commands.waitSeconds(5)
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("LeftTrenchDoubleSweepPt2", m_swerve, true),
@@ -114,7 +114,7 @@ public class AutoHelper {
                             NamedCommands.getCommand("Wrist Wiggle Command")
                         )
                     ),
-                    Commands.waitSeconds(4.5)
+                    Commands.waitSeconds(5.5)
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("LeftTrenchDoubleSweepPt3", m_swerve, true),
@@ -153,7 +153,7 @@ public class AutoHelper {
                             NamedCommands.getCommand("Wrist Wiggle Command")
                         )
                     ),
-                    Commands.waitSeconds(4.5)
+                    Commands.waitSeconds(5)
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("RightTrenchDoubleSweepPt2", m_swerve, true),
@@ -171,7 +171,7 @@ public class AutoHelper {
                             NamedCommands.getCommand("Wrist Wiggle Command")
                         )
                     ),
-                    Commands.waitSeconds(4.5)
+                    Commands.waitSeconds(5.5)
                 ),
                 Commands.race(
                     AutoUtil.loadPathPlannerPath("RightTrenchDoubleSweepPt3", m_swerve, true),
@@ -297,23 +297,17 @@ public class AutoHelper {
                     ),
                     //2.66 seconds
                     Commands.race(
-                        AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt2", m_swerve, true),
                         Commands.parallel(
                             NamedCommands.getCommand("Shoot Command"),
                             Commands.sequence(
                                 Commands.waitSeconds(1.5),
                                 NamedCommands.getCommand("Wrist Wiggle Command")
                             )
-                        )
-                    ),
-                    //2 seconds
-                    Commands.race(
-                        Commands.parallel(
-                            NamedCommands.getCommand("Shoot Command"),
-                            NamedCommands.getCommand("Wrist Wiggle Command")
                         ),
-                        Commands.waitSeconds(3)
+                        Commands.waitSeconds(4.5)
                     ),
+                    AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt2", m_swerve, true),
+
                     Commands.race(
                         AutoUtil.loadPathPlannerPath("MiddleHubDepotSingleSweepPt3", m_swerve, true),
                         Commands.sequence(
@@ -349,7 +343,7 @@ public class AutoHelper {
                     ),
                     //Shift over to the trench
                     AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt1", m_swerve, true),
-                    //Commands.waitSeconds(2),
+                    //Commands.waitSeconds(1.5),
                     //Single loopy sweep
                     Commands.race(   
                         AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt2", m_swerve, true),

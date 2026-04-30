@@ -90,7 +90,7 @@
       "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 3.4556016597510215,
+      "waypointRelativePos": 3.1834024896265607,
       "rotationDegrees": 0.0
     }
   ],
@@ -100,8 +100,8 @@
       "minWaypointRelativePos": 1.3396353814989856,
       "maxWaypointRelativePos": 1.8474004051316948,
       "constraints": {
-        "maxVelocity": 1.4,
-        "maxAcceleration": 1.4,
+        "maxVelocity": 1.7,
+        "maxAcceleration": 1.7,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
