@@ -24,7 +24,7 @@ public class Spindexer extends SubsystemBase {
 
     m_spindexerVelocityRequest = new VelocityVoltage(0);
     m_spindexerVelocityRequest.Slot = 0;
-    m_spindexerVelocityRequest.EnableFOC = false;
+    m_spindexerVelocityRequest.EnableFOC = true;
 
     TalonFXConfiguration spindexerLeaderConfig = new TalonFXConfiguration();
     spindexerLeaderConfig.CurrentLimits.StatorCurrentLimit = 120;

@@ -28,7 +28,8 @@ public class ShooterHood extends SubsystemBase {
     m_hoodMotor = new TalonFX(Constants.ShooterHood.kHoodMotorID, "Bus 2");
     m_positionVoltageRequest = new PositionVoltage(0);
     m_neutralRequest = new NeutralOut();
-
+    m_positionVoltageRequest.EnableFOC=true;
+    
     TalonFXConfiguration hoodMotorConfig = new TalonFXConfiguration();
     hoodMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     hoodMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

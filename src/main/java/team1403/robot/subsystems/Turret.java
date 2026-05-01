@@ -38,6 +38,8 @@ public class Turret extends SubsystemBase {
     m_neutralRequest = new NeutralOut();
     m_turretDutyCycleRequest = new DutyCycleOut(0);
 
+    m_positionVoltageRequest.EnableFOC=true;
+
     TalonFXConfiguration turretMotorConfig = new TalonFXConfiguration();
     turretMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     turretMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;

@@ -37,6 +37,9 @@ public class IntakeWrist extends SubsystemBase {
     m_dutyCycleRequest = new DutyCycleOut(0);
     m_neutralRequest = new NeutralOut();
 
+    m_positionVoltageRequest.EnableFOC = true;
+    m_dutyCycleRequest.EnableFOC = true;
+    
     TalonFXConfiguration wristMotorConfig = new TalonFXConfiguration();
     wristMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     wristMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;

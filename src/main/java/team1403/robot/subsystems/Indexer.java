@@ -25,7 +25,7 @@ public class Indexer extends SubsystemBase {
 
     m_indexerVelocityRequest = new VelocityVoltage(0);
     m_indexerVelocityRequest.Slot = 0;
-    m_indexerVelocityRequest.EnableFOC = false;
+    m_indexerVelocityRequest.EnableFOC = true;
 
     TalonFXConfiguration indexerLeaderConfig = new TalonFXConfiguration();
     indexerLeaderConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
