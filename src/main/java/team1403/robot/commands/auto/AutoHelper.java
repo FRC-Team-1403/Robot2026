@@ -343,6 +343,54 @@ public class AutoHelper {
                     ),
                     //Shift over to the trench
                     AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt1", m_swerve, true),
+                    Commands.waitSeconds(1),
+                    //Single loopy sweep
+                    Commands.race(   
+                        AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt2", m_swerve, true),
+                        Commands.sequence(
+                            Commands.waitSeconds(3),
+                            NamedCommands.getCommand("Turret Ramp Up")
+                        ),
+                        NamedCommands.getCommand("Intake Command")
+                    ),
+                    //Since coming over bump see a tag tune this
+                    Commands.waitSeconds(0.25),
+                    //Shoot sweep balls
+                    Commands.race(
+                        Commands.parallel(
+                            NamedCommands.getCommand("Shoot Command"),
+                            Commands.sequence(
+                                Commands.waitSeconds(1.5),
+                                NamedCommands.getCommand("Wrist Wiggle Command")
+                            )
+                        ),
+                        Commands.waitSeconds(4)
+                    ),
+                    // Go to depot
+                    Commands.race(
+                        AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt3", m_swerve, true),
+                        NamedCommands.getCommand("Intake Command")
+                    ),
+                    NamedCommands.getCommand("Shoot Command")    
+                );
+            } catch (Exception e) {
+                System.err.println("Could not load auto: " + e.getMessage());
+                return Commands.none();
+            }
+        }
+
+        public static Command getLeftBumpDelayedSingleSweepDepotSOTM(SwerveSubsystem m_swerve) {
+            try {
+                return Commands.sequence(
+                    //Intake wrist down
+                    NamedCommands.getCommand("IntakeWrist Down Command"),
+                    //Shoot preloaded 8 for 2 seconds
+                    Commands.race(
+                        NamedCommands.getCommand("Shoot Command"),    
+                        Commands.waitSeconds(2)
+                    ),
+                    //Shift over to the trench
+                    AutoUtil.loadPathPlannerPath("LeftBumpDelayedSingleSweepDepotPt1", m_swerve, true),
                     //Commands.waitSeconds(1.5),
                     //Single loopy sweep
                     Commands.race(   
