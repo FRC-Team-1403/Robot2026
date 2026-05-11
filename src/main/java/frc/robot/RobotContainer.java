@@ -6,8 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DefaultSwerveCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.swerve.SwerveSubsystem;
+import frc.robot.swerve.TunerConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,8 +29,11 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private final SwerveSubsystem m_swerve;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_swerve = new TunerConstants().createDrivetrain();
     // Configure the trigger bindings
     configureBindings();
   }
@@ -48,7 +54,19 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    //swerve buttons 
+    m_swerve.setDefaultCommand(new DefaultSwerveCommand(
+        m_swerve, 
+        () -> -m_driverController.getLeftX(),               //horozontal
+        () -> -m_driverController.getLeftY(),               //vertical
+        () -> -m_driverController.getRightX(),              //rotational 
+        () -> m_driverController.getHID().getXButton(),     //x-mode  
+        () -> false,                                        //robot relative  
+        () -> m_driverController.getRightTriggerAxis(),     //acceleration
+        () -> Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),      //snipping mode Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),
+        () ->false,                                         // Auto Aim
+        () -> m_driverController.getHID().getBButton()      // reset gyro
+    ));
   }
 
   /**
