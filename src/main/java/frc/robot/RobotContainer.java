@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DefaultSwerveCommand;
 import frc.robot.commands.ExampleCommand;
@@ -27,7 +27,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+      new CommandXboxController(Constants.Driver.kDriverControllerPort);
 
   private final SwerveSubsystem m_swerve;
 
@@ -63,7 +63,7 @@ public class RobotContainer {
         () -> m_driverController.getHID().getXButton(),     //x-mode  
         () -> false,                                        //robot relative  
         () -> m_driverController.getRightTriggerAxis(),     //acceleration
-        () -> Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),      //snipping mode Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),
+        () -> m_driverController.getLeftTriggerAxis(),      //snipping mode Math.max(m_driverController.getLeftTriggerAxis(), m_operatorController.getRightTriggerAxis()),
         () ->false,                                         // Auto Aim
         () -> m_driverController.getHID().getBButton()      // reset gyro
     ));
