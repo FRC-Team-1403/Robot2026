@@ -131,13 +131,8 @@ public class LERPShooter extends Command {
             m_shooter.setFlywheelTargetRPM(flywheelRPM);
 
             //Set hood
-            Zone zone = FieldZoneUtil.getZone(robotPose);
-            if (zone == Zone.CROSSING) {
-                m_shooterHood.setSetpoint(0);
-            }
-            else {
-                m_shooterHood.setSetpoint(hoodAngle);
-            }
+            m_shooterHood.setSetpoint(hoodAngle);
+            
         } 
         //Otherwise reset to safe conditions
         else {

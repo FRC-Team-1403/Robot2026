@@ -26,6 +26,7 @@ import team1403.robot.commands.InSpinShootCommand;
 import team1403.robot.commands.InSpinShootCommandTesting;
 import team1403.robot.commands.IntakeCommand;
 import team1403.robot.commands.LERPShooter;
+import team1403.robot.commands.ManualTurretCommand;
 import team1403.robot.commands.TurretTrackingCommand;
 import team1403.robot.commands.WristCommand;
 import team1403.robot.commands.WristPowerCommand;
@@ -117,16 +118,17 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //testing command for elastic
-    //m_operatorController.rightBumper().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
+    //Elastic Manual Buttons for Testing
+    m_operatorController.leftTrigger().whileTrue(new InSpinShootCommandTesting(m_indexer, m_spindexer, m_shooter,m_shooterHood, 0 ,0, 0, 0));
     
-    //Shooting Command
-    //m_shooter.setDefaultCommand(new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis()));
-    
-    
-  RobotModeTriggers.teleop().whileTrue(
-    new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis(), () -> m_operatorController.getHID().getRightBumper())
-  );
+    // Manual Turret
+    RobotModeTriggers.teleop().whileTrue(
+        new ManualTurretCommand(m_turret, () -> m_operatorController.getHID().getLeftBumper(), () -> m_operatorController.getHID().getRightBumper())
+    );
+
+    RobotModeTriggers.teleop().whileTrue(
+      new LERPShooter(() -> m_swerve.getState().Speeds, m_turret, m_indexer, m_spindexer, m_shooter, m_shooterHood, m_swerve::getPose, () -> m_operatorController.getHID().getRightTriggerAxis(), () -> m_operatorController.getHID().getRightBumper())
+    );
     
     //Intake Rollers
     m_operatorController.leftTrigger().whileTrue(new IntakeCommand(m_intake, 1));

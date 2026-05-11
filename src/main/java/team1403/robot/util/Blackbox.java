@@ -27,9 +27,9 @@ public class Blackbox {
       return mirrorForAlliance(Constants.ScoringLocation.kHubPosition);
     } else {
       if (side == Side.TOP) {
-        return mirrorForAlliance(Constants.ScoringLocation.kFeedTopPosition);
+        return mirrorForAlliance(Constants.ScoringLocation.kHubPosition);
       } else {
-        return mirrorForAlliance(Constants.ScoringLocation.kFeedBottomPosition);
+        return mirrorForAlliance(Constants.ScoringLocation.kHubPosition);
       }
     }
   }
