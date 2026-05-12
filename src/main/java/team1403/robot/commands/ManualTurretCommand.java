@@ -8,7 +8,7 @@ import team1403.robot.Constants;
 import team1403.robot.subsystems.Turret;
 
 public class ManualTurretCommand extends Command {
-    private static final double kChangeDegrees = 3.0;
+    private static final double kChangeDegrees = 0.75;
 
     private final Turret m_turret;
     private final BooleanSupplier m_leftBumper;
