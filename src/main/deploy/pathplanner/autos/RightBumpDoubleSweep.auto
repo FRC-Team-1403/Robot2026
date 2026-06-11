@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightBumpDoubleSweepPt1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightBumpDoubleSweepPt2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightBumpDoubleSweepPt3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightBumpDoubleSweepPt4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

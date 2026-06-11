@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5732667617689007,
+        "y": 3.9
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6324679029957199,
+        "y": 4.662524964336662
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.7489158345221112,
+        "y": 5.956390870185448
+      },
+      "prevControl": {
+        "x": 1.809674647089008,
+        "y": 5.713886505904182
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MiddleHubDepotPt1End"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3539445628997844,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

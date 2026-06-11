@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4383880171184018,
+        "y": 5.67174037089891
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.0761055634807417,
+        "y": 5.788188302425108
+      },
+      "isLocked": false,
+      "linkedName": "LeftBumpDelayedSingleSweepDepotPt2End"
+    },
+    {
+      "anchor": {
+        "x": 0.6361911554921535,
+        "y": 5.943452211126962
+      },
+      "prevControl": {
+        "x": 1.1925534950071324,
+        "y": 5.749372325249644
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 0.9,
+    "maxAcceleration": 0.9,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 158.96248897460686
+  },
+  "useDefaultConstraints": false
+}

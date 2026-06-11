@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchDoubleSweepPt1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchDoubleSweepPt2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchDoubleSweepPt3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
