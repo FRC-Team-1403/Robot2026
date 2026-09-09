@@ -139,13 +139,13 @@ public class DefaultSwerveCommand extends Command {
       if(operatorSniping || driverSniping){
           m_speedLimiter = 0.2;
       } else if(m_speedSupplier.getAsDouble()>0.3){
-          m_speedLimiter = 0.7;
+          m_speedLimiter = 0.2;
       } else {
-        m_speedLimiter = 0.5;
+        m_speedLimiter = 0.2;
       }
     } else {
       if(operatorSniping || driverSniping){
-          m_speedLimiter = 0.30;
+          m_speedLimiter = 0.2;
       } else if(m_speedSupplier.getAsDouble()>0.3){
           m_speedLimiter = 0.7;
       } else {
