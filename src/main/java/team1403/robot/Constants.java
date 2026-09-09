@@ -57,7 +57,7 @@ public static final double minimumBatteryVoltage = 11.0;
   
 
     public static final Translation2d kTurretOffset = new Translation2d(-0.094409, -0.168886); //tune
-    public static final double rotationCorrectionOffset = 177.5; //lower is to the left higher is to the right
+    public static final double rotationCorrectionOffset = 179; //lower is to the left higher is to the right
     public static final double kSpringK = 0;
     public static final double kSpringNeutralAngle = 0;
     public static final double kSpringForce = 5.94;  // lbs cause im dum
@@ -113,7 +113,6 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kMinAngleDegrees = 0.1;
     public static final double kMaxAngleDegrees = 29.75;
 
-
     public static final double kToleranceDegrees = 0.3;
     public static final double kGearRatioEncoder = (54.0 / 18.0);
     public static final double kGearRatioHoodAngleRatio = (54.0 / 18.0) * (175.0 / 10.0);
@@ -126,6 +125,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double kA = 0.0;
     public static final double kG = 0.2;
 
+    public static final double hoodConstantIncrease = 9.75;
 
     public static final double kMagnetOffset = 0.442;
     public static final double kFixedHood = 20;
@@ -148,25 +148,25 @@ public static final double minimumBatteryVoltage = 11.0;
       {6.5, 20},
       {7.0, 20},
       {7.5, 20},
-      {8.0, 29.75},
-      {8.5, 29.75},
-      {9.0, 29.75},
-      {9.5, 29.75},
-      {10.0, 29.75},
-      {10.5, 29.75},
-      {11.0, 29.75},
-      {11.5, 29.75},
-      {12.0, 29.75},
-      {12.5, 29.75},
-      {13.0, 29.75},
-      {13.5, 29.75},
-      {14.0, 29.75},
-      {14.5, 29.75},
-      {15.0, 29.75},
-      {15.5, 29.75},
-      {16.0, 29.75},
-      {16.5, 29.75},
-      {17.0, 29.75},
+      {8.0, 20},
+      {8.5, 20},
+      {9.0, 20},
+      {9.5, 20},
+      {10.0, 20},
+      {10.5, 20},
+      {11.0, 20},
+      {11.5, 20},
+      {12.0, 20},
+      {12.5, 20},
+      {13.0, 20},
+      {13.5, 20},
+      {14.0, 20},
+      {14.5, 20},
+      {15.0, 20},
+      {15.5, 20},
+      {16.0, 20},
+      {16.5, 20},
+      {17.0, 20},
     }; 
   }
 
@@ -177,7 +177,7 @@ public static final double minimumBatteryVoltage = 11.0;
     public static final double flywheelGearRatio = 27.0/17.0;//Flyhwheel to Motor  25/17 flyhweel to smal hood wheel
     public static final double rpmTolerance = 150.0;
 
-    public static final double farFeedingRPMConstant = 550;
+    public static final double farFeedingRPMConstant = 0;
     public static final double farFeedingTOFConstant = 0.2;
 
 

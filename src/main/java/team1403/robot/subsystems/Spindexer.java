@@ -81,7 +81,7 @@ public class Spindexer extends SubsystemBase {
     m_spindexerMotor.setControl(m_spindexerVelocityRequest);
 
     // Logger.recordOutput("Spindexer/Target RPM", m_spindexerTargetRPM);
-    // Logger.recordOutput("Spindexer/Current RPM", getSpindexerRPM());
+    Logger.recordOutput("Spindexer/Current RPM", getSpindexerRPM());
     // Logger.recordOutput("Spindexer/RPM Error", getSpindexerRPMError());
     // Logger.recordOutput("Spindexer/At Speed", isSpindexerAtSpeed());
     // Logger.recordOutput("Spindexer/Voltage", m_spindexerMotor.getMotorVoltage().getValueAsDouble());

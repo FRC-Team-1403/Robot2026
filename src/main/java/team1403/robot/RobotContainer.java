@@ -123,7 +123,7 @@ public class RobotContainer {
     
     // // Manual Turret
     // RobotModeTriggers.teleop().whileTrue(
-    //     new ManualTurretCommand(m_turret, () -> m_operatorController.getHID().getLeftBumper(), () -> m_operatorController.getHID().getRightBumper())
+    //     new ManualTurretCommand(m_turret, () -> m_operatorController.getHID().getRightBumper(), () -> m_operatorController.getHID().getLeftBumper())
     // );
 
     RobotModeTriggers.teleop().whileTrue(
