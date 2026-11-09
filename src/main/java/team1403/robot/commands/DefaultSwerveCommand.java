@@ -1,44 +1,31 @@
-package team1403.robot.commands;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
+package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import team1403.robot.util.Blackbox;
-import team1403.robot.util.CougarUtil;
-import team1403.robot.util.FieldZoneUtil;
-import team1403.robot.util.FieldZoneUtil.Zone;
-import team1403.robot.Constants;
-//import team1403.robot.subsystems.Blackbox;
-import team1403.robot.swerve.SwerveSubsystem;
-import team1403.robot.swerve.TunerConstants;
+import frc.robot.Constants;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveRequest;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
-/**
- * The default command for the swerve drivetrain subsystem.
- */
 public class DefaultSwerveCommand extends Command {
-  private final SwerveSubsystem m_drivetrainSubsystem;
 
-  private Pose2d m_targetPose;
+  private final SwerveSubsystem m_drivetrainSubsystem;
+  private final XboxController m_driverController;
+
+  // Input suppliers
   private final DoubleSupplier m_verticalTranslationSupplier;
   private final DoubleSupplier m_horizontalTranslationSupplier;
   private final DoubleSupplier m_rotationSupplier;
@@ -48,41 +35,45 @@ public class DefaultSwerveCommand extends Command {
   private final DoubleSupplier m_operatorSnipingMode;
   private final BooleanSupplier m_autoAim;
   private final BooleanSupplier m_robotRelativeMode;
-  private final Debouncer m_robotRelativeDebouncer
-    = new Debouncer(0.3, DebounceType.kFalling);
+  private final BooleanSupplier m_resetSupplier;
+
+  // Field-relative tracking
+  private final Debouncer m_robotRelativeDebouncer =
+      new Debouncer(0.3, DebounceType.kFalling);
+
   private boolean m_isFieldRelative = true;
-  
-  private SlewRateLimiter m_rotationRateLimiter;
-  private double prev_horizontal = 0;
-  private double prev_vertical = 0;
-  private static final double kMaxVelocityChange = 13 * Constants.kLoopTime; 
-  private BooleanSupplier m_resetSupplier;
+  private boolean m_previousReset = false;
+  private double m_speedLimiter = 0.5;
 
-  private double m_speedLimiter = 0.2;
+  // Persistent pipeline state
+  private Translation2d m_J_trans_last = new Translation2d();
+  private double m_J_omega_last = 0.0;
 
-  private final ProfiledPIDController m_rotationPID = new ProfiledPIDController(5, 0, 0, 
-    new TrapezoidProfile.Constraints(TunerConstants.kMaxAngularRate, 14));
-  private final TrapezoidProfile.State m_targetState = new TrapezoidProfile.State();
+  private Translation2d m_e_trans_last = new Translation2d();
+  private double m_e_omega_last = 0.0;
 
-  /**
-   * Creates the swerve command.
-   * \
-   * 
-   * @param drivetrain                    the instance of the
-   *                                      {@link SwerveSubsystem}
-   * @param horizontalTranslationSupplier
-   *                                      supplies the horizontal speed of the
-   *                                      drivetrain
-   * @param verticalTranslationSupplier
-   *                                      supplies the the vertical speed of the
-   *                                      drivetrain
-   * @param rotationSupplier              supplies the rotational speed of the
-   *                                      drivetrain
-   * @param fieldRelativeSupplier         supplies the
-   *                                      boolean value to enable field relative
-   *                                      mode
-   */
-  public DefaultSwerveCommand(SwerveSubsystem drivetrain,
+  private Translation2d m_u_trans_exec_last = new Translation2d();
+  private double m_u_omega_exec_last = 0.0;
+
+  // Constants
+  private static final double kDeadband = 0.05;
+
+  private static final double kDtFast = Constants.kFastLoopTime;
+  private static final double kDtLoop = Constants.kLoopTime;
+
+  // Translation gains
+  private static final double K_A = 0.05;
+  private static final double K_P = 2.5;
+  private static final double K_D = 0.15;
+
+  // Rotation gains
+  private static final double K_A_omega = 0.02;
+  private static final double K_P_omega = 2.0;
+  private static final double K_D_omega = 0.1;
+
+  public DefaultSwerveCommand(
+      SwerveSubsystem drivetrain,
+      XboxController driverController,
       DoubleSupplier horizontalTranslationSupplier,
       DoubleSupplier verticalTranslationSupplier,
       DoubleSupplier rotationSupplier,
@@ -92,391 +83,431 @@ public class DefaultSwerveCommand extends Command {
       DoubleSupplier driverSnipingMode,
       DoubleSupplier operatorSnipingMode,
       BooleanSupplier autoAim,
-      BooleanSupplier m_resetSupplier
-      ) {
-    this.m_drivetrainSubsystem = drivetrain;
-    this.m_verticalTranslationSupplier = verticalTranslationSupplier;
-    this.m_horizontalTranslationSupplier = horizontalTranslationSupplier;
-    this.m_rotationSupplier = rotationSupplier;
-    this.m_speedSupplier = speedSupplier;
-    this.m_xModeSupplier = xModeSupplier;
-    this.m_driverSnipingMode = driverSnipingMode;
-    this.m_operatorSnipingMode = operatorSnipingMode;
-    this.m_robotRelativeMode = robotRelativeSupplier;
-    this.m_targetPose = Pose2d.kZero;
-    this.m_autoAim = autoAim;
-    this.m_resetSupplier = m_resetSupplier;
+      BooleanSupplier resetSupplier) {
 
-    m_isFieldRelative = true;
-    m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
+    m_drivetrainSubsystem = drivetrain;
+    m_driverController = driverController;
 
-    m_rotationPID.enableContinuousInput(-Math.PI, Math.PI);
+    m_verticalTranslationSupplier = verticalTranslationSupplier;
+    m_horizontalTranslationSupplier = horizontalTranslationSupplier;
+    m_rotationSupplier = rotationSupplier;
+
+    m_speedSupplier = speedSupplier;
+    m_xModeSupplier = xModeSupplier;
+
+    m_driverSnipingMode = driverSnipingMode;
+    m_operatorSnipingMode = operatorSnipingMode;
+
+    m_robotRelativeMode = robotRelativeSupplier;
+    m_autoAim = autoAim;
+    m_resetSupplier = resetSupplier;
 
     addRequirements(m_drivetrainSubsystem);
   }
 
   @Override
   public void initialize() {
-    prev_horizontal = prev_vertical = 0;
-    Pose2d pose = m_drivetrainSubsystem.getPose();
-    // if the initial position is incorrect our velocity will be wrong too
-    m_rotationPID.reset(MathUtil.angleModulus(pose.getRotation().getRadians()));
+
+    // Seed controller from actual drivetrain velocity
+    ChassisSpeeds currentSpeeds =
+        m_drivetrainSubsystem.getCurrentChassisSpeeds();
+
+    Rotation2d gyroAngle =
+        m_drivetrainSubsystem.getShallowRotation();
+
+    ChassisSpeeds fieldRelativeSpeeds =
+        ChassisSpeeds.fromRobotRelativeSpeeds(
+            currentSpeeds,
+            gyroAngle);
+
+    m_u_trans_exec_last =
+        new Translation2d(
+            fieldRelativeSpeeds.vxMetersPerSecond,
+            fieldRelativeSpeeds.vyMetersPerSecond);
+
+    m_u_omega_exec_last =
+        currentSpeeds.omegaRadiansPerSecond;
+
+    // Clear derivative memory
+    m_J_trans_last = new Translation2d();
+    m_J_omega_last = 0.0;
+
+    m_e_trans_last = new Translation2d();
+    m_e_omega_last = 0.0;
+
+    m_previousReset = m_resetSupplier.getAsBoolean();
   }
 
   @Override
   public void execute() {
-    m_isFieldRelative = m_robotRelativeDebouncer.calculate(!m_robotRelativeMode.getAsBoolean());
 
-    SmartDashboard.putBoolean("isFieldRelative", m_isFieldRelative);
-    //if (Constants.DEBUG_MODE) SmartDashboard.putBoolean("Aimbot", m_aimbotSupplier.getAsBoolean());
+    // Field-relative mode
+    m_isFieldRelative =
+        m_robotRelativeDebouncer.calculate(
+            !m_robotRelativeMode.getAsBoolean());
 
-    //m_speedLimiter = 0.5 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + (m_speedSupplier.getAsDouble() * 0.7);
-    Pose2d pose = m_drivetrainSubsystem.getPose();
-    Zone zone = FieldZoneUtil.getZone(pose);
-    boolean driverSniping = m_driverSnipingMode.getAsDouble() > 0.3;
-    boolean operatorSniping = m_operatorSnipingMode.getAsDouble() > 0.3;
-    if(zone==Zone.MY_ALLIANCE){
-      if(operatorSniping || driverSniping){
-          m_speedLimiter = 0.2;
-      } else if(m_speedSupplier.getAsDouble()>0.3){
-          m_speedLimiter = 0.7;
-      } else {
-        m_speedLimiter = 0.5;
-      }
-    } else {
-      if(operatorSniping || driverSniping){
-          m_speedLimiter = 0.30;
-      } else if(m_speedSupplier.getAsDouble()>0.3){
-          m_speedLimiter = 0.7;
-      } else {
-        m_speedLimiter = 0.5;
-      }
-    }
+    SmartDashboard.putBoolean(
+        "isFieldRelative",
+        m_isFieldRelative);
 
-    
-    if (CougarUtil.getAlliance() == Alliance.Red) {
-      m_targetPose = Constants.Vision.kredGoalPose;
-    }
-    else {
-      m_targetPose = Constants.Vision.kblueGoalPose;
-    }
-
+    // Autonomous protection
     if (DriverStation.isAutonomousEnabled()) {
       m_drivetrainSubsystem.drive(new ChassisSpeeds());
       return;
     }
 
+    // X-lock mode
     if (m_xModeSupplier.getAsBoolean()) {
-      m_drivetrainSubsystem.setControl(new SwerveRequest.SwerveDriveBrake());
+
+      m_drivetrainSubsystem.setControl(
+          new SwerveRequest.SwerveDriveBrake());
+
+      m_u_trans_exec_last = new Translation2d();
+      m_u_omega_exec_last = 0.0;
+
+      if (m_driverController != null) {
+        m_driverController.setRumble(
+            RumbleType.kLeftRumble, 0.0);
+
+        m_driverController.setRumble(
+            RumbleType.kRightRumble, 0.0);
+      }
+
       return;
     }
 
-    if (m_resetSupplier.getAsBoolean()) {
-      if(DriverStation.getAlliance().get() == Alliance.Red)
+    // Gyro reset - rising edge only
+    boolean resetPressed = m_resetSupplier.getAsBoolean();
+
+    if (resetPressed && !m_previousReset) {
+
+      var alliance = DriverStation.getAlliance();
+
+      if (alliance.isPresent()
+          && alliance.get() == Alliance.Red) {
+
         m_drivetrainSubsystem.resetRotation(Rotation2d.kPi);
-      else
-        m_drivetrainSubsystem.resetRotation(Rotation2d.kZero);
-    }
 
-    ChassisSpeeds chassisSpeeds;
-    double horizontal = m_horizontalTranslationSupplier.getAsDouble();
-    double vertical = m_verticalTranslationSupplier.getAsDouble();
-    double vel_hypot = Math.hypot(horizontal, vertical);
-
-    if(CougarUtil.getAlliance() == Alliance.Red && m_isFieldRelative) {
-      horizontal *= -1;
-      vertical *= -1;
-    }
-
-    if(vel_hypot > 0)
-    {
-      //normalize using vector scaling
-      double velocity = MathUtil.clamp(vel_hypot, 0, 1);
-      velocity = MathUtil.applyDeadband(velocity, 0.05);
-      
-      //scale unit vector by speed limiter and convert to speed
-      horizontal *= velocity / vel_hypot * TunerConstants.kMaxSpeed * m_speedLimiter;
-      vertical *= velocity / vel_hypot * TunerConstants.kMaxSpeed * m_speedLimiter;
-    }
-
-    double ang_deadband = MathUtil.applyDeadband(m_rotationSupplier.getAsDouble(), 0.05);
-    double angular = m_rotationRateLimiter.calculate(squareNum(ang_deadband) * m_speedLimiter) * TunerConstants.kMaxAngularRate;
-
-
-
-    //limit change in translation of the overall robot, based on orbit's slideshow
-    {
-      double dx = horizontal - prev_horizontal;
-      double dy = vertical - prev_vertical;
-      double dmag = Math.hypot(dx, dy);
-
-      if (dmag > 0) {
-        double scale = MathUtil.clamp(dmag, 0, kMaxVelocityChange) / dmag;
-        dx *= scale;
-        dy *= scale;
-        horizontal = prev_horizontal + dx;
-        vertical = prev_vertical + dy;
-      }
-
-      prev_horizontal = horizontal;
-      prev_vertical = vertical;
-    }
-
-    {
-      if (m_isFieldRelative) {
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(vertical, horizontal, angular, m_drivetrainSubsystem.getShallowRotation());
       } else {
-        chassisSpeeds = new ChassisSpeeds(vertical, horizontal, angular);
+
+        m_drivetrainSubsystem.resetRotation(Rotation2d.kZero);
       }
+
+      // Re-seed derivative history after heading reset
+      m_J_trans_last = new Translation2d();
+      m_e_trans_last = new Translation2d();
+      m_J_omega_last = 0.0;
+      m_e_omega_last = 0.0;
     }
 
-    m_drivetrainSubsystem.drive(chassisSpeeds);
+    m_previousReset = resetPressed;
+
+    // ==========================================
+    // DYNAMIC ZONE SPEED LIMITER
+    // ==========================================
+
+    Pose2d currentPose =
+        m_drivetrainSubsystem.getPose();
+
+    Zone zone =
+        FieldZoneUtil.getZone(currentPose);
+
+    boolean driverSniping =
+        m_driverSnipingMode.getAsDouble() > 0.3;
+
+    boolean operatorSniping =
+        m_operatorSnipingMode.getAsDouble() > 0.3;
+
+    if (zone == Zone.MY_ALLIANCE) {
+
+      m_speedLimiter =
+          (operatorSniping || driverSniping)
+              ? 0.2
+              : (m_speedSupplier.getAsDouble() > 0.3
+                  ? 0.7
+                  : 0.5);
+
+    } else {
+
+      m_speedLimiter =
+          (operatorSniping || driverSniping)
+              ? 0.3
+              : (m_speedSupplier.getAsDouble() > 0.3
+                  ? 0.7
+                  : 0.5);
+    }
+
+    double vMaxActive =
+        TunerConstants.kMaxSpeed * m_speedLimiter;
+
+    double omegaMaxActive =
+        TunerConstants.kMaxAngularRate * m_speedLimiter;
+
+    // ==========================================
+    // STEP 1: PRE-FILTERING AND DEADBANDS
+    // ==========================================
+
+    double jRawX =
+        m_verticalTranslationSupplier.getAsDouble();
+
+    double jRawY =
+        m_horizontalTranslationSupplier.getAsDouble();
+
+    double jRawOmega =
+        m_rotationSupplier.getAsDouble();
+
+    double mRaw = Math.hypot(jRawX, jRawY);
+
+    Translation2d J_trans = new Translation2d();
+
+    if (mRaw > kDeadband) {
+
+      double scaledMag =
+          (mRaw - kDeadband)
+              / (mRaw * (1.0 - kDeadband));
+
+      J_trans =
+          new Translation2d(
+              jRawX * scaledMag,
+              jRawY * scaledMag);
+    }
+
+    double J_omega = 0.0;
+
+    if (Math.abs(jRawOmega) > kDeadband) {
+
+      J_omega =
+          Math.signum(jRawOmega)
+              * (Math.abs(jRawOmega) - kDeadband)
+              / (1.0 - kDeadband);
+    }
+
+    // Alliance red field-relative flip
+    var alliance = DriverStation.getAlliance();
+
+    if (alliance.isPresent()
+        && alliance.get() == Alliance.Red
+        && m_isFieldRelative) {
+
+      J_trans = J_trans.times(-1.0);
+    }
+
+    // ==========================================
+    // STEP 2: STATE NORMALIZATION AND ERROR
+    // ==========================================
+
+    ChassisSpeeds rawRobotVelocity =
+        m_drivetrainSubsystem.getCurrentChassisSpeeds();
+
+    Rotation2d heading =
+        m_drivetrainSubsystem.getShallowRotation();
+
+    Translation2d V_meas_world =
+        new Translation2d(
+            rawRobotVelocity.vxMetersPerSecond,
+            rawRobotVelocity.vyMetersPerSecond)
+            .rotateBy(heading);
+
+    Translation2d X_trans =
+        V_meas_world.div(vMaxActive);
+
+    double X_omega =
+        rawRobotVelocity.omegaRadiansPerSecond
+            / omegaMaxActive;
+
+    Translation2d e_trans =
+        J_trans.minus(X_trans);
+
+    double e_omega =
+        J_omega - X_omega;
+
+    // ==========================================
+    // STEP 3: CORE CONTROL LAW
+    // ==========================================
+
+    Translation2d dJ_trans_dt =
+        J_trans.minus(m_J_trans_last)
+            .div(kDtFast);
+
+    Translation2d de_trans_dt =
+        e_trans.minus(m_e_trans_last)
+            .div(kDtFast);
+
+    Translation2d u_trans_raw =
+        J_trans.times(vMaxActive)
+            .plus(dJ_trans_dt.times(K_A))
+            .plus(e_trans.times(K_P))
+            .plus(de_trans_dt.times(K_D));
+
+    double du_omega_dt =
+        (J_omega - m_J_omega_last) / kDtFast;
+
+    double de_omega_dt =
+        (e_omega - m_e_omega_last) / kDtFast;
+
+    double u_omega_raw =
+        (J_omega * omegaMaxActive)
+            + (du_omega_dt * K_A_omega)
+            + (e_omega * K_P_omega)
+            + (de_omega_dt * K_D_omega);
+
+    // ==========================================
+    // STEP 4: ACCELERATION ENVELOPE
+    // ==========================================
+
+    Translation2d delta_u_trans =
+        u_trans_raw.minus(m_u_trans_exec_last);
+
+    double dmag =
+        delta_u_trans.getNorm();
+
+    double maxVelChangeLoop =
+        Constants.kMaxAcceleration * kDtLoop;
+
+    Translation2d u_trans_env;
+
+    if (dmag > 0.0) {
+
+      u_trans_env =
+          m_u_trans_exec_last.plus(
+              delta_u_trans.times(
+                  Math.min(
+                      1.0,
+                      maxVelChangeLoop / dmag)));
+
+    } else {
+
+      u_trans_env = u_trans_raw;
+    }
+
+    double maxAlphaChangeLoop =
+        Constants.kMaxAngularAcceleration * kDtLoop;
+
+    double u_omega_env =
+        m_u_omega_exec_last
+            + MathUtil.clamp(
+                u_omega_raw - m_u_omega_exec_last,
+                -maxAlphaChangeLoop,
+                maxAlphaChangeLoop);
+
+    // ==========================================
+    // STEP 5: ABSOLUTE VELOCITY SATURATION
+    // ==========================================
+
+    double envNorm =
+        u_trans_env.getNorm();
+
+    Translation2d u_trans_final =
+        u_trans_env.times(
+            Math.min(
+                1.0,
+                vMaxActive
+                    / (envNorm == 0.0 ? 1.0 : envNorm)));
+
+    double u_omega_final =
+        MathUtil.clamp(
+            u_omega_env,
+            -omegaMaxActive,
+            omegaMaxActive);
+
+    // ==========================================
+    // HAPTIC ENGINE
+    // ==========================================
+
+    if (m_driverController != null) {
+
+      // Left motor: sustained tracking loss
+      double errorMagnitude =
+          e_trans.getNorm();
+
+      double leftRumbleIntensity = 0.0;
+
+      if (errorMagnitude > 0.15) {
+
+        leftRumbleIntensity =
+            MathUtil.clamp(
+                (errorMagnitude - 0.15) / 0.85,
+                0.0,
+                1.0);
+      }
+
+      // Right motor: derivative impact alert
+      double impactMagnitude =
+          de_trans_dt.getNorm();
+
+      double rightRumbleIntensity = 0.0;
+
+      if (impactMagnitude > 4.5) {
+
+        rightRumbleIntensity =
+            MathUtil.clamp(
+                impactMagnitude / 15.0,
+                0.0,
+                1.0);
+      }
+
+      m_driverController.setRumble(
+          RumbleType.kLeftRumble,
+          leftRumbleIntensity);
+
+      m_driverController.setRumble(
+          RumbleType.kRightRumble,
+          rightRumbleIntensity);
+    }
+
+    // ==========================================
+    // STEP 6: PERSISTENT MEMORY HANDOVER
+    // ==========================================
+
+    m_J_trans_last = J_trans;
+    m_J_omega_last = J_omega;
+
+    m_e_trans_last = e_trans;
+    m_e_omega_last = e_omega;
+
+    m_u_trans_exec_last = u_trans_final;
+    m_u_omega_exec_last = u_omega_final;
+
+    // ==========================================
+    // OUTPUT HANDOFF
+    // ==========================================
+
+    ChassisSpeeds outputSpeeds;
+
+    if (m_isFieldRelative) {
+
+      outputSpeeds =
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              u_trans_final.getX(),
+              u_trans_final.getY(),
+              u_omega_final,
+              m_drivetrainSubsystem.getShallowRotation());
+
+    } else {
+
+      outputSpeeds =
+          new ChassisSpeeds(
+              u_trans_final.getX(),
+              u_trans_final.getY(),
+              u_omega_final);
+    }
+
+    m_drivetrainSubsystem.drive(outputSpeeds);
   }
 
-  private static double squareNum(double num) {
-    return Math.signum(num) * Math.pow(num, 2);
-  }
+  @Override
+  public void end(boolean interrupted) {
 
-  // private void periodic() {
-  //   Pose2d curPose = m_drivetrainSubsystem.getPose();
-  //   Rotation2d curRotation = curPose.getRotation();
-  //   double given_current_angle = MathUtil.angleModulus(curRotation.getRadians());
-  //   double given_target_angle = Math.atan2(m_targetPosSupplier.get().getY() - curPose.getY(), m_targetPosSupplier.get().getX() - curPose.getX());
-  //   given_target_angle = MathUtil.angleModulus(given_target_angle + Math.PI);
-  // }
+    m_drivetrainSubsystem.drive(
+        new ChassisSpeeds());
+
+    if (m_driverController != null) {
+
+      m_driverController.setRumble(
+          RumbleType.kLeftRumble, 0.0);
+
+      m_driverController.setRumble(
+          RumbleType.kRightRumble, 0.0);
+    }
+  }
 }
-
-
-
-
-
-
-//OLD SWERVE COMMAND WITH NO ZONE LOGIC
-// package team1403.robot.commands;
-
-// import java.util.function.BooleanSupplier;
-// import java.util.function.DoubleSupplier;
-// import java.util.function.Supplier;
-
-// import org.littletonrobotics.junction.Logger;
-
-// import com.ctre.phoenix6.swerve.SwerveRequest;
-
-// import edu.wpi.first.math.MathUtil;
-// import edu.wpi.first.math.controller.ProfiledPIDController;
-// import edu.wpi.first.math.filter.Debouncer;
-// import edu.wpi.first.math.filter.SlewRateLimiter;
-// import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.geometry.Transform2d;
-// import edu.wpi.first.math.geometry.Translation2d;
-// import edu.wpi.first.math.filter.Debouncer.DebounceType;
-// import edu.wpi.first.math.kinematics.ChassisSpeeds;
-// import edu.wpi.first.math.trajectory.TrapezoidProfile;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.DriverStation.Alliance;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import team1403.robot.util.Blackbox;
-// import team1403.robot.util.CougarUtil;
-// import team1403.robot.Constants;
-// //import team1403.robot.subsystems.Blackbox;
-// import team1403.robot.swerve.SwerveSubsystem;
-// import team1403.robot.swerve.TunerConstants;
-
-// /**
-//  * The default command for the swerve drivetrain subsystem.
-//  */
-// public class DefaultSwerveCommand extends Command {
-//   private final SwerveSubsystem m_drivetrainSubsystem;
-
-//   private Pose2d m_targetPose;
-//   private final DoubleSupplier m_verticalTranslationSupplier;
-//   private final DoubleSupplier m_horizontalTranslationSupplier;
-//   private final DoubleSupplier m_rotationSupplier;
-//   private final BooleanSupplier m_xModeSupplier;
-//   private final DoubleSupplier m_speedSupplier;
-//   private final DoubleSupplier m_snipingMode;
-//   private final BooleanSupplier m_autoAim;
-//   private final BooleanSupplier m_robotRelativeMode;
-//   private final Debouncer m_robotRelativeDebouncer
-//     = new Debouncer(0.3, DebounceType.kFalling);
-//   private boolean m_isFieldRelative = true;
-  
-//   private SlewRateLimiter m_rotationRateLimiter;
-//   private double prev_horizontal = 0;
-//   private double prev_vertical = 0;
-//   private static final double kMaxVelocityChange = 13 * Constants.kLoopTime; 
-//   private BooleanSupplier m_resetSupplier;
-
-//   private double m_speedLimiter = 0.2;
-
-//   private final ProfiledPIDController m_rotationPID = new ProfiledPIDController(5, 0, 0, 
-//     new TrapezoidProfile.Constraints(TunerConstants.kMaxAngularRate, 14));
-//   private final TrapezoidProfile.State m_targetState = new TrapezoidProfile.State();
-
-//   /**
-//    * Creates the swerve command.
-//    * \
-//    * 
-//    * @param drivetrain                    the instance of the
-//    *                                      {@link SwerveSubsystem}
-//    * @param horizontalTranslationSupplier
-//    *                                      supplies the horizontal speed of the
-//    *                                      drivetrain
-//    * @param verticalTranslationSupplier
-//    *                                      supplies the the vertical speed of the
-//    *                                      drivetrain
-//    * @param rotationSupplier              supplies the rotational speed of the
-//    *                                      drivetrain
-//    * @param fieldRelativeSupplier         supplies the
-//    *                                      boolean value to enable field relative
-//    *                                      mode
-//    */
-//   public DefaultSwerveCommand(SwerveSubsystem drivetrain,
-//       DoubleSupplier horizontalTranslationSupplier,
-//       DoubleSupplier verticalTranslationSupplier,
-//       DoubleSupplier rotationSupplier,
-//       BooleanSupplier xModeSupplier,
-//       BooleanSupplier robotRelativeSupplier,
-//       DoubleSupplier speedSupplier,
-//       DoubleSupplier snipingMode,
-//       BooleanSupplier autoAim,
-//       BooleanSupplier m_resetSupplier
-//       ) {
-//     this.m_drivetrainSubsystem = drivetrain;
-//     this.m_verticalTranslationSupplier = verticalTranslationSupplier;
-//     this.m_horizontalTranslationSupplier = horizontalTranslationSupplier;
-//     this.m_rotationSupplier = rotationSupplier;
-//     this.m_speedSupplier = speedSupplier;
-//     this.m_xModeSupplier = xModeSupplier;
-//     this.m_snipingMode = snipingMode;
-//     this.m_robotRelativeMode = robotRelativeSupplier;
-//     this.m_targetPose = Pose2d.kZero;
-//     this.m_autoAim = autoAim;
-//     this.m_resetSupplier = m_resetSupplier;
-
-//     m_isFieldRelative = true;
-//     m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
-
-//     m_rotationPID.enableContinuousInput(-Math.PI, Math.PI);
-
-//     addRequirements(m_drivetrainSubsystem);
-//   }
-
-//   @Override
-//   public void initialize() {
-//     prev_horizontal = prev_vertical = 0;
-//     Pose2d pose = m_drivetrainSubsystem.getPose();
-//     // if the initial position is incorrect our velocity will be wrong too
-//     m_rotationPID.reset(MathUtil.angleModulus(pose.getRotation().getRadians()));
-//   }
-
-//   @Override
-//   public void execute() {
-//     m_isFieldRelative = m_robotRelativeDebouncer.calculate(!m_robotRelativeMode.getAsBoolean());
-
-//     SmartDashboard.putBoolean("isFieldRelative", m_isFieldRelative);
-//     //if (Constants.DEBUG_MODE) SmartDashboard.putBoolean("Aimbot", m_aimbotSupplier.getAsBoolean());
-
-//     //m_speedLimiter = 0.5 * (1.0 - m_snipingMode.getAsDouble() * 0.7) + (m_speedSupplier.getAsDouble() * 0.7);
-    
-//     if(m_snipingMode.getAsDouble()>0.3){
-//         m_speedLimiter = 0.2;
-//     } else if(m_speedSupplier.getAsDouble()>0.3){
-//         m_speedLimiter = 0.7;
-//     } else {
-//       m_speedLimiter = 0.5;
-//     }
-    
-//     if (CougarUtil.getAlliance() == Alliance.Red) {
-//       m_targetPose = Constants.Vision.kredGoalPose;
-//     }
-//     else {
-//       m_targetPose = Constants.Vision.kblueGoalPose;
-//     }
-
-//     if (DriverStation.isAutonomousEnabled()) {
-//       m_drivetrainSubsystem.drive(new ChassisSpeeds());
-//       return;
-//     }
-
-//     if (m_xModeSupplier.getAsBoolean()) {
-//       m_drivetrainSubsystem.setControl(new SwerveRequest.SwerveDriveBrake());
-//       return;
-//     }
-
-//     if (m_resetSupplier.getAsBoolean()) {
-//       if(DriverStation.getAlliance().get() == Alliance.Red)
-//         m_drivetrainSubsystem.resetRotation(Rotation2d.kPi);
-//       else
-//         m_drivetrainSubsystem.resetRotation(Rotation2d.kZero);
-//     }
-
-//     ChassisSpeeds chassisSpeeds;
-//     double horizontal = m_horizontalTranslationSupplier.getAsDouble();
-//     double vertical = m_verticalTranslationSupplier.getAsDouble();
-//     double vel_hypot = Math.hypot(horizontal, vertical);
-
-//     if(CougarUtil.getAlliance() == Alliance.Red && m_isFieldRelative) {
-//       horizontal *= -1;
-//       vertical *= -1;
-//     }
-
-//     if(vel_hypot > 0)
-//     {
-//       //normalize using vector scaling
-//       double velocity = MathUtil.clamp(vel_hypot, 0, 1);
-//       velocity = MathUtil.applyDeadband(velocity, 0.05);
-      
-//       //scale unit vector by speed limiter and convert to speed
-//       horizontal *= velocity / vel_hypot * TunerConstants.kMaxSpeed * m_speedLimiter;
-//       vertical *= velocity / vel_hypot * TunerConstants.kMaxSpeed * m_speedLimiter;
-//     }
-
-//     double ang_deadband = MathUtil.applyDeadband(m_rotationSupplier.getAsDouble(), 0.05);
-//     double angular = m_rotationRateLimiter.calculate(squareNum(ang_deadband) * m_speedLimiter) * TunerConstants.kMaxAngularRate;
-
-
-
-//     //limit change in translation of the overall robot, based on orbit's slideshow
-//     {
-//       double dx = horizontal - prev_horizontal;
-//       double dy = vertical - prev_vertical;
-//       double dmag = Math.hypot(dx, dy);
-
-//       if (dmag > 0) {
-//         double scale = MathUtil.clamp(dmag, 0, kMaxVelocityChange) / dmag;
-//         dx *= scale;
-//         dy *= scale;
-//         horizontal = prev_horizontal + dx;
-//         vertical = prev_vertical + dy;
-//       }
-
-//       prev_horizontal = horizontal;
-//       prev_vertical = vertical;
-//     }
-
-//     {
-//       if (m_isFieldRelative) {
-//         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(vertical, horizontal, angular, m_drivetrainSubsystem.getShallowRotation());
-//       } else {
-//         chassisSpeeds = new ChassisSpeeds(vertical, horizontal, angular);
-//       }
-//     }
-
-//     m_drivetrainSubsystem.drive(chassisSpeeds);
-//   }
-
-//   private static double squareNum(double num) {
-//     return Math.signum(num) * Math.pow(num, 2);
-//   }
-
-//   // private void periodic() {
-//   //   Pose2d curPose = m_drivetrainSubsystem.getPose();
-//   //   Rotation2d curRotation = curPose.getRotation();
-//   //   double given_current_angle = MathUtil.angleModulus(curRotation.getRadians());
-//   //   double given_target_angle = Math.atan2(m_targetPosSupplier.get().getY() - curPose.getY(), m_targetPosSupplier.get().getX() - curPose.getX());
-//   //   given_target_angle = MathUtil.angleModulus(given_target_angle + Math.PI);
-//   // }
-// }
