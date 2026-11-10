@@ -1,5 +1,5 @@
 
-package frc.robot.commands;
+package team1403.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
@@ -11,19 +11,25 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.SwerveRequest;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import team1403.robot.Constants;
+import team1403.robot.swerve.*;
+import team1403.robot.util.FieldZoneUtil;
+import team1403.robot.util.FieldZoneUtil.Zone;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 public class DefaultSwerveCommand extends Command {
 
   private final SwerveSubsystem m_drivetrainSubsystem;
-  private final XboxController m_driverController;
+  private final CommandXboxController m_driverController;
 
   // Input suppliers
   private final DoubleSupplier m_verticalTranslationSupplier;
@@ -58,22 +64,22 @@ public class DefaultSwerveCommand extends Command {
   // Constants
   private static final double kDeadband = 0.05;
 
-  private static final double kDtFast = Constants.kFastLoopTime;
+  private static final double kDtFast = Constants.kLoopTime;
   private static final double kDtLoop = Constants.kLoopTime;
 
   // Translation gains
-  private static final double K_A = 0.05;
-  private static final double K_P = 2.5;
-  private static final double K_D = 0.15;
+  private static final double K_A = 10;
+  private static final double K_P = 0.0;
+  private static final double K_D = 0.0;
 
   // Rotation gains
-  private static final double K_A_omega = 0.02;
-  private static final double K_P_omega = 2.0;
-  private static final double K_D_omega = 0.1;
+  private static final double K_A_omega = 10;
+  private static final double K_P_omega = 0.0;
+  private static final double K_D_omega = 0.0;
 
   public DefaultSwerveCommand(
       SwerveSubsystem drivetrain,
-      XboxController driverController,
+      CommandXboxController driverController,
       DoubleSupplier horizontalTranslationSupplier,
       DoubleSupplier verticalTranslationSupplier,
       DoubleSupplier rotationSupplier,
@@ -110,7 +116,7 @@ public class DefaultSwerveCommand extends Command {
 
     // Seed controller from actual drivetrain velocity
     ChassisSpeeds currentSpeeds =
-        m_drivetrainSubsystem.getCurrentChassisSpeeds();
+        m_drivetrainSubsystem.getState().Speeds;
 
     Rotation2d gyroAngle =
         m_drivetrainSubsystem.getShallowRotation();
@@ -297,7 +303,7 @@ public class DefaultSwerveCommand extends Command {
     // ==========================================
 
     ChassisSpeeds rawRobotVelocity =
-        m_drivetrainSubsystem.getCurrentChassisSpeeds();
+        m_drivetrainSubsystem.getState().Speeds;
 
     Rotation2d heading =
         m_drivetrainSubsystem.getShallowRotation();
@@ -362,7 +368,7 @@ public class DefaultSwerveCommand extends Command {
         delta_u_trans.getNorm();
 
     double maxVelChangeLoop =
-        Constants.kMaxAcceleration * kDtLoop;
+        1000 * kDtLoop;
 
     Translation2d u_trans_env;
 
@@ -381,7 +387,7 @@ public class DefaultSwerveCommand extends Command {
     }
 
     double maxAlphaChangeLoop =
-        Constants.kMaxAngularAcceleration * kDtLoop;
+        1000 * kDtLoop;
 
     double u_omega_env =
         m_u_omega_exec_last
@@ -493,6 +499,10 @@ public class DefaultSwerveCommand extends Command {
     }
 
     m_drivetrainSubsystem.drive(outputSpeeds);
+
+    Logger.recordOutput("Error", m_e_trans_last);
+    Logger.recordOutput("Error Angular", m_e_omega_last);
+    Logger.recordOutput("dy/dx Joystick", dJ_trans_dt);
   }
 
   @Override

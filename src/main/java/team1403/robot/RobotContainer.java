@@ -160,6 +160,7 @@ public class RobotContainer {
     //NEW ZONE Swerve Buttons
     m_swerve.setDefaultCommand(new DefaultSwerveCommand(
           m_swerve, 
+          m_driverController,
           () -> -m_driverController.getLeftX(),                        //horizontal
           () -> -m_driverController.getLeftY(),                        //vertical
           () -> -m_driverController.getRightX(),                       //rotational 
