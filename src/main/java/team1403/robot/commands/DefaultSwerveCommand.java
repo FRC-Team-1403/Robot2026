@@ -108,7 +108,7 @@ public class DefaultSwerveCommand extends Command {
     this.m_resetSupplier = m_resetSupplier;
 
     m_isFieldRelative = true;
-    m_rotationRateLimiter = new SlewRateLimiter(3, -3, 0);
+    m_rotationRateLimiter = new SlewRateLimiter(4, -4, 0);
 
     m_rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -137,19 +137,19 @@ public class DefaultSwerveCommand extends Command {
     boolean operatorSniping = m_operatorSnipingMode.getAsDouble() > 0.3;
     if(zone==Zone.MY_ALLIANCE){
       if(operatorSniping || driverSniping){
-          m_speedLimiter = 0.2;
+          m_speedLimiter = 1.0;
       } else if(m_speedSupplier.getAsDouble()>0.3){
-          m_speedLimiter = 0.7;
+          m_speedLimiter = 1.0;
       } else {
-        m_speedLimiter = 0.5;
+        m_speedLimiter = 1.0;
       }
     } else {
       if(operatorSniping || driverSniping){
-          m_speedLimiter = 0.30;
+          m_speedLimiter = 1.0;
       } else if(m_speedSupplier.getAsDouble()>0.3){
-          m_speedLimiter = 0.7;
+          m_speedLimiter = 1.0;
       } else {
-        m_speedLimiter = 0.5;
+        m_speedLimiter = 1.0;
       }
     }
 
