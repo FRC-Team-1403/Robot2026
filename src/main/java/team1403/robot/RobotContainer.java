@@ -165,11 +165,6 @@ public class RobotContainer {
           () -> -m_driverController.getLeftY(),                        //vertical
           () -> -m_driverController.getRightX(),                       //rotational 
           () -> m_driverController.getHID().getXButton(),              //x-mode  
-          () -> false,                                                  //robot relative  
-          () -> m_driverController.getRightTriggerAxis(),              //acceleration
-          () -> m_driverController.getLeftTriggerAxis(),               //driver sniping mode
-          () -> m_operatorController.getRightTriggerAxis(),            //operator sniping mode
-          () -> false,                                                  // Auto Aim
           () -> m_driverController.getHID().getBButton()               // reset gyro
       ));
 

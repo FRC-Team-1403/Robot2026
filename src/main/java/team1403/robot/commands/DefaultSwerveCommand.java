@@ -44,8 +44,8 @@ public class DefaultSwerveCommand extends Command {
   private static final double K_A_omega = 0.05;
 
   // Maximum allowed velocity and angular velocity changes per second
-  private static final double kMaxAcceleration = 1000.0;
-  private static final double kMaxAngularAcceleration = 1000.0;
+  private static final double kMaxAcceleration = 10.0;
+  private static final double kMaxAngularAcceleration = 10.0;
 
   // Haptic feedback thresholds
   private static final double kRumbleErrorThreshold = 0.15;
