@@ -80,8 +80,8 @@ public class Indexer extends SubsystemBase {
     m_indexerVelocity.refresh();
     m_indexerMotor.setControl(m_indexerVelocityRequest);
 
-    // Logger.recordOutput("Indexer/Target RPM", m_indexerTargetRPM);
-    // Logger.recordOutput("Indexer/Leader RPM", getIndexerRPM());
+    Logger.recordOutput("Indexer/Target RPM", m_indexerTargetRPM);
+    Logger.recordOutput("Indexer/Leader RPM", getIndexerRPM());
     // Logger.recordOutput("Indexer/RPM Error", getIndexerRPMError());
     // Logger.recordOutput("Indexer/At Speed", isIndexerAtSpeed());
     // Logger.recordOutput(

@@ -262,7 +262,9 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem,
 
         m_state = getState();
 
-        m_gyroDisconnected.set(!super.getPigeon2().isConnected());
+        boolean gyroConnected = super.getPigeon2().isConnected();
+        m_gyroDisconnected.set(!gyroConnected);
+        Logger.recordOutput("Health/GyroConnected", gyroConnected);
 
         SmartDashboard.putNumber("Velocity", CougarUtil.norm(m_state.Speeds));
 

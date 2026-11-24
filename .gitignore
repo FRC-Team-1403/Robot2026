@@ -175,6 +175,7 @@ simgui.json
 
 # Simulation data log directory
 logs/
+match-reports/
 
 # Folder that has CTRE Phoenix Sim device config storage
 ctre_sim/
@@ -186,3 +187,4 @@ compile_commands.json
 # Eclipse generated file for annotation processors
 .factorypath
 src/main/java/team1403/robot/Robot.java
+__pycache__/

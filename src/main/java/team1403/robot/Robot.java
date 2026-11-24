@@ -1,14 +1,15 @@
 package team1403.robot;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import team1403.robot.commands.ControllerVibrationCommand;
 
-import org.littletonrobotics.junction.LoggedPowerDistribution;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -28,8 +29,10 @@ public class Robot extends LoggedRobot {
 
   public Robot() {
     Logger.addDataReceiver(new NT4Publisher());
-    Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/matchlogs"));
-    //LoggedPowerDistribution.getInstance(50, ModuleType.kRev);
+    // Keep simulation logs on the development computer, not at a roboRIO-only path.
+    Logger.addDataReceiver(new WPILOGWriter(RobotBase.isReal() ? "/home/lvuser/matchlogs" : "logs"));
+    Logger.recordMetadata("CodeVersion", System.getProperty("robot.codeVersion", "unavailable"));
+    Logger.recordMetadata("Runtime", RobotBase.isReal() ? "roboRIO" : "simulation");
     Logger.start();
 
     m_robotContainer = new RobotContainer();
@@ -43,6 +46,17 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
+    Logger.recordOutput("Match/Mode", DriverStation.isDisabled() ? "Disabled"
+        : DriverStation.isAutonomous() ? "Autonomous"
+        : DriverStation.isTeleop() ? "Teleop" : "Test");
+    Logger.recordOutput("Match/EventName", DriverStation.getEventName());
+    Logger.recordOutput("Match/MatchType", DriverStation.getMatchType().toString());
+    Logger.recordOutput("Match/MatchNumber", DriverStation.getMatchNumber());
+    Logger.recordOutput("Match/ReplayNumber", DriverStation.getReplayNumber());
+    Logger.recordOutput("Match/RemainingTimeSeconds", DriverStation.getMatchTime());
+    Logger.recordOutput("Health/BatteryVolts", RobotController.getBatteryVoltage());
+    Logger.recordOutput("Health/BrownedOut", RobotController.isBrownedOut());
+    Logger.recordOutput("Health/FPGATimestampSeconds", Timer.getFPGATimestamp());
     CommandScheduler.getInstance().run();
 
     double now = m_teleopTimer.get();
@@ -71,6 +85,8 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    Logger.recordOutput("Match/SelectedAutoCommand", m_autonomousCommand == null
+        ? "unavailable" : m_autonomousCommand.getName());
 
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
