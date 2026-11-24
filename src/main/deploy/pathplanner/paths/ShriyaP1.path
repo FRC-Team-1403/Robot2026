@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.476923913788378,
+        "y": 7.51558623732182
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.476923913788377,
+        "y": 7.51558623732182
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.630107636033443,
+        "y": 6.470347322162829
+      },
+      "prevControl": {
+        "x": 7.55093424468758,
+        "y": 7.467208182114099
+      },
+      "nextControl": {
+        "x": 7.695843570106909,
+        "y": 5.642675567091558
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.869499126233553,
+        "y": 5.257200049684759
+      },
+      "prevControl": {
+        "x": 7.733970411869517,
+        "y": 5.6388441012198465
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ShriyaP2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -87.86177683993347
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.53932205507608
+  },
+  "useDefaultConstraints": true
+}

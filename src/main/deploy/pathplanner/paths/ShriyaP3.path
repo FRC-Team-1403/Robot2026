@@ -1,0 +1,123 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.328435829564145,
+        "y": 7.448573147957785
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.660909580590183,
+        "y": 7.764523084167302
+      },
+      "isLocked": false,
+      "linkedName": "ShriyaP3Link"
+    },
+    {
+      "anchor": {
+        "x": 6.138540510211075,
+        "y": 7.021702773780152
+      },
+      "prevControl": {
+        "x": 5.602039962655067,
+        "y": 7.642303358138299
+      },
+      "nextControl": {
+        "x": 7.035019045637454,
+        "y": 5.984695252567763
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.300363598204496,
+        "y": 4.233372267338267
+      },
+      "prevControl": {
+        "x": 5.650772178089596,
+        "y": 5.213006038303307
+      },
+      "nextControl": {
+        "x": 6.6184147057772105,
+        "y": 3.7537267606042737
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.817436266447368,
+        "y": 4.233372267338267
+      },
+      "prevControl": {
+        "x": 7.313689371889607,
+        "y": 3.8061183278223334
+      },
+      "nextControl": {
+        "x": 8.803837296272857,
+        "y": 5.069990280250287
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.470838858621163,
+        "y": 6.819160970052082
+      },
+      "prevControl": {
+        "x": 8.403885838139304,
+        "y": 6.134966990727557
+      },
+      "nextControl": {
+        "x": 6.264263499514623,
+        "y": 7.703930563034804
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.328435829564145,
+        "y": 7.448573147957785
+      },
+      "prevControl": {
+        "x": 4.042376146409337,
+        "y": 7.337909961444549
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ShriyaP4Link"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 0.4777855574703429
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -2.1164227888332476
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": -91.27163308066699
+  },
+  "useDefaultConstraints": true
+}
