@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Manav Agrawal Part 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Manav Agarawal Part 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Manav Agrawal Part 3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

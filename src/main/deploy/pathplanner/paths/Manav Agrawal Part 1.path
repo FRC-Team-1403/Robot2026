@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.923977777777778,
+        "y": 7.562488888888888
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.6699864515118343,
+        "y": 7.371437397810479
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.710888888888889,
+        "y": 7.133733333333334
+      },
+      "prevControl": {
+        "x": 5.594238287862337,
+        "y": 7.961355989049975
+      },
+      "nextControl": {
+        "x": 7.39660381518798,
+        "y": 6.625505237771058
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.880222222222223,
+        "y": 4.902255555555555
+      },
+      "prevControl": {
+        "x": 7.5214316958420095,
+        "y": 5.783740357591548
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Manav Agarwal Part1 to Part 2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}
